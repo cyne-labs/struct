@@ -1,0 +1,10 @@
+[package]
+name = "structl"
+version = "0.2.0"
+edition = "2021"
+authors = ["Ashman Das"]
+description = "Core library for Struct structured-output format (v0.2)"
+license = "MIT"
+
+[dependencies]
+# Standard library only - no external crates!

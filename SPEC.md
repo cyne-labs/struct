@@ -28,22 +28,26 @@ This draft records every decision made by the maintainer so far. Anything not ye
 A field is written `name` or `name:type`. With no type, it's text.
 
 - `str`: text (the default).
-- `int`: a whole number, optionally negative, such as `2024` or `-17`. Its range is Rust's `i64`.
+- `int`: a whole number, optionally negative, such as `2024` or `-17`. Its range is Rust's `i64`. A leading `+` is an error.
 - `float`: a decimal number, such as `3.14`, `-0.5`, `1e5`, `inf` or `NaN`. It accepts exactly what Rust's `f64` parser accepts.
 - `bool`: `1` for true, `0` for false.
 - `enum(a,b,c)`: exactly one of the listed labels. Labels follow the same rule as names: letters, digits and `_`, no spaces, and they don't start with a digit.
 - `record{...}`: a fixed group of fields inside this one (section 4).
 - `list[T]`: any number of items of type `T`, where `T` is a scalar type, an enum, or `record{...}` (section 5).
 
+A type name not in this list (such as `date`) is an error. Using the same field name twice inside one set of braces is an error.
+
 Types are **enforced**. A value that doesn't match its type is an error. For example, `twenty twenty-four` in an `int` field is an error. Writing a value correctly is the job of whoever produces the data.
 
 ## 3. Values
 
 - The fields on a data line are separated by `|`, and the line ends with `|`.
+- A data line has exactly one value per column of its class or list item (records flattened, lists not counted). Too few or too many values is an error.
 - Spaces next to each `|` are trimmed. Spaces inside a value are kept.
 - **`~` means null** (no value) in a field of any scalar or enum type. A value that is exactly `~` is null; `~` anywhere else, as in `~abc`, is plain text.
 - **A record can be null.** A record whose columns are all `~` reads back as a null record. There's no separate marker, so "null record" and "record with every field null" are the same thing.
-- **A list is never null.** A list field always holds a list, which may be empty. Struct has no way to write a list that doesn't exist, by design.
+- **A list is never null.** A list field always holds a list, which may be empty, and whose items may be `~`. Struct has no way to write a list that doesn't exist, by design. Think of a list as a box: once declared, the box always exists, even when it's empty.
+- **A record that contains a list is never null.** If a record has a list anywhere inside it, the list must exist, so the record must too. When all its columns are `~`, it reads back as a record with null values and its lists (empty when it has no child lines). Handing an encoder a null in place of a list, or a null for a record that contains a list, is an error.
 - **An empty field is always an error.** There's no empty string. Blank text is written `~`.
 
 ### Escapes
@@ -113,6 +117,8 @@ Rope scaling hurts long ctx|refuted|
 
 The numbers count **schema fields**, not values on the line.
 
+A child line whose parent has no list is an error. When an index is needed (rules 2 and 3), leaving it out is an error, and an index that doesn't name one of the parent's lists is an error.
+
 **Leniency:** an index written where none is needed (rule 1) is **accepted, with a warning**. It isn't an error.
 
 **Empty lists** produce no child lines and read back as an empty list.
@@ -137,4 +143,6 @@ None. Every question raised in review has been decided.
 - Number limits are Rust's: `i64` for `int`, and `f64` parsing rules for `float`.
 - Enum labels follow name rules, with no spaces.
 - Nesting depth is unlimited.
+- After R1 review: wrong column counts, children under a parent with no list, missing or unknown indices, unknown type names and duplicate field names are all errors. These were assumed by everyone, now written down. A leading `+` on an int is an error.
+- A record containing a list is never null: the list is a box that must exist. A null list or a null list-holding record given to the encoder is an error.
 - **No class references.** A field can't refer to another class by name (`list[note]`). Nested shapes are always written inline with `record{...}`. The maintainer rejected references as too many ways to go wrong for small models.
