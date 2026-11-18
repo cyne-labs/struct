@@ -1,0 +1,1 @@
+schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}

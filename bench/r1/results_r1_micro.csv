@@ -1,0 +1,261 @@
+family,group,case,test_string,token_count,token_ids,pieces
+Qwen,pipe_newline,pipe_newline_isolated,"|
+",2,"[91, 198]","['|', '\n']"
+Llama,pipe_newline,pipe_newline_isolated,"|
+",1,[7511],['|\n']
+Gemma,pipe_newline,pipe_newline_isolated,"|
+",2,"[236909, 107]","['|', '\n']"
+LFM,pipe_newline,pipe_newline_isolated,"|
+",1,[2642],['|\n']
+Qwen,pipe_newline,newline_isolated,"
+",1,[198],['\n']
+Llama,pipe_newline,newline_isolated,"
+",1,[198],['\n']
+Gemma,pipe_newline,newline_isolated,"
+",1,[107],['\n']
+LFM,pipe_newline,newline_isolated,"
+",1,[207],['\n']
+Qwen,pipe_newline,line_with_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+",28,"[17, 19, 15, 20, 13, 15, 20, 17, 20, 19, 83706, 2703, 26079, 41642, 1248, 5458, 91, 1062, 2686, 91, 17, 15, 17, 19, 91, 15, 91, 198]","['2', '4', '0', '5', '.', '0', '5', '2', '5', '4', '|R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '2', '0', '2', '4', '|', '0', '|', '\n']"
+Llama,pipe_newline,line_with_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+",20,"[8273, 20, 13, 24130, 4370, 87798, 2862, 28041, 44164, 1317, 5753, 91, 1116, 2844, 91, 2366, 19, 91, 15, 7511]","['240', '5', '.', '052', '54', '|R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '202', '4', '|', '0', '|\n']"
+Gemma,pipe_newline,line_with_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+",29,"[236778, 236812, 236771, 236810, 236761, 236771, 236810, 236778, 236810, 236812, 236909, 236794, 2504, 24968, 58893, 1440, 14372, 236909, 1811, 7059, 236909, 236778, 236771, 236778, 236812, 236909, 236771, 236909, 107]","['2', '4', '0', '5', '.', '0', '5', '2', '5', '4', '|', 'R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '2', '0', '2', '4', '|', '0', '|', '\n']"
+LFM,pipe_newline,line_with_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+",22,"[13726, 29, 22, 31306, 7033, 100, 58, 2294, 29169, 12287, 940, 1286, 33569, 100, 1390, 12107, 100, 1217, 28, 100, 24, 2642]","['240', '5', '.', '052', '54', '|', 'R', 'ope', ' scaling', ' hur', 'ts', ' long', ' ctx', '|', 'ref', 'uted', '|', '202', '4', '|', '0', '|\n']"
+Qwen,pipe_newline,line_without_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+",27,"[17, 19, 15, 20, 13, 15, 20, 17, 20, 19, 83706, 2703, 26079, 41642, 1248, 5458, 91, 1062, 2686, 91, 17, 15, 17, 19, 91, 15, 198]","['2', '4', '0', '5', '.', '0', '5', '2', '5', '4', '|R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '2', '0', '2', '4', '|', '0', '\n']"
+Llama,pipe_newline,line_without_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+",20,"[8273, 20, 13, 24130, 4370, 87798, 2862, 28041, 44164, 1317, 5753, 91, 1116, 2844, 91, 2366, 19, 91, 15, 198]","['240', '5', '.', '052', '54', '|R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '202', '4', '|', '0', '\n']"
+Gemma,pipe_newline,line_without_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+",28,"[236778, 236812, 236771, 236810, 236761, 236771, 236810, 236778, 236810, 236812, 236909, 236794, 2504, 24968, 58893, 1440, 14372, 236909, 1811, 7059, 236909, 236778, 236771, 236778, 236812, 236909, 236771, 107]","['2', '4', '0', '5', '.', '0', '5', '2', '5', '4', '|', 'R', 'ope', ' scaling', ' hurts', ' long', ' ctx', '|', 'ref', 'uted', '|', '2', '0', '2', '4', '|', '0', '\n']"
+LFM,pipe_newline,line_without_pipe_nl,"2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+",22,"[13726, 29, 22, 31306, 7033, 100, 58, 2294, 29169, 12287, 940, 1286, 33569, 100, 1390, 12107, 100, 1217, 28, 100, 24, 207]","['240', '5', '.', '052', '54', '|', 'R', 'ope', ' scaling', ' hur', 'ts', ' long', ' ctx', '|', 'ref', 'uted', '|', '202', '4', '|', '0', '\n']"
+Qwen,pipe_newline,short_word_with_pipe_nl,"refuted|
+",4,"[1062, 2686, 91, 198]","['ref', 'uted', '|', '\n']"
+Llama,pipe_newline,short_word_with_pipe_nl,"refuted|
+",3,"[1116, 2844, 7511]","['ref', 'uted', '|\n']"
+Gemma,pipe_newline,short_word_with_pipe_nl,"refuted|
+",4,"[1811, 7059, 236909, 107]","['ref', 'uted', '|', '\n']"
+LFM,pipe_newline,short_word_with_pipe_nl,"refuted|
+",3,"[1390, 12107, 2642]","['ref', 'uted', '|\n']"
+Qwen,pipe_newline,short_word_with_nl,"refuted
+",3,"[1062, 2686, 198]","['ref', 'uted', '\n']"
+Llama,pipe_newline,short_word_with_nl,"refuted
+",3,"[1116, 2844, 198]","['ref', 'uted', '\n']"
+Gemma,pipe_newline,short_word_with_nl,"refuted
+",3,"[1811, 7059, 107]","['ref', 'uted', '\n']"
+LFM,pipe_newline,short_word_with_nl,"refuted
+",3,"[1390, 12107, 207]","['ref', 'uted', '\n']"
+Qwen,pipe_newline,num_with_pipe_nl,"2024|
+",6,"[17, 15, 17, 19, 91, 198]","['2', '0', '2', '4', '|', '\n']"
+Llama,pipe_newline,num_with_pipe_nl,"2024|
+",3,"[2366, 19, 7511]","['202', '4', '|\n']"
+Gemma,pipe_newline,num_with_pipe_nl,"2024|
+",6,"[236778, 236771, 236778, 236812, 236909, 107]","['2', '0', '2', '4', '|', '\n']"
+LFM,pipe_newline,num_with_pipe_nl,"2024|
+",3,"[1217, 28, 2642]","['202', '4', '|\n']"
+Qwen,pipe_newline,num_with_nl,"2024
+",5,"[17, 15, 17, 19, 198]","['2', '0', '2', '4', '\n']"
+Llama,pipe_newline,num_with_nl,"2024
+",3,"[2366, 19, 198]","['202', '4', '\n']"
+Gemma,pipe_newline,num_with_nl,"2024
+",5,"[236778, 236771, 236778, 236812, 107]","['2', '0', '2', '4', '\n']"
+LFM,pipe_newline,num_with_nl,"2024
+",3,"[1217, 28, 207]","['202', '4', '\n']"
+Qwen,child_markers_depth,depth_1_marker_only,>,1,[29],['>']
+Llama,child_markers_depth,depth_1_marker_only,>,1,[29],['>']
+Gemma,child_markers_depth,depth_1_marker_only,>,1,[236813],['>']
+LFM,child_markers_depth,depth_1_marker_only,>,1,[38],['>']
+Qwen,child_markers_depth,depth_1_text,>notes are from abstract only|,7,"[29, 17742, 513, 494, 7859, 1132, 91]","['>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_1_text,>notes are from abstract only|,7,"[29, 18790, 527, 505, 8278, 1193, 91]","['>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_1_text,>notes are from abstract only|,7,"[236813, 23184, 659, 699, 7628, 1186, 236909]","['>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_1_text,>notes are from abstract only|,7,"[38, 26037, 437, 487, 13879, 1049, 100]","['>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_1_index_3,>3|notes are from abstract only|,9,"[29, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_1_index_3,>3|notes are from abstract only|,9,"[29, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_1_index_3,>3|notes are from abstract only|,9,"[236813, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_1_index_3,>3|notes are from abstract only|,9,"[38, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_1_index_dotted,>1.2|notes are from abstract only|,11,"[29, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_1_index_dotted,>1.2|notes are from abstract only|,11,"[29, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_1_index_dotted,>1.2|notes are from abstract only|,11,"[236813, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_1_index_dotted,>1.2|notes are from abstract only|,11,"[38, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_2_marker_only,>>,1,[2372],['>>']
+Llama,child_markers_depth,depth_2_marker_only,>>,1,[2511],['>>']
+Gemma,child_markers_depth,depth_2_marker_only,>>,1,[6985],['>>']
+LFM,child_markers_depth,depth_2_marker_only,>>,1,[12720],['>>']
+Qwen,child_markers_depth,depth_2_text,>>notes are from abstract only|,7,"[2372, 17742, 513, 494, 7859, 1132, 91]","['>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_2_text,>>notes are from abstract only|,7,"[2511, 18790, 527, 505, 8278, 1193, 91]","['>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_2_text,>>notes are from abstract only|,7,"[6985, 23184, 659, 699, 7628, 1186, 236909]","['>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_2_text,>>notes are from abstract only|,7,"[12720, 26037, 437, 487, 13879, 1049, 100]","['>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_2_index_3,>>3|notes are from abstract only|,9,"[2372, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_2_index_3,>>3|notes are from abstract only|,9,"[2511, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_2_index_3,>>3|notes are from abstract only|,9,"[6985, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_2_index_3,>>3|notes are from abstract only|,9,"[12720, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_2_index_dotted,>>1.2|notes are from abstract only|,11,"[2372, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_2_index_dotted,>>1.2|notes are from abstract only|,11,"[2511, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_2_index_dotted,>>1.2|notes are from abstract only|,11,"[6985, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_2_index_dotted,>>1.2|notes are from abstract only|,11,"[12720, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_3_marker_only,>>>,1,[19541],['>>>']
+Llama,child_markers_depth,depth_3_marker_only,>>>,1,[20761],['>>>']
+Gemma,child_markers_depth,depth_3_marker_only,>>>,1,[22539],['>>>']
+LFM,child_markers_depth,depth_3_marker_only,>>>,1,[64860],['>>>']
+Qwen,child_markers_depth,depth_3_text,>>>notes are from abstract only|,7,"[19541, 17742, 513, 494, 7859, 1132, 91]","['>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_3_text,>>>notes are from abstract only|,7,"[20761, 18790, 527, 505, 8278, 1193, 91]","['>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_3_text,>>>notes are from abstract only|,7,"[22539, 23184, 659, 699, 7628, 1186, 236909]","['>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_3_text,>>>notes are from abstract only|,7,"[64860, 26037, 437, 487, 13879, 1049, 100]","['>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_3_index_3,>>>3|notes are from abstract only|,9,"[19541, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_3_index_3,>>>3|notes are from abstract only|,9,"[20761, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_3_index_3,>>>3|notes are from abstract only|,9,"[22539, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_3_index_3,>>>3|notes are from abstract only|,9,"[64860, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_3_index_dotted,>>>1.2|notes are from abstract only|,11,"[19541, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_3_index_dotted,>>>1.2|notes are from abstract only|,11,"[20761, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_3_index_dotted,>>>1.2|notes are from abstract only|,11,"[22539, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_3_index_dotted,>>>1.2|notes are from abstract only|,11,"[64860, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_4_marker_only,>>>>,1,[17613],['>>>>']
+Llama,child_markers_depth,depth_4_marker_only,>>>>,1,[18649],['>>>>']
+Gemma,child_markers_depth,depth_4_marker_only,>>>>,1,[88140],['>>>>']
+LFM,child_markers_depth,depth_4_marker_only,>>>>,1,[94851],['>>>>']
+Qwen,child_markers_depth,depth_4_text,>>>>notes are from abstract only|,7,"[17613, 17742, 513, 494, 7859, 1132, 91]","['>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_4_text,>>>>notes are from abstract only|,7,"[18649, 18790, 527, 505, 8278, 1193, 91]","['>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_4_text,>>>>notes are from abstract only|,7,"[88140, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_4_text,>>>>notes are from abstract only|,7,"[94851, 26037, 437, 487, 13879, 1049, 100]","['>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_4_index_3,>>>>3|notes are from abstract only|,9,"[17613, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_4_index_3,>>>>3|notes are from abstract only|,9,"[18649, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_4_index_3,>>>>3|notes are from abstract only|,9,"[88140, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_4_index_3,>>>>3|notes are from abstract only|,9,"[94851, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_4_index_dotted,>>>>1.2|notes are from abstract only|,11,"[17613, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_4_index_dotted,>>>>1.2|notes are from abstract only|,11,"[18649, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_4_index_dotted,>>>>1.2|notes are from abstract only|,11,"[88140, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_4_index_dotted,>>>>1.2|notes are from abstract only|,11,"[94851, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_5_marker_only,>>>>>,2,"[17613, 29]","['>>>>', '>']"
+Llama,child_markers_depth,depth_5_marker_only,>>>>>,2,"[18649, 29]","['>>>>', '>']"
+Gemma,child_markers_depth,depth_5_marker_only,>>>>>,2,"[6985, 22539]","['>>', '>>>']"
+LFM,child_markers_depth,depth_5_marker_only,>>>>>,2,"[12720, 64860]","['>>', '>>>']"
+Qwen,child_markers_depth,depth_5_text,>>>>>notes are from abstract only|,8,"[17613, 29, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_5_text,>>>>>notes are from abstract only|,8,"[18649, 29, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_5_text,>>>>>notes are from abstract only|,8,"[6985, 22539, 23184, 659, 699, 7628, 1186, 236909]","['>>', '>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_5_text,>>>>>notes are from abstract only|,8,"[12720, 64860, 26037, 437, 487, 13879, 1049, 100]","['>>', '>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_5_index_3,>>>>>3|notes are from abstract only|,10,"[17613, 29, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_5_index_3,>>>>>3|notes are from abstract only|,10,"[18649, 29, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_5_index_3,>>>>>3|notes are from abstract only|,10,"[6985, 22539, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>', '>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_5_index_3,>>>>>3|notes are from abstract only|,10,"[12720, 64860, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>', '>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_5_index_dotted,>>>>>1.2|notes are from abstract only|,12,"[17613, 29, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_5_index_dotted,>>>>>1.2|notes are from abstract only|,12,"[18649, 29, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_5_index_dotted,>>>>>1.2|notes are from abstract only|,12,"[6985, 22539, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>', '>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_5_index_dotted,>>>>>1.2|notes are from abstract only|,12,"[12720, 64860, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>', '>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_6_marker_only,>>>>>>,2,"[17613, 2372]","['>>>>', '>>']"
+Llama,child_markers_depth,depth_6_marker_only,>>>>>>,2,"[18649, 2511]","['>>>>', '>>']"
+Gemma,child_markers_depth,depth_6_marker_only,>>>>>>,2,"[88140, 6985]","['>>>>', '>>']"
+LFM,child_markers_depth,depth_6_marker_only,>>>>>>,2,"[94851, 12720]","['>>>>', '>>']"
+Qwen,child_markers_depth,depth_6_text,>>>>>>notes are from abstract only|,8,"[17613, 2372, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_6_text,>>>>>>notes are from abstract only|,8,"[18649, 2511, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_6_text,>>>>>>notes are from abstract only|,8,"[88140, 6985, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_6_text,>>>>>>notes are from abstract only|,8,"[94851, 12720, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_6_index_3,>>>>>>3|notes are from abstract only|,10,"[17613, 2372, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_6_index_3,>>>>>>3|notes are from abstract only|,10,"[18649, 2511, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_6_index_3,>>>>>>3|notes are from abstract only|,10,"[88140, 6985, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_6_index_3,>>>>>>3|notes are from abstract only|,10,"[94851, 12720, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_6_index_dotted,>>>>>>1.2|notes are from abstract only|,12,"[17613, 2372, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>', '>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_6_index_dotted,>>>>>>1.2|notes are from abstract only|,12,"[18649, 2511, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>', '>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_6_index_dotted,>>>>>>1.2|notes are from abstract only|,12,"[88140, 6985, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_6_index_dotted,>>>>>>1.2|notes are from abstract only|,12,"[94851, 12720, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_7_marker_only,>>>>>>>,1,[61206],['>>>>>>>']
+Llama,child_markers_depth,depth_7_marker_only,>>>>>>>,1,[64444],['>>>>>>>']
+Gemma,child_markers_depth,depth_7_marker_only,>>>>>>>,2,"[88140, 22539]","['>>>>', '>>>']"
+LFM,child_markers_depth,depth_7_marker_only,>>>>>>>,2,"[94851, 64860]","['>>>>', '>>>']"
+Qwen,child_markers_depth,depth_7_text,>>>>>>>notes are from abstract only|,7,"[61206, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_7_text,>>>>>>>notes are from abstract only|,7,"[64444, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_7_text,>>>>>>>notes are from abstract only|,8,"[88140, 22539, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_7_text,>>>>>>>notes are from abstract only|,8,"[94851, 64860, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_7_index_3,>>>>>>>3|notes are from abstract only|,9,"[61206, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_7_index_3,>>>>>>>3|notes are from abstract only|,9,"[64444, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_7_index_3,>>>>>>>3|notes are from abstract only|,10,"[88140, 22539, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_7_index_3,>>>>>>>3|notes are from abstract only|,10,"[94851, 64860, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_7_index_dotted,>>>>>>>1.2|notes are from abstract only|,11,"[61206, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_7_index_dotted,>>>>>>>1.2|notes are from abstract only|,11,"[64444, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_7_index_dotted,>>>>>>>1.2|notes are from abstract only|,12,"[88140, 22539, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>', '>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_7_index_dotted,>>>>>>>1.2|notes are from abstract only|,12,"[94851, 64860, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_8_marker_only,>>>>>>>>,1,[47751],['>>>>>>>>']
+Llama,child_markers_depth,depth_8_marker_only,>>>>>>>>,1,[50513],['>>>>>>>>']
+Gemma,child_markers_depth,depth_8_marker_only,>>>>>>>>,1,[220893],['>>>>>>>>']
+LFM,child_markers_depth,depth_8_marker_only,>>>>>>>>,2,"[94851, 94851]","['>>>>', '>>>>']"
+Qwen,child_markers_depth,depth_8_text,>>>>>>>>notes are from abstract only|,7,"[47751, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_8_text,>>>>>>>>notes are from abstract only|,7,"[50513, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_8_text,>>>>>>>>notes are from abstract only|,7,"[220893, 23184, 659, 699, 7628, 1186, 236909]","['>>>>>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_8_text,>>>>>>>>notes are from abstract only|,8,"[94851, 94851, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>>', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_8_index_3,>>>>>>>>3|notes are from abstract only|,9,"[47751, 18, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_8_index_3,>>>>>>>>3|notes are from abstract only|,9,"[50513, 18, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_8_index_3,>>>>>>>>3|notes are from abstract only|,9,"[220893, 236800, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_8_index_3,>>>>>>>>3|notes are from abstract only|,10,"[94851, 94851, 27, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>>', '3', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,child_markers_depth,depth_8_index_dotted,>>>>>>>>1.2|notes are from abstract only|,11,"[47751, 16, 13, 17, 91, 17742, 513, 494, 7859, 1132, 91]","['>>>>>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Llama,child_markers_depth,depth_8_index_dotted,>>>>>>>>1.2|notes are from abstract only|,11,"[50513, 16, 13, 17, 91, 18790, 527, 505, 8278, 1193, 91]","['>>>>>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Gemma,child_markers_depth,depth_8_index_dotted,>>>>>>>>1.2|notes are from abstract only|,11,"[220893, 236770, 236761, 236778, 236909, 23184, 659, 699, 7628, 1186, 236909]","['>>>>>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+LFM,child_markers_depth,depth_8_index_dotted,>>>>>>>>1.2|notes are from abstract only|,12,"[94851, 94851, 25, 22, 26, 100, 26037, 437, 487, 13879, 1049, 100]","['>>>>', '>>>>', '1', '.', '2', '|', 'notes', ' are', ' from', ' abstract', ' only', '|']"
+Qwen,tilde_null_field,tilde_isolated,~,1,[93],['~']
+Llama,tilde_null_field,tilde_isolated,~,1,[93],['~']
+Gemma,tilde_null_field,tilde_isolated,~,1,[236995],['~']
+LFM,tilde_null_field,tilde_isolated,~,1,[102],['~']
+Qwen,tilde_null_field,pipe_tilde_pipe_isolated,|~|,3,"[91, 93, 91]","['|', '~', '|']"
+Llama,tilde_null_field,pipe_tilde_pipe_isolated,|~|,3,"[91, 93, 91]","['|', '~', '|']"
+Gemma,tilde_null_field,pipe_tilde_pipe_isolated,|~|,3,"[236909, 236995, 236909]","['|', '~', '|']"
+LFM,tilde_null_field,pipe_tilde_pipe_isolated,|~|,3,"[100, 102, 100]","['|', '~', '|']"
+Qwen,tilde_null_field,pipe_empty_pipe_isolated,||,1,[8224],['||']
+Llama,tilde_null_field,pipe_empty_pipe_isolated,||,1,[8651],['||']
+Gemma,tilde_null_field,pipe_empty_pipe_isolated,||,1,[16836],['||']
+LFM,tilde_null_field,pipe_empty_pipe_isolated,||,1,[852],['||']
+Qwen,tilde_null_field,field_tilde_between_pipes,refuted|~|2024|,10,"[1062, 2686, 91, 93, 91, 17, 15, 17, 19, 91]","['ref', 'uted', '|', '~', '|', '2', '0', '2', '4', '|']"
+Llama,tilde_null_field,field_tilde_between_pipes,refuted|~|2024|,8,"[1116, 2844, 91, 93, 91, 2366, 19, 91]","['ref', 'uted', '|', '~', '|', '202', '4', '|']"
+Gemma,tilde_null_field,field_tilde_between_pipes,refuted|~|2024|,10,"[1811, 7059, 236909, 236995, 236909, 236778, 236771, 236778, 236812, 236909]","['ref', 'uted', '|', '~', '|', '2', '0', '2', '4', '|']"
+LFM,tilde_null_field,field_tilde_between_pipes,refuted|~|2024|,8,"[1390, 12107, 100, 102, 100, 1217, 28, 100]","['ref', 'uted', '|', '~', '|', '202', '4', '|']"
+Qwen,tilde_null_field,field_empty_between_pipes,refuted||2024|,8,"[1062, 2686, 8224, 17, 15, 17, 19, 91]","['ref', 'uted', '||', '2', '0', '2', '4', '|']"
+Llama,tilde_null_field,field_empty_between_pipes,refuted||2024|,6,"[1116, 2844, 8651, 2366, 19, 91]","['ref', 'uted', '||', '202', '4', '|']"
+Gemma,tilde_null_field,field_empty_between_pipes,refuted||2024|,8,"[1811, 7059, 16836, 236778, 236771, 236778, 236812, 236909]","['ref', 'uted', '||', '2', '0', '2', '4', '|']"
+LFM,tilde_null_field,field_empty_between_pipes,refuted||2024|,6,"[1390, 12107, 852, 1217, 28, 100]","['ref', 'uted', '||', '202', '4', '|']"
+Qwen,tilde_null_field,field_value_between_pipes,refuted|unverified|2024|,11,"[1062, 2686, 91, 354, 20392, 91, 17, 15, 17, 19, 91]","['ref', 'uted', '|', 'un', 'verified', '|', '2', '0', '2', '4', '|']"
+Llama,tilde_null_field,field_value_between_pipes,refuted|unverified|2024|,9,"[1116, 2844, 91, 359, 21713, 91, 2366, 19, 91]","['ref', 'uted', '|', 'un', 'verified', '|', '202', '4', '|']"
+Gemma,tilde_null_field,field_value_between_pipes,refuted|unverified|2024|,11,"[1811, 7059, 236909, 602, 87622, 236909, 236778, 236771, 236778, 236812, 236909]","['ref', 'uted', '|', 'un', 'verified', '|', '2', '0', '2', '4', '|']"
+LFM,tilde_null_field,field_value_between_pipes,refuted|unverified|2024|,10,"[1390, 12107, 100, 384, 420, 1940, 100, 1217, 28, 100]","['ref', 'uted', '|', 'un', 'ver', 'ified', '|', '202', '4', '|']"
+Qwen,tilde_null_field,three_tildes_fields,|~|~|~|,7,"[91, 93, 91, 93, 91, 93, 91]","['|', '~', '|', '~', '|', '~', '|']"
+Llama,tilde_null_field,three_tildes_fields,|~|~|~|,7,"[91, 93, 91, 93, 91, 93, 91]","['|', '~', '|', '~', '|', '~', '|']"
+Gemma,tilde_null_field,three_tildes_fields,|~|~|~|,7,"[236909, 236995, 236909, 236995, 236909, 236995, 236909]","['|', '~', '|', '~', '|', '~', '|']"
+LFM,tilde_null_field,three_tildes_fields,|~|~|~|,7,"[100, 102, 100, 102, 100, 102, 100]","['|', '~', '|', '~', '|', '~', '|']"
+Qwen,tilde_null_field,three_empty_fields,||||,1,[74304],['||||']
+Llama,tilde_null_field,three_empty_fields,||||,1,[78034],['||||']
+Gemma,tilde_null_field,three_empty_fields,||||,2,"[16836, 16836]","['||', '||']"
+LFM,tilde_null_field,three_empty_fields,||||,1,[44899],['||||']
+Qwen,escape_pipe,escape_pipe_isolated,\|,2,"[59, 91]","['\\', '|']"
+Llama,escape_pipe,escape_pipe_isolated,\|,2,"[59, 91]","['\\', '|']"
+Gemma,escape_pipe,escape_pipe_isolated,\|,1,[5011],['\\|']
+LFM,escape_pipe,escape_pipe_isolated,\|,1,[15673],['\\|']
+Qwen,escape_pipe,pipe_isolated,|,1,[91],['|']
+Llama,escape_pipe,pipe_isolated,|,1,[91],['|']
+Gemma,escape_pipe,pipe_isolated,|,1,[236909],['|']
+LFM,escape_pipe,pipe_isolated,|,1,[100],['|']
+Qwen,escape_pipe,backslash_isolated,\,1,[59],['\\']
+Llama,escape_pipe,backslash_isolated,\,1,[59],['\\']
+Gemma,escape_pipe,backslash_isolated,\,1,[236785],['\\']
+LFM,escape_pipe,backslash_isolated,\,1,[68],['\\']
+Qwen,escape_pipe,text_with_escape_pipe,Rope \| scaling,4,"[49, 2703, 93805, 26079]","['R', 'ope', ' \\|', ' scaling']"
+Llama,escape_pipe,text_with_escape_pipe,Rope \| scaling,4,"[49, 2862, 98255, 28041]","['R', 'ope', ' \\|', ' scaling']"
+Gemma,escape_pipe,text_with_escape_pipe,Rope \| scaling,4,"[236794, 2504, 33046, 24968]","['R', 'ope', ' \\|', ' scaling']"
+LFM,escape_pipe,text_with_escape_pipe,Rope \| scaling,4,"[58, 2294, 28678, 29169]","['R', 'ope', ' \\|', ' scaling']"
+Qwen,escape_pipe,text_with_plain_space,Rope   scaling,4,"[49, 2703, 256, 26079]","['R', 'ope', '  ', ' scaling']"
+Llama,escape_pipe,text_with_plain_space,Rope   scaling,4,"[49, 2862, 256, 28041]","['R', 'ope', '  ', ' scaling']"
+Gemma,escape_pipe,text_with_plain_space,Rope   scaling,4,"[236794, 2504, 139, 69473]","['R', 'ope', '   ', 'scaling']"
+LFM,escape_pipe,text_with_plain_space,Rope   scaling,4,"[58, 2294, 266, 29169]","['R', 'ope', '  ', ' scaling']"
+Qwen,escape_pipe,text_with_literal_pipe,Rope | scaling,4,"[49, 2703, 735, 26079]","['R', 'ope', ' |', ' scaling']"
+Llama,escape_pipe,text_with_literal_pipe,Rope | scaling,4,"[49, 2862, 765, 28041]","['R', 'ope', ' |', ' scaling']"
+Gemma,escape_pipe,text_with_literal_pipe,Rope | scaling,4,"[236794, 2504, 1109, 24968]","['R', 'ope', ' |', ' scaling']"
+LFM,escape_pipe,text_with_literal_pipe,Rope | scaling,4,"[58, 2294, 1670, 29169]","['R', 'ope', ' |', ' scaling']"
+Qwen,escape_pipe,code_with_escape_pipe,if a \|\| b:,7,"[331, 264, 1088, 22242, 91, 292, 25]","['if', ' a', ' \\', '|\\', '|', ' b', ':']"
+Llama,escape_pipe,code_with_escape_pipe,if a \|\| b:,7,"[333, 264, 1144, 23813, 91, 293, 25]","['if', ' a', ' \\', '|\\', '|', ' b', ':']"
+Gemma,escape_pipe,code_with_escape_pipe,if a \|\| b:,6,"[584, 496, 33046, 5011, 518, 236787]","['if', ' a', ' \\|', '\\|', ' b', ':']"
+LFM,escape_pipe,code_with_escape_pipe,if a \|\| b:,7,"[387, 267, 577, 8221, 100, 293, 34]","['if', ' a', ' \\', '|\\', '|', ' b', ':']"
+Qwen,escape_pipe,inside_word_escape_pipe,pipe\|inside,4,"[13372, 59, 91, 39983]","['pipe', '\\', '|', 'inside']"
+Llama,escape_pipe,inside_word_escape_pipe,pipe\|inside,4,"[14086, 59, 91, 42450]","['pipe', '\\', '|', 'inside']"
+Gemma,escape_pipe,inside_word_escape_pipe,pipe\|inside,3,"[23644, 5011, 49431]","['pipe', '\\|', 'inside']"
+LFM,escape_pipe,inside_word_escape_pipe,pipe\|inside,3,"[45301, 15673, 94879]","['pipe', '\\|', 'inside']"
+Qwen,escape_pipe,inside_word_plain_pipe,pipe|inside,3,"[13372, 91, 39983]","['pipe', '|', 'inside']"
+Llama,escape_pipe,inside_word_plain_pipe,pipe|inside,3,"[14086, 91, 42450]","['pipe', '|', 'inside']"
+Gemma,escape_pipe,inside_word_plain_pipe,pipe|inside,3,"[23644, 236909, 49431]","['pipe', '|', 'inside']"
+LFM,escape_pipe,inside_word_plain_pipe,pipe|inside,3,"[45301, 100, 94879]","['pipe', '|', 'inside']"

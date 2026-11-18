@@ -1,0 +1,11 @@
+[10]{text,verdict,source{id,year},verified}:
+  Rope scaling hurts long ctx,refuted,2405.05254,2024,false
+  Attention is all you need,supported,1706.03762,2017,true
+  LoRA low rank adaptation,supported,2106.09685,2021,true
+  Mistral 7B architecture,supported,2309.06180,2023,true
+  DeepSeekMoE mixture experts,supported,2401.04088,2024,true
+  Language models few-shot,supported,2005.14165,2020,true
+  StarCoder 2 training code,supported,2402.14905,2024,true
+  Mistral fine tuning rules,unverified,2310.06825,2023,false
+  Chinchilla scaling compute,supported,2203.15556,2022,true
+  Direct preference optim,supported,2305.18290,2023,true

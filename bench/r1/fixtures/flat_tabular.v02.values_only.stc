@@ -1,0 +1,20 @@
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+2005.14165|Language models few-shot|supported|2020|1|
+2402.14905|StarCoder 2 training code|supported|2024|1|
+2310.06825|Mistral fine tuning rules|unverified|2023|0|
+2203.15556|Chinchilla scaling compute|supported|2022|1|
+2305.18290|Direct preference optim|supported|2023|1|
+2407.21783|Llama 3 herd models tech|supported|2024|1|
+2312.11805|Gemini models multimodal|supported|2023|1|
+2403.09611|Gemma open models Google|supported|2024|1|
+2307.09288|Llama 2 foundation chat|supported|2023|1|
+2210.03629|ReAct syner reasoning act|supported|2022|1|
+2404.14219|Phi 3 technical report|supported|2024|1|
+2302.13971|LLaMA efficient found LM|supported|2023|1|
+2408.03314|Qwen2 technical report|supported|2024|1|
+2308.12950|Code Llama open model|supported|2023|1|
+2406.11794|Nemotron 4 340B report|unverified|2024|0|

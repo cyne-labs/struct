@@ -1,0 +1,1 @@
+schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
