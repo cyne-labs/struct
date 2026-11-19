@@ -611,3 +611,50 @@ fn parse_enum_labels(input: &str, line_num: usize, col: usize) -> Result<Vec<Str
 
     Ok(labels)
 }
+
+/// Parses one or more outside schema definition lines (`schema:name{...}`).
+///
+/// SPEC.md §6: "A decoder can be given one or more schema lines from outside the file.
+/// They define classes exactly as if they appeared before the file's first line."
+/// R2.md Part A.3: "schemas is one or more schema:name{...} definition lines, one per line.
+/// Errors inside schemas report their line and column within schemas, and the message says
+/// the error was in the outside schemas."
+pub fn parse_outside_schemas(schemas: &str) -> Result<std::collections::BTreeMap<String, ClassDef>, StructError> {
+    let mut map = std::collections::BTreeMap::new();
+    for (line_idx, raw_line) in schemas.split('\n').enumerate() {
+        let line_num = line_idx + 1;
+        let clean = raw_line.strip_suffix('\r').unwrap_or(raw_line);
+        let trimmed = clean.trim_matches(|c| c == ' ' || c == '\t');
+        if trimmed.is_empty() {
+            continue;
+        }
+        match parse_schema_line(trimmed, line_num) {
+            Ok(ParsedSchemaLine::Define(class_def)) => {
+                if map.contains_key(&class_def.name) {
+                    return Err(StructError::new(
+                        format!("error in outside schemas: class '{}' defined twice", class_def.name),
+                        line_num,
+                        8,
+                    ));
+                }
+                map.insert(class_def.name.clone(), class_def);
+            }
+            Ok(ParsedSchemaLine::Reuse(name)) => {
+                return Err(StructError::new(
+                    format!("error in outside schemas: class reuse 'schema:{}' is not allowed in outside schemas", name),
+                    line_num,
+                    8,
+                ));
+            }
+            Err(e) => {
+                return Err(StructError::new(
+                    format!("error in outside schemas: {}", e.message),
+                    e.line,
+                    e.column,
+                ));
+            }
+        }
+    }
+    Ok(map)
+}
+

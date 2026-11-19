@@ -1,20 +1,48 @@
-//! Encoding implementation for Struct (v0.2).
+//! Encoding implementation for Struct (v0.3).
 //!
 //! Serializes in-memory Struct data into canonical Struct text format.
 
-use std::collections::HashSet;
-use crate::schema::{ClassDef, FieldDef, FieldType, ListItemType, ListTarget, ScalarType};
+use std::collections::{BTreeMap, HashSet};
+use crate::schema::{
+    parse_outside_schemas, ClassDef, FieldDef, FieldType, ListItemType, ListTarget, ScalarType,
+};
 use crate::types::{DecodedFile, StructError, Value};
 
 /// Encodes a `DecodedFile` into its canonical Struct text representation.
 ///
-/// Produces exactly one correct form, adhering strictly to SPEC.md v0.2.
+/// Calls `encode_with("", file)`.
 pub fn encode(file: &DecodedFile) -> Result<String, StructError> {
-    let mut out = String::new();
-    let mut defined_classes: HashSet<String> = HashSet::new();
+    encode_with("", file)
+}
 
-    for block in &file.blocks {
-        let class_def = match file.schemas.get(&block.class_name) {
+/// Encodes a `DecodedFile` given schemas from outside the file.
+///
+/// An encoder given outside schemas writes no definitions for them.
+/// With one outside class, its first block has no schema line, and any later block starts with `schema:name`.
+/// With several outside classes, every block starts with `schema:name`.
+pub fn encode_with(schemas: &str, file: &DecodedFile) -> Result<String, StructError> {
+    let outside_classes = parse_outside_schemas(schemas)?;
+    let num_outside = outside_classes.len();
+
+    let mut all_schemas: BTreeMap<String, ClassDef> = BTreeMap::new();
+    for (k, v) in &outside_classes {
+        all_schemas.insert(k.clone(), v.clone());
+    }
+    for (k, v) in &file.schemas {
+        all_schemas.insert(k.clone(), v.clone());
+    }
+
+    let mut out = String::new();
+    let mut defined_in_doc: HashSet<String> = HashSet::new();
+
+    let single_outside_name = if num_outside == 1 {
+        outside_classes.keys().next().cloned()
+    } else {
+        None
+    };
+
+    for (block_idx, block) in file.blocks.iter().enumerate() {
+        let class_def = match all_schemas.get(&block.class_name) {
             Some(def) => def,
             None => {
                 return Err(StructError::new(
@@ -25,13 +53,19 @@ pub fn encode(file: &DecodedFile) -> Result<String, StructError> {
             }
         };
 
-        // Schema line
-        if !defined_classes.contains(&block.class_name) {
-            out.push_str(&class_def.format_schema_line());
-            defined_classes.insert(block.class_name.clone());
-        } else {
-            // Reused class block: schema:name with no braces
+        // Schema line emission rules
+        if block_idx == 0 && num_outside == 1 && single_outside_name.as_deref() == Some(&block.class_name) {
+            // First block of the single outside class: NO schema line!
+        } else if outside_classes.contains_key(&block.class_name) {
+            // Outside class (reused or one of several outside classes)
             out.push_str(&format!("schema:{}\n", block.class_name));
+        } else if defined_in_doc.contains(&block.class_name) {
+            // Reused in-doc class
+            out.push_str(&format!("schema:{}\n", block.class_name));
+        } else {
+            // First definition of in-doc class
+            out.push_str(&class_def.format_schema_line());
+            defined_in_doc.insert(block.class_name.clone());
         }
 
         // Records
@@ -83,7 +117,6 @@ fn encode_record_columns(
 ) -> Result<(), StructError> {
     match record {
         Value::Null => {
-            // Check if any field contains a list
             for f in fields {
                 if f.has_list() {
                     return Err(StructError::new(
@@ -96,7 +129,6 @@ fn encode_record_columns(
                     ));
                 }
             }
-            // All columns of this record are null (~)
             for f in fields {
                 match &f.field_type {
                     FieldType::Scalar(_) | FieldType::Enum(_) => {
@@ -114,7 +146,6 @@ fn encode_record_columns(
         Value::Record(rec_fields) => {
             let mut first = is_start_of_line;
             for field_def in fields {
-                // Find matching value in rec_fields
                 let val_opt = rec_fields.iter().find(|(k, _)| k == &field_def.name).map(|(_, v)| v);
 
                 match &field_def.field_type {
@@ -191,21 +222,17 @@ fn encode_child_lists_for_record(
     out: &mut String,
 ) -> Result<(), StructError> {
     for target in list_targets {
-        // Retrieve the list items from parent_val following target.field_path
         if let Some(items) = get_list_by_path(parent_val, &target.field_path) {
             for item in items {
-                // Depth markers: one '>' per depth level
                 for _ in 0..depth {
                     out.push('>');
                 }
 
-                // If parent has multiple lists, emit canonical index
                 if !target.canonical_index.is_empty() {
                     out.push_str(&target.canonical_index);
                     out.push('|');
                 }
 
-                // Child columns
                 match &target.item_type {
                     ListItemType::Scalar(st) => {
                         encode_scalar_value(item, *st, target.canonical_index.is_empty(), out);
@@ -236,7 +263,6 @@ fn encode_child_lists_for_record(
                         )?;
                         out.push('\n');
 
-                        // Recurse into any child lists of this record item at depth + 1
                         let sub_lists = rec_def.find_lists();
                         encode_child_lists_for_record(item, &sub_lists, class_name, depth + 1, out)?;
                     }
@@ -247,7 +273,6 @@ fn encode_child_lists_for_record(
     Ok(())
 }
 
-/// Traverses a Value hierarchy to find the list at `path`.
 fn get_list_by_path<'a>(val: &'a Value, path: &[usize]) -> Option<&'a [Value]> {
     match val {
         Value::Record(fields) => {
@@ -284,8 +309,19 @@ fn encode_scalar_value(val: &Value, _st: ScalarType, is_first_col: bool, out: &m
                 } else {
                     out.push_str("-inf");
                 }
+            } else if *f == 0.0 {
+                if f.is_sign_negative() {
+                    out.push_str("-0");
+                } else {
+                    out.push('0');
+                }
             } else {
-                out.push_str(&f.to_string());
+                let abs = f.abs();
+                if abs >= 0.0001 && abs < 10000.0 {
+                    out.push_str(&f.to_string());
+                } else {
+                    out.push_str(&format!("{:e}", f));
+                }
             }
         }
         Value::Bool(b) => {
@@ -314,59 +350,47 @@ fn encode_enum_value(val: &Value, _labels: &[String], is_first_col: bool, out: &
     }
 }
 
-/// Encodes a text string according to Struct escaping rules.
+/// Encodes a text string according to Struct v0.3 canonical rules.
 fn encode_text(s: &str, is_first_col: bool, out: &mut String) {
-    // SPEC.md §3: An empty field is always an error. There's no empty string. Blank text is written ~.
     if s.is_empty() {
         out.push('~');
         return;
     }
 
-    // SPEC.md §3: \~ only when the whole value is exactly ~ and must not mean null
     if s == "~" {
         out.push_str(r"\~");
         return;
     }
 
-    let chars: Vec<char> = s.chars().collect();
-    let total = chars.len();
+    // SPEC.md §7: \r only when a text value contains a line break, or starts or ends with a space or tab.
+    // Inside it, only | and \ are escaped.
+    let needs_raw = s.contains('\n')
+        || s.starts_with(' ')
+        || s.starts_with('\t')
+        || s.ends_with(' ')
+        || s.ends_with('\t');
 
-    // Find leading spaces count
-    let mut leading_sp = 0;
-    while leading_sp < total && chars[leading_sp] == ' ' {
-        leading_sp += 1;
-    }
-
-    // Find trailing spaces count
-    let mut trailing_sp = 0;
-    while trailing_sp < total && chars[total - 1 - trailing_sp] == ' ' {
-        trailing_sp += 1;
-    }
-
-    for (i, c) in chars.iter().enumerate() {
-        // Leading space escape
-        if i < leading_sp {
-            out.push_str(r"\s");
-            continue;
+    if needs_raw {
+        out.push_str(r"\r");
+        for c in s.chars() {
+            match c {
+                '\\' => out.push_str(r"\\"),
+                '|' => out.push_str(r"\|"),
+                '\r' => {} // CRLF normalization: omit bare CR
+                _ => out.push(c),
+            }
         }
-        // Trailing space escape
-        if i >= total - trailing_sp {
-            out.push_str(r"\s");
-            continue;
-        }
-
-        // First character on line starting with '>'
-        if i == 0 && is_first_col && *c == '>' {
-            out.push_str(r"\>");
-            continue;
-        }
-
-        match c {
-            '\\' => out.push_str(r"\\"),
-            '|' => out.push_str(r"\|"),
-            '\n' => out.push_str(r"\n"),
-            '\r' => {} // omit CR
-            _ => out.push(*c),
+    } else {
+        for (i, c) in s.chars().enumerate() {
+            if i == 0 && is_first_col && c == '>' {
+                out.push_str(r"\>");
+                continue;
+            }
+            match c {
+                '\\' => out.push_str(r"\\"),
+                '|' => out.push_str(r"\|"),
+                _ => out.push(c),
+            }
         }
     }
 }

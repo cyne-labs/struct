@@ -14,12 +14,14 @@ pub mod types;
 pub mod schema;
 pub mod decode;
 pub mod encode;
+pub mod gbnf;
 
 // Re-export primary types and functions for a clean public interface
 pub use types::{Block, DecodedFile, StructError, Value, Warning, float_eq};
 pub use schema::{ClassDef, FieldDef, FieldType, ListItemType, RecordDef, ScalarType};
-pub use decode::decode;
-pub use encode::encode;
+pub use decode::{decode, decode_with};
+pub use encode::{encode, encode_with};
+pub use gbnf::{gbnf, gbnf_triggered};
 
 /// Looks up and returns all records of class `name` from all blocks in `file`, in file order.
 pub fn lookup<'a>(file: &'a DecodedFile, name: &str) -> Vec<&'a Value> {

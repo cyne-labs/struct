@@ -3,7 +3,7 @@
 //! One test per rule in SPEC.md, each asserting the exact line,
 //! the exact column, and the full exact message (not a substring).
 
-use structl::{decode, encode, Block, ClassDef, DecodedFile, FieldDef, FieldType, ListItemType, RecordDef, ScalarType, Value};
+use structl::{decode, decode_with, encode, Block, ClassDef, DecodedFile, FieldDef, FieldType, ListItemType, RecordDef, ScalarType, Value};
 
 #[test]
 fn test_error_data_line_before_schema_line() {
@@ -87,13 +87,23 @@ fn test_error_unknown_type_name() {
 }
 
 #[test]
-fn test_error_schema_line_containing_pipe() {
-    // SPEC.md §1: "a schema line: it starts with schema:, and never contains |;"
+fn test_error_schema_line_containing_pipe_is_data_line() {
+    // SPEC.md §1: "If a line starts with schema: and also contains |, it is a data line (the schema: prefix belongs to its first value, and the line is not a schema line)."
+    // Since no schema has been defined yet, it is a data line before any schema line.
     let input = "schema:claim{text|verdict}\n";
-    let err = decode(input).expect_err("Must fail: schema line containing '|'");
+    let err = decode(input).expect_err("Must fail: data line before any schema line");
+    assert_eq!(err.line, 1);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "data line appears before any schema line");
+}
+
+#[test]
+fn test_error_schema_line_containing_pipe_in_outside_schemas() {
+    // SPEC.md §1: "a schema line: it starts with schema:, and never contains |;"
+    let err = decode_with("schema:claim{text|verdict}", "").expect_err("Must fail: schema line containing '|'");
     assert_eq!(err.line, 1);
     assert_eq!(err.column, 18);
-    assert_eq!(err.message, "schema line must never contain '|'");
+    assert_eq!(err.message, "error in outside schemas: schema line must never contain '|'");
 }
 
 #[test]
@@ -368,4 +378,127 @@ fn test_error_encoder_null_for_record_containing_list() {
     assert_eq!(err.line, 0);
     assert_eq!(err.column, 0);
     assert_eq!(err.message, "cannot encode null for record containing a list: class 'claim', field 'info'");
+}
+
+#[test]
+fn test_error_escape_n() {
+    // SPEC.md §3: \n is no longer an escape sequence in v0.3
+    let input = "schema:claim{text}\nhello\\nworld|\n";
+    let err = decode(input).expect_err("Must fail: \\n escape");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 6);
+    assert_eq!(err.message, "invalid escape sequence '\\n'");
+}
+
+#[test]
+fn test_error_escape_s() {
+    // SPEC.md §3: \s is no longer an escape sequence in v0.3
+    let input = "schema:claim{text}\nhello\\sworld|\n";
+    let err = decode(input).expect_err("Must fail: \\s escape");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 6);
+    assert_eq!(err.message, "invalid escape sequence '\\s'");
+}
+
+#[test]
+fn test_error_raw_in_int() {
+    // SPEC.md §3: raw values are only valid for str and list[str]
+    let input = "schema:claim{val:int}\n\\r42|\n";
+    let err = decode(input).expect_err("Must fail: \\r in int field");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "raw value '\\r' is not allowed in int field");
+}
+
+#[test]
+fn test_error_raw_in_float() {
+    // SPEC.md §3: raw values are only valid for str and list[str]
+    let input = "schema:claim{val:float}\n\\r3.14|\n";
+    let err = decode(input).expect_err("Must fail: \\r in float field");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "raw value '\\r' is not allowed in float field");
+}
+
+#[test]
+fn test_error_raw_in_bool() {
+    // SPEC.md §3: raw values are only valid for str and list[str]
+    let input = "schema:claim{val:bool}\n\\r1|\n";
+    let err = decode(input).expect_err("Must fail: \\r in bool field");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "raw value '\\r' is not allowed in bool field");
+}
+
+#[test]
+fn test_error_raw_in_enum() {
+    // SPEC.md §3: raw values are only valid for str and list[str]
+    let input = "schema:claim{val:enum(a,b)}\n\\ra|\n";
+    let err = decode(input).expect_err("Must fail: \\r in enum field");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "raw value '\\r' is not allowed in enum field");
+}
+
+#[test]
+fn test_error_empty_raw_value() {
+    // SPEC.md §3: "An empty raw value (\r|) is an error."
+    let input = "schema:claim{text}\n\\r|\n";
+    let err = decode(input).expect_err("Must fail: empty raw value");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "empty raw value is an error");
+}
+
+#[test]
+fn test_error_unknown_escape_in_raw_value() {
+    // SPEC.md §3: Inside raw value, only \| and \\ are allowed
+    let input = "schema:claim{text}\n\\rhello\\qworld|\n";
+    let err = decode(input).expect_err("Must fail: invalid escape inside raw value");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 8);
+    assert_eq!(err.message, "invalid escape sequence '\\q' inside raw value");
+}
+
+#[test]
+fn test_error_raw_value_no_closing_pipe_at_eof() {
+    // SPEC.md §3: raw value with no closing | before EOF
+    let input = "schema:claim{text}\n\\runclosed";
+    let err = decode(input).expect_err("Must fail: unclosed raw value");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "raw value has no closing '|' before the end of the file");
+}
+
+#[test]
+fn test_error_several_outside_classes_data_before_schema_line() {
+    // SPEC.md §6: with several outside classes, data before first schema line is an error
+    let schemas = "schema:c1{x}\nschema:c2{y}";
+    let input = "foo|\n";
+    let err = decode_with(schemas, input).expect_err("Must fail: data before schema line with multiple outside classes");
+    assert_eq!(err.line, 1);
+    assert_eq!(err.column, 1);
+    assert_eq!(err.message, "with several outside classes, data before the first schema line is an error");
+}
+
+#[test]
+fn test_error_redefining_outside_class() {
+    // SPEC.md §6: redefining an outside class is an error
+    let schemas = "schema:claim{text}";
+    let input = "schema:claim{text, year:int}\nclaim 1|2024|\n";
+    let err = decode_with(schemas, input).expect_err("Must fail: redefining outside class");
+    assert_eq!(err.line, 1);
+    assert_eq!(err.column, 8);
+    assert_eq!(err.message, "class 'claim' defined twice");
+}
+
+#[test]
+fn test_error_inside_schemas_argument() {
+    // R2.md Part A.3: errors inside schemas report line, column and state it was in outside schemas
+    let schemas = "schema:claim{text,text:int}";
+    let input = "claim 1|\n";
+    let err = decode_with(schemas, input).expect_err("Must fail: error inside schemas argument");
+    assert_eq!(err.line, 1);
+    assert_eq!(err.column, 19);
+    assert_eq!(err.message, "error in outside schemas: duplicate field name 'text' in schema");
 }

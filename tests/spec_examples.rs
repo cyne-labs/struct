@@ -1,8 +1,8 @@
-//! Tests verifying all examples in SPEC.md (v0.2).
+//! Tests verifying all examples in SPEC.md (v0.3).
 //!
 //! Checks decoding, values structure, and byte-for-byte re-encoding.
 
-use structl::{decode, encode, lookup, Value};
+use structl::{decode, decode_with, encode, encode_with, lookup, Value};
 
 #[test]
 fn test_spec_section_4_records_example() {
@@ -135,22 +135,92 @@ fn test_spec_section_3_null_records() {
 }
 
 #[test]
+fn test_spec_section_3_raw_values_example() {
+    // SPEC.md §3: Raw values example
+    let input = "schema:fix{file, patch}\nmain.rs|\\rfn main() {\n    println!(\"hi\");\n}|\n";
+
+    let doc = decode(input).expect("decoding failed");
+    assert_eq!(doc.blocks.len(), 1);
+    let rec = &doc.blocks[0].records[0];
+    assert_eq!(rec.get_field("file"), Some(&Value::String("main.rs".into())));
+    let expected_patch = "fn main() {\n    println!(\"hi\");\n}";
+    assert_eq!(rec.get_field("patch"), Some(&Value::String(expected_patch.into())));
+
+    let encoded = encode(&doc).expect("encoding failed");
+    assert_eq!(encoded, input, "Encoded output must match SPEC.md raw value example byte-for-byte");
+}
+
+#[test]
 fn test_spec_section_3_escapes_roundtrip() {
-    let input = "schema:escaped{gt, pipe, backslash, newline, tilde, space, hash}\n\
-                 \\>title|\\||\\\\|\\n|\\~|\\shello\\s|#tag|\n";
+    // SPEC.md §3 & §7: Escapes in v0.3
+    let input = "schema:escaped{gt, pipe, backslash, tilde, hash, raw_sp, raw_nl}\n\
+                 \\>title|\\||\\\\|\\~|#tag|\\r hello |\\rfirst\nsecond|\n";
 
     let doc = decode(input).expect("decoding failed");
     let rec = &doc.blocks[0].records[0];
     assert_eq!(rec.get_field("gt"), Some(&Value::String(">title".into())));
     assert_eq!(rec.get_field("pipe"), Some(&Value::String("|".into())));
     assert_eq!(rec.get_field("backslash"), Some(&Value::String("\\".into())));
-    assert_eq!(rec.get_field("newline"), Some(&Value::String("\n".into())));
     assert_eq!(rec.get_field("tilde"), Some(&Value::String("~".into())));
-    assert_eq!(rec.get_field("space"), Some(&Value::String(" hello ".into())));
     assert_eq!(rec.get_field("hash"), Some(&Value::String("#tag".into())));
+    assert_eq!(rec.get_field("raw_sp"), Some(&Value::String(" hello ".into())));
+    assert_eq!(rec.get_field("raw_nl"), Some(&Value::String("first\nsecond".into())));
 
     let encoded = encode(&doc).expect("encoding failed");
     assert_eq!(encoded, input, "Encoded escapes must match byte-for-byte");
+}
+
+#[test]
+fn test_spec_section_1_schema_line_with_pipe_is_data() {
+    // SPEC.md §1: "A line that starts with schema: but contains a | is a data line.
+    // For example, schema:foo|1.5| is a data line whose first value is the text schema:foo."
+    let input = "schema:claim{text, val:float}\n\
+                 schema:foo|1.5|\n";
+
+    let doc = decode(input).expect("decoding failed");
+    assert_eq!(doc.blocks.len(), 1);
+    let rec = &doc.blocks[0].records[0];
+    assert_eq!(rec.get_field("text"), Some(&Value::String("schema:foo".into())));
+    assert_eq!(rec.get_field("val"), Some(&Value::Float(1.5)));
+
+    let encoded = encode(&doc).expect("encoding failed");
+    assert_eq!(encoded, input);
+}
+
+#[test]
+fn test_spec_section_6_outside_schemas_single_class() {
+    // SPEC.md §6: Outside schema with one class
+    let schemas = "schema:claim{text, year:int}\n";
+    let input = "Rope scaling hurts long ctx|2024|\n\
+                 Another claim|2025|\n\
+                 schema:claim\n\
+                 Later block|2026|\n";
+
+    let doc = decode_with(schemas, input).expect("decoding with single outside schema failed");
+    assert_eq!(doc.blocks.len(), 2);
+    assert_eq!(doc.blocks[0].records.len(), 2);
+    assert_eq!(doc.blocks[1].records.len(), 1);
+
+    let encoded = encode_with(schemas, &doc).expect("encoding with single outside schema failed");
+    assert_eq!(encoded, input, "Encoded output must match outside schema single class byte-for-byte");
+}
+
+#[test]
+fn test_spec_section_6_outside_schemas_multiple_classes() {
+    // SPEC.md §6: Outside schemas with several classes
+    let schemas = "schema:claim{text, year:int}\nschema:source{url, score:float}\n";
+    let input = "schema:claim\n\
+                 Rope scaling|2024|\n\
+                 schema:source\n\
+                 https://arxiv.org|4.5|\n";
+
+    let doc = decode_with(schemas, input).expect("decoding with multiple outside schemas failed");
+    assert_eq!(doc.blocks.len(), 2);
+    assert_eq!(doc.blocks[0].class_name, "claim");
+    assert_eq!(doc.blocks[1].class_name, "source");
+
+    let encoded = encode_with(schemas, &doc).expect("encoding with multiple outside schemas failed");
+    assert_eq!(encoded, input, "Encoded output must match outside schema multiple classes byte-for-byte");
 }
 
 #[test]
@@ -174,8 +244,6 @@ fn test_spec_section_5_leniency_warning() {
 
 #[test]
 fn test_positive_all_tilde_list_holding_record_without_child_lines() {
-    // 1.2: Decoding a line where all of its columns are ~ gives a record with null values
-    // and its lists, which are empty when there are no child lines. It never gives null.
     let input = "schema:item{name, tags:list[str]}\n\
                  ~|\n";
 
@@ -197,7 +265,6 @@ fn test_positive_all_tilde_list_holding_record_without_child_lines() {
 
 #[test]
 fn test_positive_all_tilde_list_holding_record_with_child_lines() {
-    // 1.2: With child lines, decodes to record with null scalar values and populated list.
     let input = "schema:item{name, tags:list[str]}\n\
                  ~|\n\
                  >rust|\n";
@@ -220,7 +287,6 @@ fn test_positive_all_tilde_list_holding_record_with_child_lines() {
 
 #[test]
 fn test_positive_all_tilde_record_with_no_list_decodes_to_null() {
-    // 1.2 & 1.3: Records with no list inside still decode to null when all their columns are ~.
     let input = "schema:item{name, qty:int}\n\
                  ~|~|\n";
 
@@ -235,9 +301,6 @@ fn test_positive_all_tilde_record_with_no_list_decodes_to_null() {
 
 #[test]
 fn test_positive_both_encoder_input_forms_of_null_record() {
-    // 1.3: A record with no list inside it can arrive as Value::Null or as a record
-    // whose fields are all null. The encoder accepts both and writes the same text,
-    // and decode(encode(x)) returns Value::Null either way.
     use structl::{Block, ClassDef, DecodedFile, FieldDef, FieldType, ScalarType};
 
     let mut doc_null = DecodedFile::new();
@@ -267,11 +330,9 @@ fn test_positive_both_encoder_input_forms_of_null_record() {
     let text_null = encode(&doc_null).expect("encoding Value::Null record failed");
     let text_fields = encode(&doc_fields).expect("encoding record with all null fields failed");
 
-    // Both encoder forms must produce identical text
     assert_eq!(text_null, text_fields);
     assert_eq!(text_null, "schema:item{name, qty:int}\n~|~|\n");
 
-    // decode(encode(x)) returns Value::Null either way
     let decoded_from_null = decode(&text_null).expect("decoding text_null failed");
     let decoded_from_fields = decode(&text_fields).expect("decoding text_fields failed");
     assert_eq!(decoded_from_null.blocks[0].records[0], Value::Null);
