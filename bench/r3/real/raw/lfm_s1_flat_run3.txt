@@ -1,0 +1,34 @@
+<think>
+We need to produce 5 records, each line ends with '|', and values separated by '|', matching the schema columns: id, title, verdict, year, verified.
+
+We have claim IDs c1 to c5. We need to extract title, verdict, year, verified. The notes provide claim text, some have verdict implied? Let's parse.
+
+Claim c1: "Attention is all you need, supported, published 2017, verified true." Title could be "Attention is all you need". Verdict: supported. Year: 2017. Verified: true.
+
+c2: "FlashAttention memory reduction on A100, supported, published 2022, verified true." Title: "FlashAttention memory reduction on A100". Verdict: supported. Year: 2022. Verified: true.
+
+c3: "Llama 3 405B runs on single 8GB GPU, refuted, published 2024, verified false." Title: "Llama 3 405B runs on single 8GB GPU". Verdict: refuted. Year: 2024. Verified: false.
+
+c4: "Speculative decoding achieves 3x speedup, unverified, published 2023, verified false." Title: "Speculative decoding achieves 3x speedup". Verdict: unverified. Year: 2023. Verified: false.
+
+c5: "Quantization below 2 bits preserves full FP16 perplexity, refuted, published 2024, verified false." Title: "Quantization below 2 bits preserves full FP16 perplexity". Verdict: refuted. Year: 2024. Verified: false.
+
+Thus each line: id,c1,verdict,year,verified? Wait schema: schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. So columns: id, title, verdict, year, verified. So each line: id, title, verdict, year, verified. For c1: id "c1", title "Attention is all you need", verdict "supported", year 2017, verified true. So line: "c1,Attention is all you need,supported,2017,true". End with '|'.
+
+Similarly for others.
+
+Thus output:
+
+c1,Attention is all you need,supported,2017,true|
+c2,FlashAttention memory reduction on A100,supported,2022,true|
+c3,Llama 3 405B runs on single 8GB GPU,refuted,2024,false|
+c4,Speculative decoding achieves 3x speedup,unverified,2023,false|
+c5,Quantization below 2 bits preserves full FP16 perplexity,refuted,2024,false|
+
+Make sure each line ends with '|'. No extra spaces? Probably okay. Provide exactly that.
+</think>
+c1,Attention is all you need,supported,2017,true|
+c2,FlashAttention memory reduction on A100,supported,2022,true|
+c3,Llama 3 405B runs on single 8GB GPU,refuted,2024,false|
+c4,Speculative decoding achieves 3x speedup,unverified,2023,false|
+c5,Quantization below 2 bits preserves full FP16 perplexity,refuted,2024,false|

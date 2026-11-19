@@ -1,0 +1,88 @@
+<think>
+We need to produce 5 records from the given notes, in a specific format.
+
+Schema: 
+```
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}}]
+```
+
+We need to output each record as '|' separated values, with list items on subsequent lines starting with '>' and sublists with '>>', ending lines with '|'.
+
+Interpretation: For each record, we output a line that starts with a '|'? Or each record is separated by a line? The instruction: "Output each record as '|' separated values, with list items on subsequent lines starting with '>' and sublists with '>>', ending lines with '|'." This is a bit confusing.
+
+Maybe they want something like:
+
+| text | verdict | source id | year | notes |
+|---|---|---|---|
+| ... | ... | ... | ... | ... |
+
+But they also mention "list items on subsequent lines starting with '>' and sublists with '>>'". That suggests that notes are a list, and each note has subnotes. So perhaps each record is:
+
+| text | verdict | source id | year | notes |
+|---|---|---|---|---|
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 | experimental verification (subnotes: vision tested, audio tested) |
+| KV cache compression loses zero accuracy, refuted, source s2 in 2023. | refuted | s2 | 2023 | 4-bit KV causes drift |
+...
+
+But they also want "list items on subsequent lines starting with '>' and sublists with '>>'". Possibly they want the notes list to be a vertical list where each note is on its own line starting with '>', and subnotes are prefixed with '>>'.
+
+Thus each record might be:
+
+| text | verdict | source id | year | notes |
+|---|---|---|---|---|
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 | |
+| | > experimental verification | |
+| | > audio tested | |
+| |
+
+But that seems odd.
+
+Maybe they want something like:
+
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 | experimental verification |
+| KV cache compression loses zero accuracy, refuted, source s2 in 2023. | refuted | s2 | 2023 | 4-bit KV causes drift |
+...
+
+But they said "list items on subsequent lines starting with '>' and sublists with '>>'". So maybe each note is a separate line starting with '>', and any subnotes are prefixed with '>>'.
+
+Thus:
+
+| text | verdict | source id | year | notes |
+|---|---|---|---|---|
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 | experimental verification (subnotes: vision tested, audio tested) |
+| KV cache compression loses zero accuracy, refuted, source s2 in 2023. | refuted | s2 | 2023 | 4-bit KV causes drift (subnotes: > greedy matching confirmed) |
+... etc.
+
+But the notes field is a list[record{text, subnotes:list[str]}]. So each note record has a text and subnotes list. So we could embed that as a sublist. However, the instruction "list items on subsequent lines starting with '>' and sublists with '>>'" suggests a hierarchical list: top-level notes are items starting with '>', and subnotes are prefixed with '>>'.
+
+Thus maybe we need to produce something like:
+
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 |
+| experimental verification (subnotes: vision tested, audio tested) | > | | 
+| KV cache compression loses zero accuracy, refuted, source s2 in 2023. | refuted | s2 | 2023 |
+| 4-bit KV causes drift (subnotes: > greedy matching confirmed) | > | > |
+| Pruning eliminates 70% parameters without fine-tuning, unknown, source s4 in 2024. | unknown | s4 | 2024 |
+| needs deeper benchmark (subnotes: > theta adjustment required) | refuted | s5 | 2024 |
+| RoPE scaling needed (subnotes: theta adjustment required) | supported? Wait third note says "Speculative decoding reduces latency without output change, supported, source s3 in 2023." Actually note 3 is about speculative decoding, supported. But the last note (5) about context length extension to 1M tokens requires zero retargeting, refuted, source s5. So we need to include that.
+
+Thus we have 5 notes. They are:
+
+1. Scaling laws hold across modalities, supported, source s1 in 2024. Notes: experimental verification (subnotes: vision tested, audio tested).
+2. KV cache compression loses zero accuracy, refuted, source s2 in 2023. Notes: 4-bit KV causes drift.
+3. Speculative decoding reduces latency without output change, supported, source s3 in 2023. (No subnotes given, but we could include none or maybe "none"? Not required.)
+4. Pruning eliminates 70% parameters without fine-tuning, unknown, source s4 in 2024. (No subnotes)
+5. Context length extension to 1M tokens requires zero retargeting, refuted, source s5 in 2024. (No subnotes)
+
+Thus we need to produce 5 records, each with text, verdict, source id, year, and notes list.
+
+We need to format each record as a line with '|' separated values. Then notes:list[record{text, subnotes:list[str]}] So each note is a "record" with its own text and subnotes. The top-level record has notes as a list of those sub-records.
+
+Thus the output could be something like:
+
+| Scaling laws hold across modalities, supported, source s1 in 2024. | supported | s1 | 2024 | experimental verification (subnotes: vision tested, audio tested) |
+| KV cache compression loses zero accuracy, refuted, source s2 in 2023. | refuted | s2 | 2023 | 4-bit KV causes drift (subnotes: > greedy matching confirmed) |
+| Speculative decoding reduces latency without output change, supported, source s3 in 2023. | supported | s3 | 2023 | |
+| Pruning eliminates 70% parameters without fine-tuning, unknown, source s4 in 2024. | unknown | s4 | 2024 | |
+| Context length extension to 1M tokens requires zero retargeting, refuted, source s5 in 2024. | refuted | s5 | 2024 | |
+
+But we need to ensure "list items on subsequent lines

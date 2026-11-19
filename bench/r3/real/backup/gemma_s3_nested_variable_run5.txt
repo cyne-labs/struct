@@ -1,0 +1,24 @@
+text: Scaling laws hold across modalities, supported, source s1 in 2024
+|source:record{id:s1, year:2024}|
+notes:experimental verification
+>>vision tested
+>>audio tested
+|
+text: KV cache compression loses zero accuracy, refuted, source s2 in 2023
+|source:record{id:s2, year:2023}|
+notes:4-bit KV causes drift
+|
+text: Speculative decoding reduces latency without output change, supported, source s3 in 2023
+|source:record{id:s3, year:2023}|
+notes:lossless verification
+>>greedy matching confirmed
+|
+text: Pruning eliminates 70% parameters without fine-tuning, unknown, source s4 in 2024
+|source:record{id:s4, year:2024}|
+notes:needs deeper benchmark
+|
+text: Context length extension to 1M tokens requires zero retargeting, refuted, source s5 in 2024
+|source:record{id:s5, year:2024}|
+notes:RoPE scaling needed
+>>theta adjustment required
+|

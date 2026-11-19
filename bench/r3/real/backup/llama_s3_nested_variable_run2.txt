@@ -1,0 +1,65 @@
+Here is the Python code that reads the given schema and writes 5 records as described in the problem statement:
+
+```python
+import json
+
+schema = """
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+
+Format: Output each record as '|' separated values, with list items on subsequent lines starting with '>' and sublists with '>>', ending lines with '|'.
+
+Task: Write 5 records from the given notes.
+Notes:
+1. Scaling laws hold across modalities, supported, source s1 in 2024. Notes: experimental verification (subnotes: vision tested, audio tested).
+2. KV cache compression loses zero accuracy, refuted, source s2 in 2023. Notes: 4-bit KV causes drift.
+3. Speculative decoding reduces latency without output change, supported, source s3 in 2023. Notes: lossless verification (subnotes: greedy matching confirmed).
+4. Pruning eliminates 70% parameters without fine-tuning, unknown, source s4 in 2024. Notes: needs deeper benchmark.
+5. Context length extension to 1M tokens requires zero retargeting, refuted, source s5 in 2024. Notes: RoPE scaling needed (subnotes: theta adjustment required).
+"""
+
+data = """id, year, text, subnotes, verdict, source
+1, 2024, 'Scaling laws hold across modalities', [
+    'Experimental verification',
+    'Vision tested',
+    'Audio tested'
+], 'refuted', 's1 in 2024'
+2, 2023, 'KV cache compression loses zero accuracy', [
+    '4-bit KV causes drift'
+], 'refuted', 's2 in 2023'
+3, 2023, 'Speculative decoding reduces latency without output change', [
+    'Lossless verification',
+    'Greedy matching confirmed'
+], 'supported', 's3 in 2023'
+4, 2024, 'Pruning eliminates 70% parameters without fine-tuning', [
+    'Needs deeper benchmark'
+], 'unknown', 's4 in 2024'
+5, 2024, 'Context length extension to 1M tokens requires zero retargeting', [
+    'RoPE scaling needed'
+], 'refuted', 's5 in 2024'"""
+
+data_list = json.loads(data)
+records = [
+    (1, 2024, "Scaling laws hold across modalities", [
+        "Experimental verification",
+        "Vision tested",
+        "Audio tested"
+    ], "refuted", "s1 in 2024"),
+    (2, 2023, "KV cache compression loses zero accuracy", [
+        "4-bit KV causes drift"
+    ], "refuted", "s2 in 2023"),
+    (3, 2023, "Speculative decoding reduces latency without output change", [
+        "Lossless verification"
+    ], "supported", "s3 in 2023"),
+    (4, 2024, "Pruning eliminates 70% parameters without fine-tuning", [
+        "Needs deeper benchmark"
+    ], "unknown", "s4 in 2024"),
+    (5, 2024, "Context length extension to 1M tokens requires zero retargeting", [
+        "RoPE scaling needed"
+    ], "refuted", "s5 in 2024")
+]
+
+for record in records:
+    print('|'.join(f"{field[0]}: {field[1]}" for field in record))
+```
+
+This script reads the given schema and data, and then generates 5 records based on the schema. Each record is then printed as a list of values separated by pipes.

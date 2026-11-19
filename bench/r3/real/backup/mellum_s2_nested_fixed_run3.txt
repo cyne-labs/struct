@@ -1,0 +1,5 @@
+|Linear attention scales linearly with sequence length|supported|arxiv.1234|2020|true|
+|Mixture of experts routes tokens dynamically|supported|arxiv.5678|2021|true|
+|LoRA fine-tuning beats full fine-tuning on all benchmarks|refuted|arxiv.9999|2023|false|
+|1-bit LLMs match full precision on reasoning tasks|unverified|arxiv.4444|2024|false|
+|Direct preference optimization replaces RLHF entirely|unverified|arxiv.7777|2023|true|

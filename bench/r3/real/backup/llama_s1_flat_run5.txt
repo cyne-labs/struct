@@ -1,0 +1,33 @@
+Here is the code snippet that matches the given schema and the provided notes:
+
+```python
+import enum
+
+class Supported(str, enum.Enum):
+    supported = "supported"
+    refuted = "refuted"
+    unverified = "unverified"
+
+class Verified(str, enum.Enum):
+    true = "true"
+    false = "false"
+
+class Year(int):
+    pass
+
+class Verified(bool):
+    pass
+
+schema = [
+    {"id": 1, "title": "Attention is all you need", "verdict": Supported.supported, "year": 2017, "verified": True},
+    {"id": 2, "title": "FlashAttention memory reduction on A100", "verdict": Supported.refuted, "year": 2022, "verified": True},
+    {"id": 3, "title": "Llama 3 405B runs on single 8GB GPU", "verdict": Supported.refuted, "year": 2024, "verified": False},
+    {"id": 4, "title": "Speculative decoding achieves 3x speedup", "verdict": Supported.unverified, "year": 2023, "verified": False},
+    {"id": 5, "title": "Quantization below 2 bits preserves full FP16 perplexity", "verdict": Supported.refuted, "year": 2024, "verified": False}
+]
+
+for record in schema:
+    print("|" + " | ".join(str(value) for key, value in record.items()) + "|")
+```
+
+This code snippet defines a dictionary `schema` that matches the given schema and prints each record as "id|title|verdict|year|verified|".

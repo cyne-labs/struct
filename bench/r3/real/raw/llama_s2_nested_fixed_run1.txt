@@ -1,0 +1,54 @@
+Here is the Python code that reads the given schema and writes 5 records from it:
+
+```python
+from enum import Enum
+from typing import List
+
+class Supported(Enum):
+    """Enum for the supported verdict."""
+    supported = "supported"
+    """Verdict for the supported case."""
+    refuted = "refuted"
+    """Verdict for the refuted case."""
+    unverified = "unverified"
+    """Verdict for the unverified case."""
+
+class Source(Enum):
+    """Enum for the source."""
+    arxiv = "arxiv"
+    """Source for the ARXIV publication."""
+    published = "published"
+    """Source for the publication."""
+    verified = "verified"
+    """Verdict for the verified case."""
+    refuted = "refuted"
+    """Verdict for the refuted case."""
+    unverified = "unverified"
+    """Verdict for the unverified case."""
+    """Verdict for the unverified case."""
+
+class Record:
+    """Class to represent a record."""
+    def __init__(self, text: str, verdict: Supported, source: Source, year: int, verified: bool):
+        self.text = text
+        self.verdict = verdict
+        self.source = source
+        self.year = year
+        self.verified = verified
+
+    def __str__(self):
+        return f"| {self.text} | {self.verdict} | {self.source} | {self.year} | {self.verified} | |\n"
+
+records: List[Record] = [
+    Record("Linear attention scales linearly with sequence length, supported, source arxiv.1234 published 2020, verified true.", Supported.supported, Source.arxiv, 2020, True),
+    Record("Mixture of experts routes tokens dynamically, supported, source arxiv.5678 published 2021, verified true.", Supported.supported, Source.arxiv, 2021, True),
+    Record("LoRA fine-tuning beats full fine-tuning on all benchmarks, refuted, source arxiv.9999 published 2023, verified false.", Supported.refuted, Source.arxiv, 2023, False),
+    Record("1-bit LLMs match full precision on reasoning tasks, unverified, source arxiv.4444 published 2024, verified false.", Supported.unverified, Source.arxiv, 2024, False),
+    Record("Direct preference optimization replaces RLHF entirely, unverified, source arxiv.7777 published 2023, verified true.", Supported.unverified, Source.arxiv, 2023, True),
+]
+
+for record in records:
+    print(record)
+```
+
+This code defines the `Record` class with the specified fields and a `__str__` method for printing the record. It then creates a list of `Record` objects and prints each one.

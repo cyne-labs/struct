@@ -1,0 +1,9 @@
+schema:lib
+\rpub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+|
+schema:main
+\rfn main() {
+    println!("hello");
+}

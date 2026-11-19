@@ -1,0 +1,7 @@
+Here are the five records according to the specified format:
+
+1. s1
+2. 
+3. s2
+4. 
+5. s5

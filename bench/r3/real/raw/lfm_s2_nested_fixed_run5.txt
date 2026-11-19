@@ -1,0 +1,45 @@
+<think>
+We need to output 5 records in the specified schema format. The schema:
+
+```
+schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+```
+
+But the example "Format: Output each record as '|' separated values with record columns flattened in order, ending each line with '|'."
+
+We need to produce lines, each line is a record. The fields: text, verdict, source, verified? The schema shows claim with text, verdict, source, verified. However they say "record{id, year:int}" - maybe the record includes id and year. Also "schema:claim{text, verdict:enum..., source:record{id, year:int}, verified:bool}". So each claim contains text (maybe the statement), verdict (supported, refuted, unverified), source (a record with id and year). So we need to create five such claims based on the notes.
+
+Given notes:
+
+1. Linear attention scales linearly with sequence length, supported, source arxiv.1234 published 2020, verified true.
+- So record: id? Not given. We need to assign an id. Possibly we can use numbers like "1". Year: 2020. text: "Linear attention scales linearly with sequence length". verdict: supported. source: {id: 1, year: 2020}. verified: true.
+
+2. Mixture of experts routes tokens dynamically, supported, source arxiv.5678 published 2021, verified true.
+- text: "Mixture of experts routes tokens dynamically". verdict: supported. source: {id: 2, year: 2021}. verified: true.
+
+3. LoRA fine-tuning beats full fine-tuning on all benchmarks, refuted, source arxiv.9999 published 2023, verified false.
+- text: "LoRA fine-tuning beats full fine-tuning on all benchmarks". verdict: refuted. source: {id: 3, year: 2023}. verified: false.
+
+4. 1-bit LLMs match full precision on reasoning tasks, unverified, source arxiv.4444 published 2024, verified false.
+- text: "1-bit LLMs match full precision on reasoning tasks". verdict: unverified. source: {id: 4, year: 2024}. verified: false.
+
+5. Direct preference optimization replaces RLHF entirely, unverified, source arxiv.7777 published 2023, verified true.
+- text: "Direct preference optimization replaces RLHF entirely". verdict: unverified. source: {id: 5, year: 2023}. verified: true.
+
+Thus each line will be:
+
+|Linear attention scales linearly with sequence length|supported|{id:1, year:2020}|true|
+|Mixture of experts routes tokens dynamically|supported|{id:2, year:2021}|true|
+|LoRA fine-tuning beats full fine-tuning on all benchmarks|refuted|{id:3, year:2023}|false|
+|1-bit LLMs match full precision on reasoning tasks|unverified|{id:4, year:2024}|false|
+|Direct preference optimization replaces RLHF entirely|unverified|{id:5, year:2023}|true|
+
+Make sure each line ends with '|'. The fields: text, verdict, source (flattened id and year), verified. The source is a record with id and year. Could also omit braces? The format says "record: {id, year:int}". So we can write as {id:1, year:2020}. That's fine.
+
+Thus final answer.
+</think>
+|Linear attention scales linearly with sequence length|supported|{id:1, year:2020}|true|
+|Mixture of experts routes tokens dynamically|supported|{id:2, year:2021}|true|
+|LoRA fine-tuning beats full fine-tuning on all benchmarks|refuted|{id:3, year:2023}|false|
+|1-bit LLMs match full precision on reasoning tasks|unverified|{id:4, year:2024}|false|
+|Direct preference optimization replaces RLHF entirely|unverified|{id:5, year:2023}|true|

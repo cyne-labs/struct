@@ -1,0 +1,43 @@
+Here is the code that meets the specifications:
+
+```rust
+use std::fs::File;
+use std::io::Read;
+use std::path::Path;
+
+fn main() {
+    let mut file = match File::open("src/lib.rs") {
+        Ok(file) => file,
+        Err(_) => return,
+    };
+
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+
+    let mut lines = contents.lines();
+
+    for line in lines {
+        if line.starts_with("schema:")) {
+            let name = line.trim();
+            println!("class {}", name);
+            let code = match line.starts_with("schema:")) {
+                true => {
+                    let mut code = String::new();
+                    lines.next().unwrap().read_to_string(&mut code).unwrap();
+                    code = format!("{}\r\n{}", code, "|");
+                    println!("{}", code);
+                    break;
+                }
+                false => {
+                    let mut code = String::new();
+                    lines.next().unwrap().read_to_string(&mut code).unwrap();
+                    println!("{}", code);
+                    break;
+                }
+            };
+        }
+    }
+}
+```
+
+This code reads the contents of a file named "src/lib.rs" and then for each class block in the file, it prints the class name followed by the code. The code is wrapped in a loop that continues until it has processed all class blocks.

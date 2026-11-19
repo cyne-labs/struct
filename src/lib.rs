@@ -15,6 +15,7 @@ pub mod schema;
 pub mod decode;
 pub mod encode;
 pub mod gbnf;
+pub mod doctor;
 
 // Re-export primary types and functions for a clean public interface
 pub use types::{Block, DecodedFile, StructError, Value, Warning, float_eq};
@@ -22,6 +23,7 @@ pub use schema::{ClassDef, FieldDef, FieldType, ListItemType, RecordDef, ScalarT
 pub use decode::{decode, decode_with};
 pub use encode::{encode, encode_with};
 pub use gbnf::{gbnf, gbnf_triggered};
+pub use doctor::{doctor, splice, BadLine, DoctorMode, DoctorOptions, DoctorReport, Repair, SafeFix};
 
 /// Looks up and returns all records of class `name` from all blocks in `file`, in file order.
 pub fn lookup<'a>(file: &'a DecodedFile, name: &str) -> Vec<&'a Value> {

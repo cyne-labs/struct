@@ -1,0 +1,7 @@
+Here are the 5 records as per the given schema:
+
+c1|Attention is all you need|2017|true|true
+c2|FlashAttention memory reduction on A100|2022|true|true
+c3|Llama 3 405B runs on single 8GB GPU|2024|false|false
+c4|Speculative decoding achieves 3x speedup|2023|false|false
+c5|Quantization below 2 bits preserves full FP16 perplexity|2024|false|false

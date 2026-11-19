@@ -1,0 +1,40 @@
+Here is the Python code that reads the given data and writes it to a file in the desired format:
+
+```python
+import csv
+
+# Read the data from the file
+with open('data.txt', 'r') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        record = {
+            'text': row['text'],
+            'verdict': row['verdict'],
+            'source': row['source'],
+            'verified': row['verified']
+        }
+        print("|", end="")
+        for key, value in record.items():
+            print(f"{key:10}", end=",")
+        print()
+
+        if row['verdict'] == 'supported':
+            print("|", end="")
+            for key, value in record.items():
+                print(f"{key:10}", end=",")
+            print()
+
+        elif row['verdict'] == 'refuted':
+            print("|", end="")
+            for key, value in record.items():
+                print(f"{key:10}", end=",")
+            print()
+
+        elif row['verdict'] == 'unverified':
+            print("|", end="")
+            for key, value in record.items():
+                print(f"{key:10}", end=",")
+            print()
+```
+
+You can replace `'data.txt'` with the path to your own file if needed. This code assumes that the data is in the same format as the example data provided. If the data is in a different format, you may need to modify the code accordingly.

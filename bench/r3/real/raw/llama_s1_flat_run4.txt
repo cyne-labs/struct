@@ -1,0 +1,9 @@
+Here is the output based on the provided schema:
+
+| id | title       | verdict | year | verified |  |
+|----|-------------|--------|------|---------|----|
+| c1 | Attention   | supported | 2017 | true     | |
+| c2 | FlashAttention | supported | 2022 | true     | |
+| c3 | Llama 3     | refuted  | 2024 | false    | |
+| c4 | Speculative | unverified | 2023 | false    | |
+| c5 | Quantization | refuted  | 2024 | false    |

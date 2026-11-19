@@ -1,0 +1,41 @@
+Here is the code to accomplish the task:
+
+```rust
+use std::fs::File;
+use std::io::Read;
+
+fn main() {
+    let mut file = File::open("lib.rs").unwrap();
+    let mut buffer = String::new();
+    file.read_to_string(&mut buffer).unwrap();
+
+    let mut lines = buffer.lines();
+    let code_block = lines.next();
+    while let Some(line) = lines.next() {
+        if line.starts_with("pub fn") {
+            println!("{}", line.trim_start_matches("pub fn"));
+        } else if line.starts_with("fn") {
+            println!("{}", line.trim_start_matches("fn"));
+        }
+    }
+}
+
+schema:file{name, path}
+schema:patch{file_name, code, line:int}
+
+let file_name = "lib.rs";
+let path = "src/lib.rs";
+let code = "pub fn add(a: i32, b: i32) -> i32 {\r\n    a + b\r\n}";
+let line = 10;
+
+schema:patch{file_name, code, line};
+
+let file_name = "lib.rs";
+let path = "src/main.rs";
+let code = "fn main() {\r\n    println!("hello");\r\n}";
+let line = 1;
+
+schema:patch{file_name, code, line};
+```
+
+This code reads the contents of the 'lib.rs' file into a string, and then iterates over the lines of the file. If the line starts with 'pub fn', it prints the line. If the line starts with 'fn', it prints the line. The 'schema:patch' statements apply the patch to the 'lib.rs' file at the specified line number.

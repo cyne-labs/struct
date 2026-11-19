@@ -1,0 +1,25 @@
+Here is the code for the given schema:
+
+```rust
+schema:file{name, path}
+schema:patch{file_name, code, line:int}
+
+Format: Output lines for each class block beginning with 'schema:name', with multiline code written as a raw value starting with '\r' and ending with '|'.
+
+Task: Write 5 records from the given notes.
+Notes:
+1. File 'lib.rs' at path 'src/lib.rs'.
+2. Patch for 'lib.rs' at line 10 with code:
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+3. Patch for 'lib.rs' at line 20 with code:
+pub fn sub(a: i32, b: i32) -> i32 {
+    a - b
+}
+4. File 'main.rs' at path 'src/main.rs'.
+5. Patch for 'main.rs' at line 1 with code:
+fn main() {
+    println!("hello");
+}
+```

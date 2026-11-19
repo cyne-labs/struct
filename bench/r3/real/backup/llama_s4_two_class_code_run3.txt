@@ -1,0 +1,17 @@
+Here is the code that meets the requirements:
+
+```rust
+fn main() {
+    println!("hello");
+}
+
+schema:file{name, path}
+schema:patch{file_name, code, line:int}
+
+notes = [
+    ("lib.rs", "pub fn add(a: i32, b: i32) -> i32 {\r    a + b\r}}, 10),
+    ("lib.rs", "pub fn sub(a: i32, b: i32) -> i32 {\r    a - b\r}}, 20),
+    ("main.rs", "fn main() {\r    println!("hello\r"}, 1),
+```
+
+This code first defines a `main` function. Then it defines a `notes` array, where each element is a tuple containing the name of a file, a string of code, and a `line` field. The code then uses this array to apply the patches to the files specified in the `notes` array. The patches are applied in the order they appear in the `notes` array.

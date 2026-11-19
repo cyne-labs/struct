@@ -1,0 +1,6 @@
+id|title|verdict|year|verified|
+c1|Attention is all you need|supported|2017|true|
+c2|FlashAttention memory reduction on A100|supported|2022|true|
+c3|Llama 3 405B runs on single 8GB GPU|refuted|2024|false|
+c4|Speculative decoding achieves 3x speedup|unverified|2023|false|
+c5|Quantization below 2 bits preserves full FP16 perplexity|refuted|2024|false|

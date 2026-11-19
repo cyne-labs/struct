@@ -1,0 +1,73 @@
+Here is the code that generates the five records as specified:
+
+```python
+import enum
+from datetime import datetime
+
+class Supported(enum.Enum):
+    supported = "supported"
+    refuted = "refuted"
+    unknown = "unknown"
+
+class Source(enum.Enum):
+    s1 = "s1"
+    s2 = "s2"
+    s3 = "s3"
+    s4 = "s4"
+    s5 = "s5"
+
+class Notes:
+    def __init__(self):
+        self.text = ""
+        self.subnotes = []
+        self.notes = []
+
+    def add_subnote(self, subnote):
+        self.subnotes.append(subnote)
+
+    def add_note(self, note):
+        self.notes.append(note)
+
+def generate_records(notes):
+    records = []
+    for i in range(n):
+        record = {
+            "text": "",
+            "verdict": None,
+            "source": None,
+            "notes": []
+        }
+        for j in range(n):
+            if i < n:
+                record["text"] += "|"
+                if j < n - 1:
+                    record["text"] += ">>"
+                    record["verdict"] = Supported[j] if j < n - 2 else None
+                    record["source"] = Source[j] if j < n - 2 else None
+                    record["notes"].append(Notes())
+                else:
+                    record["text"] += "|"
+                    if j < n - 1:
+                        record["text"] += ">>"
+                    record["verdict"] = Supported[j] if j < n - 1 else None
+                    record["source"] = Source[j] if j < n - 1 else None
+                    record["notes"].append(Notes())
+            else:
+                record["text"] += "|"
+                if j < n - 1:
+                    record["text"] += ">>"
+                record["verdict"] = Supported[j] if j < n - 1 else None
+                record["source"] = Source[j] if j < n - 1 else None
+                record["notes"].append(Notes())
+        records.append(record)
+    return records
+
+records = generate_records(notes)
+for record in records:
+    print(record["text"])
+    for note in record["notes"]:
+        print(note["text"])
+    print("\n")
+```
+
+This code defines a `Notes` class to hold the notes, a `Source` enum to hold the source of the notes, and a `generate_records` function to generate the records. The records are then printed out.

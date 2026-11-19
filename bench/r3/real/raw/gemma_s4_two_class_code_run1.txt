@@ -1,0 +1,5 @@
+schema:file{name: "src/lib.rs", path: "src/lib.rs"}
+schema:patch{file_name: "src/lib.rs", code: "pub fn add(a: i32, b: i32) -> i32 {\r\ta + b}", line: 10}
+schema:patch{file_name: "src/lib.rs", code: "pub fn sub(a: i32, b: i32) -> i32 {\r\ta - b}", line: 20}
+schema:file{name: "src/main.rs", path: "src/main.rs"}
+schema:patch{file_name: "src/main.rs", code: "fn main() {\r\tprintln!(\"hello\");}", line: 1}

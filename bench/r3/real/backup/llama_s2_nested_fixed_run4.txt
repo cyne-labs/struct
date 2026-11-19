@@ -1,0 +1,7 @@
+Here are the five records according to the specified format:
+
+1. Linear Attention Scales Linearly With Sequence Length, Supported, Source arXiv.1234 Published 2020, Verified True.
+2. Mixture Of Experts Routes Tokens Dynamically, Supported, Source arXiv.5678 Published 2021, Verified True.
+3. LoRA Fine-Tuning Beats Full Fine-Tuning On All Benchmarks, Refuted, Source arXiv.9999 Published 2023, Verified False.
+4. 1-Bit LLMs Match Full Precision On Reasoning Tasks, Unverified, Source arXiv.4444 Published 2024, Verified False.
+5. Direct Preference Optimization Replaces RLHF Entirely, Unverified, Source arXiv.7777 Published 2023, Verified True.

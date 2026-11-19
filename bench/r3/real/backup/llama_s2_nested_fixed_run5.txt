@@ -1,0 +1,39 @@
+Here are five records in the given format:
+
+1. Linear attention scales linearly with sequence length, supported, source arxiv.1234 published 2020, verified true.
+| id | year | supported | source | verdict |
+|----|------|-----------|--------|--------|
+| 1  | 2020 | supported   | arxiv.1234 | verified |
+| 2  | 2020 | refuted    | arxiv.1234 | refuted  |
+| 3  | 2020 | unverified  | arxiv.1234 | unverified |
+| 4  | 2020 | supported   | arxiv.1234 | verified |
+| 5  | 2020 | unverified  | arxiv.1234 | unverified |
+
+2. Mixture of experts routes tokens dynamically, supported, source arxiv.5678 published 2021, verified true.
+| id | year | supported | source | verdict |
+|----|------|-----------|--------|--------|
+| 1  | 2021 | supported   | arxiv.5678 | verified |
+| 2  | 2021 | refuted    | arxiv.5678 | refuted  |
+| 3  | 2021 | unverified  | arxiv.5678 | unverified |
+| 4  | 2021 | supported   | arxiv.5678 | verified |
+| 5  | 2021 | unverified  | arxiv.5678 | unverified |
+
+3. LoRA fine-tuning beats full fine-tuning on all benchmarks, refuted, source arxiv.9999 published 2023, verified false.
+| id | year | supported | source | verdict |
+|----|------|-----------|--------|--------|
+| 1  | 2023 | refuted    | arxiv.9999 | refuted  |
+| 2  | 2023 | unverified  | arxiv.9999 | unverified |
+| 3  | 2023 | supported   | arxiv.9999 | verified |
+| 4  | 2023 | unverified  | arxiv.9999 | unverified |
+
+4. 1-bit LLMs match full precision on reasoning tasks, unverified, source arxiv.4444 published 2024, verified false.
+| id | year | supported | source | verdict |
+|----|------|-----------|--------|--------|
+| 1  | 2024 | unverified  | arxiv.4444 | unverified |
+| 2  | 2024 | supported   | arxiv.4444 | verified |
+| 3  | 2024 | unverified  | arxiv.4444 | unverified |
+
+5. Direct preference optimization replaces RLHF entirely, unverified, source arxiv.7777 published 2023, verified true.
+| id | year | supported | source | verdict |
+|----|------|-----------|--------|--------|
+| 1  | 2023 | true        | arxiv.7777 | verified |

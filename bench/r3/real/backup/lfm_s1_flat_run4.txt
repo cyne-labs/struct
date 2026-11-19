@@ -1,0 +1,30 @@
+<think>
+We need to output 5 records, each as a line with values separated by '|', matching the schema columns: id, title, verdict, year, verified.
+
+We have notes with claim IDs c1 to c5, each with title, verdict, year, and possibly supporting info. However the schema does not have a "title" field. Wait schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. So each record must have a title string. The notes include claim statements, but no explicit title. Perhaps the title can be derived from the claim text? We need to write 5 records from the given notes. Likely each record corresponds to a claim, with title being the claim text? Or maybe we need to infer a title like "Claim c1: ..." but that's redundant. Could be that the title is just the claim identifier? But schema requires a title string. We could use something like "c1: Attention is all you need" as title, but that includes the note content. However the instruction: "Write 5 records from the given notes." So we need to produce a record for each claim, including id, title (maybe the claim text), verdict, year, verified. The notes include the needed fields: claim id, title (the claim statement), verdict, published year, and verification status. So we can map:
+
+c1: title = "Attention is all you need", verdict = supported, year = 2017, verified = true.
+
+c2: title = "FlashAttention memory reduction on A100", verdict = supported, year = 2022, verified = true.
+
+c3: title = "Llama 3 405B runs on single 8GB GPU", verdict = refuted, year = 2024, verified = false.
+
+c4: title = "Speculative decoding achieves 3x speedup", verdict = unverified, year = 2023, verified = false.
+
+c5: title = "Quantization below 2 bits preserves full FP16 perplexity", verdict = refuted, year = 2024, verified = false.
+
+Thus each line: "c1|Attention is all you need|supported|2017|true" etc. Ensure each field separated by '|', no extra spaces. End each line with '|'. So final output:
+
+c1|Attention is all you need|supported|2017|true|
+c2|FlashAttention memory reduction on A100|supported|2022|true|
+c3|Llama 3 405B runs on single 8GB GPU|refuted|2024|false|
+c4|Speculative decoding achieves 3x speedup|unverified|2023|false|
+c5|Quantization below 2 bits preserves full FP16 perplexity|refuted|2024|false|
+
+Make sure no trailing spaces. That should satisfy.
+</think>
+c1|Attention is all you need|supported|2017|true|
+c2|FlashAttention memory reduction on A100|supported|2022|true|
+c3|Llama 3 405B runs on single 8GB GPU|refuted|2024|false|
+c4|Speculative decoding achieves 3x speedup|unverified|2023|false|
+c5|Quantization below 2 bits preserves full FP16 perplexity|refuted|2024|false|
