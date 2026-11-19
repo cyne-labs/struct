@@ -1,0 +1,230 @@
+{
+  "s1_flat": [
+    {
+      "id": "2405.05254",
+      "title": "Rope scaling hurts long ctx",
+      "verdict": "refuted",
+      "year": 2024,
+      "verified": false
+    },
+    {
+      "id": "1706.03762",
+      "title": "Attention is all you need",
+      "verdict": "supported",
+      "year": 2017,
+      "verified": true
+    },
+    {
+      "id": "2106.09685",
+      "title": "LoRA low rank adaptation",
+      "verdict": "supported",
+      "year": 2021,
+      "verified": true
+    },
+    {
+      "id": "2309.06180",
+      "title": "Mistral 7B architecture",
+      "verdict": "supported",
+      "year": 2023,
+      "verified": true
+    },
+    {
+      "id": "2401.04088",
+      "title": "DeepSeekMoE mixture experts",
+      "verdict": "supported",
+      "year": 2024,
+      "verified": true
+    }
+  ],
+  "s2_nested_fixed": [
+    {
+      "text": "Rope scaling hurts long ctx",
+      "verdict": "refuted",
+      "source": {
+        "id": "2405.05254",
+        "year": 2024
+      },
+      "verified": false
+    },
+    {
+      "text": "Attention is all you need",
+      "verdict": "supported",
+      "source": {
+        "id": "1706.03762",
+        "year": 2017
+      },
+      "verified": true
+    },
+    {
+      "text": "LoRA low rank adaptation",
+      "verdict": "supported",
+      "source": {
+        "id": "2106.09685",
+        "year": 2021
+      },
+      "verified": true
+    },
+    {
+      "text": "Mistral 7B architecture",
+      "verdict": "supported",
+      "source": {
+        "id": "2309.06180",
+        "year": 2023
+      },
+      "verified": true
+    },
+    {
+      "text": "DeepSeekMoE mixture experts",
+      "verdict": "supported",
+      "source": {
+        "id": "2401.04088",
+        "year": 2024
+      },
+      "verified": true
+    }
+  ],
+  "s3_nested_variable": [
+    {
+      "text": "Rope scaling hurts long ctx",
+      "verdict": "refuted",
+      "source": {
+        "id": "2405.05254",
+        "year": 2024
+      },
+      "notes": [
+        {
+          "text": "notes are from abstract only",
+          "subnotes": [
+            "abstract mentions 32k limit",
+            "appendix B clarifies"
+          ]
+        },
+        {
+          "text": "table 3 contradicts",
+          "subnotes": [
+            "llama 7b tested only"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "LoRA matches full finetune",
+      "verdict": "supported",
+      "source": {
+        "id": "2106.09685",
+        "year": 2021
+      },
+      "notes": [
+        {
+          "text": "tested on GLUE and Wikisql",
+          "subnotes": [
+            "rank 4 sufficient",
+            "higher ranks show diminishing returns"
+          ]
+        },
+        {
+          "text": "memory footprint reduced 3x",
+          "subnotes": [
+            "optimizer state minimal"
+          ]
+        },
+        {
+          "text": "checkpoint size under 50MB",
+          "subnotes": []
+        }
+      ]
+    },
+    {
+      "text": "KV cache quant loses 2x acc",
+      "verdict": "refuted",
+      "source": {
+        "id": "2406.12345",
+        "year": 2024
+      },
+      "notes": [
+        {
+          "text": "outlier channels preserved",
+          "subnotes": [
+            "per-head scales help",
+            "perplexity intact"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Chinchilla tokens beat params",
+      "verdict": "supported",
+      "source": {
+        "id": "2203.15556",
+        "year": 2022
+      },
+      "notes": [
+        {
+          "text": "optimal ratio is 20 to 1",
+          "subnotes": [
+            "tested across 400 models",
+            "cosine schedule used"
+          ]
+        },
+        {
+          "text": "kaplan tokens were suboptimal",
+          "subnotes": [
+            "fixed learning rate flawed"
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Language models few-shot",
+      "verdict": "supported",
+      "source": {
+        "id": "2005.14165",
+        "year": 2020
+      },
+      "notes": [
+        {
+          "text": "scaling curve is smooth",
+          "subnotes": [
+            "tested up to 175B",
+            "in-context learning observed"
+          ]
+        }
+      ]
+    }
+  ],
+  "s4_two_class_code": [
+    {
+      "class": "file",
+      "name": "lib.rs",
+      "path": "src/lib.rs"
+    },
+    {
+      "class": "file",
+      "name": "util.rs",
+      "path": "src/util.rs"
+    },
+    {
+      "class": "file",
+      "name": "main.rs",
+      "path": "src/main.rs"
+    },
+    {
+      "class": "patch",
+      "file_name": "lib.rs",
+      "code": "pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}",
+      "line": 10
+    },
+    {
+      "class": "patch",
+      "file_name": "util.rs",
+      "code": "pub fn greet(name: &str) -> String {\n    format!(\"Hello, {}!\", name)\n}",
+      "line": 5
+    },
+    {
+      "class": "patch",
+      "file_name": "main.rs",
+      "code": "fn main() {\n    println!(\"Hello, world!\");\n}",
+      "line": 1
+    }
+  ]
+}

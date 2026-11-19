@@ -1,0 +1,32 @@
+We need answer user's request. Need produce final data only Struct format, no prose no code fences. Need parse schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. But user gives 5 records. Need one per line values in schema order separated by | and every line ends with |. Never header row or column names. First line already data? They say first line is already data maybe just output data lines. Need decide id? Schema has id, but user says Paper 2405... maybe id is paper id? likely id field should be the arXiv id? Need output: 2405.05254|...? But schema claim{id...} maybe id is identifier. They say Paper 2405.05254 was published... title... false so refuted. So id maybe 2405.05254. Title "Rope scaling hurts long ctx". verdict refuted, year 2024, verified? They didn't specify verification? "turned out to be false, so claim is refuted." verified? In schema verified:bool. Need infer verified true? Maybe claim verification true? Let's inspect items:
+1. Paper 2405.05254 published 2024 title "Rope scaling hurts long ctx"; it turned out to be false, so claim is refuted.
+No explicit verification true/false? "turned out to be false" maybe verified? Could be verified bool? If claim is refuted maybe verified true? In examples, supported records say verification was true. For refuted, maybe also verified true? But need boolean. Could be verified 0 if not verified? However "it turned out to be false" implies verified? Need choose.
+2. In 2017, paper 1706.03762 title "Attention is all you need"; verification was true, and claim is supported. -> verified 1, supported.
+3. Paper 2106.09685 title "LoRA low rank adaptation", appeared 2021; verified as true, so supported. -> 1.
+4. Titled "Mistral 7B architecture", paper 2309.06180 published 2023; verification true, supported. -> 1.
+5. Paper 2401.04088 published 2024 title "DeepSeekMoE mixture experts"; verified true, supported. -> 1.
+
+Need escape rules: inside a value, write \| for | and \ for \. Text with line breaks or spaces/tabs at start/end needs start value with \r, then exactly. Our titles no leading/trailing spaces, no pipes or backslashes, no line breaks. So plain.
+
+Need line: id|title|verdict|year|verified|.
+Record 1: 2405.05254|Rope scaling hurts long ctx|refuted|2024|?|
+Need decide verified. The phrase "it turned out to be false" likely means the claim verification result is false, but schema verified is bool, not verdict. Could represent verified = 0 if it was false? Wait in examples: "verification was true" maps to verified=1. "verified as true" maps 1. If "turned out to be false" maybe verification false? But they say "so the claim is refuted." There is no "verification was false". The bool verified may be whether the claim was verified (not whether true). In NLP claim verification, verified could be boolean true if supported or refuted? Let's reason from data: They ask write these as Struct records. The provided statements include explicit "verification was true" for supported ones. For first, no explicit "verification" but "turned out to be false" may indicate verified true? If a claim is refuted, it has been verified to be false. So verified true. But could be unverified? No, "turned out to be false" is a verified result. I lean verified 1 for all. However if verified is boolean for verification status, then supported claims verified true; refuted maybe verified true. If false, no evidence. The schema includes verdict enum supported/refuted/unverified; if unverified, verdict unverified and verified maybe 0? But here refuted, so verified likely 1.
+
+Need ensure no code fences. Final lines only. Could there be issue id? They might expect id field as numeric? The schema says claim{id...} but user data has paper ids. Use paper id as id. If id should be an integer? no, likely string. Output values in schema order: id, title, verdict, year, verified.
+
+Need maybe include ~ for null? No null.
+
+Let's final:
+2405.05254|Rope scaling hurts long ctx|refuted|2024|1|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Double-check line ends with |. Yes. No header.
+
+Need consider if title "LoRA low rank adaptation" exact? yes. "DeepSeekMoE mixture experts" exact.
+
+Potential issue: user said "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is..." Our values no. But title has spaces internal, okay no escaping. They only require escaping for | and \. spaces not special unless leading/trailing. OK.
+
+Need maybe output exactly 5 lines. final no prose.

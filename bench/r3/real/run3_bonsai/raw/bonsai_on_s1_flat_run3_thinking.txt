@@ -1,0 +1,10 @@
+We need answer user's request. Need output data only Struct format, no prose, no code fences. Need parse schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. They provided 5 records. Need output lines values in schema order separated by |, every line ends with |. No header. First line data. Need handle escaping inside value: \| for | and \ for \. Text with line breaks or leading/trailing spaces: start value with \r then exact until closing |. But titles likely no line breaks/leading spaces. We can just normal.
+
+Need infer id? The records mention paper IDs. Schema id likely claim id? Maybe use paper arxiv ids? They say Paper 2405.05254 etc. Need id values likely those strings. Need title as given. verdict: 1 refuted, others supported. year int. verified bool: 1 for true, 0 for false. Record 1: id 2405.05254, title Rope scaling hurts long ctx, verdict refuted, year 2024, verified 0. 2: id 1706.03762, title Attention is all you need, supported, 2017, verified 1. 3: id 2106.09685, title LoRA low rank adaptation, supported, 2021, 1. 4: id 2309.06180, title Mistral 7B architecture, supported, 2023, 1. 5: id 2401.04088, title DeepSeekMoE mixture experts, supported, 2024, 1.
+
+Need ensure if title has spaces no special. Output each line ends |.
+Potential issue: "Struct format" maybe expects exactly values | ... |. No newline at end? okay.
+
+Need consider if id should be numeric? schema id unspecified type, likely string. Use arxiv id.
+
+Need final only records.

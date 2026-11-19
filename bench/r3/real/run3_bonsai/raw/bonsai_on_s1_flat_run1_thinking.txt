@@ -1,0 +1,10 @@
+We need answer user's request. Need produce Struct records only no prose/code fences. Need parse 5 records with schema claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. Fields order id | title | verdict | year | verified. id likely paper ids? They say Paper 2405.05254 ... likely id is 2405.05254. title exactly? Need handle special chars? Titles: "Rope scaling hurts long ctx" no special. "Attention is all you need" no. "LoRA low rank adaptation" no. "Mistral 7B architecture" no. "DeepSeekMoE mixture experts" no. Verdicts: refuted/supported/supported/supported/supported. Years 2024,2017,2021,2023,2024. Verified bool 1 or 0. For line break? none. Need escape? no. Each line ends with |. No header.
+
+Check if any value contains | or backslash? no. Need bool 1 or 0. So:
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Need ensure no code fences. final only lines.

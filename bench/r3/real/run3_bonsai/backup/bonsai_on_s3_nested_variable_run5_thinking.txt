@@ -1,0 +1,287 @@
+We need answer user's request. Need produce Struct records only, no prose/fences. Need parse schema and items.
+
+We need output data only in Struct format. Schema: claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+Output: never header row or column names. First line already data.
+One record per line: values in schema order, separated by |, and every line ends with |.
+~ means null. bool 1/0. enum exact.
+Inside value, write \| for | and \ for \.
+A record field adds its fields as extra columns, in order.
+List items go on lines below parent, starting with one > per level: > for its items, >> for theirs.
+For text with line breaks, or with spaces or tabs at start/end, start value with \r, then write it exactly as is, keeping every space, tab, indent and line break, until closing |.
+Example: text|supported|text|~|
+
+Need encode 5 records. Need decide representation of nested records and lists.
+
+Schema top: claim{text, verdict, source, notes}
+Top fields: text, verdict, source, notes. source record id, year adds extra columns. notes list of record{text, subnotes list[str]}.
+
+Need line per line? "One record per line: values in schema order, separated by |, and every line ends with |." But list items go on lines below parent. So likely each top-level record starts a line with its fields? But notes list is a field; how represent list? They say list items go on lines below parent, starting with one > per level: > for its items, >> for theirs. So for top record, line includes text|verdict|sourceid|sourceyear|? maybe notes list value? Need know how to denote list? In Struct format maybe each value column is value; list items are subsequent indented lines, not part of current line? Need infer.
+
+We have schema with nested records and lists. Need output only records. Each top-level record probably line: text|verdict|id|year|~? Or maybe no value for notes on parent, then child lines. Need ensure every line ends with |.
+
+Let's think of Struct format likely custom: It's like flattened table with nested lines. For record field adds fields as extra columns in order. For list items go on lines below parent, starting with one > per level: > for its items, >> for theirs.
+
+Given top-level claim object: fields text, verdict, source, notes. If source is record{id, year:int}, then parent line columns: text, verdict, source.id, source.year, notes? But notes is a list field. How represent? Maybe list field is represented by empty/? value on parent? Example only simple text|supported|text|~|. That example has 4 fields maybe top text, verdict, source text? no.
+
+Need produce valid according to their spec. Need maybe for list field, the value on the parent line is blank? Or maybe no column? They say values in schema order separated by |, every line ends with |. List items go on lines below parent. Could be that list field itself is represented by the lines below; on parent line, we omit the notes column? But "values in schema order" for record fields, list is a field. Maybe we still need a placeholder value for the list field? Example: text|supported|text|~| could be top: text, verdict, source, notes? no.
+
+Maybe Struct format: each record line has columns for scalar fields and records expanded; list fields are not on the line? Let's search memory? This resembles "Struct" format maybe from some tasks: schema:claim{text, verdict, ...}. They want output data only in Struct format. "Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |. ~ means null. bool is 1 or 0. enum values exact. Inside value write \|... A record{...} field adds its fields as extra columns, in order. List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+Example: text|supported|text|~|"
+
+This might be a serialization where each line is a record; nested records expand as columns; lists as child lines with indentation prefix. For a list of records, each item line has > prefix and its fields. For list of strings? subnotes list[str] are values; items go lines below their parent with >. Since subnotes is list of strings, each string item likely line starts with > and just the string? But must be values separated by |? "One record per line" maybe strings are not records but list items. They say list items go on lines below parent, starting with one > per level: > for its items, >> for theirs. So a list item could be a single value line, with no extra columns? But every line ends with |. For string list, maybe >string|? Need include fields? Let's design.
+
+We need represent:
+Record 1:
+text = Rope scaling hurts long ctx
+verdict = refuted
+source.id = 2405.05254
+source.year = 2024
+notes:
+  note1 text = notes are from abstract only
+  note1.subnotes:
+    sub1 = abstract mentions 32k limit
+    sub2 = appendix B clarifies
+  note2 text = table 3 contradicts
+  note2.subnotes:
+    sub1 = llama 7b tested only
+
+Need decide top line: text|refuted|2405.05254|2024|? maybe ~? Then note lines:
+> notes are from abstract only|? (subnotes field?)
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|?
+>> llama 7b tested only|
+
+But if note record has fields text, subnotes. The note line should have text then maybe subnotes list placeholder. How to represent? If record field adds fields as columns, for note record{text, subnotes}, line should have text and subnotes? subnotes is list of strings. Could put text|~? Then subnote lines. Or maybe just text| because list field not represented? Need every line values in schema order. If note line: text|subnotes? subnotes list not scalar, but list items below. Could put a null placeholder for list? ~? But if list is empty? For non-empty list, maybe the value is omitted or maybe represented by an empty string? The spec doesn't explicitly say placeholder for list field. It says list items go on lines below their parent. That suggests parent line does not include a value for the list field, only scalar/record fields? But "values in schema order" and "record field adds its fields as extra columns" maybe for each field: scalar/record -> value(s); list -> no column? Need infer from similar formats.
+
+Maybe in Struct, a field of list type is represented by a marker column with number of items? No, not specified.
+
+Let's parse exact: "One record per line: values in schema order, separated by |, and every line ends with |.
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \ for \.
+A record{...} field adds its fields as extra columns, in order.
+List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |."
+
+This likely defines a line-oriented format. For record top, values are in schema order. A record field adds fields as extra columns. A list field? It doesn't add a column; instead its items are lines below parent. But if not, how to know columns for child lines? For child record, its line includes its record fields. For list of records, each item line begins > then fields. For list of strings, each item line begins > then the string. Need every line ends with |. So a string item line could be >text|? If only one value, yes.
+
+But what about subnotes list of strings inside note record. The note line: if record fields text and subnotes; subnotes is list. It might have only text column, then child lines for subnotes. So note line: >text| (one value). Then subnote lines: >>subtext|.
+
+Top line: text|verdict|sourceid|sourceyear|? If notes list, no notes column? But if list field has no column, then top line only has text, verdict, source.id, source.year. But then how to distinguish top fields from note line? Indent. Top no prefix: text|refuted|id|year|? If no notes column, ends with | after year. Is that acceptable? It would have 4 values. The example: text|supported|text|~| has 4 values. Could correspond top text, verdict, source.id? source.year? maybe notes null? Not helpful.
+
+Need maybe top line must include a placeholder for notes because schema order includes notes. But how? Could use ~ for empty list? But non-empty list cannot be ~. Maybe the parent line includes a placeholder like <notes> or empty? They didn't specify. Could use ~ to mean null, not empty list. If notes non-null list, perhaps we need a value for list? Maybe list values are serialized as items below, but the list field itself could be represented by an empty string column? In table, empty string maybe null? But they say ~ null. Empty maybe empty string? Could use empty value before |? But "values in schema order separated by |". If no value, would be adjacent separators? Not likely.
+
+Maybe a list field is represented by a value column with an integer count? No mention.
+
+Maybe "List items go on the lines below their parent" means the parent line still has a value for the list field, but the actual items are on lines below. The value could be a token like @? Not specified. Maybe we omit list field from the line, but then field count not schema order? Could be acceptable because list not a scalar value.
+
+Let's search memory: There is a format "Struct" used in some AI evals? It might be similar to TSV with nested records and lists. The example "text|supported|text|~|" maybe from schema: claim{text, verdict:enum, source:record{id, year}, notes:list...}. If they give example of one line: text|supported|text|~| maybe it's a top record with text, verdict, source.id? source.year? Actually if source record has id and year, top line should have 5 or 6 columns if notes? Example has 4: text|supported|text|~|. Could be a simplified record with fields: text, verdict, source, notes? But source is a record with one field? no. Maybe example is generic not tied to schema. It shows four values: maybe text, verdict, source.id, notes~? Hmm.
+
+Could be they expect each record line includes all scalar/record-expanded fields, and for list fields they put ~ if empty or no value? But for list non-empty, maybe they put ~? No.
+
+Need produce likely accepted output. Need maximize correctness.
+
+Let's consider possible output:
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+>notes are from abstract only|
+>>abstract mentions 32k limit|
+>>appendix B clarifies|
+>table 3 contradicts|
+>>llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|
+>tested on GLUE and Wikisql|
+>>rank 4 sufficient|
+>>higher ranks show diminishing returns|
+>memory footprint reduced 3x|
+>>optimizer state minimal|
+>checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+>outlier channels preserved|
+>>per-head scales help|
+>>perplexity intact|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+>optimal ratio is 20 to 1|
+>>tested across 400 models|
+>>cosine schedule used|
+>kaplan tokens were suboptimal|
+>>fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2020|
+>scaling curve is smooth|
+>>tested up to 175B|
+>>in-context learning observed|
+
+This is plausible. But top line missing notes field value. Could be wrong if expected a column for notes. Maybe should include something like |? For top line: text|verdict|id|year||? That would be empty notes? But non-empty list? Could be parent line has no value for list field, and the list items below; no column. In table terms, list field absent. But "values in schema order" would then be not complete. However if list items are below, maybe that's how list fields work: they don't have a column on parent line. The parent line has only fields that are not list? But source is record, not list, so expanded.
+
+What about note line: It has text and subnotes list. If list field no column, note line has only text. So >text|. Subnotes list lines below: >>str|.
+
+If top line has no notes column, how do we know top line is complete? It ends after year. Fine.
+
+Need handle text with leading/trailing spaces or line breaks. Our texts have no leading/trailing, no line breaks, no pipes or backslashes. So no \r needed.
+
+Need maybe enum verdict exact supported/refuted. Yes.
+
+Potential issue: source year is int, output 2024 etc.
+
+Need ensure no code fences, no prose.
+
+But we need be careful about escaping inside values. No pipes in values. "GLUE and Wikisql" no. "rank 4 sufficient" no. Good.
+
+Could there be required blank line for empty subnotes? For third note in record2 "without any subnotes". We can just not have subnote lines. Good.
+
+Need maybe include a note line for empty subnotes? no.
+
+Alternative format: include note subnotes count? Let's explore more.
+
+The phrase "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This indicates for a list field, each item line is indented. It does not say parent line includes placeholder. So likely our format is correct.
+
+But "One record per line" could conflict with list items lines not records? But they are list item lines. Fine.
+
+Need think about if note record line should include both text and maybe an empty subnotes placeholder if no subnotes? If no subnotes, line just >text|. That's fine.
+
+Potential issue: "A record{...} field adds its fields as extra columns, in order." For top-level claim, if source record has id and year, top line fields: text, verdict, source.id, source.year. But what about notes? If list, maybe no extra columns. For note record, line: text (subnotes list no column). Good.
+
+Could top-level record be considered a record{...} field? We output top-level records directly. Good.
+
+Need maybe for list of records, the line should include the record fields with > prefix: >text|? If note has subnotes list, no column. Good.
+
+Need consider if list of strings should be represented with no column and just >value|. Yes.
+
+Need ensure every line ends with |. Yes.
+
+Need maybe line for note with subnotes should have a column for subnotes if non-empty? If not, how to know that subnotes belongs to previous note? Indentation lines below parent until next note line with >. Since subnotes lines have >>, they are below note line. Good.
+
+But if a note has no subnotes, the next > note line could be confused? The previous note line >text|, then next line >nextnote|; no subnotes. Fine.
+
+Need maybe top line for record with notes list should include a token to indicate notes list exists? Indented lines immediately below. Good.
+
+Let's test parsing:
+Line 1: Rope scaling hurts long ctx|refuted|2405.05254|2024|
+Fields: text, verdict, source_id, source_year. No notes. But next lines > are notes. How parser know these are notes? Schema says top field notes is list; after parent fields, list items at level 1. It can infer. For note line: >notes are from abstract only| fields text? Since note record has text and subnotes list. Good. Then >> lines are subnotes.
+
+But for top line, if no notes field column, the parser might think the first > lines are not part of top but new records? Indent indicates nested. Good.
+
+Need maybe top-level records separated? No blank lines.
+
+Could there be a requirement "The first line is already data." Means don't include header. We comply.
+
+Potential hidden expectation: Use ~ for null. We don't have null except maybe no. But if source record fields maybe all present. No notes placeholder. If they expect placeholder, missing might be wrong. Need decide if to include a value for notes field as ~? For non-empty list, maybe not. Let's think of possible canonical serialization.
+
+Maybe schema: claim{text, verdict, source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+If output as "Struct" records, perhaps each record line contains values for all fields in schema order, with nested record fields expanded, and list fields serialized as their items on subsequent lines, but the list field itself may be represented by an empty value? How would one encode list? The instruction "List items go on the lines below their parent" could mean that instead of a value in the parent column, you put the item lines. It doesn't say put a placeholder. If parent line still had a column for notes, what would its value be? Could be the first item? No, then items below duplicate? No. Could be an empty string? They don't define empty. Could be ~ meaning null, but list non-null. So likely no column.
+
+But "values in schema order" for record line: For a record field, add fields as extra columns. For a list field, maybe no value, because list items are lines. So okay.
+
+Need maybe for subnotes list of strings, the note line has only text, but schema order includes subnotes. If list no column, okay. If a note has subnotes, the >> lines are below. If no subnotes, nothing. Good.
+
+Potential issue: For list of strings, should each string line have trailing | only, e.g., >>abstract mentions 32k limit|. Yes.
+
+Need maybe for top-level source record, if source is record with id and year, top line has id and year. But schema source:record{id, year:int}. If a record field adds fields as extra columns, then the top line has text, verdict, id, year. Good.
+
+Need maybe include a field separator after year and then no notes value. If no notes field, line ends after year. But if top-level notes list is a field, maybe there is an implicit empty value? Could output text|verdict|id|year||? That would be an empty string for notes. But no spec. Which is more likely? Let's inspect example: "Example: text|supported|text|~|" If schema had a list field at end maybe they'd show ~? It shows four values. Suppose schema: {a:string, verdict:enum, source:string, notes:string?}. Then example a=text, verdict=supported, source=text, notes=null. Not informative.
+
+Maybe they expect each top line to have exactly columns: text|verdict|source_id|source_year|notes? If notes is list, they might use ~ for no notes? But all records have notes. Could use a special marker for list? Not defined.
+
+Could there be a convention: List values are encoded by repeating the parent line? No.
+
+Let's consider alternative: serialize nested objects as JSON-like inside pipes? But instructions say record fields add extra columns and list items lines below. So no.
+
+Need maybe use  for text with spaces at start/end. Not needed.
+
+Need maybe preserve exact text: "Rope scaling hurts long ctx" includes maybe no trailing. Good.
+
+Potential issue with paper IDs: 2405.05254 etc. No escaping.
+
+Need maybe year int no quotes.
+
+Let's produce final as above.
+
+But before final, ensure no accidental code fences or prose. Need only lines.
+
+Double-check all entries:
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, verdict refuted. Notes:
+- "notes are from abstract only", subnotes: "abstract mentions 32k limit", "appendix B clarifies"
+- "table 3 contradicts", subnote "llama 7b tested only"
+
+Our line: Rope scaling hurts long ctx|refuted|2405.05254|2024|
+>notes are from abstract only|
+>>abstract mentions 32k limit|
+>>appendix B clarifies|
+>table 3 contradicts|
+>>llama 7b tested only|
+
+Good.
+
+2. 2021, 2106.09685, claim "LoRA matches full finetune", supported. Notes:
+first "tested on GLUE and Wikisql" subnotes "rank 4 sufficient", "higher ranks show diminishing returns"
+second "memory footprint reduced 3x" subnote "optimizer state minimal"
+third "checkpoint size under 50MB" no subnotes.
+
+Our:
+LoRA matches full finetune|supported|2106.09685|2021|
+>tested on GLUE and Wikisql|
+>>rank 4 sufficient|
+>>higher ranks show diminishing returns|
+>memory footprint reduced 3x|
+>>optimizer state minimal|
+>checkpoint size under 50MB|
+
+Good.
+
+3. 2406.12345 in 2024, claim "KV cache quant loses 2x acc", refuted. note "outlier channels preserved" subnotes "per-head scales help", "perplexity intact".
+Our:
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+>outlier channels preserved|
+>>per-head scales help|
+>>perplexity intact|
+
+4. 2203.15556 2022 supported claim Chinchilla tokens beat params. notes:
+"optimal ratio is 20 to 1" subnotes "tested across 400 models", "cosine schedule used"
+"kaplan tokens were suboptimal" subnote "fixed learning rate flawed"
+Our good.
+
+5. 2005.14165 2020 supported claim "Language models few-shot". note "scaling curve is smooth" subnotes "tested up to 175B", "in-context learning observed".
+Our good.
+
+Need think if text values should be quoted? No.
+
+Potential issue: If values contain "2x" maybe no. "32k" no.
+
+Need maybe use ~ for unknown? no.
+
+Could the source record be represented with id then year as extra columns, but if source is record, maybe we should include source.id and source.year after verdict. Yes.
+
+Potential issue: In note lines, note record has fields text and subnotes. If subnotes list has no column, note line is >text|. But if note has subnotes, the subnote lines are at level 2. But how does parser know that >> lines belong to the previous > line and not to another list? It's by parent. Fine.
+
+Could there be ambiguity for a note with no subnotes followed by another note: >text1|
+>text2|
+No subnote lines. Good.
+
+Need maybe include an empty line to end a list? no.
+
+Let's think about possible expectation of a placeholder for empty list. For third note without subnotes, we output just line. If parser expects a subnotes value ~ on note line, maybe our line missing one column. But for first note, would it expect >text|~? or >text|? If list field has column with ~ when no items? But for non-empty list, what value? Maybe it expects the list field value to be the first item? Let's hypothesize other conventions.
+
+Alternative convention: For every field, including list, the parent line includes a value. For list, the value is a placeholder token representing the list, maybe empty or ~? But then list items below. If the placeholder is empty string, line for top would have extra empty column before |? e.g., Rope...|refuted|2405.05254|2024||. But spec says ~ means null, not empty. If empty string, maybe they'd specify. They didn't. If placeholder is ~ for null list only, non-empty list can't.
+
+Alternative: For a list field, the parent line's value is the number of items? e.g., 2. Not specified. Could be "values in schema order" where list value is serialized as items on following lines, so no column.
+
+Alternative: The list items themselves are values in a single column, and the parent line includes a token like @ for list? no.
+
+Given explicit list items lines below parent, no placeholder.
+
+Need maybe use indentation prefix exactly one > per level. For top-level child notes, one >. For subnotes, two >>. No spaces after >. Good.
+
+Need ensure line endings? final no newline? Usually okay. Could include newline after last line? It's fine.
+
+Let's consider if "The first line is already data" could mean the user expects us to continue from a provided first line? No, they say first line is already data in general? Maybe "Never write a header row or column names. The first line is already data." Means don't output column names; first line of output is data. Not that there is preexisting line. We'll output data.
+
+Potential issue: The schema top field is claim{text...}. Does that mean output records are of type claim and should not include a column for claim name. Good.
+
+Need maybe source id is a string? Schema says record{id, year:int}. id likely string. We output string.
+
+Could verdict enum labels exactly supported, refuted, unknown. Good.
+
+Need maybe "text" fields with spaces: We output with spaces. They say for text with spaces at start/end need ; internal spaces normal. Good.
+
+Need maybe if text contains pipe? none. If contains backslash? none.
+
+Let's final with lines. Ensure no extra leading spaces. final only.

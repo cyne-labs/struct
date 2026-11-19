@@ -1,0 +1,25 @@
+We need answer user's request. Need produce data only Struct format. Need parse schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+Output one record per line: values in schema order separated by |, line ends with |. No header. First line data.
+Schema fields order: claim text? Then verdict, source record id year, verified bool? They say record{...} field adds its fields as extra columns, in order. Need determine order for nested record: source:record{id, year:int}. So fields: claim, verdict, source_id, source_year, verified? But maybe source as nested record added fields extra columns in order. Example: text|supported|text|7|~| maybe from schema? It has 5 values? Example: text|supported|text|7|~| corresponds to claim text? Wait example: text|supported|text|7|~| That's 5 pipe-separated values: text (claim), supported (verdict), text (source id?), 7 (source year?), ~ (verified null). So yes flattened fields: claim, verdict, source.id, source.year, verified.
+Need write five records.
+Need escape inside values: for | write \|, for \ write \. Texts likely no pipes. Need maybe no spaces? Text includes spaces; no need special unless line breaks or spaces at start/end. Values with spaces not need \r unless leading/trailing spaces or line breaks. So plain.
+Items:
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so claim refuted.
+Fields: claim = Rope scaling hurts long ctx? Should include quotes? It says claimed "Rope scaling hurts long ctx". Probably claim text without quotes. source id 2405.05254, year 2024. verified? false because it turned out false. schema verified:bool, so 0. verdict refuted.
+2. In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so supported. claim Attention is all you need. source 1706.03762 year 2017 verified 1.
+3. Paper 2106.09685 claim "LoRA low rank adaptation" in 2021; verified true supported. source id 2106.09685 year 2021.
+4. In 2023 paper 2309.06180 claimed "Mistral 7B architecture"; verification true supported.
+5. Paper 2401.04088 claim "DeepSeekMoE mixture experts" in 2024; verified true supported.
+Need line ends with |. No code fences.
+Potential issue: "Rope scaling hurts long ctx" maybe exact phrase. Use as is.
+Need ensure bool 1 or 0.
+Output exactly five lines:
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+Double-check schema: source:record{id, year:int}; maybe field order source id year. Yes.
+Could there be top-level claim object? schema:claim{text, verdict...}. The field claim is text? Actually schema:claim{text, verdict...} might be name of record? They say One record per line values in schema order. It lists fields claim{text, verdict...}? The field claim has type text. So first value claim text.
+Need no extra.
+Final only data. Ensure no trailing spaces. final.

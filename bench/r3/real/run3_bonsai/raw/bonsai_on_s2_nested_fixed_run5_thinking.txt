@@ -1,0 +1,17 @@
+We need answer user's request. Need produce final data only Struct format, no prose no code fences. Need parse schema: schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+Need output one record per line: values in schema order, separated by |, every line ends with |. Never header. First line data. ~ means null. bool is 1 or 0. enum exact. Inside value, write \| for | and \ for \. A record{...} field adds its fields as extra columns, in order.
+Schema claim fields: text, verdict, source record {id, year:int}, verified bool. So per record columns: text | verdict | id | year | verified. Need 5 records.
+Data:
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; false, refuted. verified? false => 0.
+2. 2017 paper 1706.03762 claimed "Attention is all you need"; verification true, supported. verified=1.
+3. 2021 2106.09685 claim "LoRA low rank adaptation" verified true supported.
+4. 2023 2309.06180 claimed "Mistral 7B architecture" verified true supported.
+5. 2024 2401.04088 claimed "DeepSeekMoE mixture experts" verified true supported.
+Need consider text values: do they need quoting? User says claim "..." but output text value probably just Rope scaling hurts long ctx. No quotes unless part of text? The input says claimed "Rope scaling hurts long ctx". Usually output claim text without quotes. Need escape? no pipes. For spaces no special unless start/end. We don't need \r. Need final lines:
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+Check if id maybe with arXiv? Use given. bool 1/0. No header.
+Need ensure no prose. final only data.

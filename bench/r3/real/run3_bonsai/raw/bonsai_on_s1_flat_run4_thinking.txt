@@ -1,0 +1,32 @@
+We need answer user's request. Need produce final data only Struct format, no prose, no code fences, no header. Need 5 records.
+
+Schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+Format one record per line: values in schema order, separated by |, every line ends with |.
+~ means null. bool is 1 or 0. enum exact. Inside value, write \| for | and \ for \.
+For text with line breaks, or spaces/tabs at start/end, start value with \r, then write exactly until closing |.
+Example: text|text|supported|7|~|
+
+Input:
+1. Paper 2405.05254 published 2024 title "Rope scaling hurts long ctx"; false, claim refuted.
+id likely 2405.05254. title Rope scaling hurts long ctx. verdict refuted. year 2024. verified? false? It says turned out to be false, so claim is refuted. verified: bool? The claim maybe false? Need map to verified. "it turned out to be false" likely verified? In examples: 2 verified was true supported, 3 true supported, etc. For refuted, verified likely false? But could be verified true (verification determined false)? Schema verified:bool ambiguous. The natural: claim supported/refuted based on verification. If false, verified false? But if false is verified? The text "turned out to be false" maybe verified true? Let's inspect pattern. Items:
+1. false, refuted.
+2. verification was true, supported.
+3. verified as true, supported.
+4. verification true, supported.
+5. verified true, supported.
+For false, no explicit verified, but "turned out to be false" suggests verified false? However if verification process found false, verified might be true (the claim was verified). But schema likely expects boolean indicating if claim verified (true if supported? maybe false if refuted?). User says "it turned out to be false, so the claim is refuted." Not "verification was false". But bool could be false for refuted. Need decide.
+
+Maybe dataset: claim id, title, verdict, year, verified. Verified maybe indicates whether the paper's claim is verified true. If refuted, verified 0. I think use 0.
+
+Need no header. Each line ends with |. IDs no spaces. Titles no special chars except maybe quotes not included. No trailing spaces. Need ensure line endings? final can have each line ending newline, last line maybe newline? They require every line ends with |. OK.
+
+Records:
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Need check if title should include quotes? No, title text only. No escaping needed. No line breaks/spaces leading/trailing.
+
+Final data only. Ensure no code fences.

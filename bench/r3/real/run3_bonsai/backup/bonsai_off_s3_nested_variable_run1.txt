@@ -1,0 +1,5 @@
+2405.05254|refuted|~|Rope scaling hurts long ctx||notes are from abstract only|abstract mentions 32k limit|appendix B clarifies|table 3 contradicts|llama 7b tested only|
+2106.09685|supported|~|LoRA matches full finetune|tested on GLUE and Wikisql|rank 4 sufficient|higher ranks show diminishing returns|memory footprint reduced 3x|optimizer state minimal|checkpoint size under 50MB||
+2406.12345|refuted|~|KV cache quant loses 2x acc|outlier channels preserved|per-head scales help|perplexity intact|
+2203.15556|supported|~|Chinchilla tokens beat params|optimal ratio is 20 to 1|tested across 400 models|cosine schedule used|kaplan tokens were suboptimal|fixed learning rate flawed|
+2005.14165|supported|~|Language models few-shot|scaling curve is smooth|tested up to 175B|in-context learning observed|

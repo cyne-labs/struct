@@ -1,0 +1,5 @@
+~|Rope scaling hurts long ctx|refuted|2024|1|
+~|Attention is all you need|supported|2017|1|
+~|LoRA low rank adaptation|supported|2021|1|
+~|Mistral 7B architecture|supported|2023|1|
+~|DeepSeekMoE mixture experts|supported|2024|1|

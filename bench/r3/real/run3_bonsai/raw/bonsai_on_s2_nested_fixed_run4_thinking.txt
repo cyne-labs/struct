@@ -1,0 +1,16 @@
+We need answer user's request. Need produce final data only in Struct format. Need parse schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}. Record fields in schema order: text, verdict, source (which adds fields id, year as extra columns, in order), verified. One line per record, values separated by |, every line ends with |. No header. Need escape: inside value, write \| for | and \ for \. Text with line breaks or spaces/tabs at start/end requires starting value with \r then exact until closing |. Our texts likely simple no leading/trailing spaces? Need check exact strings:
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+Claim text probably Rope scaling hurts long ctx. verdict refuted. source id 2405.05254 year 2024. verified? "turned out to be false" so verified bool? Schema has verified:bool. likely verified true? The prompt: verification? For 1 says turned out false, so refuted. Does verified true mean the claim verification completed? Usually if verdict refuted, verified true. Need infer. Other statements: 2 verification was true -> supported. 3 verified as true. 4 verification true. 5 verified as true. For 1 it says turned out to be false, so claim is refuted. It implies verified true? It didn't explicitly say verification true but verification occurred. likely 1. Need output five lines.
+Need ensure source record fields as extra columns: text|verdict|id|year|verified| ? Let's verify schema: claim{text, verdict:..., source:record{id, year:int}, verified:bool}. The example: text|supported|text|7|~| maybe weird: fields text, verdict, source.id? Actually example: text|supported|text|7|~| has 5 fields: text, supported, text, 7, ~. For schema maybe top-level text, verdict, source record fields id, year, verified. Yes example likely text|supported|id|year|verified|. So output 5 columns.
+Need maybe quotes in text? Should we include quotation marks? The claim strings include quotes in prose: claimed "Rope scaling hurts long ctx". Usually claim text without quotes? Need likely text is claim content. Use Rope scaling hurts long ctx. Not include Paper ... etc.
+Potential escape: If text contains pipe? no. If backslash? no. No leading/trailing spaces. Need line ends with |.
+Line1: Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Line2: Attention is all you need|supported|1706.03762|2017|1|
+Line3: LoRA low rank adaptation|supported|2106.09685|2021|1|
+Line4: Mistral 7B architecture|supported|2309.06180|2023|1|
+Line5: DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+Need ensure no prose. Final only lines.
+Double-check user says ~ means null. bool 1 or 0. enum exact. source:record adds fields as extra columns, in order. Yes.
+Could verified for refuted be 1? If "turned out to be false" is verification result, yes. Could it be 0? The field verified maybe whether claim is verified? In 1 false means not supported but verified? In fact verification was true? It says turned out false, so claim refuted. I'd set 1.
+Need consider if source id could be full claim id? They gave Paper 2405.05254. Use that.
+Final no code fences. Ensure every line ends with |. OK.
