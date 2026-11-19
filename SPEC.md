@@ -205,13 +205,14 @@ Each fix is reported with its line, its column, what it found, and what it wrote
 1. **Code fences.** A line that, after trimming, starts with three backticks is removed.
 2. **Echoed schema.** A line identical to one of the outside schema definitions, ignoring spaces, is removed.
 3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value.
-4. **Header row.** A depth-0 line whose values are exactly the class's column names, in order, is removed.
-5. **Missing final `|`.** A line that contains `|` but doesn't end with one gets `|` added, when the result has exactly the right number of columns and every value is valid.
-6. **Cut-off last record.** When the output's last line is an incomplete record (too few columns, or an unclosed raw value), that line is dropped, along with any child lines that would hang under it. Nothing is invented to complete it.
+4. **Missing final `|`.** A line that contains `|` but doesn't end with one gets `|` added, when the result has exactly the right number of columns and every value is valid.
+5. **Cut-off last record.** When the output's last line is an incomplete record (too few columns, or an unclosed raw value), that line is dropped, along with any child lines that would hang under it. Nothing is invented to complete it.
 
 In the maintainer's words: *the box has a hole, the doctor patches it. Not my problem if the water in the box is dirty.*
 
 **The doctor never touches values.** Fixing data is not its job: a value as written may be exactly what was meant, even in quotes. Only `~` is null, a `bool` is only `1` or `0`, and every value that fails its type check makes its line a bad line. That includes an empty field, `null`, `true`, `"2024"` in an int field, `+5`, `1,000`, an enum's wrong capitalisation (`Supported`), and a field-name prefix (`year: 2024`).
+
+**Header rows are data.** The doctor never removes a line because it looks like column names: `word|meaning|` can be a real record. A header line is read like any other line: kept if its values are valid, reported as bad if not. Headers are prevented by the prompt (section 10) instead.
 
 ### Everything else is a bad line
 
@@ -227,6 +228,46 @@ Anything the fixes above can't resolve is a **bad line**: wrong column count, an
 The doctor can also write a short **retry hint** for the model. It lists each bad line with its original text and the problem in a few words, and asks the model to rewrite only those lines, one per line, in the same order. The hint quotes each line's text instead of only giving a line number, because models count lines unreliably. Hints are on by default; the caller can turn them off, for example for small models, which may make changes nobody asked for.
 
 The model's reply is spliced back: its lines replace the bad lines in order, and the result goes through the doctor again. A reply with a different number of lines than were asked for is rejected, with an error.
+
+## 10. The prompt
+
+Models are told the format by a prompt that the library builds from the schemas: `prompt(schemas)`. It contains only the rules the schemas need, so simple schemas pay fewer input tokens. The schema lines come first, followed by the parts below, in this order.
+
+**Always:**
+```
+Reply with data only in Struct format: no prose, no code fences.
+Never write a header row or column names. The first line is already data.
+One record per line: values in schema order, separated by |, and every line ends with |.
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \ for \.
+```
+
+**When any class has a `record{...}` field:**
+```
+A record{...} field adds its fields as extra columns, in order.
+```
+
+**When any class has a list:**
+```
+List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.
+```
+
+**When any parent has two or more lists:**
+```
+When a parent has several lists, start each item with the list's field number and |, e.g. >2|item|. Fields count from 0 in schema order.
+```
+
+**When any class has a text field:**
+```
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+```
+
+**When there are two or more classes:**
+```
+Start each block with schema:name on its own line.
+```
+
+**Always last: one example line,** built from the first class, with neutral placeholder values. Text is `text`, int is `7`, float is `1.5`, bool is `1`, and an enum uses its first label. Exactly one scalar field, the last one, is written `~`, to show null. Record fields are flattened. Lists are left out of the example. It's written as `Example: ` followed by the canonical line.
 
 ---
 
@@ -261,8 +302,10 @@ None. Every question raised in review has been decided.
 ### 2026-11-20, the doctor
 
 - **Only `~` is null.** The doctor never reads `null`, `None`, `N/A` or similar words as null. In text they're text; elsewhere they're bad values. Likewise `true`/`false` in a bool field is a bad line, never converted to `1`/`0`.
-- **The doctor fixes structure, never values.** Its only fixes are code fences, echoed schema, chatter, header rows, a missing final `|`, and a cut-off last record. Every wrong value is reported. The user may have meant it, and fixing data isn't the doctor's job.
+- **The doctor fixes structure, never values.** Its only fixes are code fences, echoed schema, chatter, a missing final `|`, and a cut-off last record.
+- **Header rows are never removed.** A line equal to the field names may be a real record. The prompt forbids headers instead. Every wrong value is reported. The user may have meant it, and fixing data isn't the doctor's job.
 - **Safe fixes only.** Guessing was rejected: it burns tokens when a model has to work out why the doctor changed something it shouldn't have. Every case with more than one reading is reported as a bad line.
 - **The caller chooses strict or salvage.**
 - **Retry hints are on by default and can be turned off.** They might confuse small models, but API models handle them well.
+- **The official prompt (section 10)** is built from the schema and contains only the rules that schema needs, plus one placeholder example line. Its exact wording was approved by the maintainer.
 - **Tests come first from synthetic damage.** Real model outputs come after, kept apart and backed up, and never used as test fixtures.
