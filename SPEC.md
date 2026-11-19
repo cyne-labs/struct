@@ -204,9 +204,12 @@ Each fix is reported with its line, its column, what it found, and what it wrote
 
 1. **Code fences.** A line that, after trimming, starts with three backticks is removed.
 2. **Echoed schema.** A line identical to one of the outside schema definitions, ignoring spaces, is removed.
-3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value.
-4. **Missing final `|`.** A line that contains `|` but doesn't end with one gets `|` added, when the result has exactly the right number of columns and every value is valid.
+3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value. A line that fix 4 turns into a valid record is a record, not chatter: fix 4 is tried first.
+4. **Missing final `|`.** A line that doesn't end with `|` gets `|` added, when the result has exactly the right number of columns and every value is valid. This includes a line with no `|` at all, such as `1706` under a one-column schema. On a record whose raw value spans several lines, the fix is reported on the record's last line, where the `|` was missing.
 5. **Cut-off last record.** When the output's last line is an incomplete record (too few columns, or an unclosed raw value), that line is dropped, along with any child lines that would hang under it. Nothing is invented to complete it.
+   - A raw value still open at the end of the output is a cut-off.
+   - A cut that leaves the last value broken (for example, ending in a lone `\`) is a cut-off.
+   - A child line under a parent with several lists is a cut-off only when it has one reading. If its first value could be either the list's field number or a value with the number left out (for example, `>2|` under a parent whose field 2 is a list), it's a bad line.
 
 In the maintainer's words: *the box has a hole, the doctor patches it. Not my problem if the water in the box is dirty.*
 

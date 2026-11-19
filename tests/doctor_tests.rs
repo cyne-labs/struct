@@ -4,6 +4,7 @@
 
 mod common;
 
+use common::SimpleRng;
 use structl::{
     doctor, splice, BadLine, Block, DecodedFile, DoctorMode, DoctorOptions,
     Repair, SafeFix, Value,
@@ -132,39 +133,34 @@ fn test_safe_fix_3_chatter() {
 }
 
 #[test]
-fn test_safe_fix_4_header_row() {
-    let schema = "schema:claim{id, title, verdict:enum(supported,refuted), year:int, verified:bool}";
+fn test_header_row_is_data_record() {
+    let schema = "schema:entry{word, meaning}";
     let options = DoctorOptions::default();
 
-    // Case 1: Exact column names as header row
-    let input1 = "id|title|verdict|year|verified|\nc1|Attention|supported|2017|1|\n";
-    let report1 = doctor(schema, input1, &options);
-    assert_eq!(report1.text, "c1|Attention|supported|2017|1|\n");
-    assert_eq!(report1.repairs.len(), 1);
-    assert_eq!(report1.repairs[0].fix, SafeFix::HeaderRow);
-    assert_eq!(report1.repairs[0].line, 1);
-    assert_eq!(report1.repairs[0].original, "id|title|verdict|year|verified|");
-    assert_eq!(report1.repairs[0].new_text, "");
-    assert!(report1.bad_lines.is_empty());
+    // A line equal to field names is read as data: kept when valid, bad line if not
+    let input = "word|meaning|\napple|a round fruit|\n";
+    let report = doctor(schema, input, &options);
+    assert_eq!(report.text, "word|meaning|\napple|a round fruit|\n");
+    assert!(report.repairs.is_empty(), "Header-like line with valid types must not be repaired");
+    assert!(report.bad_lines.is_empty(), "Valid record must not be reported as bad line");
 
-    // Case 2: Header row with spaces around pipes
-    let input2 = "id | title | verdict | year | verified |\nc2|FlashAttention|supported|2022|1|\n";
-    let report2 = doctor(schema, input2, &options);
-    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|1|\n");
-    assert_eq!(report2.repairs.len(), 1);
-    assert_eq!(report2.repairs[0].fix, SafeFix::HeaderRow);
-    assert_eq!(report2.repairs[0].line, 1);
-    assert!(report2.bad_lines.is_empty());
-
-    // Case 3: Header row in a nested record schema
-    let nested_schema = "schema:claim{text, source:record{id, year:int}, verdict:enum(supported,refuted)}";
-    let input3 = "text|id|year|verdict|\nlinear attention|arxiv.123|2020|supported|\n";
-    let report3 = doctor(nested_schema, input3, &options);
-    assert_eq!(report3.text, "linear attention|arxiv.123|2020|supported|\n");
-    assert_eq!(report3.repairs.len(), 1);
-    assert_eq!(report3.repairs[0].fix, SafeFix::HeaderRow);
-    assert_eq!(report3.repairs[0].line, 1);
-    assert!(report3.bad_lines.is_empty());
+    let data = report.data.expect("Should decode successfully");
+    assert_eq!(data.blocks.len(), 1);
+    assert_eq!(data.blocks[0].records.len(), 2);
+    assert_eq!(
+        data.blocks[0].records[0],
+        Value::Record(vec![
+            ("word".to_string(), Value::String("word".to_string())),
+            ("meaning".to_string(), Value::String("meaning".to_string())),
+        ])
+    );
+    assert_eq!(
+        data.blocks[0].records[1],
+        Value::Record(vec![
+            ("word".to_string(), Value::String("apple".to_string())),
+            ("meaning".to_string(), Value::String("a round fruit".to_string())),
+        ])
+    );
 }
 
 #[test]
@@ -812,749 +808,1960 @@ fn test_r3b_bug_1_3_columns_reporting() {
 }
 
 // =========================================================================
-// 6. The damage suite (at least 5,000 cases)
+// 5b. R3e Dedicated Tests: Three Bugs and SPEC Changes
 // =========================================================================
 
-#[derive(Default)]
-struct DamageStats {
-    cases_run: usize,
-    exact_restorations: usize,
-    bad_lines_reported: usize,
-    false_repairs: usize,
+#[test]
+fn test_r3e_three_bugs() {
+    let options = DoctorOptions::default();
+
+    // Bug 1: A valid last child line is dropped.
+    // Schema `schema:c{n:int, a:list[record{p, q, r}], b:list[int]}`, text `1|\n>2|5|\n`.
+    // Correct: 0 repairs and 0 bad lines; 5 is an item of b.
+    let schema1 = "schema:c{n:int, a:list[record{p, q, r}], b:list[int]}";
+    let input1 = "1|\n>2|5|\n";
+    let report1 = doctor(schema1, input1, &options);
+    assert_eq!(report1.repairs.len(), 0, "Bug 1: must have 0 repairs");
+    assert_eq!(report1.bad_lines.len(), 0, "Bug 1: must have 0 bad lines");
+    let data1 = report1.data.expect("Bug 1: data should decode");
+    assert_eq!(data1.blocks.len(), 1);
+    assert_eq!(data1.blocks[0].records.len(), 1);
+    if let Value::Record(fields) = &data1.blocks[0].records[0] {
+        assert_eq!(fields[0].0, "n");
+        assert_eq!(fields[0].1, Value::Int(1));
+        assert_eq!(fields[1].0, "a");
+        assert_eq!(fields[1].1, Value::List(vec![]));
+        assert_eq!(fields[2].0, "b");
+        assert_eq!(fields[2].1, Value::List(vec![Value::Int(5)]));
+    } else {
+        panic!("Expected record");
+    }
+
+    // Bug 2: A child line missing its final | is never repaired under a parent with several lists.
+    // Schema `schema:c{n:int, a:list[int], b:list[int]}`, text `1|\n>2|5`.
+    // Correct: fix 4, giving `>2|5|`.
+    let schema2 = "schema:c{n:int, a:list[int], b:list[int]}";
+    let input2 = "1|\n>2|5";
+    let report2 = doctor(schema2, input2, &options);
+    assert_eq!(report2.bad_lines.len(), 0, "Bug 2: must have 0 bad lines");
+    assert_eq!(report2.repairs.len(), 1, "Bug 2: must have 1 repair");
+    assert_eq!(report2.repairs[0].fix, SafeFix::MissingFinalPipe);
+    assert_eq!(report2.repairs[0].line, 2);
+    assert_eq!(report2.repairs[0].original, ">2|5");
+    assert_eq!(report2.repairs[0].new_text, ">2|5|");
+    assert_eq!(report2.text, "1|\n>2|5|\n");
+
+    // Bug 3: A depth-2 line under a parent with no lists is dropped as a cut-off.
+    // Schema `schema:n{l, s:list[record{t, y}]}`, text `~|\n>a|b|\n>>c|\n`.
+    // Correct: a bad line (parent record has no list fields to attach child line).
+    let schema3 = "schema:n{l, s:list[record{t, y}]}";
+    let input3 = "~|\n>a|b|\n>>c|\n";
+    let report3 = doctor(schema3, input3, &options);
+    assert_eq!(report3.repairs.len(), 0, "Bug 3: must have 0 repairs");
+    assert_eq!(report3.bad_lines.len(), 1, "Bug 3: must report bad line");
+    assert_eq!(report3.bad_lines[0].line, 3);
+    assert_eq!(report3.bad_lines[0].column, 1);
+    assert_eq!(report3.bad_lines[0].problem, "parent record has no list fields to attach child line");
+    assert_eq!(report3.bad_lines[0].original, ">>c|");
 }
 
-fn make_doc_file(schema_name: &str, records: Vec<Value>) -> DecodedFile {
-    let mut file = DecodedFile::new();
-    file.blocks.push(Block {
-        class_name: schema_name.to_string(),
-        records,
+#[test]
+fn test_r3e_spec_changes() {
+    let options = DoctorOptions {
+        mode: DoctorMode::Strict,
+        retry_hint: true,
+    };
+
+    // 1. Fix 4 on line with no pipe at all
+    // Included case:
+    let schema_id = "schema:test{id:int}";
+    let input_no_pipe = "1|\n1706";
+    let report_no_pipe = doctor(schema_id, input_no_pipe, &options);
+    assert_eq!(report_no_pipe.bad_lines.len(), 0);
+    assert_eq!(report_no_pipe.repairs.len(), 1);
+    assert_eq!(
+        report_no_pipe.repairs[0],
+        Repair {
+            line: 2,
+            column: 5,
+            fix: SafeFix::MissingFinalPipe,
+            original: "1706".to_string(),
+            new_text: "1706|".to_string(),
+        }
+    );
+    assert_eq!(report_no_pipe.text, "1|\n1706|\n");
+
+    // Excluded case (chatter, not a valid int):
+    let input_chatter = "1|\nHope this helps!\n";
+    let report_chatter = doctor(schema_id, input_chatter, &options);
+    assert_eq!(report_chatter.bad_lines.len(), 0);
+    assert_eq!(report_chatter.repairs.len(), 1);
+    assert_eq!(
+        report_chatter.repairs[0],
+        Repair {
+            line: 2,
+            column: 1,
+            fix: SafeFix::Chatter,
+            original: "Hope this helps!".to_string(),
+            new_text: String::new(),
+        }
+    );
+    assert_eq!(report_chatter.text, "1|\n");
+
+    // Excluded case (mid-file line with wrong column count):
+    let schema_two = "schema:test{id:int, name:str}";
+    let input_mid_bad = "1|a|\n1706\n2|b|\n";
+    let report_mid_bad = doctor(schema_two, input_mid_bad, &options);
+    assert_eq!(report_mid_bad.bad_lines.len(), 1);
+    assert_eq!(
+        report_mid_bad.bad_lines[0],
+        BadLine {
+            line: 2,
+            column: 5,
+            problem: "data line must always end with an unescaped '|'".to_string(),
+            original: "1706".to_string(),
+            dropped_as_child: false,
+        }
+    );
+
+    // 2. Multi-line raw record missing final pipe reported on record's last line
+    let schema_raw = "schema:fix{patch, file}";
+    let input_raw_no_pipe = "\\rfn main() {\n    println!(\"hi\");\n}|main.rs\n";
+    let report_raw_no_pipe = doctor(schema_raw, input_raw_no_pipe, &options);
+    assert_eq!(report_raw_no_pipe.bad_lines.len(), 0);
+    assert_eq!(report_raw_no_pipe.repairs.len(), 1);
+    assert_eq!(
+        report_raw_no_pipe.repairs[0],
+        Repair {
+            line: 3,
+            column: 10,
+            fix: SafeFix::MissingFinalPipe,
+            original: "\\rfn main() {\n    println!(\"hi\");\n}|main.rs".to_string(),
+            new_text: "\\rfn main() {\n    println!(\"hi\");\n}|main.rs|".to_string(),
+        }
+    );
+    assert_eq!(report_raw_no_pipe.repairs[0].line, 3);
+
+    // 3. Fix 5: Raw value still open at end of output is a cut-off
+    let schema_open_raw = "schema:code{a, b}";
+    let input_open_raw = "x|y|\nw|\\rfn main() {\n  let a = 1;";
+    let report_open_raw = doctor(schema_open_raw, input_open_raw, &options);
+    assert_eq!(report_open_raw.bad_lines.len(), 0);
+    assert_eq!(report_open_raw.repairs.len(), 1);
+    assert_eq!(report_open_raw.repairs[0].fix, SafeFix::CutOffLastRecord);
+    assert_eq!(report_open_raw.repairs[0].line, 2);
+
+    // 4. Fix 5: Broken escape ending in lone trailing backslash at end of output is a cut-off
+    let schema_broken = "schema:text{id:int, body:str}";
+    let input_broken = "1|valid|\n2|hello\\";
+    let report_broken = doctor(schema_broken, input_broken, &options);
+    assert_eq!(report_broken.bad_lines.len(), 0);
+    assert_eq!(report_broken.repairs.len(), 1);
+    assert_eq!(report_broken.repairs[0].fix, SafeFix::CutOffLastRecord);
+    assert_eq!(report_broken.repairs[0].line, 2);
+    assert_eq!(report_broken.text, "1|valid|\n");
+
+    // 5. Fix 5: Child line under parent with several lists
+    // 5a. Exactly one reading -> cut-off last record
+    // Under schema with bool lists, '2' is uniquely a list index for 'b', not a valid bool.
+    let schema_bool_lists = "schema:c{n:int, a:list[bool], b:list[bool]}";
+    let input_single_reading = "1|\n>2|";
+    let report_single_reading = doctor(schema_bool_lists, input_single_reading, &options);
+    assert_eq!(report_single_reading.bad_lines.len(), 0);
+    assert_eq!(report_single_reading.repairs.len(), 1);
+    assert_eq!(report_single_reading.repairs[0].fix, SafeFix::CutOffLastRecord);
+    assert_eq!(report_single_reading.repairs[0].line, 2);
+    assert_eq!(report_single_reading.text, "1|\n");
+
+    // 5b. Ambiguous reading -> BadLine "ambiguous: missing list index or cut-off value"
+    let schema_int_lists = "schema:c{n:int, a:list[int], b:list[int]}";
+    let input_ambig = "1|\n>2|";
+    let report_ambig = doctor(schema_int_lists, input_ambig, &options);
+    assert_eq!(report_ambig.repairs.len(), 0);
+    assert_eq!(report_ambig.bad_lines.len(), 1);
+    assert_eq!(
+        report_ambig.bad_lines[0],
+        BadLine {
+            line: 2,
+            column: 2,
+            problem: "ambiguous: missing list index or cut-off value".to_string(),
+            original: ">2|".to_string(),
+            dropped_as_child: false,
+        }
+    );
+}
+
+// =========================================================================
+// 6. The damage suite (at least 5,000 cases)
+// =========================================================================
+//
+// Every case starts from a freshly generated random schema set (1 to 3 classes with
+// scalars, enums, records, lists, nested lists and several lists per parent) and a random
+// multi-record file written with outside schemas. The file is then damaged in exactly one
+// of the ways the SPEC (section 9) talks about, and the doctor's answer is compared with an
+// expected answer that does NOT come from the doctor:
+//
+// * fixable damage: the expected data is the original data (or, for a cut-off, the records
+//   before the cut, read back by the library's own decoder), and the expected repairs are
+//   listed from the damage that was applied (kind, line, original text, replacement text);
+// * unfixable damage: the expected bad lines are worked out from the damaged line, and the
+//   expected data is the library decoder's reading of the file with the dropped lines
+//   (the bad line and its child lines) removed from the original canonical text;
+// * no damage: nothing may be repaired or reported.
+//
+// Every case has its own seed. A failure prints the seed, the schemas and the damaged
+// text. To replay one case, set DOCTOR_REPRO=<row number>:<seed in hex>.
+
+use common::generator::{generate_random_file, GenConfig, GeneratedFile};
+use std::collections::hash_map::DefaultHasher;
+use std::collections::HashSet;
+use std::hash::{Hash, Hasher};
+use std::panic::{catch_unwind, AssertUnwindSafe};
+use structl::{decode_with, encode_with, FieldDef, FieldType, ListItemType, ScalarType};
+
+// ---------- layout of the canonical text ----------
+
+#[derive(Clone, Debug, PartialEq)]
+enum Col {
+    Str,
+    Int,
+    Float,
+    Bool,
+    Enum(Vec<String>),
+}
+
+/// A value on a line: byte range of its written text inside the entry text (not including
+/// the closing pipe, which sits at `end`), and whether it is a raw value (`\r...`).
+#[derive(Clone, Debug)]
+struct Fld {
+    start: usize,
+    end: usize,
+    raw: bool,
+}
+
+/// One logical line of the canonical file: a schema line, or a data line (which may span
+/// several physical lines when it holds a raw value with line breaks).
+#[derive(Clone, Debug)]
+struct Ent {
+    text: String,
+    schema: bool,
+    depth: usize,
+    fields: Vec<Fld>,
+    /// Types of the value columns (the list index, when present, is not one of them).
+    cols: Vec<Col>,
+    /// 1 when the line starts with a list index (its parent has two or more lists).
+    prefix: usize,
+    /// Number of lists in this line's own schema node.
+    own_lists: usize,
+    /// Number of lists in the parent's schema node (child lines only).
+    parent_lists: usize,
+    /// Index of the last entry that hangs under this one (itself when it is a leaf).
+    last_desc: usize,
+    /// First physical line number in the canonical text.
+    line: usize,
+}
+
+struct RawEnt {
+    text: String,
+    schema: bool,
+    depth: usize,
+    fields: Vec<Fld>,
+}
+
+/// Splits canonical text into logical lines, finding every value's byte range.
+fn tokenize(text: &str) -> Vec<RawEnt> {
+    let b = text.as_bytes();
+    let mut out = Vec::new();
+    let mut pos = 0;
+    while pos < b.len() {
+        let line_end = text[pos..].find('\n').map(|i| pos + i).unwrap_or(b.len());
+        let first_line = &text[pos..line_end];
+        if first_line.starts_with("schema:") && !first_line.contains('|') {
+            out.push(RawEnt {
+                text: first_line.to_string(),
+                schema: true,
+                depth: 0,
+                fields: Vec::new(),
+            });
+            pos = line_end + 1;
+            continue;
+        }
+        let mut depth = 0;
+        let mut p = pos;
+        while p < b.len() && b[p] == b'>' {
+            depth += 1;
+            p += 1;
+        }
+        let mut fields = Vec::new();
+        loop {
+            let fs = p;
+            let raw = p + 1 < b.len() && b[p] == b'\\' && b[p + 1] == b'r';
+            if raw {
+                p += 2;
+            }
+            while p < b.len() {
+                match b[p] {
+                    b'\\' => p += 2,
+                    b'|' => break,
+                    _ => p += 1,
+                }
+            }
+            assert!(p < b.len(), "layout: unterminated value in canonical text");
+            fields.push(Fld {
+                start: fs - pos,
+                end: p - pos,
+                raw,
+            });
+            p += 1;
+            if p >= b.len() || b[p] == b'\n' {
+                break;
+            }
+        }
+        out.push(RawEnt {
+            text: text[pos..p].to_string(),
+            schema: false,
+            depth,
+            fields,
+        });
+        pos = p + 1;
+    }
+    out
+}
+
+struct Node {
+    depth: usize,
+    cols: Vec<Col>,
+    own_lists: usize,
+}
+
+fn scalar_col(s: &ScalarType) -> Col {
+    match s {
+        ScalarType::Str => Col::Str,
+        ScalarType::Int => Col::Int,
+        ScalarType::Float => Col::Float,
+        ScalarType::Bool => Col::Bool,
+    }
+}
+
+fn flatten_cols(fields: &[FieldDef], out: &mut Vec<Col>) {
+    for f in fields {
+        match &f.field_type {
+            FieldType::Scalar(s) => out.push(scalar_col(s)),
+            FieldType::Enum(l) => out.push(Col::Enum(l.clone())),
+            FieldType::Record(r) => flatten_cols(&r.fields, out),
+            FieldType::List(_) => {}
+        }
+    }
+}
+
+fn count_lists(fields: &[FieldDef]) -> usize {
+    fields
+        .iter()
+        .map(|f| match &f.field_type {
+            FieldType::List(_) => 1,
+            FieldType::Record(r) => count_lists(&r.fields),
+            _ => 0,
+        })
+        .sum()
+}
+
+fn collect_lists<'a>(
+    fields: &'a [FieldDef],
+    val: &'a Value,
+    out: &mut Vec<(&'a ListItemType, &'a [Value])>,
+) {
+    for f in fields {
+        match &f.field_type {
+            FieldType::List(it) => {
+                let items = val
+                    .get_field(&f.name)
+                    .and_then(|v| v.as_list())
+                    .unwrap_or(&[]);
+                out.push((&**it, items));
+            }
+            FieldType::Record(sub) => {
+                if count_lists(&sub.fields) > 0 {
+                    if let Some(sv) = val.get_field(&f.name) {
+                        collect_lists(&sub.fields, sv, out);
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+fn walk_node(fields: &[FieldDef], val: &Value, depth: usize, out: &mut Vec<Node>) {
+    let mut cols = Vec::new();
+    flatten_cols(fields, &mut cols);
+    out.push(Node {
+        depth,
+        cols,
+        own_lists: count_lists(fields),
     });
-    file
+    let mut lists = Vec::new();
+    collect_lists(fields, val, &mut lists);
+    for (it, items) in lists {
+        for item in items {
+            match it {
+                ListItemType::Scalar(s) => out.push(Node {
+                    depth: depth + 1,
+                    cols: vec![scalar_col(s)],
+                    own_lists: 0,
+                }),
+                ListItemType::Enum(l) => out.push(Node {
+                    depth: depth + 1,
+                    cols: vec![Col::Enum(l.clone())],
+                    own_lists: 0,
+                }),
+                ListItemType::Record(r) => walk_node(&r.fields, item, depth + 1, out),
+            }
+        }
+    }
 }
 
-fn encode_records(schema: &str, class_name: &str, records: &[Value]) -> String {
-    let file = make_doc_file(class_name, records.to_vec());
-    structl::encode_with(schema, &file).unwrap()
+/// Reads the canonical text into typed logical lines. The typing comes from walking the
+/// original data and schemas (not from the doctor); the two views are cross-checked.
+fn build_layout(gf: &GeneratedFile) -> Vec<Ent> {
+    let raw = tokenize(&gf.text);
+    let mut nodes = Vec::new();
+    for block in &gf.doc.blocks {
+        let class = &gf.doc.schemas[&block.class_name];
+        for rec in &block.records {
+            walk_node(&class.fields, rec, 0, &mut nodes);
+        }
+    }
+    let mut nodes = nodes.into_iter();
+    let mut ents: Vec<Ent> = Vec::new();
+    let mut line = 1;
+    for r in raw {
+        let nlines = r.text.matches('\n').count() + 1;
+        let idx = ents.len();
+        if r.schema {
+            ents.push(Ent {
+                text: r.text,
+                schema: true,
+                depth: 0,
+                fields: Vec::new(),
+                cols: Vec::new(),
+                prefix: 0,
+                own_lists: 0,
+                parent_lists: 0,
+                last_desc: idx,
+                line,
+            });
+        } else {
+            let node = nodes.next().expect("layout: more lines than data nodes");
+            assert_eq!(node.depth, r.depth, "layout: depth mismatch at line {}", line);
+            ents.push(Ent {
+                text: r.text,
+                schema: false,
+                depth: r.depth,
+                fields: r.fields,
+                cols: node.cols,
+                prefix: 0,
+                own_lists: node.own_lists,
+                parent_lists: 0,
+                last_desc: idx,
+                line,
+            });
+        }
+        line += nlines;
+    }
+    assert!(nodes.next().is_none(), "layout: fewer lines than data nodes");
+
+    let mut stack: Vec<usize> = Vec::new();
+    for i in 0..ents.len() {
+        if ents[i].schema {
+            stack.clear();
+            continue;
+        }
+        let d = ents[i].depth;
+        assert!(d <= stack.len(), "layout: depth jump in canonical text");
+        stack.truncate(d);
+        if d > 0 {
+            ents[i].parent_lists = ents[stack[d - 1]].own_lists;
+        }
+        stack.push(i);
+        ents[i].prefix = if d >= 1 && ents[i].parent_lists >= 2 { 1 } else { 0 };
+        assert_eq!(
+            ents[i].fields.len(),
+            ents[i].prefix + ents[i].cols.len(),
+            "layout: column count mismatch at line {}",
+            ents[i].line
+        );
+    }
+    let n = ents.len();
+    for i in 0..n {
+        let mut j = i;
+        while j + 1 < n && !ents[j + 1].schema && ents[j + 1].depth > ents[i].depth && !ents[i].schema {
+            j += 1;
+        }
+        ents[i].last_desc = j;
+    }
+    ents
+}
+
+// ---------- shared helpers ----------
+
+const CASES_PER_ROW: usize = 200;
+
+fn hash_of<T: Hash + ?Sized>(t: &T) -> u64 {
+    let mut h = DefaultHasher::new();
+    t.hash(&mut h);
+    h.finish()
+}
+
+fn splitmix(mut z: u64) -> u64 {
+    z = z.wrapping_add(0x9e3779b97f4a7c15);
+    z = (z ^ (z >> 30)).wrapping_mul(0xbf58476d1ce4e5b9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94d049bb133111eb);
+    z ^ (z >> 31)
+}
+
+fn pick_idx(rng: &mut SimpleRng, len: usize) -> usize {
+    rng.gen_range(0, len - 1)
+}
+
+fn gt_count(s: &str) -> usize {
+    s.chars().take_while(|&c| c == '>').count()
+}
+
+/// True when a value, trimmed, could be read as a list index (digits and dots).
+fn index_like(field_text: &str) -> bool {
+    let t = field_text.trim_start_matches("\\r").trim();
+    !t.is_empty() && t.chars().all(|c| c.is_ascii_digit() || c == '.')
+}
+
+fn lines_of(texts: &[String]) -> Vec<usize> {
+    let mut v = Vec::new();
+    let mut l = 1;
+    for t in texts {
+        v.push(l);
+        l += t.matches('\n').count() + 1;
+    }
+    v
+}
+
+/// (extra physical lines, 1-based character column) of byte offset `off` inside `text`.
+fn locate(text: &str, off: usize) -> (usize, usize) {
+    let pre = &text[..off];
+    let extra = pre.matches('\n').count();
+    let ls = pre.rfind('\n').map(|i| i + 1).unwrap_or(0);
+    (extra, pre[ls..].chars().count() + 1)
+}
+
+fn decode_blocks(schemas: &str, text: &str) -> Result<Vec<Block>, String> {
+    if text.trim().is_empty() {
+        return Ok(Vec::new());
+    }
+    match decode_with(schemas, text) {
+        Ok(d) => Ok(d.blocks.into_iter().filter(|b| !b.records.is_empty()).collect()),
+        Err(e) => Err(format!("{:?}", e)),
+    }
+}
+
+fn type_error(col: &Col, v: &str) -> String {
+    match col {
+        Col::Str => unreachable!("text has no type error"),
+        Col::Int => {
+            if v.starts_with('+') {
+                format!("leading '+' is not allowed in int '{}'", v)
+            } else {
+                format!("'{}' is not a valid int (i64)", v)
+            }
+        }
+        Col::Float => format!("'{}' is not a valid float (f64)", v),
+        Col::Bool => format!("'{}' is not a valid bool (expected 1 or 0)", v),
+        Col::Enum(l) => format!("'{}' is not one of: {}", v, l.join(", ")),
+    }
+}
+
+const EMPTY_FIELD: &str = "empty field is not allowed (use ~ for null)";
+
+// ---------- fixable damage ----------
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum Fix {
+    Fences,
+    Echo,
+    Chatter,
+    Pipe,
+    Cut,
+}
+
+const ALL_FIXES: [Fix; 5] = [Fix::Fences, Fix::Echo, Fix::Chatter, Fix::Pipe, Fix::Cut];
+
+fn fix_name(f: Fix) -> &'static str {
+    match f {
+        Fix::Fences => "code fences",
+        Fix::Echo => "echoed schema",
+        Fix::Chatter => "chatter",
+        Fix::Pipe => "missing final pipe",
+        Fix::Cut => "cut-off last record",
+    }
+}
+
+#[derive(Clone, Debug)]
+enum Role {
+    Entry,
+    Chatter,
+    Fence,
+    Echo,
+    /// Final pipe removed from this line; holds the original line.
+    PipeDamaged(String),
+    /// Cut-off record that the doctor may report under one of these kinds.
+    CutDrop(Vec<SafeFix>),
+    /// Cut-off whose remains are a complete record once `|` is added (SPEC fix 4).
+    CutPipe,
+}
+
+struct ExpRepair {
+    line: usize,
+    kinds: Vec<SafeFix>,
+    original: String,
+    new_text: String,
+}
+
+struct Damaged {
+    text: String,
+    repairs: Vec<ExpRepair>,
+    expected: Vec<Block>,
+    /// What the cut did, for the summary printed under the table.
+    cut_note: Option<&'static str>,
+}
+
+fn cut_note_of(plan: &CutPlan) -> &'static str {
+    match &plan.class {
+        CutClass::FixPipe { .. } => {
+            "cut left a complete record once | is added (SPEC fix 4; last value truncated, data read from the decoder)"
+        }
+        CutClass::Drop { alts } if alts.contains(&SafeFix::Chatter) => {
+            "cut before the first pipe (SPEC fix 3 chatter)"
+        }
+        CutClass::Drop { .. } if matches!(scan_partial(&plan.text).1, Tail::Raw) => {
+            "cut inside a raw value (unclosed raw value at end of file)"
+        }
+        _ => "cut left too few columns",
+    }
+}
+
+enum Built {
+    NotApplicable,
+    Skip(String),
+    Case(Damaged),
+}
+
+#[derive(Debug)]
+enum Tail {
+    Empty,
+    Raw,
+    Plain { dangling: bool },
+}
+
+/// Reads a partial line the way SPEC sections 1 and 3 do: how many values are closed by a
+/// `|`, and what is left after the last closing pipe.
+fn scan_partial(l: &str) -> (usize, Tail) {
+    let b = l.as_bytes();
+    let mut p = 0;
+    while p < b.len() && b[p] == b'>' {
+        p += 1;
+    }
+    let mut closed = 0;
+    loop {
+        if p >= b.len() {
+            return (closed, Tail::Empty);
+        }
+        let raw = p + 1 < b.len() && b[p] == b'\\' && b[p + 1] == b'r';
+        if raw {
+            p += 2;
+        }
+        let start = p;
+        let mut dangling = false;
+        loop {
+            if p >= b.len() {
+                if raw {
+                    return (closed, Tail::Raw);
+                }
+                if l[start..].trim().is_empty() {
+                    return (closed, Tail::Empty);
+                }
+                return (closed, Tail::Plain { dangling });
+            }
+            match b[p] {
+                b'\\' => {
+                    if p + 1 >= b.len() {
+                        dangling = true;
+                        p += 1;
+                    } else {
+                        p += 2;
+                    }
+                }
+                b'|' => break,
+                _ => p += 1,
+            }
+        }
+        closed += 1;
+        p += 1;
+    }
+}
+
+enum CutClass {
+    Drop { alts: Vec<SafeFix> },
+    FixPipe { blocks: Vec<Block> },
+    #[allow(dead_code)]
+    Skip(String),
+}
+
+struct CutPlan {
+    ent: usize,
+    text: String,
+    class: CutClass,
+}
+
+/// Decides, from the SPEC alone, what must happen to a last line cut off after `cut_text`.
+fn classify_cut(gf: &GeneratedFile, ents: &[Ent], c: usize, cut_text: &str) -> CutClass {
+    let e = &ents[c];
+    let (closed, tail) = scan_partial(cut_text);
+    let n = e.prefix + e.cols.len();
+    let multi = cut_text.contains('\n');
+
+    let mut prefix_text = String::new();
+    for x in &ents[..c] {
+        prefix_text.push_str(&x.text);
+        prefix_text.push('\n');
+    }
+
+    if !cut_text.contains('|') {
+        if multi || matches!(tail, Tail::Raw) {
+            return CutClass::Drop {
+                alts: vec![SafeFix::CutOffLastRecord],
+            };
+        }
+        let cand = format!("{}{}|\n", prefix_text, cut_text);
+        if let Ok(blocks) = decode_blocks(&gf.schemas, &cand) {
+            return CutClass::FixPipe { blocks };
+        }
+        return CutClass::Drop {
+            alts: vec![SafeFix::Chatter],
+        };
+    }
+
+    if matches!(tail, Tail::Raw) {
+        return CutClass::Drop {
+            alts: vec![SafeFix::CutOffLastRecord],
+        };
+    }
+
+    if let Tail::Plain { dangling: true } = tail {
+        return CutClass::Drop {
+            alts: vec![SafeFix::CutOffLastRecord],
+        };
+    }
+
+    if closed + 1 == n {
+        let cand = format!("{}{}|\n", prefix_text, cut_text);
+        if let Ok(blocks) = decode_blocks(&gf.schemas, &cand) {
+            return CutClass::FixPipe { blocks };
+        }
+    }
+
+    CutClass::Drop {
+        alts: vec![SafeFix::CutOffLastRecord],
+    }
+}
+
+fn plan_cut(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> Result<CutPlan, Option<String>> {
+    let data: Vec<usize> = (0..ents.len())
+        .filter(|&i| !ents[i].schema && ents[i].text.chars().count() >= 2)
+        .collect();
+    if data.is_empty() {
+        return Err(None);
+    }
+    let raws: Vec<usize> = data
+        .iter()
+        .copied()
+        .filter(|&i| ents[i].fields.iter().any(|f| f.raw))
+        .collect();
+    let want_raw = !raws.is_empty() && rng.gen_bool(0.5);
+    let c = if want_raw {
+        raws[pick_idx(rng, raws.len())]
+    } else {
+        data[pick_idx(rng, data.len())]
+    };
+    let e = &ents[c];
+    let total = e.text.chars().count();
+    let p = if want_raw {
+        let rf: Vec<&Fld> = e.fields.iter().filter(|f| f.raw).collect();
+        let f = rf[pick_idx(rng, rf.len())];
+        let cs = e.text[..f.start].chars().count();
+        let ce = e.text[..f.end].chars().count();
+        rng.gen_range(cs + 1, ce.min(total - 1)).max(1)
+    } else {
+        rng.gen_range(1, total - 1)
+    };
+    let byte = e.text.char_indices().nth(p).map(|(i, _)| i).unwrap_or(e.text.len());
+    let cut_text = e.text[..byte].to_string();
+    let (closed, _) = scan_partial(&cut_text);
+    if e.prefix == 1 && closed <= 1 {
+        return Err(None);
+    }
+    let class = classify_cut(gf, ents, c, &cut_text);
+    match class {
+        CutClass::Skip(r) => Err(Some(r)),
+        class => Ok(CutPlan {
+            ent: c,
+            text: cut_text,
+            class,
+        }),
+    }
+}
+
+const CHATTER: [&str; 12] = [
+    "Here is the data you asked for:",
+    "Sure, here are the records.",
+    "Hope this helps!",
+    "Let me know if you need more.",
+    "Output:",
+    "Done.",
+    "Below are the records in Struct format:",
+    "Note: nothing was invented.",
+    "> a quoted remark from the model",
+    "- a bullet remark",
+    "  Here you go  ",
+    "I found these entries.",
+];
+
+const FENCES: [&str; 6] = ["```", "```stc", "```struct", "```text", "  ```", "\t```"];
+
+fn echo_variant(rng: &mut SimpleRng, gf: &GeneratedFile) -> String {
+    let lines: Vec<&str> = gf.schemas.lines().collect();
+    let l = lines[pick_idx(rng, lines.len())];
+    match rng.gen_range(0, 3) {
+        0 => l.to_string(),
+        1 => l.replace(", ", ","),
+        2 => format!("  {}  ", l),
+        _ => l.replace(", ", ",  "),
+    }
+}
+
+fn shuffle<T>(rng: &mut SimpleRng, v: &mut Vec<T>) {
+    for i in (1..v.len()).rev() {
+        let j = rng.gen_range(0, i);
+        v.swap(i, j);
+    }
+}
+
+fn eligible_pipe(e: &Ent) -> bool {
+    // SPEC fix 4 is for "a line that contains | but doesn't end with one", so a line
+    // whose only pipe is its final one is not a fix-4 case once that pipe is gone.
+    !e.schema
+        && !e.text.contains('\n')
+        && e.text.ends_with('|')
+        && e.text[..e.text.len() - 1].contains('|')
+        && !e.fields.last().map(|f| f.raw).unwrap_or(true)
+}
+
+fn compose_fixable(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent], fixes: &[Fix]) -> Built {
+    let has = |f: Fix| fixes.contains(&f);
+    let n = ents.len();
+    let cutting = has(Fix::Cut);
+
+    let mut cut_plan: Option<CutPlan> = None;
+    let mut full_limit = n;
+    if cutting {
+        match plan_cut(rng, gf, ents) {
+            Err(None) => return Built::NotApplicable,
+            Err(Some(reason)) => return Built::Skip(reason),
+            Ok(p) => {
+                full_limit = p.ent;
+                cut_plan = Some(p);
+            }
+        }
+    }
+
+    // Missing final pipe on up to 3 complete lines before the cut.
+    let mut pipe_set: Vec<usize> = Vec::new();
+    if has(Fix::Pipe) {
+        let mut elig: Vec<usize> = (0..full_limit).filter(|&i| eligible_pipe(&ents[i])).collect();
+        if elig.is_empty() {
+            return Built::NotApplicable;
+        }
+        let k = rng.gen_range(1, 3.min(elig.len()));
+        for _ in 0..k {
+            let j = pick_idx(rng, elig.len());
+            pipe_set.push(elig.remove(j));
+        }
+    }
+
+    // The lines the file really contains, in order.
+    let mut body: Vec<(String, Role)> = Vec::new();
+    for i in 0..full_limit {
+        let t = ents[i].text.clone();
+        if pipe_set.contains(&i) {
+            let damaged = t[..t.len() - 1].to_string();
+            body.push((damaged, Role::PipeDamaged(t)));
+        } else {
+            body.push((t, Role::Entry));
+        }
+    }
+    if let Some(p) = &cut_plan {
+        let role = match &p.class {
+            CutClass::Drop { alts } => Role::CutDrop(alts.clone()),
+            CutClass::FixPipe { .. } => Role::CutPipe,
+            CutClass::Skip(_) => unreachable!(),
+        };
+        body.push((p.text.clone(), role));
+    }
+    let m = body.len();
+    let last_boundary = if cutting { m - 1 } else { m };
+
+    let mut lead: Vec<(String, Role)> = Vec::new();
+    let mut trail: Vec<(String, Role)> = Vec::new();
+    let mut mids: Vec<Vec<(String, Role)>> = (0..=m).map(|_| Vec::new()).collect();
+
+    if has(Fix::Chatter) {
+        let first_class = gf.doc.blocks.first().map(|b| b.class_name.as_str()).unwrap_or("");
+        let last_class = gf.doc.blocks.last().map(|b| b.class_name.as_str()).unwrap_or("");
+        let check_cand = |ch: &str, cls: &str| -> bool {
+            let cand = format!("schema:{}\n{}|\n", cls, ch);
+            decode_blocks(&gf.schemas, &cand).is_ok()
+                || decode_blocks(&gf.schemas, &format!("{}{}|\n", gf.text, ch)).is_ok()
+        };
+
+        let (mut a, mut b) = (rng.gen_range(0, 3), rng.gen_range(0, 3));
+        if cutting {
+            b = 0;
+            if a == 0 {
+                a = rng.gen_range(1, 3);
+            }
+        } else if a + b == 0 {
+            if rng.gen_bool(0.5) {
+                a = 1;
+            } else {
+                b = 1;
+            }
+        }
+        for _ in 0..a {
+            let ch = CHATTER[pick_idx(rng, CHATTER.len())].to_string();
+            if check_cand(&ch, first_class) {
+                return Built::NotApplicable;
+            }
+            lead.push((ch, Role::Chatter));
+        }
+        for _ in 0..b {
+            let ch = CHATTER[pick_idx(rng, CHATTER.len())].to_string();
+            if check_cand(&ch, last_class) {
+                return Built::NotApplicable;
+            }
+            trail.push((ch, Role::Chatter));
+        }
+    }
+    if has(Fix::Fences) {
+        let cnt = rng.gen_range(1, 3);
+        for _ in 0..cnt {
+            let line = FENCES[pick_idx(rng, FENCES.len())].to_string();
+            let place = rng.gen_range(0, if cutting { 1 } else { 2 });
+            match place {
+                0 => lead.push((line, Role::Fence)),
+                1 => {
+                    let b = rng.gen_range(0, last_boundary);
+                    mids[b].push((line, Role::Fence));
+                }
+                _ => trail.push((line, Role::Fence)),
+            }
+        }
+    }
+    if has(Fix::Echo) {
+        let cnt = rng.gen_range(1, 2);
+        for _ in 0..cnt {
+            let line = echo_variant(rng, gf);
+            let b = rng.gen_range(0, last_boundary);
+            mids[b].push((line, Role::Echo));
+        }
+    }
+    shuffle(rng, &mut lead);
+    shuffle(rng, &mut trail);
+    for v in mids.iter_mut() {
+        shuffle(rng, v);
+    }
+
+    let mut items: Vec<(String, Role)> = lead;
+    let mut body_it = body.into_iter();
+    for b in 0..=m {
+        items.append(&mut mids[b]);
+        if b < m {
+            items.push(body_it.next().unwrap());
+        }
+    }
+    items.extend(trail);
+
+    let mut repairs = Vec::new();
+    let mut line = 1;
+    let mut out = String::new();
+    for (i, (t, role)) in items.iter().enumerate() {
+        if i > 0 {
+            out.push('\n');
+        }
+        out.push_str(t);
+        let (kinds, orig, newt): (Vec<SafeFix>, String, String) = match role {
+            Role::Entry => (vec![], String::new(), String::new()),
+            Role::Chatter => (vec![SafeFix::Chatter], t.clone(), String::new()),
+            Role::Fence => (vec![SafeFix::CodeFences], t.clone(), String::new()),
+            Role::Echo => (vec![SafeFix::EchoedSchema], t.clone(), String::new()),
+            Role::PipeDamaged(orig_line) => (
+                vec![SafeFix::MissingFinalPipe],
+                t.clone(),
+                orig_line.clone(),
+            ),
+            Role::CutDrop(alts) => {
+                // A cut right after a line break leaves the break as the file's last
+                // character, which is a line terminator, not part of the dropped line.
+                let orig = t.strip_suffix('\n').unwrap_or(t).to_string();
+                (alts.clone(), orig, String::new())
+            }
+            Role::CutPipe => (vec![SafeFix::MissingFinalPipe], t.clone(), format!("{}|", t)),
+        };
+        if !kinds.is_empty() {
+            let rep_line = match role {
+                Role::CutPipe => line + t.matches('\n').count(),
+                _ => line,
+            };
+            repairs.push(ExpRepair {
+                line: rep_line,
+                kinds,
+                original: orig,
+                new_text: newt,
+            });
+        }
+        line += t.matches('\n').count() + 1;
+    }
+    if !cutting {
+        out.push('\n');
+    }
+
+    let expected = match &cut_plan {
+        None => gf.doc.blocks.clone(),
+        Some(p) => match &p.class {
+            CutClass::FixPipe { blocks } => blocks.clone(),
+            _ => {
+                let mut t = String::new();
+                for e in &ents[..full_limit] {
+                    t.push_str(&e.text);
+                    t.push('\n');
+                }
+                match decode_blocks(&gf.schemas, &t) {
+                    Ok(b) => b,
+                    Err(e) => panic!("oracle could not read the records before the cut: {}", e),
+                }
+            }
+        },
+    };
+
+    let cut_note = cut_plan.as_ref().map(cut_note_of);
+    Built::Case(Damaged {
+        text: out,
+        repairs,
+        expected,
+        cut_note,
+    })
+}
+
+// ---------- unfixable damage ----------
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum UK {
+    Few,
+    Many,
+    Pipe,
+    EnumTypo,
+    Depth,
+    MissIdx,
+    NoList,
+    UnclosedRaw,
+    Esc,
+    Quoted,
+    Plus,
+    Comma,
+    Caps,
+    Prefix,
+    Null,
+    NoneWord,
+    NA,
+    NaN,
+    True,
+    Yes,
+    Empty,
+    DecComma,
+}
+
+const ALL_UK: [(UK, &str); 22] = [
+    (UK::Few, "Wrong column count (too few)"),
+    (UK::Many, "Wrong column count (too many)"),
+    (UK::Pipe, "Unescaped pipe inside text"),
+    (UK::EnumTypo, "Enum typo"),
+    (UK::Depth, "Depth jump"),
+    (UK::MissIdx, "Missing list index"),
+    (UK::NoList, "Child line, parent has no list"),
+    (UK::UnclosedRaw, "Unclosed raw value mid-file"),
+    (UK::Esc, "Invalid escape (\\q) in text"),
+    (UK::Quoted, "Quoted int (\"2024\")"),
+    (UK::Plus, "Leading plus in int (+5)"),
+    (UK::Comma, "Comma in int (1,000)"),
+    (UK::Caps, "Enum wrong case (Supported)"),
+    (UK::Prefix, "Field-name prefix (year: 2024)"),
+    (UK::Null, "Literal null in non-text"),
+    (UK::NoneWord, "Literal None in non-text"),
+    (UK::NA, "Literal N/A in non-text"),
+    (UK::NaN, "NaN in int/bool/enum"),
+    (UK::True, "true in bool"),
+    (UK::Yes, "yes in bool"),
+    (UK::Empty, "Empty field (two pipes in a row)"),
+    (UK::DecComma, "Decimal comma in float (3,14)"),
+];
+
+struct Unf {
+    texts: Vec<String>,
+    bad: Vec<BadLine>,
+    removed: Vec<usize>,
+}
+
+/// Builds the expected answer for one bad line at entry `e` (whose text becomes `new_text`):
+/// the bad line itself, then every child line that hangs under it.
+fn finish(
+    ents: &[Ent],
+    e: usize,
+    new_text: String,
+    err: (usize, usize),
+    problem: String,
+    merged_next: Option<usize>,
+) -> Unf {
+    let mut texts: Vec<String> = ents.iter().map(|x| x.text.clone()).collect();
+    texts[e] = new_text.clone();
+    let lines = lines_of(&texts);
+    let mut original = new_text;
+    if let Some(nx) = merged_next {
+        original.push('\n');
+        original.push_str(&ents[nx].text);
+    }
+    let mut bad = vec![BadLine {
+        line: lines[e] + err.0,
+        column: err.1,
+        problem,
+        original,
+        dropped_as_child: false,
+    }];
+    for d in e + 1..=ents[e].last_desc {
+        if Some(d) == merged_next {
+            continue;
+        }
+        bad.push(BadLine {
+            line: lines[d],
+            column: 1,
+            problem: format!("dropped as child of line {}", lines[e]),
+            original: ents[d].text.clone(),
+            dropped_as_child: true,
+        });
+    }
+    let removed = (e..=ents[e].last_desc).collect();
+    Unf { texts, bad, removed }
+}
+
+fn value_candidates(ents: &[Ent], pred: impl Fn(&Col) -> bool) -> Vec<(usize, usize)> {
+    let mut v = Vec::new();
+    for (i, e) in ents.iter().enumerate() {
+        if e.schema {
+            continue;
+        }
+        for (ci, c) in e.cols.iter().enumerate() {
+            if pred(c) {
+                v.push((i, ci));
+            }
+        }
+    }
+    v
+}
+
+fn build_unfixable(rng: &mut SimpleRng, ents: &[Ent], kind: UK) -> Option<Unf> {
+    let last = ents.len() - 1;
+    let data: Vec<usize> = (0..ents.len()).filter(|&i| !ents[i].schema).collect();
+    match kind {
+        UK::Few => {
+            let c: Vec<usize> = data
+                .iter()
+                .copied()
+                .filter(|&i| i != last && ents[i].cols.len() >= 2)
+                .collect();
+            if c.is_empty() {
+                return None;
+            }
+            let e = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let ci = pick_idx(rng, en.cols.len());
+            let f = &en.fields[en.prefix + ci];
+            let new = format!("{}{}", &en.text[..f.start], &en.text[f.end + 1..]);
+            if gt_count(&new) != en.depth {
+                return None;
+            }
+            let problem = format!("expected {} columns, found {}", en.cols.len(), en.cols.len() - 1);
+            Some(finish(ents, e, new, (0, en.depth + 1), problem, None))
+        }
+        UK::Many => {
+            let e = data[pick_idx(rng, data.len())];
+            let en = &ents[e];
+            let mut j = rng.gen_range(0, en.cols.len());
+            let single_child = en.depth >= 1 && en.parent_lists == 1;
+            if single_child && j > 0 && index_like(&en.text[en.fields[0].start..en.fields[0].end]) {
+                j = 0;
+            }
+            let pos = if j < en.cols.len() { en.fields[en.prefix + j].start } else { en.text.len() };
+            let new = format!("{}zzz|{}", &en.text[..pos], &en.text[pos..]);
+            if gt_count(&new) != en.depth {
+                return None;
+            }
+            let problem = format!("expected {} columns, found {}", en.cols.len(), en.cols.len() + 1);
+            Some(finish(ents, e, new, (0, en.depth + 1), problem, None))
+        }
+        UK::Pipe => {
+            let mut c = Vec::new();
+            for &(e, ci) in &value_candidates(ents, |c| *c == Col::Str) {
+                let en = &ents[e];
+                let f = &en.fields[en.prefix + ci];
+                let vs = if f.raw { f.start + 2 } else { f.start };
+                let v = &en.text[vs..f.end];
+                if v.chars().count() >= 2 && !v.contains('\\') && !v.contains('\n') {
+                    c.push((e, ci, vs));
+                }
+            }
+            if c.is_empty() {
+                return None;
+            }
+            let (e, ci, vs) = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let f = &en.fields[en.prefix + ci];
+            let v = &en.text[vs..f.end];
+            let at = rng.gen_range(1, v.chars().count() - 1);
+            let byte = vs + v.char_indices().nth(at).map(|(i, _)| i).unwrap();
+            let new = format!("{}|{}", &en.text[..byte], &en.text[byte..]);
+            if en.depth >= 1 && en.parent_lists == 1 {
+                let first_end = new.find('|').unwrap();
+                if index_like(&new[en.depth..first_end]) {
+                    return None;
+                }
+            }
+            let problem = format!("expected {} columns, found {}", en.cols.len(), en.cols.len() + 1);
+            Some(finish(ents, e, new, (0, en.depth + 1), problem, None))
+        }
+        UK::EnumTypo | UK::Caps => {
+            let c = value_candidates(ents, |c| matches!(c, Col::Enum(_)));
+            if c.is_empty() {
+                return None;
+            }
+            let (e, ci) = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let f = &en.fields[en.prefix + ci];
+            let labels = match &en.cols[ci] {
+                Col::Enum(l) => l.clone(),
+                _ => unreachable!(),
+            };
+            let cur = &en.text[f.start..f.end];
+            let base = if labels.iter().any(|l| l == cur) {
+                cur.to_string()
+            } else {
+                labels[pick_idx(rng, labels.len())].clone()
+            };
+            let bad_text = if kind == UK::Caps {
+                let mut cs = base.chars();
+                let first = cs.next().unwrap().to_uppercase().collect::<String>();
+                format!("{}{}", first, cs.as_str())
+            } else {
+                match rng.gen_range(0, 2) {
+                    0 => format!("{}x", base),
+                    1 => format!("z{}", &base[1..]),
+                    _ => format!("{}z", &base[..base.len() - 1]),
+                }
+            };
+            if labels.iter().any(|l| *l == bad_text) || bad_text == base && kind == UK::Caps {
+                return None;
+            }
+            let new = format!("{}{}{}", &en.text[..f.start], bad_text, &en.text[f.end..]);
+            let (x, col) = locate(&new, f.start);
+            let problem = type_error(&en.cols[ci], &bad_text);
+            Some(finish(ents, e, new, (x, col), problem, None))
+        }
+        UK::Depth => {
+            let c: Vec<usize> = data
+                .iter()
+                .copied()
+                .filter(|&i| i >= 1 && !ents[i - 1].schema && ents[i].last_desc == i)
+                .collect();
+            if c.is_empty() {
+                return None;
+            }
+            let e = c[pick_idx(rng, c.len())];
+            let p = &ents[e - 1];
+            let stacklen = p.depth + 1;
+            let nd = stacklen + 1 + rng.gen_range(0, 1);
+            let en = &ents[e];
+            let new = format!("{}{}", ">".repeat(nd), &en.text[en.depth..]);
+            if gt_count(&new) != nd {
+                return None;
+            }
+            let problem = format!(
+                "depth increased by more than one level (from depth {} to {})",
+                p.depth, nd
+            );
+            Some(finish(ents, e, new, (0, 1), problem, None))
+        }
+        UK::NoList => {
+            let c: Vec<usize> = data
+                .iter()
+                .copied()
+                .filter(|&i| {
+                    i >= 1 && !ents[i - 1].schema && ents[i - 1].own_lists == 0 && ents[i].last_desc == i
+                })
+                .collect();
+            if c.is_empty() {
+                return None;
+            }
+            let e = c[pick_idx(rng, c.len())];
+            let nd = ents[e - 1].depth + 1;
+            let en = &ents[e];
+            let new = format!("{}{}", ">".repeat(nd), &en.text[en.depth..]);
+            if gt_count(&new) != nd {
+                return None;
+            }
+            Some(finish(
+                ents,
+                e,
+                new,
+                (0, 1),
+                "parent record has no list fields to attach child line".to_string(),
+                None,
+            ))
+        }
+        UK::MissIdx => {
+            let c: Vec<usize> = data
+                .iter()
+                .copied()
+                .filter(|&i| i != last && ents[i].prefix == 1)
+                .collect();
+            if c.is_empty() {
+                return None;
+            }
+            let e = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let new = format!("{}{}", &en.text[..en.fields[0].start], &en.text[en.fields[0].end + 1..]);
+            let f1 = &en.fields[1];
+            if gt_count(&new) != en.depth || index_like(&en.text[f1.start..f1.end]) {
+                return None;
+            }
+            Some(finish(ents, e, new, (0, en.depth + 1), "missing list index".to_string(), None))
+        }
+        UK::UnclosedRaw => {
+            let c: Vec<usize> = data
+                .iter()
+                .copied()
+                .filter(|&i| {
+                    let en = &ents[i];
+                    en.last_desc > i
+                        && !en.fields.last().unwrap().raw
+                        && ents[i + 1].fields.len() >= 2
+                        && !(en.depth >= 1
+                            && en.parent_lists == 1
+                            && index_like(&en.text[en.fields[0].start..en.fields[0].end]))
+                })
+                .collect();
+            if c.is_empty() {
+                return None;
+            }
+            let e = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let lf = en.fields.last().unwrap();
+            let new = format!("{}\\r{}", &en.text[..lf.start], &en.text[lf.start..lf.end]);
+            let merged = en.fields.len() + ents[e + 1].fields.len() - 1;
+            let problem = format!("expected {} columns, found {}", en.cols.len(), merged - en.prefix);
+            Some(finish(ents, e, new, (0, en.depth + 1), problem, Some(e + 1)))
+        }
+        UK::Esc => {
+            let mut c = Vec::new();
+            for &(e, ci) in &value_candidates(ents, |c| *c == Col::Str) {
+                let en = &ents[e];
+                if !en.fields[en.prefix + ci].raw {
+                    c.push((e, ci));
+                }
+            }
+            if c.is_empty() {
+                return None;
+            }
+            let (e, ci) = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let f = &en.fields[en.prefix + ci];
+            let v = &en.text[f.start..f.end];
+            let mut positions = Vec::new();
+            let mut prev: Option<char> = None;
+            for (i, ch) in v.char_indices().chain(std::iter::once((v.len(), ' '))) {
+                if prev != Some('\\') {
+                    positions.push(i);
+                }
+                prev = Some(ch);
+            }
+            let at = f.start + positions[pick_idx(rng, positions.len())];
+            let new = format!("{}\\q{}", &en.text[..at], &en.text[at..]);
+            let (x, col) = locate(&new, at);
+            Some(finish(ents, e, new, (x, col), "invalid escape sequence '\\q'".to_string(), None))
+        }
+        UK::Quoted | UK::Plus | UK::Comma | UK::Prefix | UK::Null | UK::NoneWord | UK::NA
+        | UK::NaN | UK::True | UK::Yes | UK::Empty | UK::DecComma => {
+            let pred = |c: &Col| match kind {
+                UK::Quoted | UK::Plus | UK::Comma => *c == Col::Int,
+                UK::Prefix | UK::Null | UK::NoneWord | UK::NA => *c != Col::Str,
+                UK::NaN => matches!(c, Col::Int | Col::Bool | Col::Enum(_)),
+                UK::True | UK::Yes => *c == Col::Bool,
+                UK::DecComma => *c == Col::Float,
+                _ => true,
+            };
+            let c = value_candidates(ents, pred);
+            if c.is_empty() {
+                return None;
+            }
+            let (e, ci) = c[pick_idx(rng, c.len())];
+            let en = &ents[e];
+            let f = &en.fields[en.prefix + ci];
+            let col = &en.cols[ci];
+            let bad_text = match kind {
+                UK::Quoted => format!("\"{}\"", if rng.gen_bool(0.5) { 2024 } else { rng.gen_range(1, 9999) }),
+                UK::Plus => format!("+{}", rng.gen_range(1, 9999)),
+                UK::Comma => format!("{},{:03}", rng.gen_range(1, 99), rng.gen_range(0, 999)),
+                UK::Prefix => {
+                    let name = ["year", "score", "flag", "kind", "count"][rng.gen_range(0, 4)];
+                    let v = match col {
+                        Col::Int => "2024".to_string(),
+                        Col::Float => "3.5".to_string(),
+                        Col::Bool => "1".to_string(),
+                        Col::Enum(l) => l[0].clone(),
+                        Col::Str => unreachable!(),
+                    };
+                    format!("{}: {}", name, v)
+                }
+                UK::Null => "null".to_string(),
+                UK::NoneWord => "None".to_string(),
+                UK::NA => "N/A".to_string(),
+                UK::NaN => "NaN".to_string(),
+                UK::True => "true".to_string(),
+                UK::Yes => "yes".to_string(),
+                UK::Empty => String::new(),
+                UK::DecComma => format!("{},{}", rng.gen_range(1, 99), rng.gen_range(1, 99)),
+                _ => unreachable!(),
+            };
+            let new = format!("{}{}{}", &en.text[..f.start], bad_text, &en.text[f.end..]);
+            let (x, colno) = locate(&new, f.start);
+            let problem = if bad_text.is_empty() {
+                EMPTY_FIELD.to_string()
+            } else {
+                type_error(col, &bad_text)
+            };
+            Some(finish(ents, e, new, (x, colno), problem, None))
+        }
+    }
+}
+
+// ---------- checking ----------
+
+struct CaseErr {
+    false_repair: bool,
+    msg: String,
+}
+
+struct Outcome {
+    exact: bool,
+    bad: usize,
+    repairs: usize,
+    cut_note: Option<&'static str>,
+}
+
+fn strict_opts() -> DoctorOptions {
+    DoctorOptions {
+        mode: DoctorMode::Strict,
+        retry_hint: true,
+    }
+}
+
+fn salvage_opts() -> DoctorOptions {
+    DoctorOptions {
+        mode: DoctorMode::Salvage,
+        retry_hint: true,
+    }
+}
+
+fn describe_blocks_diff(got: &[Block], want: &[Block]) -> String {
+    if got.len() != want.len() {
+        return format!("block count {} != expected {}", got.len(), want.len());
+    }
+    for (i, (g, w)) in got.iter().zip(want).enumerate() {
+        if g.class_name != w.class_name {
+            return format!("block {} class {:?} != {:?}", i, g.class_name, w.class_name);
+        }
+        if g.records.len() != w.records.len() {
+            return format!(
+                "block {} has {} records, expected {}",
+                i,
+                g.records.len(),
+                w.records.len()
+            );
+        }
+        for (j, (a, b)) in g.records.iter().zip(&w.records).enumerate() {
+            if a != b {
+                return format!("block {} record {} differs\n  got:      {:?}\n  expected: {:?}", i, j, a, b);
+            }
+        }
+    }
+    "no difference found".to_string()
+}
+
+fn data_of(report: &structl::DoctorReport) -> Vec<Block> {
+    report.data.as_ref().map(|d| d.blocks.clone()).unwrap_or_default()
+}
+
+fn check_data(
+    schemas: &str,
+    report: &structl::DoctorReport,
+    expected: &[Block],
+    label: &str,
+) -> Result<(), CaseErr> {
+    let got = data_of(report);
+    if got != expected {
+        return Err(CaseErr {
+            false_repair: true,
+            msg: format!("{}: data differs from expected: {}", label, describe_blocks_diff(&got, expected)),
+        });
+    }
+    if expected.is_empty() {
+        if report.data.is_some() {
+            return Err(CaseErr {
+                false_repair: false,
+                msg: format!("{}: expected no data, got Some", label),
+            });
+        }
+    } else {
+        let mut file = DecodedFile::new();
+        file.blocks = expected.to_vec();
+        let want_text = encode_with(schemas, &file).unwrap();
+        if report.text != want_text {
+            return Err(CaseErr {
+                false_repair: true,
+                msg: format!(
+                    "{}: canonical text differs from the expected data's canonical text\n  got:      {:?}\n  expected: {:?}",
+                    label, report.text, want_text
+                ),
+            });
+        }
+    }
+    Ok(())
+}
+
+fn check_fixable(schemas: &str, d: &Damaged) -> Result<Outcome, CaseErr> {
+    let plain = |m: String| CaseErr { false_repair: false, msg: m };
+    for (label, opts) in [("salvage", salvage_opts()), ("strict", strict_opts())] {
+        let report = doctor(schemas, &d.text, &opts);
+        if !report.bad_lines.is_empty() {
+            return Err(plain(format!("{}: unexpected bad lines {:?}", label, report.bad_lines)));
+        }
+        if report.hint.is_some() {
+            return Err(plain(format!("{}: hint present without bad lines", label)));
+        }
+        let mut got: Vec<&Repair> = report.repairs.iter().collect();
+        got.sort_by_key(|r| r.line);
+        if got.len() != d.repairs.len() {
+            return Err(plain(format!(
+                "{}: expected {} repairs, got {}\n  expected: {:?}\n  got: {:?}",
+                label,
+                d.repairs.len(),
+                got.len(),
+                d.repairs
+                    .iter()
+                    .map(|r| (r.line, r.kinds.clone()))
+                    .collect::<Vec<_>>(),
+                got.iter().map(|r| (r.line, r.fix)).collect::<Vec<_>>()
+            )));
+        }
+        for (g, w) in got.iter().zip(&d.repairs) {
+            if g.line != w.line
+                || !w.kinds.contains(&g.fix)
+                || g.original != w.original
+                || g.new_text != w.new_text
+            {
+                return Err(plain(format!(
+                    "{}: repair mismatch\n  expected: line {} kinds {:?} original {:?} new {:?}\n  got:      line {} kind {:?} original {:?} new {:?}",
+                    label, w.line, w.kinds, w.original, w.new_text, g.line, g.fix, g.original, g.new_text
+                )));
+            }
+        }
+        check_data(schemas, &report, &d.expected, label)?;
+    }
+    Ok(Outcome {
+        exact: true,
+        bad: 0,
+        repairs: d.repairs.len(),
+        cut_note: d.cut_note,
+    })
+}
+
+fn check_unfixable(
+    schemas: &str,
+    damaged_text: &str,
+    unf: &Unf,
+    expected: &[Block],
+) -> Result<Outcome, CaseErr> {
+    let plain = |m: String| CaseErr { false_repair: false, msg: m };
+    let salvage = doctor(schemas, damaged_text, &salvage_opts());
+    let strict = doctor(schemas, damaged_text, &strict_opts());
+    for (label, report) in [("salvage", &salvage), ("strict", &strict)] {
+        if !report.repairs.is_empty() {
+            return Err(plain(format!("{}: unexpected repairs {:?}", label, report.repairs)));
+        }
+        if report.bad_lines != unf.bad {
+            return Err(plain(format!(
+                "{}: bad lines differ\n  expected: {:#?}\n  got:      {:#?}",
+                label, unf.bad, report.bad_lines
+            )));
+        }
+    }
+    if strict.data.is_some() || !strict.text.is_empty() {
+        return Err(plain("strict: data returned although there are bad lines".to_string()));
+    }
+    check_data(schemas, &salvage, expected, "salvage")?;
+    match &salvage.hint {
+        None => return Err(plain("salvage: no retry hint although there are bad lines".to_string())),
+        Some(h) => {
+            for b in unf.bad.iter().filter(|b| !b.dropped_as_child) {
+                let want = format!("{}   ({})", b.original, b.problem);
+                if !h.contains(&want) {
+                    return Err(plain(format!("hint does not quote the bad line: missing {:?} in {:?}", want, h)));
+                }
+            }
+        }
+    }
+    Ok(Outcome {
+        exact: true,
+        bad: unf.bad.len(),
+        repairs: 0,
+        cut_note: None,
+    })
+}
+
+// ---------- the driver ----------
+
+#[derive(Clone, Copy)]
+enum Row {
+    NoDamage,
+    Single(Fix),
+    Combo(usize),
+    Unfixable(UK),
+}
+
+enum CaseResult {
+    NotApplicable,
+    Skipped(String),
+    Done(Result<Outcome, CaseErr>, String, String),
+}
+
+fn run_case(row: Row, seed: u64) -> CaseResult {
+    let mut rng = SimpleRng::new(seed);
+    let cfg = GenConfig::RICH;
+    for _ in 0..40 {
+        let gf = generate_random_file(&mut rng, &cfg);
+        let ents = build_layout(&gf);
+        match row {
+            Row::NoDamage => {
+                let report = doctor(&gf.schemas, &gf.text, &salvage_opts());
+                let res = (|| {
+                    if !report.repairs.is_empty() || !report.bad_lines.is_empty() {
+                        return Err(CaseErr {
+                            false_repair: false,
+                            msg: format!(
+                                "clean file: repairs {:?}, bad lines {:?}",
+                                report.repairs, report.bad_lines
+                            ),
+                        });
+                    }
+                    if report.text != gf.text {
+                        return Err(CaseErr {
+                            false_repair: true,
+                            msg: "clean file: canonical text changed".to_string(),
+                        });
+                    }
+                    check_data(&gf.schemas, &report, &gf.doc.blocks, "salvage")?;
+                    Ok(Outcome {
+                        exact: true,
+                        bad: 0,
+                        repairs: 0,
+                        cut_note: None,
+                    })
+                })();
+                return CaseResult::Done(res, gf.schemas.clone(), gf.text.clone());
+            }
+            Row::Single(_) | Row::Combo(_) => {
+                let fixes: Vec<Fix> = match row {
+                    Row::Single(f) => vec![f],
+                    Row::Combo(k) => {
+                        let mut all = ALL_FIXES.to_vec();
+                        shuffle(&mut rng, &mut all);
+                        all.truncate(k);
+                        all
+                    }
+                    _ => unreachable!(),
+                };
+                match compose_fixable(&mut rng, &gf, &ents, &fixes) {
+                    Built::NotApplicable => continue,
+                    Built::Skip(r) => return CaseResult::Skipped(r),
+                    Built::Case(d) => {
+                        let res = check_fixable(&gf.schemas, &d);
+                        return CaseResult::Done(res, gf.schemas.clone(), d.text);
+                    }
+                }
+            }
+            Row::Unfixable(k) => {
+                let unf = match build_unfixable(&mut rng, &ents, k) {
+                    Some(u) => u,
+                    None => continue,
+                };
+                let mut text = unf.texts.join("\n");
+                text.push('\n');
+                let mut kept = String::new();
+                for (i, t) in ents.iter().enumerate() {
+                    if !unf.removed.contains(&i) {
+                        kept.push_str(&t.text);
+                        kept.push('\n');
+                    }
+                }
+                let expected = match decode_blocks(&gf.schemas, &kept) {
+                    Ok(b) => b,
+                    Err(e) => panic!("oracle could not read the kept lines: {}", e),
+                };
+                let res = check_unfixable(&gf.schemas, &text, &unf, &expected);
+                return CaseResult::Done(res, gf.schemas.clone(), text);
+            }
+        }
+    }
+    CaseResult::NotApplicable
+}
+
+#[derive(Default)]
+struct RowStats {
+    cases: usize,
+    exact: usize,
+    bad: usize,
+    repairs: usize,
+    false_repairs: usize,
+    failures: usize,
+    skipped: usize,
+    inputs: HashSet<u64>,
+    schemas: HashSet<u64>,
+}
+
+struct Failure {
+    row: usize,
+    name: String,
+    seed: u64,
+    msg: String,
+    schemas: String,
+    text: String,
+}
+
+fn row_list() -> Vec<(Row, String)> {
+    let mut rows = vec![(Row::NoDamage, "No damage".to_string())];
+    for f in ALL_FIXES {
+        let mut name = format!("Fix alone: {}", fix_name(f));
+        if f == Fix::Pipe {
+            name.push_str(" (1-3 lines)");
+        }
+        rows.push((Row::Single(f), name));
+    }
+    for k in 2..=5 {
+        rows.push((Row::Combo(k), format!("Random combination of {} fixes", k)));
+    }
+    for (k, name) in ALL_UK {
+        rows.push((Row::Unfixable(k), name.to_string()));
+    }
+    rows
+}
+
+fn case_seed(row_idx: usize, attempt: u64) -> u64 {
+    splitmix(0xD0C7_0125_2026_1119 ^ ((row_idx as u64) << 40) ^ attempt)
+}
+
+fn replay(rows: &[(Row, String)], spec: &str) {
+    let (r, s) = spec.split_once(':').expect("DOCTOR_REPRO is <row>:<seed hex>");
+    let row_idx: usize = r.parse().unwrap();
+    let seed = u64::from_str_radix(s.trim_start_matches("0x"), 16).unwrap();
+    match run_case(rows[row_idx].0, seed) {
+        CaseResult::Done(Ok(_), schemas, text) => {
+            println!("replay passed.\nschemas:\n{}\ndamaged text:\n{:?}", schemas, text)
+        }
+        CaseResult::Done(Err(e), schemas, text) => panic!(
+            "replay of '{}' seed 0x{:016x} failed: {}\nschemas:\n{}\ndamaged text: {:?}",
+            rows[row_idx].1, seed, e.msg, schemas, text
+        ),
+        CaseResult::Skipped(r) => println!("replay skipped: {}", r),
+        CaseResult::NotApplicable => println!("replay: not applicable"),
+    }
 }
 
 #[test]
 fn test_damage_suite_5000_cases() {
-    let doc_schema = "schema:doc{title:str, year:int, score:float, active:bool}";
-    let review_schema = "schema:review{title:str, rating:enum(poor,fair,good,excellent), score:float, verified:bool}";
-    let claim_schema = "schema:claim{text:str, notes:list[str]}";
-    let multi_schema = "schema:multi{id:str, count:int, l1:list[str], l2:list[str]}";
-    let fix_schema = "schema:fix{file:str, patch:str}";
+    let rows = row_list();
+    if let Ok(spec) = std::env::var("DOCTOR_REPRO") {
+        replay(&rows, &spec);
+        return;
+    }
 
-    let strict_opt = DoctorOptions {
-        mode: DoctorMode::Strict,
-        retry_hint: true,
-    };
-    let salvage_opt = DoctorOptions {
-        mode: DoctorMode::Salvage,
-        retry_hint: true,
-    };
+    let mut stats: Vec<RowStats> = rows.iter().map(|_| RowStats::default()).collect();
+    let mut failures: Vec<Failure> = Vec::new();
+    let mut skip_reasons: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+    let mut cut_notes: std::collections::BTreeMap<&'static str, usize> = std::collections::BTreeMap::new();
 
-    let kind_names = [
-        "No damage",
-        "Code fences",
-        "Echoed schema",
-        "Chatter",
-        "Header row",
-        "Missing final pipe",
-        "Cut-off last record",
-        "Fixable combinations",
-        "Wrong column count (too few)",
-        "Wrong column count (too many)",
-        "Unescaped pipe inside text",
-        "Enum typo",
-        "Depth jump",
-        "Missing list index",
-        "Child line with no list parent",
-        "Unclosed raw value mid-file",
-        "Quoted int (\"2024\")",
-        "Leading plus in int (+5)",
-        "Comma in int (1,000)",
-        "Enum case mismatch (Supported)",
-        "Field-name prefix (year: 2024)",
-        "Literal null",
-        "Literal None",
-        "Literal N/A",
-        "Literal true in bool",
-        "Literal yes in bool",
-        "Empty field (||)",
-        "Decimal comma in float (3,14)",
-        "Invalid escape sequence",
-    ];
-
-    let mut stats: Vec<DamageStats> = (0..kind_names.len()).map(|_| DamageStats::default()).collect();
-    const RUNS_PER_KIND: usize = 180;
-
-    for kind_idx in 0..kind_names.len() {
-        for run in 0..RUNS_PER_KIND {
-            stats[kind_idx].cases_run += 1;
-
-            match kind_idx {
-                0 => {
-                    // 1. No damage
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2020 + (run as i64 % 5))),
-                        ("score".to_string(), Value::Float(4.5)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let r2 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("beta_{}", run))),
-                        ("year".to_string(), Value::Int(2025)),
-                        ("score".to_string(), Value::Float(3.0)),
-                        ("active".to_string(), Value::Bool(false)),
-                    ]);
-                    let orig = vec![r1, r2];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-
-                    let report = doctor(doc_schema, &canonical, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert!(report.repairs.is_empty());
-                    assert_eq!(report.text, canonical);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
+    for (ri, (row, name)) in rows.iter().enumerate() {
+        let st = &mut stats[ri];
+        let mut attempt = 0u64;
+        while st.cases < CASES_PER_ROW {
+            attempt += 1;
+            assert!(
+                attempt < 100 * CASES_PER_ROW as u64,
+                "row '{}': could not build {} applicable cases",
+                name,
+                CASES_PER_ROW
+            );
+            let seed = case_seed(ri, attempt);
+            let r = catch_unwind(AssertUnwindSafe(|| run_case(*row, seed)));
+            match r {
+                Err(p) => {
+                    st.cases += 1;
+                    st.failures += 1;
+                    let msg = p
+                        .downcast_ref::<String>()
+                        .cloned()
+                        .or_else(|| p.downcast_ref::<&str>().map(|s| s.to_string()))
+                        .unwrap_or_else(|| "panic".to_string());
+                    failures.push(Failure {
+                        row: ri,
+                        name: name.clone(),
+                        seed,
+                        msg: format!("PANIC: {}", msg),
+                        schemas: String::new(),
+                        text: String::new(),
+                    });
                 }
-                1 => {
-                    // 2. Code fences
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2021)),
-                        ("score".to_string(), Value::Float(5.0)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let damaged = format!("```stc\n{}```\n", canonical);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 2);
-                    assert_eq!(report.repairs[0].fix, SafeFix::CodeFences);
-                    assert_eq!(report.repairs[1].fix, SafeFix::CodeFences);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
+                Ok(CaseResult::NotApplicable) => {}
+                Ok(CaseResult::Skipped(reason)) => {
+                    st.skipped += 1;
+                    *skip_reasons.entry(format!("{}: {}", name, reason)).or_insert(0) += 1;
                 }
-                2 => {
-                    // 3. Echoed schema
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2022)),
-                        ("score".to_string(), Value::Float(4.0)),
-                        ("active".to_string(), Value::Bool(false)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let damaged = format!("{}\n{}", doc_schema, canonical);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 1);
-                    assert_eq!(report.repairs[0].fix, SafeFix::EchoedSchema);
-                    assert_eq!(report.repairs[0].line, 1);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                3 => {
-                    // 4. Chatter
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2023)),
-                        ("score".to_string(), Value::Float(3.5)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let damaged = format!("Here is your data:\n{}Let me know if you need more.\n", canonical);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 2);
-                    assert_eq!(report.repairs[0].fix, SafeFix::Chatter);
-                    assert_eq!(report.repairs[1].fix, SafeFix::Chatter);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                4 => {
-                    // 5. Header row
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2024)),
-                        ("score".to_string(), Value::Float(4.2)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let damaged = format!("title|year|score|active|\n{}", canonical);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 1);
-                    assert_eq!(report.repairs[0].fix, SafeFix::HeaderRow);
-                    assert_eq!(report.repairs[0].line, 1);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                5 => {
-                    // 6. Missing final pipe
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2024)),
-                        ("score".to_string(), Value::Float(4.2)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let trimmed_line = canonical.trim_end();
-                    assert!(trimmed_line.ends_with('|'));
-                    let damaged = format!("{}\n", &trimmed_line[..trimmed_line.len() - 1]);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 1);
-                    assert_eq!(report.repairs[0].fix, SafeFix::MissingFinalPipe);
-                    assert_eq!(report.repairs[0].line, 1);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                6 => {
-                    // 7. Cut-off last record
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2024)),
-                        ("score".to_string(), Value::Float(4.2)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    let damaged = format!("{}cutoff_title|42|\n", canonical);
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 1);
-                    assert_eq!(report.repairs[0].fix, SafeFix::CutOffLastRecord);
-                    assert_eq!(report.repairs[0].line, 2);
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                7 => {
-                    // 8. Fixable combinations
-                    let r1 = Value::Record(vec![
-                        ("title".to_string(), Value::String(format!("alpha_{}", run))),
-                        ("year".to_string(), Value::Int(2024)),
-                        ("score".to_string(), Value::Float(4.2)),
-                        ("active".to_string(), Value::Bool(true)),
-                    ]);
-                    let orig = vec![r1];
-                    let canonical = encode_records(doc_schema, "doc", &orig);
-                    // Combine Code fences + Header row + Cut-off last record
-                    let damaged = format!(
-                        "```\ntitle|year|score|active|\n{}cutoff_title|10|\n```\n",
-                        canonical
-                    );
-
-                    let report = doctor(doc_schema, &damaged, &salvage_opt);
-                    assert!(report.bad_lines.is_empty());
-                    assert_eq!(report.repairs.len(), 4); // 2 fences + 1 header + 1 cut-off
-                    let salvaged = report.data.unwrap().blocks[0].records.clone();
-                    if salvaged == orig {
-                        stats[kind_idx].exact_restorations += 1;
-                    } else {
-                        stats[kind_idx].false_repairs += 1;
-                    }
-                }
-                _ => {
-                    // Unfixable damage kinds (8..=28)
-                    let (schema, orig, damaged) = match kind_idx {
-                        8 => {
-                            // Wrong column count (too few)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}too_few_cols|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
+                Ok(CaseResult::Done(res, schemas, text)) => {
+                    st.cases += 1;
+                    st.inputs.insert(hash_of(&text));
+                    st.schemas.insert(hash_of(&schemas));
+                    match res {
+                        Ok(o) => {
+                            if o.exact {
+                                st.exact += 1;
+                            }
+                            st.bad += o.bad;
+                            st.repairs += o.repairs;
+                            if let Some(n) = o.cut_note {
+                                *cut_notes.entry(n).or_insert(0) += 1;
+                            }
                         }
-                        9 => {
-                            // Wrong column count (too many)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad|2022|5.0|1|extra_field|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
+                        Err(e) => {
+                            st.failures += 1;
+                            if e.false_repair {
+                                st.false_repairs += 1;
+                            }
+                            failures.push(Failure {
+                                row: ri,
+                                name: name.clone(),
+                                seed,
+                                msg: e.msg,
+                                schemas,
+                                text,
+                            });
                         }
-                        10 => {
-                            // Unescaped pipe inside text
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}unescaped|pipe|2022|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        11 => {
-                            // Enum typo
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_1_{}", run))),
-                                ("rating".to_string(), Value::Enum("good".to_string())),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("verified".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_2_{}", run))),
-                                ("rating".to_string(), Value::Enum("poor".to_string())),
-                                ("score".to_string(), Value::Float(2.0)),
-                                ("verified".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(review_schema, "review", &[orig[0].clone()]);
-                            let c2 = encode_records(review_schema, "review", &[orig[1].clone()]);
-                            let damaged = format!("{}rev_bad|godd|3.0|1|\n{}", c1, c2);
-                            (review_schema, orig, damaged)
-                        }
-                        12 => {
-                            // Depth jump
-                            let r1 = Value::Record(vec![
-                                ("text".to_string(), Value::String(format!("claim_1_{}", run))),
-                                ("notes".to_string(), Value::List(vec![])),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("text".to_string(), Value::String(format!("claim_2_{}", run))),
-                                ("notes".to_string(), Value::List(vec![])),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(claim_schema, "claim", &[orig[0].clone()]);
-                            let c2 = encode_records(claim_schema, "claim", &[orig[1].clone()]);
-                            let damaged = format!("{}>>depth_jump_item|\n{}", c1, c2);
-                            (claim_schema, orig, damaged)
-                        }
-                        13 => {
-                            // Missing list index
-                            let r1 = Value::Record(vec![
-                                ("id".to_string(), Value::String(format!("id_1_{}", run))),
-                                ("count".to_string(), Value::Int(10)),
-                                ("l1".to_string(), Value::List(vec![])),
-                                ("l2".to_string(), Value::List(vec![])),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("id".to_string(), Value::String(format!("id_2_{}", run))),
-                                ("count".to_string(), Value::Int(20)),
-                                ("l1".to_string(), Value::List(vec![])),
-                                ("l2".to_string(), Value::List(vec![])),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(multi_schema, "multi", &[orig[0].clone()]);
-                            let c2 = encode_records(multi_schema, "multi", &[orig[1].clone()]);
-                            let damaged = format!("{}>missing_idx|\n{}", c1, c2);
-                            (multi_schema, orig, damaged)
-                        }
-                        14 => {
-                            // Child line with no list parent
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}>child_under_doc|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        15 => {
-                            // Unclosed raw value mid-file
-                            let r1 = Value::Record(vec![
-                                ("file".to_string(), Value::String(format!("main_{}.rs", run))),
-                                ("patch".to_string(), Value::String("let a = 1;".to_string())),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("file".to_string(), Value::String(format!("lib_{}.rs", run))),
-                                ("patch".to_string(), Value::String("let b = 2;".to_string())),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(fix_schema, "fix", &[orig[0].clone()]);
-                            let c2 = encode_records(fix_schema, "fix", &[orig[1].clone()]);
-                            let damaged = format!("{}unclosed|\\rfn main() {{\nnext|patch|\n{}", c1, c2);
-                            (fix_schema, orig, damaged)
-                        }
-                        16 => {
-                            // Quoted int ("2024")
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|\"2024\"|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        17 => {
-                            // Leading plus in int (+5)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|+5|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        18 => {
-                            // Comma in int (1,000)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|1,000|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        19 => {
-                            // Enum case mismatch (Supported)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_1_{}", run))),
-                                ("rating".to_string(), Value::Enum("good".to_string())),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("verified".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_2_{}", run))),
-                                ("rating".to_string(), Value::Enum("poor".to_string())),
-                                ("score".to_string(), Value::Float(2.0)),
-                                ("verified".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(review_schema, "review", &[orig[0].clone()]);
-                            let c2 = encode_records(review_schema, "review", &[orig[1].clone()]);
-                            let damaged = format!("{}rev_case|Good|3.0|1|\n{}", c1, c2);
-                            (review_schema, orig, damaged)
-                        }
-                        20 => {
-                            // Field-name prefix (year: 2024)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|year: 2024|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        21 => {
-                            // Literal null
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|null|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        22 => {
-                            // Literal None
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|2022|5.0|None|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        23 => {
-                            // Literal N/A
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_1_{}", run))),
-                                ("rating".to_string(), Value::Enum("good".to_string())),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("verified".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("rev_2_{}", run))),
-                                ("rating".to_string(), Value::Enum("poor".to_string())),
-                                ("score".to_string(), Value::Float(2.0)),
-                                ("verified".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(review_schema, "review", &[orig[0].clone()]);
-                            let c2 = encode_records(review_schema, "review", &[orig[1].clone()]);
-                            let damaged = format!("{}rev_bad|N/A|3.0|1|\n{}", c1, c2);
-                            (review_schema, orig, damaged)
-                        }
-                        24 => {
-                            // Literal true in bool
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|2022|5.0|true|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        25 => {
-                            // Literal yes in bool
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|2022|5.0|yes|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        26 => {
-                            // Empty field (||)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc||5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        27 => {
-                            // Decimal comma in float (3,14)
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_doc|2022|3,14|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        28 => {
-                            // Invalid escape sequence
-                            let r1 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_1_{}", run))),
-                                ("year".to_string(), Value::Int(2020)),
-                                ("score".to_string(), Value::Float(4.0)),
-                                ("active".to_string(), Value::Bool(true)),
-                            ]);
-                            let r2 = Value::Record(vec![
-                                ("title".to_string(), Value::String(format!("doc_2_{}", run))),
-                                ("year".to_string(), Value::Int(2021)),
-                                ("score".to_string(), Value::Float(3.0)),
-                                ("active".to_string(), Value::Bool(false)),
-                            ]);
-                            let orig = vec![r1, r2];
-                            let c1 = encode_records(doc_schema, "doc", &[orig[0].clone()]);
-                            let c2 = encode_records(doc_schema, "doc", &[orig[1].clone()]);
-                            let damaged = format!("{}bad_\\q_doc|2022|5.0|1|\n{}", c1, c2);
-                            (doc_schema, orig, damaged)
-                        }
-                        _ => unreachable!(),
-                    };
-
-                    // Strict mode must reject with bad lines and return None data
-                    let strict_report = doctor(schema, &damaged, &strict_opt);
-                    assert!(strict_report.data.is_none(), "Strict mode must reject unfixable damage for kind {}", kind_names[kind_idx]);
-                    assert!(!strict_report.bad_lines.is_empty());
-
-                    // Salvage mode must report bad line and return the undamaged records byte-identical
-                    let salvage_report = doctor(schema, &damaged, &salvage_opt);
-                    assert!(!salvage_report.bad_lines.is_empty());
-
-                    if let Some(decoded_file) = salvage_report.data {
-                        let salvaged = decoded_file.blocks[0].records.clone();
-                        if salvaged == orig {
-                            stats[kind_idx].bad_lines_reported += 1;
-                        } else {
-                            stats[kind_idx].false_repairs += 1;
-                            panic!(
-                                "False repair detected on kind {}: salvaged records differ from original.\nSalvaged: {:?}\nOriginal: {:?}",
-                                kind_names[kind_idx], salvaged, orig
-                            );
-                        }
-                    } else {
-                        panic!("Salvage mode failed to return any data for kind {}", kind_names[kind_idx]);
                     }
                 }
             }
         }
     }
 
-    println!("\n=========================================================================================");
-    println!("STRUCT DOCTOR SYNTHETIC DAMAGE SUITE RESULTS");
-    println!("=========================================================================================\n");
-    println!("| Damage Kind | Cases Run | Exact Restorations | Bad Lines Reported | False Repairs |");
-    println!("|---|---|---|---|---|");
-    for (i, name) in kind_names.iter().enumerate() {
+    println!("\n=============================================================================================================================");
+    println!("STRUCT DOCTOR DAMAGE SUITE (random schemas, random multi-record files, seeded)");
+    println!("=============================================================================================================================");
+    println!("| # | Damage kind | Cases | Exact restorations | Bad lines reported | Repairs reported | False repairs | Failures | Distinct inputs | Distinct schemas | Skipped (SPEC-ambiguous) |");
+    println!("|---|---|---|---|---|---|---|---|---|---|---|");
+    let mut tot = RowStats::default();
+    let mut all_inputs: HashSet<u64> = HashSet::new();
+    let mut all_schemas: HashSet<u64> = HashSet::new();
+    for (i, (_, name)) in rows.iter().enumerate() {
+        let s = &stats[i];
         println!(
-            "| {} | {} | {} | {} | {} |",
-            name, stats[i].cases_run, stats[i].exact_restorations, stats[i].bad_lines_reported, stats[i].false_repairs
+            "| {} | {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |",
+            i, name, s.cases, s.exact, s.bad, s.repairs, s.false_repairs, s.failures,
+            s.inputs.len(), s.schemas.len(), s.skipped
         );
+        tot.cases += s.cases;
+        tot.exact += s.exact;
+        tot.bad += s.bad;
+        tot.repairs += s.repairs;
+        tot.false_repairs += s.false_repairs;
+        tot.failures += s.failures;
+        tot.skipped += s.skipped;
+        all_inputs.extend(s.inputs.iter());
+        all_schemas.extend(s.schemas.iter());
     }
-    println!("=========================================================================================\n");
+    println!(
+        "| | TOTAL | {} | {} | {} | {} | {} | {} | {} | {} | {} |",
+        tot.cases, tot.exact, tot.bad, tot.repairs, tot.false_repairs, tot.failures,
+        all_inputs.len(), all_schemas.len(), tot.skipped
+    );
+    println!("Cut-off cases checked, by what the random cut did:");
+    for (n, c) in &cut_notes {
+        println!("  {:5}  {}", c, n);
+    }
+    if !skip_reasons.is_empty() {
+        println!("Skipped cases by reason (not checked; see SPEC questions):");
+        for (r, c) in &skip_reasons {
+            println!("  {:5}  {}", c, r);
+        }
+    }
+    println!("=============================================================================================================================\n");
 
-    let total_cases: usize = stats.iter().map(|s| s.cases_run).sum();
-    let total_false_repairs: usize = stats.iter().map(|s| s.false_repairs).sum();
-    assert!(total_cases >= 5000, "Must run at least 5000 cases, ran {}", total_cases);
-    assert_eq!(total_false_repairs, 0, "False repairs must be 0 under real check");
+    if !failures.is_empty() {
+        let mut groups: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+        for f in &failures {
+            let first: String = f.msg.lines().next().unwrap_or("").chars().map(|c| if c.is_ascii_digit() { '#' } else { c }).take(75).collect();
+            *groups.entry(format!("{} | {}", f.name, first)).or_insert(0) += 1;
+        }
+        println!("Failure groups (row | first line of message): count");
+        for (k, c) in &groups {
+            println!("  {:4}  {}", c, k);
+        }
+        let mut shown = 0;
+        let mut seen_rows = HashSet::new();
+        for f in &failures {
+            if !seen_rows.insert(f.row) && shown >= 12 {
+                continue;
+            }
+            shown += 1;
+            if shown > 40 {
+                break;
+            }
+            println!(
+                "FAILURE row {} '{}' seed 0x{:016x} (replay: DOCTOR_REPRO={}:{:016x})\n{}\nschemas:\n{}damaged text: {:?}\n",
+                f.row, f.name, f.seed, f.row, f.seed, f.msg, f.schemas, f.text
+            );
+        }
+        println!("{} failures in total", failures.len());
+    }
+    assert!(tot.cases >= 5000, "must run at least 5000 cases, ran {}", tot.cases);
+    assert_eq!(tot.false_repairs, 0, "false repairs must be 0");
+    assert!(failures.is_empty(), "{} damage-suite cases failed (see above)", failures.len());
 }
