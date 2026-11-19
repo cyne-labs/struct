@@ -1,0 +1,5 @@
+claim|refuted|record{id:2405.05254,year:2024}|>note{text:\rnotes\rare\rfrom\rabstract\ronly,subnotes:\rabstract\rmentions\r32k\rlimit,\rappendix\rB\rclarifies}|source{id:2405.05254,year:2024}|
+claim|supported|record{id:2106.09685,year:2021}|>note{text:\rtested\ron\rGLUE\rand\Wikisql,subnotes:\rrank\r4\rsufficient,\rhigher\rranks\rshow\rdiminishing\rreturns}|source{id:2106.09685,year:2021}|
+claim|refuted|record{id:2406.12345,year:2024}|>note{text:\routlier\rchannels\rpreserved,subnotes:\rper-head\rscales\rhelp,\rperplexity\rintact}|source{id:2406.12345,year:2024}|
+claim|supported|record{id:2203.15556,year:2022}|>note{text:\rouptimal\rratio\ris\r20\rto\r1,subnotes:\rtested\racross\r400\rmodels,\rcosine\rschedule\rused}|source{id:2203.15556,year:2022}|
+claim|supported|record{id:2005.14165,year:2020}|>note{text:\rscaling\rcurve\ris\rsmooth,subnotes:\rtested\rup\rto\r175B,\rin-context\rlearning\robserved}|source{id:2005.14165,year:2020}|

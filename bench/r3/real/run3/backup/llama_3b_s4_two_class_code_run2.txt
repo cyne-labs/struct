@@ -1,0 +1,3 @@
+~|src/lib.rs|~|~|~|~|pub fn add(a: i32, b: i32) -> i32 { a + b }|~|
+~|src/util.rs|~|~|~|~|pub fn greet(name: &str) -> String { \rformat!("Hello, {}!", name\r)|~|
+~|src/main.rs|~|~|~|~|fn main() { \rprintln!("Hello, world!")\r}|~|

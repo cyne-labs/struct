@@ -1,0 +1,64 @@
+We need to parse the user request. They gave a schema:
+
+schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to produce data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |. ~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \. A record{...} field adds its fields as extra columns, in order. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+We have 5 claims provided in the user message after "Claim ...". Let's list them:
+
+1. Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false.
+2. Claim 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true.
+3. Claim 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true.
+4. Claim 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true.
+5. Claim 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true.
+
+We need to produce Struct records for each claim. The schema order: claim fields: text, verdict, source:record{id, year:int}, verified:bool.
+
+But note: The top-level fields are: text, verdict, source (which is a record with id and year), verified. So the columns in order for each record should be: text, verdict, source id, source year, verified.
+
+Wait careful: The schema: claim{text, verdict:enum(...), source:record{id, year:int}, verified:bool}
+
+So for each claim record, we need to output values in schema order: text, verdict, source id, source year, verified.
+
+But also note: "A record{...} field adds its fields as extra columns, in order." So source is a record field that adds its fields id and year as extra columns after verdict? Actually the order is: text, verdict, source:record{id, year:int}, verified:bool. So after verdict, we have source id, then source year, then verified. Yes.
+
+Thus each line should have 5 values separated by |: text | verdict | source_id | source_year | verified
+
+All lines end with |.
+
+We need to escape special characters: Inside a value, write \| for | and \ for \. Also if text contains line breaks or spaces at start/end, we need to start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+Our texts are simple phrases without line breaks, but they contain apostrophes and commas. No special | or \ characters. So we can just put the text as is.
+
+Verdict must be one of supported, refuted, unverified. We have refuted, supported, supported, supported, supported.
+
+Source id is given as strings like 2405.05254, 1706.03762, etc. Source year is given: 2024, 2017, 2021, 2023, 2024.
+
+Verified is bool: false -> 0, true -> 1.
+
+Thus we need to produce lines:
+
+Claim 1: text 'Rope scaling hurts long ctx' -> but we need to use the text exactly as given? The claim text is 'Rope scaling hurts long ctx'. Should we include the quotes? Probably not, just the text inside quotes. The example earlier: "Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false." So text is Rope scaling hurts long ctx. We'll use that exact string without quotes.
+
+So line: Rope scaling hurts long ctx|refuted|2405.05254|2024|0
+
+But need to ensure separators: | between values, and line ends with |. So we need to write: Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+Wait the instruction: "One record per line: values in schema order, separated by |, and every line ends with |." So after the last value we also put a trailing |? The example they gave: "Example: text|supported|text|7|~|" That suggests that the line ends with a final | after the last value. So we need to have a pipe after each value including the last. So format: value1|value2|value3|value4|value5|
+
+Thus for each claim: text|verdict|source_id|source_year|verified|
+
+Now we need to escape | inside values. Our texts don't have |, but if they did, we would need to replace | with \|. Also \ needs to be escaped as \\.
+
+Our texts: "Rope scaling hurts long ctx" no |. "Attention is all you need" no |. "LoRA low rank adaptation" no |. "Mistral 7B architecture" no |. "DeepSeekMoE mixture experts" no |.
+
+So fine.
+
+Now we need to produce the lines in order? The user didn't specify order, but likely the order given. We'll follow the order listed.
+
+Thus lines:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+2. Attention is all you need|supported|1706.03762|2017|1|
+3. LoRA low rank adaptation|supported|2106.09685|2021|1|
+4. Mistral 7B architecture|supported|2309.06

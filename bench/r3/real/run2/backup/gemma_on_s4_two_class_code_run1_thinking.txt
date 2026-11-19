@@ -1,0 +1,70 @@
+The user wants me to process a set of file and patch instructions and output the results in a specific Struct format.
+
+Schema definitions:
+1. `schema:file{name, path}`
+2. `schema:patch{file_name, code, line:int}`
+
+Output format rules:
+1. Reply with data only in Struct format (no prose, no code fences).
+2. No header row or column names.
+3. The first line is already data.
+4. One record per line.
+5. Values in schema order, separated by `|`.
+6. Every line ends with `|`.
+7. `~` means null.
+8. `bool` is 1 or 0.
+9. `enum` values must be one of the listed labels exactly.
+10. Inside a value, write `|` for `|` and `\` for `\`.
+11. For text with line breaks, or with spaces or tabs at its start or end, start the value with `\r`, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing `|`.
+12. Start each block with `schema:name` on its own line.
+
+Input data:
+1. File 'lib.rs' at path 'src/lib.rs'. Patch for 'lib.rs' at line 10 with code:
+```rust
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+2. File 'util.rs' at path 'src/util.rs'. Patch for 'util.rs' at line 5 with code:
+```rust
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+```
+3. File 'main.rs' at path 'src/main.rs'. Patch for 'main.rs' at line 1 with code:
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+Processing step by step.
+
+Record 1: File 'lib.rs' at path 'src/lib.rs'. Patch for 'lib.rs' at line 10 with code:
+File name: lib.rs
+Path: src/lib.rs
+File_name: lib.rs
+Code: pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+Line: 10
+
+Record 2: File 'util.rs' at path 'src/util.rs'. Patch for 'util.rs' at line 5 with code:
+File name: util.rs
+Path: src/util.rs
+File_name: util.rs
+Code: pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+Line: 5
+
+Record 3: File 'main.rs' at path 'src/main.rs'. Patch for 'main.rs' at line 1 with code:
+File name: main.rs
+Path: src/main.rs
+File_name: main.rs
+Code: fn main() {
+    println!("Hello, world!");
+}
+Line: 1
+
+Constructing the output in the required format.<channel|>

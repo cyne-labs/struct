@@ -1,0 +1,47 @@
+
+We need to produce a list of records in a specific format. Let's parse the instructions:
+
+- The schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+- Reply with data only in Struct format: no prose, no code fences.
+- Never write a header row or column names. The first line is already data.
+- One record per line: values in schema order, separated by |, and every line ends with |.
+- Inside a value, write \| for | and \ for \.
+- For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+- Example: text|text|supported|7|~|
+- So we need to output records that correspond to the 5 statements. Each statement gives information about a paper; we need to extract id, title, verdict, year, verified.
+
+We need to determine id for each claim. Possibly the paper identifier is the numeric identifier? The schema uses "id" but doesn't specify what the id should be. Probably use the numeric identifier string as given. The statements:
+
+1. "Paper 2405.05254 was published in 2024 with the title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted."
+
+So id = 2405.05254? The schema claim id maybe the numeric identifier. Title: "Rope scaling hurts long ctx". Verdict: refuted (since it turned out to be false). Year: 2024. Verified: false (since it was refuted, so not verified). So record: 2405.05254,"Rope scaling hurts long ctx",refuted,2024,0
+
+2. "In 2017, paper 1706.03762 was published with the title "Attention is all you need"; verification was true, and the claim is supported."
+
+id=1706.03762, title="Attention is all you need", verdict=supported, year=2017, verified=1.
+
+3. "Paper 2106.09685, titled "LoRA low rank adaptation", appeared in 2021; it was verified as true, so the claim is supported."
+
+id=2106.09685, title="LoRA low rank adaptation", verdict=supported, year=2021, verified=1.
+
+4. "Titled "Mistral 7B architecture", paper 2309.06180 was published in 2023; verification was true, and the claim is supported."
+
+id=2309.06180, title="Mistral 7B architecture", verdict=supported, year=2023, verified=1.
+
+5. "Paper 2401.04088 was published in 2024 under the title "DeepSeekMoE mixture experts"; it was verified as true, and the claim is supported."
+
+id=2401.04088, title="DeepSeekMoE mixture experts", verdict=supported, year=2024, verified=1.
+
+We must produce lines: id,title,verdict,year,verified separated by commas, no extra quotes? The example includes quotes around text values. The instructions: "Inside a value, write \| for | and \ for \." It doesn't say to quote strings. The example uses quotes around text values: text|text|... So they used double quotes. The schema uses title as a string; we can include quotes. There's no explicit requirement to quote. However, to be safe, we can include quotes as in example. Also need to ensure any internal double quotes are escaped? There are no internal double quotes. So we can output:
+
+2405.05254,"Rope scaling hurts long ctx",refuted,2024,0|
+1706.03762,"Attention is all you need",supported,2017,1|
+2106.09685,"LoRA low rank adaptation",supported,2021,1|
+2309.06180,"Mistral 7B architecture",supported,2023,1|
+2401.04088,"DeepSeekMoE mixture experts",supported,2024,1|
+
+Check if any spaces needed? The example: text|text|supported|7|~|. They didn't have quotes. But they said "no prose, no code fences". Using quotes is okay. However, they said "the first line is already data." That implies the first line is the first record. So we start directly with the line. No extra explanation.
+
+Make sure no trailing spaces. Each line ends with |. There's no extra line after last? Probably fine.
+
+Thus answer.

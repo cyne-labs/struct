@@ -1,0 +1,96 @@
+
+We need to produce a Struct record per line, representing each paper entry. The schema: claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]. The fields: claim text, verdict, source (id, year), notes. The notes is a list of records each having text (the note content) and subnotes (list of strings). The notes are within the top-level record. The notes themselves have items that are subnotes.
+
+We have to produce data only in Struct format: no prose, no code fences. The first line is already data (i.e., the first record line). Each record per line: values in schema order, separated by |, and every line ends with |. So each line ends with |. No extra commentary.
+
+We need to parse the given description.
+
+We have five entries (1 to 5). For each, we need to capture:
+
+- claim text: The claim text from each entry. For example, entry 1: "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024". That is the claim text. Then also "but the claim was refuted." So the claim includes that it was refuted? The schema says claim{text,...}. Possibly the text includes the claim statement and the verdict? The schema includes "text" field, but also "verdict". The "verdict" is separate. So we need to include the claim statement as text, and the verdict as enum. The description says "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted." So the claim text could be "Rope scaling hurts long ctx" and the refutation is indicated by "but the claim was refuted". However, we have a separate note about refuted. The schema includes "verdict:enum(supported,refuted,unknown)". So we should set verdict = "refuted". The claim text should include the claim itself, maybe just the quoted phrase. The note includes the refutation. So claim text: "Rope scaling hurts long ctx". Or include "claimed 'Rope scaling hurts long ctx'". Probably just "Rope scaling hurts long ctx". We'll do that.
+
+- source: record{id, year:int}. So id is the numeric ID, year is integer. For each entry, we have paper IDs and years. Let's extract:
+
+1. Paper 2405.05254 claimed ... in 2024. So id = 2405.05254, year = 2024.
+
+2. Paper 2106.09685 ... in 2021. So id = 2106.09685, year = 2021.
+
+3. Paper 2406.12345 ... in 2024. So id = 2406.12345, year = 2024.
+
+4. Paper 2203.15556 ... published in 2022. So id = 2203.15556, year = 2022.
+
+5. Paper 2005.14165 from 2020 claimed ... supported. So id = 2005.14165, year = 2020.
+
+Now notes: For each entry, we need to produce a list of notes. Each note is a record with text and subnotes. The notes list includes multiple entries:
+
+- For entry 1: "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". So one note: text = "notes are from abstract only", subnotes = ["abstract mentions 32k limit", "appendix B clarifies"].
+
+- For entry 1: second note: "table 3 contradicts", with subnote "llama 7b tested only". So note: text = "table 3 contradicts", subnotes = ["llama 7b tested only"].
+
+Thus entry 1 notes list has two items.
+
+- Entry 2: "the verdict is supported. The first note is 'tested on GLUE and Wikisql', with subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'. The second note is 'memory footprint reduced 3x', with subnote 'optimizer state minimal'. The third note is 'checkpoint size under 50MB', without any subnotes."
+
+Thus three notes:
+
+Note1: text = "tested on GLUE and Wikisql", subnotes = ["rank 4 sufficient", "higher ranks show diminishing returns"].
+
+Note2: text = "memory footprint reduced 3x", subnotes = ["optimizer state minimal"].
+
+Note3: text = "checkpoint size under 50MB", subnotes = [] (empty list). In JSON-like representation, we need to indicate empty list. Probably just omit subnotes or represent as []? The schema says notes:list[record{text, subnotes:list[str]}]. So subnotes is a list of strings, can be empty. In the example they show "notes:list[record{text, subnotes:list[str]}]". So we need to include subnotes: [] for empty.
+
+Thus entry 2 notes list has three items.
+
+- Entry 3: "Paper 2406.12345 made the claim 'KV cache quant loses 2x acc' in 2024, but the verdict is refuted. It has a note 'outlier channels preserved', with subnote 'per-head scales help' and 'perplexity intact'." So one note: text = "outlier channels preserved", subnotes = ["per-head scales help", "perplexity intact"].
+
+- Entry 4: "Published in 2022, paper 2203.15556 claimed 'Chinchilla tokens beat params', which is supported. One note states 'optimal ratio is 20 to 1', with subnotes 'tested across 400 models' and 'cosine schedule used'. Another note states 'kaplan tokens were suboptimal', with subnote 'fixed learning rate flawed'." So two notes:
+
+Note1: text = "optimal ratio is 20 to 1", subnotes = ["tested across 400 models", "cosine schedule used"].
+
+Note2: text = "kaplan tokens were suboptimal", subnotes = ["fixed learning rate flawed"].
+
+- Entry 5: "Paper 2005.14165 from 2020 claimed 'Language models few-shot', and the claim is supported. There is a note 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'." So one note: text = "scaling curve is smooth", subnotes = ["tested up to 175B", "in-context learning observed"].
+
+Now we need to output each record line: fields in order: claim text, verdict, source.id, source.year, then notes (list). The schema order: claim{text, verdict:enum(...), source:record{id, year:int}, notes:list[...]. So we need to include all these fields. The source is a nested record with id and year. The notes are a list of sub-record fields. The notes themselves are list items, each with text and subnotes. The order of notes items: they appear sequentially. The schema says "List items go on the lines below their parent, starting with one > for its items, > for its items, >> for theirs." But we are not using markdown, we just need to produce lines in order. However we need to ensure the notes are represented as a list. Since we cannot use markdown, we need to represent the list as something like [{text:..., subnotes:...}, {...}, {}]. But the instruction: "List items go on the lines below their parent, starting with one > for its items, > for its items, >> for theirs." That's for markdown bullet lists. But we are not required to produce bullet list, just data. The example they gave earlier: "text|supported|text|~|". That's a line with pipe separated values, where the last value is a list? Actually they had "notes:list[record{text, subnotes:list[str]}]". The example: "text|supported|text|~|". That seems to represent a note with subnotes? Not sure. But we need to follow the instructions: "One record per line: values in schema order, separated by |, and every line ends with |." So we need to produce lines like:
+
+"2405.05254|refuted|2024|notes:[{text:Rope scaling hurts long ctx, subnotes:['abstract mentions 32k limit','appendix B clarifies']},{text:table 3 contradicts, subnotes:['llama 7b tested only']}]"
+
+But we need to ensure correct ordering: claim text, verdict, source.id, source.year, notes. The source is a nested object with id and year. So we need to embed that as a record. The schema order says claim{text, verdict, source:record{id, year:int}, notes:list...}. So we need to include source as a field, not as a nested list. So we need to produce something like:
+
+"2405.05254|refuted|2024|notes:[{text:Rope scaling hurts long ctx, subnotes:['abstract mentions 32k limit','appendix B clarifies']},{text:table 3 contradicts, subnotes:['llama 7b tested only']},{text:checkpoint size under 50MB, subnotes:[]}]"
+
+But we need to ensure no extra spaces or formatting. Also need to escape quotes inside values? The claim text includes single quotes around the phrase. That's fine. The subnotes strings may contain spaces. That's fine.
+
+We need to ensure no code fences. Also no extra commentary. So final output will be five lines, each representing a record.
+
+We must ensure each line ends with |. Also note that inside a value we need to write \| for | and \ for \". However we have no pipe characters inside values except the separator between fields. Inside notes we have subnotes separated by commas. The subnotes themselves are lists, we need to represent them as JSON-like arrays. The instruction: "Inside a value, write \| for | and \ for \". That is for pipe characters inside a value. But we are not using pipe inside values except as separators. So it's fine.
+
+Thus final lines:
+
+Line1: 2405.05254|refuted|2024|notes:[{text:Rope scaling hurts long ctx, subnotes:['abstract mentions 32k limit','appendix B clarifies']},{text:table 3 contradicts, subnotes:['llama 7b tested only']},{text:checkpoint size under 50MB, subnotes:[]}]
+
+But we need to include the note about refuted? The verdict is refuted, but we also have the claim text. The claim text includes the claim, not the verdict. That's fine.
+
+Check ordering: claim text, verdict, source.id, source.year, notes. Yes.
+
+Now line2: 2106.09685|supported|2021|notes:[{text:tested on GLUE and Wikisql, subnotes:['rank 4 sufficient','higher ranks show diminishing returns']},{text:memory footprint reduced 3x, subnotes:['optimizer state minimal']},{text:checkpoint size under 50MB, subnotes:[]}]
+
+Line3: 2406.12345|refuted|2024|notes:[{text:outlier channels preserved, subnotes:['per-head scales help','perplexity intact']}]
+
+Line4: 2203.15556|supported|2022|notes:[{text:optimal ratio is 20 to 1, subnotes:['tested across 400 models','cosine schedule used']},{text:kaplan tokens were suboptimal, subnotes:['fixed learning rate flawed']}]
+
+Line5: 2005.14165|supported|2020|notes:[{text:scaling curve is smooth, subnotes:['tested up to 175B','in-context learning observed']}]
+
+Make sure each line ends with |. Yes.
+
+Check if any missing fields. The source is a record with id and year. We have that. The notes are a list of records. Yes.
+
+One nuance: The schema says "notes:list[record{text, subnotes:list[str]}]". That means each note is a record with text and subnotes. So we need to include subnotes as a list of strings. We have that.
+
+Thus final answer is five lines as above. Ensure no extra spaces at start or end. Provide exactly those lines.
+
+Potential issues: The quotes inside text values: "Rope scaling hurts long ctx" - no quotes needed. The note texts have quotes? No. So fine.
+
+We need to ensure no trailing spaces. Also ensure that we don't accidentally include extra commas at the end of lines. The line ends with |. The last field is notes, which ends with a closing bracket and then |. That's fine.
+
+Thus final output.

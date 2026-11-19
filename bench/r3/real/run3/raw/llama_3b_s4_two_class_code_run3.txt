@@ -1,0 +1,14 @@
+~|src/lib.rs|~|
+~|~|10|~|
+~|pub fn add(a: i32, b: i32) -> i32 {~|
+~|    a + b~|
+
+~|src/util.rs|~|
+~|~|5|~|
+~|pub fn greet(name: &str) -> String {~|
+~|    format!("Hello, {}!", name~)|
+
+~|src/main.rs|~|
+~|~|1|~|
+~|fn main() {~|
+~|    println!("Hello, world!");~|

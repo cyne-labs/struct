@@ -1,0 +1,5 @@
+1. Claim|refuted|2405.05254|2024|Notes:|>  - Note text 'notes are from abstract only', with subnotes 'abstract mentions 32k limit' and 'appendix B clarifies'.|>  - Note text 'table 3 contradicts', with subnote 'llama 7b tested only.|~|
+2. Claim|supported|2106.09685|2021|Notes:|>  - Note text 'tested on GLUE and Wikisql', with subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'.|>  - Note text 'memory footprint reduced 3x', with subnote 'optimizer state minimal'.|>  - Note text 'checkpoint size under 50MB', with no subnotes.|~|
+3. Claim|refuted|2406.12345|2024|Notes:|>  - Note text 'outlier channels preserved', with subnotes 'per-head scales help' and 'perplexity intact'.|>  - Note text 'KV cache quant loses 2x acc', with no subnotes.|~|
+4. Claim|supported|2203.15556|2022|Notes:|>  - Note text 'optimal ratio is 20 to 1', with subnotes 'tested across 400 models' and 'cosine schedule used'.|>  - Note text 'kaplan tokens were suboptimal', with subnote 'fixed learning rate flawed'.|~|
+5. Claim|supported|2005.14165|2020|Notes:|>  - Note text 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'.|~|

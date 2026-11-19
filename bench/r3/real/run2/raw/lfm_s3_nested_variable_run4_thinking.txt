@@ -1,0 +1,121 @@
+<think>
+We need to output data only in Struct format: no prose, no code fences. The first line is already data. Likely each record is a line with fields in schema order: schema{text, verdict, source, notes}. But we need to translate the given claims into that structure. The schema:
+
+struct claim {
+  text: string,
+  verdict: enum(supported, refuted, unknown),
+  source: record{id:int, year:int},
+  notes: list[record{text, subnotes: list[str]]}
+}
+
+But the instruction: "Write these as Struct records." The example they gave is a claim schema, but they want output in a similar format: each record line includes text, verdict, source, notes. The notes themselves are list of records that have text and subnotes. The notes are hierarchical: each note has text and subnotes (list of strings). For each claim, we have notes with bullet points:
+
+- Note text 'notes are from abstract only', with subnotes 'abstract mentions 32k limit' and 'appendix B clarifies'.
+- Note text 'table 3 contradicts', with subnote 'llama 7b tested only'.
+
+So each note is a record with text and subnotes (list of strings). The subnotes themselves are strings, not a list of records. So we can represent each note as a list of strings? They said "list[record{text, subnotes:list[str]}]". But that's nested list. However we can just represent subnotes as an array of strings. The instruction: "write | for | and \ for |". So we need to escape internal pipes.
+
+The first line is already data. Probably we need to output something like:
+
+claim{
+text: 'Claim ...', verdict: 'refuted', source: {id: 2405.05254, year: 2024}, notes: [
+  {
+    text: 'Note text ...',
+    subnotes: ['abstract mentions 32k limit', 'appendix B clarifies']
+  },
+  ...
+]
+
+But they said "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data." So maybe they want a single line per record? Or each claim as a struct object, but they said "One record per line". So each claim is a line, containing the struct fields. Let's read carefully.
+
+Original instruction:
+
+"~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \ for \.
+A record{...} field adds its fields as extra columns, in order.
+List items go on the lines below their parent, starting with one > for its items, >> for theirs.
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+Example: text|supported|text|~|"
+
+Thus they want a line like:
+
+claim{text: ..., verdict: ..., source: {id: ..., year: ...}, notes: [{text: ..., subnotes: [...]}, ...]}
+
+But we need to follow that format exactly: The fields in order: text, verdict, source, notes. Within notes, each note is itself a record with text and subnotes. The subnotes is a list of strings.
+
+We need to produce data for the given claims. So we have 5 claims.
+
+We need to ensure we use proper quoting, escape pipes, backslashes. For each note's text, there may be quotes inside. The example uses quotes around strings. We can use single quotes or double quotes? Probably double quotes are fine. However inside a value, we need to escape internal quotes? The instruction doesn't mention escaping quotes, only pipes and backslashes. So we can just use double quotes around strings and include internal quotes as needed. But we have to be careful: The note text includes 'abstract mentions 32k limit' which contains no quotes. The subnote 'llama 7b tested only' also no quotes. So we can just write them.
+
+We need to include the source id and year as integers.
+
+Now we need to produce each claim as a line. The first line is already data? Actually they say "The first line is already data." That might refer to the example? Or maybe they want the output to start with the first record line. But we can just output all lines.
+
+Thus we produce:
+
+claim{
+text: 'Claim \'Rope scaling hurts long ctx\'',
+verdict: 'refuted',
+source: {id: 2405.05254, year: 2024},
+notes: [
+  {
+    text: 'Note text \'notes are from abstract only\'',
+    subnotes: ['abstract mentions 32k limit', 'appendix B clarifies']
+  },
+  {
+    text: 'Note text \'table 3 contradicts\'',
+    subnotes: ['llama 7b tested only']
+  },
+  {
+    text: 'Note text \'outlier channels preserved\'',
+    subnotes: []
+  },
+  {
+    text: 'Note text \'optimal ratio is 20 to 1\'',
+    subnotes: ['tested across 400 models', 'cosine schedule used']
+  },
+  {
+    text: 'Note text \'scaling curve is smooth\'',
+    subnotes: ['tested up to 175B', 'in-context learning observed']
+  }
+]
+claim{
+text: 'Claim \'LoRA matches full finetune\'',
+verdict: 'supported',
+source: {id: 2106.09685, year: 2021},
+notes: [
+  {
+    text: 'Note text \'tested on GLUE and Wikisql\'',
+    subnotes: ['rank 4 sufficient', 'higher ranks show diminishing returns']
+  },
+  {
+    text: 'Note text \'memory footprint reduced 3x\'',
+    subnotes: ['optimizer state minimal']
+  },
+  {
+    text: 'Note text \'checkpoint size under 50MB\'',
+    subnotes: []
+  }
+]
+claim{
+text: 'Claim \'KV cache quant loses 2x acc\'',
+verdict: 'refuted',
+source: {id: 2406.12345, year: 2024},
+notes: [
+  {
+    text: 'Note text \'outlier channels preserved\'',
+    subnotes: ['per-head scales help', 'perplexity intact']
+  },
+  {
+    text: 'Note text \'optimal ratio is 20 to 1\'',
+    subnotes: ['tested across 400 models', 'cosine schedule used']
+  },
+  {
+    text: 'Note text \'kaplan tokens were suboptimal\'',
+    subnotes: ['fixed learning rate flawed']
+  }
+]
+claim{
+text: 'Claim \'Language models few-shot\'',
+verdict: 'supported',
+source: {id: 2005.14165, year

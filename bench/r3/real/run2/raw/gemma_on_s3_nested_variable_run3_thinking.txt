@@ -1,0 +1,40 @@
+Thinking Process:
+
+1.  **Analyze the Request:** The goal is to extract data from the provided text and format it strictly according to the defined schema: `schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}`.
+2.  **Determine Output Format Constraints:**
+    *   Data only in Struct format.
+    *   No prose, no code fences.
+    *   No header row or column names.
+    *   One record per line.
+    *   Values separated by `|`.
+    *   Every line ends with `|`.
+    *   `~` for null.
+    *   `bool` is 1 or 0.
+    *   Enum values must be exact labels.
+    *   Internal delimiters: `|` for fields, `\` for `\`, `\r` for text with special whitespace/newlines.
+    *   List structure: `>` for parent list items, `>>` for nested list items.
+3.  **Process Claim 1:**
+    *   Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 in year 2024.
+    *   Notes:
+        *   Note text 'notes are from abstract only', with subnotes 'abstract mentions 32k limit' and 'appendix B clarifies'.
+        *   Note text 'table 3 contradicts', with subnote 'llama 7b tested only'.
+4.  **Process Claim 2:**
+    *   Claim 'LoRA matches full finetune', verdict supported, source id 2106.09685 in year 2021.
+    *   Notes:
+        *   Note text 'tested on GLUE and Wikisql', with subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'.
+        *   Note text 'memory footprint reduced 3x', with subnote 'optimizer state minimal'.
+        *   Note text 'checkpoint size under 50MB', with no subnotes.
+5.  **Process Claim 3:**
+    *   Claim 'KV cache quant loses 2x acc', verdict refuted, source id 2406.12345 in year 2024.
+    *   Notes:
+        *   Note text 'outlier channels preserved', with subnotes 'per-head scales help' and 'perplexity intact'.
+6.  **Process Claim 4:**
+    *   Claim 'Chinchilla tokens beat params', verdict supported, source id 2203.15556 in year 2022.
+    *   Notes:
+        *   Note text 'optimal ratio is 20 to 1', with subnotes 'tested across 400 models' and 'cosine schedule used'.
+        *   Note text 'kaplan tokens were suboptimal', with subnote 'fixed learning rate flawed'.
+7.  **Process Claim 5:**
+    *   Claim 'Language models few-shot', verdict supported, source id 2005.14165 in year 2020.
+    *   Notes:
+        *   Note text 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'.
+8.  **Final Formatting (Strict adherence to the requested format):** Assemble the extracted data into the required pipe-separated structure. (Self-Correction: Ensure the complex nested list structure is handled correctly using `>` and `>>`.)<channel|>

@@ -1,0 +1,46 @@
+Thinking Process:
+
+1.  **Analyze the Request:** The user wants me to extract structured data from the provided text based on a specific schema: `claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}`.
+2.  **Determine Output Format Constraints:**
+    *   Data only in Struct format.
+    *   No prose, no code fences.
+    *   No header row or column names.
+    *   One record per line.
+    *   Values separated by `|`.
+    *   Every line ends with `|`.
+    *   `~` means null.
+    *   `bool` is 1 or 0.
+    *   Enum values must be exact matches.
+    *   Inside values: use `|` for `|` and `\` for `\`.
+    *   List items (notes/subnotes) use `>` and `>>` hierarchy.
+    *   Special handling for multi-line/formatted text (using `\r`).
+
+3.  **Process Input Data (Claim by Claim):**
+
+    *   **Claim 1:** 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 in year 2024. Notes:
+        *   Note 1: text 'notes are from abstract only', subnotes 'abstract mentions 32k limit', 'appendix B clarifies'.
+        *   Note 2: text 'table 3 contradicts', subnote 'llama 7b tested only'.
+
+    *   **Claim 2:** 'LoRA matches full finetune', verdict supported, source id 2106.09685 in year 2021. Notes:
+        *   Note 1: text 'tested on GLUE and Wikisql', subnotes 'rank 4 sufficient', 'higher ranks show diminishing returns'.
+        *   Note 2: text 'memory footprint reduced 3x', subnote 'optimizer state minimal'.
+        *   Note 3: text 'checkpoint size under 50MB', no subnotes.
+
+    *   **Claim 3:** 'KV cache quant loses 2x acc', verdict refuted, source id 2406.12345 in year 2024. Notes:
+        *   Note 1: text 'outlier channels preserved', subnotes 'per-head scales help', 'perplexity intact'.
+
+    *   **Claim 4:** 'Chinchilla tokens beat params', verdict supported, source id 2203.15556 in year 2022. Notes:
+        *   Note 1: text 'optimal ratio is 20 to 1', subnotes 'tested across 400 models', 'cosine schedule used'.
+        *   Note 2: text 'kaplan tokens were suboptimal', subnote 'fixed learning rate flawed'.
+
+    *   **Claim 5:** 'Language models few-shot', verdict supported, source id 2005.14165 in year 2020. Notes:
+        *   Note 1: text 'scaling curve is smooth', subnotes 'tested up to 175B', 'in-context learning observed'.
+
+4.  **Construct the Output (Strict Formatting Check):** Ensure adherence to the specified format (no headers, strict pipe separation, correct handling of nested lists).
+
+    *Self-Correction during formatting:* I need to handle the complex note structure carefully. The structure is: `text|verdict|source_id|year|notes_list`. The notes list itself is a list of records.
+
+    *Structure Check:*
+    `text|verdict|source|id|year|notes_text|subnotes_list_text...`
+
+5.  **Final Generation.** (Proceed to generate the output based on the derived structure.)<channel|>

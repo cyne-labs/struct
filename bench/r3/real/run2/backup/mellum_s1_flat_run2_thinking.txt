@@ -1,0 +1,63 @@
+We need to parse the user request. They gave a schema: schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+
+We need to reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |. ~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+We have 5 claims listed with numbers but we need to extract id, title, verdict, year, verified.
+
+The claims:
+
+1. Claim 2405.05254: title 'Rope scaling hurts long ctx', published in 2024, verdict refuted, verified false.
+So id: 2405.05254 (presumably the claim id is the arXiv ID). title: "Rope scaling hurts long ctx". verdict: refuted. year: 2024. verified: false (bool 0).
+
+2. Claim 1706.03762: title 'Attention is all you need', published in 2017, verdict supported, verified true.
+id: 1706.03762. title: "Attention is all you need". verdict: supported. year: 2017. verified: true (1).
+
+3. Claim 2106.09685: title 'LoRA low rank adaptation', published in 2021, verdict supported, verified true.
+id: 2106.09685. title: "LoRA low rank adaptation". verdict: supported. year: 2106.09685? Wait year is 2021. The claim says published in 2021. So year: 2021. verified: true (1).
+
+4. Claim 2309.06180: title 'Mistral 7B architecture', published in 2023, verdict supported, verified true.
+id: 2309.06180. title: "Mistral 7B architecture". verdict: supported. year: 2023. verified: true (1).
+
+5. Claim 2401.04088: title 'DeepSeekMoE mixture experts', published in 2024, verdict supported, verified true.
+id: 2401.04088. title: "DeepSeekMoE mixture experts". verdict: supported. year: 2024. verified: true (1).
+
+We need to output one record per line, values in schema order: id, title, verdict, year, verified.
+
+So each line: id|title|verdict|year|verified|
+
+But we need to handle special characters: Inside a value, write \| for | and \ for \. So if any value contains | or \, we need to escape them. The titles may contain spaces but not | or \. The ids contain dots but no | or \. Verdict is one of the enum labels: supported, refuted, unverified. Year is int. Verified is bool: 1 or 0.
+
+We need to ensure each line ends with |. So format: id|title|verdict|year|verified|
+
+But we need to consider the rule: "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |." Our titles have spaces but not leading/trailing spaces or tabs. So we don't need to prefix with \r. Only if there are line breaks or leading/trailing spaces/tabs. Our titles are normal. So we can just put the title as is, but we need to escape any | or \ characters inside the title. There are none. So fine.
+
+Thus lines:
+
+1. 2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+2. 1706.03762|Attention is all you need|supported|2017|1|
+3. 2106.09685|LoRA low rank adaptation|supported|2021|1|
+4. 2309.06180|Mistral 7B architecture|supported|2023|1|
+5. 2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Check each: id is the claim id string. title is as given. verdict correct. year correct. verified: false -> 0, true -> 1.
+
+Make sure each line ends with |. Yes.
+
+Now we need to output only the lines, no header, no prose. So just the five lines.
+
+But we need to ensure that if any value contains | or \, we escape them. Not needed.
+
+Thus final answer:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Double-check schema order: id, title, verdict, year, verified. Yes.
+
+Make sure no extra spaces. Each line ends with |. Good.
+
+Now produce final.
+</think>

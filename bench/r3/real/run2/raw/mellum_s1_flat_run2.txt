@@ -1,0 +1,6 @@
+
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2

@@ -1,0 +1,27 @@
+text|refuted|source{id:2405.05254,year:2024}|[
+>text|notes are from abstract only|
+>>subnotes|abstract mentions 32k limit|appendix B clarifies
+>text|table 3 contradicts|
+>>subnotes|llama 7b tested only
+]|
+text|supported|source{id:2106.09685,year:2021}|[
+>text|tested on GLUE and Wikisql|
+>>subnotes|rank 4 sufficient|higher ranks show diminishing returns
+>text|memory footprint reduced 3x|
+>>subnotes|optimizer state minimal
+>text|checkpoint size under 50MB
+]|
+text|refuted|source{id:2406.12345,year:2024}|[
+>text|outlier channels preserved|
+>>subnotes|per-head scales help|perplexity intact
+]|
+text|supported|source{id:2203.15556,year:2022}|[
+>text|optimal ratio is 20 to 1|
+>>subnotes|tested across 400 models|cosine schedule used
+>text|kaplan tokens were suboptimal|
+>>subnotes|fixed learning rate flawed
+]|
+text|supported|source{id:2005.14165,year:2020}|[
+>text|scaling curve is smooth|
+>>subnotes|tested up to 175B|in-context learning observed
+]|

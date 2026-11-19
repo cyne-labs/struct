@@ -1,0 +1,47 @@
+<think>
+We need to output data in Struct format, one record per line, with fields as per schema:
+
+{
+  "schema": "claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+}
+
+But the instruction: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data." So we just output the records, presumably each line is a JSON object? However they mention "Struct format". Possibly they want a record with fields: text, verdict, source.id, source.year, verified? Actually schema: claim{text, verdict:enum(...), source:record{id, year:int}, verified:bool}. That's like a schema for a claim object. The data for each claim would be something like:
+
+{
+  "text": "Rope scaling hurts long ctx",
+  "verdict": "refuted",
+  "source": {
+    "id": 2405.05254,
+    "year": 2024
+  },
+  "verified": false
+}
+
+But the instruction says "One record per line: values in schema order, separated by |, and every line ends with |." That suggests a pipe-separated format, not JSON. The example: "~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \". A record{...} field adds its fields as extra columns, in order."
+
+Thus they want pipe-separated fields. The schema order: text, verdict, source.id, source.year, verified? Or maybe the order: text, verdict, source, verified? The schema says "claim{text, verdict:enum(...), source:record{id, year:int}, verified:bool}". That suggests fields: text, verdict, source (which itself has id and year), verified. So in pipe-separated order: text, verdict, source.id, source.year, verified. That matches example? They didn't provide example of pipe format, but we can infer.
+
+Thus each line: "Rope scaling hurts long ctx|refuted|2405.05254|2024|false". Since verified false is boolean, we write false (or 0?). They said bool is 1 or 0. So false = 0. So "verified false" becomes "false". The source.id and year are ints, so we write them as numbers. No quotes.
+
+Check other claims:
+
+2. Claim 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true. So: "Attention is all you need|supported|1706.03762|2017|true"
+
+3. Claim 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true. => "LoRA low rank adaptation|supported|2106.09685|2021|true"
+
+4. Claim 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true. => "Mistral 7B architecture|supported|2309.06180|2023|true"
+
+5. Claim 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true. => "DeepSeekMoE mixture experts|supported|2401.04088|2024|true"
+
+All lines end with |. No extra spaces. Ensure no header. Provide exactly those five lines.
+
+Thus output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|false
+Attention is all you need|supported|1706.03762|2017|true
+LoRA low rank adaptation|supported|2106.09685|2021|true
+Mistral 7B architecture|supported|2309.06180|2023|true
+DeepSeekMoE mixture experts|supported|2401.04088|2024|true
+
+Check if any extra spaces. There's no trailing spaces. Good.
+</think>

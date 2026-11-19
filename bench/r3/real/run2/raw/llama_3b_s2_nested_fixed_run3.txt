@@ -1,0 +1,1 @@
+text|refuted|supported|7|~|text|supported|supported|2017|\rAttention is all you need.|text|supported|2021|\rLoRA low rank adaptation.|text|supported|2023|\rMistral 7B architecture.|text|supported|2024|\rDeepSeekMoE mixture experts.|~|refuted|2405.05254|2401.04088|

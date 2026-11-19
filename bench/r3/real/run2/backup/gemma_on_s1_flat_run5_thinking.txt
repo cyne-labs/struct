@@ -1,0 +1,59 @@
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Schema:** `claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}`
+    *   **Output Format:** Data only, Struct format.
+    *   **Constraints:**
+        *   No prose, no code fences.
+        *   No header row/column names.
+        *   One record per line.
+        *   Values separated by `|`.
+        *   Every line ends with `|`.
+        *   `~` means null.
+        *   `bool` is 1 or 0.
+        *   Enum values must be exact labels (`supported`, `refuted`, `unverified`).
+        *   Special handling for text containing line breaks/spaces/tabs: start the value with `\r` and preserve all whitespace/newlines.
+
+2.  **Process Input Data (Claim by Claim):**
+
+    *   **Claim 1:** Claim 2405.05254: title 'Rope scaling hurts long ctx', published in 2024, verdict refuted, verified false.
+        *   id: 2405.05254
+        *   title: Rope scaling hurts long ctx
+        *   year: 2024
+        *   verdict: refuted
+        *   verified: false (0)
+        *   *Result:* 2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+
+    *   **Claim 2:** Claim 1706.03762: title 'Attention is all you need', published in 2017, verdict supported, verified true.
+        *   id: 1706.03762
+        *   title: Attention is all you need
+        *   year: 2017
+        *   verdict: supported
+        *   verified: true (1)
+        *   *Result:* 1706.03762|Attention is all you need|supported|2017|1|
+
+    *   **Claim 3:** Claim 2106.09685: title 'LoRA low rank adaptation', published in 2021, verdict supported, verified true.
+        *   id: 2106.09685
+        *   title: LoRA low rank adaptation
+        *   year: 2021
+        *   verdict: supported
+        *   verified: true (1)
+        *   *Result:* 2106.09685|LoRA low rank adaptation|supported|2021|1|
+
+    *   **Claim 4:** Claim 2309.06180: title 'Mistral 7B architecture', published in 2023, verdict supported, verified true.
+        *   id: 2309.06180
+        *   title: Mistral 7B architecture
+        *   year: 2023
+        *   verdict: supported
+        *   verified: true (1)
+        *   *Result:* 2309.06180|Mistral 7B architecture|supported|2023|1|
+
+    *   **Claim 5:** Claim 2401.04088: title 'DeepSeekMoE mixture experts', published in 2024, verdict supported, verified true.
+        *   id: 2401.04088
+        *   title: DeepSeekMoE mixture experts
+        *   year: 2024
+        *   verdict: supported
+        *   verified: true (1)
+        *   *Result:* 2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+3.  **Final Review against Constraints:** All data is in the required pipe-separated format, no headers, and boolean/enum values are correctly mapped. (Self-Correction: Ensure the output strictly adheres to the example format and constraints.)<channel|>

@@ -1,0 +1,114 @@
+We need to parse the instruction carefully.
+
+We have schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to produce data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \.
+
+A record{...} field adds its extra columns, in order. So for source:record{id, year:int}, that adds two columns: id and year. So overall columns order: text, verdict, source id, source year, verified? Wait schema: claim{text, verdict:enum(...), source:record{id, year:int}, verified:bool}. So the fields in order: text, verdict, source (which is a record with fields id and year), verified. So columns: text, verdict, source.id, source.year, verified.
+
+Thus each line should have 5 values separated by |, ending with |. So format: text|verdict|source_id|source_year|verified|
+
+We have 5 claims provided in the prompt after "Write these as Struct records."
+
+The claims:
+
+1. Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false.
+2. Claim 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true.
+3. Claim 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true.
+4. Claim 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true.
+5. Claim 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true.
+
+We need to extract text, verdict, source id, source year, verified bool.
+
+Verdict values must be exactly supported, refuted, or unverified. Here we have "refuted", "supported". Good.
+
+Verified bool: false -> 0, true -> 1.
+
+Source id: given as strings like 2405.05254, 1706.03762, etc. They are presumably the record id. We'll use them as is.
+
+Source year: given as 2024, 2017, 2021, 2023, 2024.
+
+Text: the claim text is the quoted string. Need to handle any special characters like quotes, commas, etc. The text value may contain line breaks, spaces, tabs, etc. In this case, the texts are simple: 'Rope scaling hurts long ctx', etc. They contain single quotes? The example shows text|supported|text|7|~| but that's just an example. We need to output the text exactly as it appears, but we may need to escape | and \ characters. The texts here do not contain | or \ or line breaks. So we can just put the text inside quotes? Wait the schema expects text field value. In the example they gave: "Example: text|supported|text|7|~|". That seems to indicate that the text value is just the text itself, not quoted. Probably we should output the text without additional quotes, just the string. However, the texts here are given with single quotes in the prompt, but we should probably strip the quotes. The claim text is 'Rope scaling hurts long ctx'. So the text content is Rope scaling hurts long ctx (without quotes). Similarly others.
+
+Thus for claim 1: text = Rope scaling hurts long ctx
+
+verdict = refuted
+
+source id = 2405.05254
+
+source year = 2024
+
+verified = 0 (false)
+
+Claim 2: text = Attention is all you need
+
+verdict = supported
+
+source id = 1706.03762
+
+source year = 2017
+
+verified = 1
+
+Claim 3: text = LoRA low rank adaptation
+
+verdict = supported
+
+source id = 2106.09685
+
+source year = 2021
+
+verified = 1
+
+Claim 4: text = Mistral 7B architecture
+
+verdict = supported
+
+source id = 2309.06180
+
+source year = 2023
+
+verified = 1
+
+Claim 5: text = DeepSeekMoE mixture experts
+
+verdict = supported
+
+source id = 2401.04088
+
+source year = 2024
+
+verified = 1
+
+Now we need to format each line: text|verdict|source_id|source_year|verified|
+
+Make sure to escape any | characters in text. None have |.
+
+Also need to ensure that if text contains backslashes or pipes, we replace | with \| and \ with \\. But not needed.
+
+Also need to ensure that the line ends with |. So after verified value, put |.
+
+Thus lines:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+Attention is all you need|supported|1706.03762|2017|1|
+
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+Mistral 7B architecture|supported|2309.06180|2023|1|
+
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check if any text contains line breaks or leading/trailing spaces. No.
+
+Thus output these 5 lines.
+
+But we must ensure no header, no prose, just the lines.
+
+Also need to ensure that the enum values are exactly one of the listed labels: supported, refuted, unverified. We have refuted and supported. Good.
+
+Now produce the output.
+</think>

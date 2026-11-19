@@ -1,0 +1,57 @@
+Thinking Process:
+
+1.  **Analyze the Request:** The goal is to transform the provided text into a specific structured format (Struct format) based on the defined schema.
+2.  **Analyze the Schema:**
+    `schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}`
+3.  **Analyze the Output Format Rules:**
+    *   Data only in Struct format.
+    *   No prose, no code fences.
+    *   No header row or column names.
+    *   One record per line.
+    *   Values separated by `|`.
+    *   Every line ends with `|`.
+    *   Field separator: `\|` for `|` and `\` for `\`.
+    *   `~` means null.
+    *   `bool` is 1 or 0.
+    *   `enum` values must be exact labels (`supported`, `refuted`, `unverified`).
+    *   Special handling for multi-line/whitespace text: start with `\r`.
+    *   `record{...}` fields add extra columns in order.
+
+4.  **Process the Input Data (Sentence by Sentence):**
+
+    *   **Sentence 1:** Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+        *   `text`: "Rope scaling hurts long ctx"
+        *   `verdict`: refuted
+        *   `source.id`: 2405.05254
+        *   `source.year`: 2024
+        *   `verified`: false (0)
+
+    *   **Sentence 2:** In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported.
+        *   `text`: "Attention is all you need"
+        *   `verdict`: supported
+        *   `source.id`: 1706.03762
+        *   `source.year`: 2017
+        *   `verified`: true (1)
+
+    *   **Sentence 3:** Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported.
+        *   `text`: "LoRA low rank adaptation"
+        *   `verdict`: supported
+        *   `source.id`: 2106.09685
+        *   `source.year`: 2021
+        *   `verified`: true (1)
+
+    *   **Sentence 4:** In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported.
+        *   `text`: "Mistral 7B architecture"
+        *   `verdict`: supported
+        *   `source.id`: 2309.06180
+        *   `source.year`: 2023
+        *   `verified`: true (1)
+
+    *   **Sentence 5:** Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported.
+        *   `text`: "DeepSeekMoE mixture experts"
+        *   `verdict`: supported
+        *   `source.id`: 2401.04088
+        *   `source.year`: 2024
+        *   `verified`: true (1)
+
+5.  **Construct the Final Output (Strict Format Adherence):** Ensure the output matches the required pipe-separated structure exactly, handling the quoted text and the required data types (especially boolean/enum). (Self-Correction: Ensure the structure handles the nested `source` record correctly.)

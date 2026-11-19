@@ -1,0 +1,7 @@
+schema:name|lib.rs
+1. File 'lib.rs' at path 'src/lib.rs' |~|~|~|
+2. File 'util.rs' at path 'src/util.rs' |~|~|~|
+3. File 'main.rs' at path 'src/main.rs' |~|~|~|pub fn main() {
+|~|~|~|fn main() {
+|~|~|~|    println!("Hello, world!");
+|~|~|~|}~|~|~|~|~|~|~|~|~|~|~|

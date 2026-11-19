@@ -1,0 +1,71 @@
+We need to parse the instruction: We have to output data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+Schema: schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+
+So each record should have fields: id, title, verdict, year, verified.
+
+We need to produce records for each paper described in the bullet points. The bullet points describe papers with titles, years, verification status, and claim verdicts. We need to extract id? The schema includes id, but the bullet points don't give explicit ids. Possibly the id is the paper's identifier (maybe arXiv ID). The bullet points mention paper numbers like "2405.05254", "1706.03762", "2106.09685", "2309.06180", "2401.04088". Those look like arXiv IDs. So id could be that arXiv ID string. Title is given in the bullet. Verdict: for paper 2405.05254: "turned out to be false, so the claim is refuted." So verdict = refuted. Year: 2024. verified: maybe false? The bullet says "it turned out to be false, so the claim is refuted." It doesn't explicitly say verified flag. The schema has verified: bool. For claims that are supported/refuted/unverified, and there is a verified bool field. We need to infer verified from the context. For paper 2405.05254, claim is refuted, but is it verified? The bullet says "it turned out to be false", which suggests it was verified (i.e., investigated) and found false. So verified could be true? But the field verified indicates whether the claim has been verified (i.e., evidence evaluated). In the example earlier in the instruction, they gave "verification was true" for paper 1706.03762. So for that paper, verified = 1 (true). For paper 2405.05254, it turned out false, so maybe verified = true as well (since they checked). But we need to decide. The bullet says "it turned out to be false, so the claim is refuted." It doesn't explicitly say verification status, but "turned out" implies some verification happened. However, the schema also has verdict enum supported, refuted, unverified. So if verdict is refuted, that implies some verification led to that conclusion. So verified should be true. But we need to be careful: The bullet for paper 1706.03762 says "verification was true, and the claim is supported." So verified = true. For paper 2106.09685: "it was verified as true, so the claim is supported." So verified = true. For paper 2309.06180: "it was published... Titled 'Mistral 7B architecture', paper 2309.06180 was published in 2023; verification was true, and the claim is supported." So verified = true. For paper 2401.04088: "it was verified as true, and the claim is supported." So verified = true.
+
+For paper 2405.05254: "it turned out to be false, so the claim is refuted." It doesn't explicitly say verification was true, but "turned out" implies verification happened. However, we might treat verified as true as well. But we need to infer from the pattern: When verdict is refuted, does verified still be true? The schema has verified bool, independent of verdict. It could be true even if verdict is refuted. The bullet for 2405.05254 doesn't mention verification explicitly, but says "turned out to be false". That suggests verification led to refutation. So verified = true.
+
+Thus for each record:
+
+1. id: "2405.05254"
+   title: "Rope scaling hurts long ctx"
+   verdict: "refuted"
+   year: 2024
+   verified: 1 (true)
+
+2. id: "1706.03762"
+   title: "Attention is all you need"
+   verdict: "supported"
+   year: 2017 (since published in 2017)
+   verified: 1
+
+3. id: "2106.09685"
+   title: "LoRA low rank adaptation"
+   verdict: "supported"
+   year: 2021
+   verified: 1
+
+4. id: "2309.06180"
+   title: "Mistral 7B architecture"
+   verdict: "supported"
+   year: 2023
+   verified: 1
+
+5. id: "2401.04088"
+   title: "DeepSeekMoE mixture experts"
+   verdict: "supported"
+   year: 2024
+   verified: 1
+
+We need to format each line as: id|title|verdict|year|verified|
+
+But note the schema order: id, title, verdict, year, verified. Yes.
+
+So each line: id|title|verdict|year|verified|
+
+We need to escape | and \ in title if any contains | or \. The titles given don't contain | or \, but we should still follow the rule: Inside a value, write \| for | and \ for \. Since there are no | or \, we can just write the title as is.
+
+Also need to handle line breaks? No.
+
+We need to ensure each line ends with |.
+
+Thus:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|1|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Check if any title has special characters like apostrophes? No.
+
+Thus output these lines.
+
+But we must ensure no extra spaces, no header, just the lines.
+
+Also need to ensure that if any field contains line breaks or tabs, we would prefix with \r and keep as is, but not needed.
+
+Thus final answer is those five lines.

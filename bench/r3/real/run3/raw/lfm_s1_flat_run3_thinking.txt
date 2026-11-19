@@ -1,0 +1,26 @@
+
+We need to produce a list of records in the given schema format. Each record is a line: values in schema order: id, title, verdict, year, verified. The fields: id (int?), title (string), verdict (enum: supported, refuted, unverified), year (int), verified (bool). The instructions: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data." So we start directly with the first line of data, which would be something like:
+
+1|Paper 2405.05254|refuted|2024|0 (since false => ~? Wait verdict is enum(supported,refuted,unverified). The claim is false, so verdict is refuted. So verdict: refuted. Year: 2024. Verified: false => ~ (null). So line: 1|Paper 2405.05254|refuted|2024|~|
+
+Second line: "In 2017, paper 1706.03762 was published with the title 'Attention is all you need'; verification was true, and the claim is supported." So id? Probably the next number? Could be 2? The order is given: 1,2,3,4,5. So id increments. So record 2: id=2, title: "paper 1706.03762", verdict: supported, year: 2017, verified: true => 1. So line: 2|paper 1706.03762|supported|2017|1
+
+Third: "Paper 2106.09685, titled 'LoRA low rank adaptation', appeared in 2021; it was verified as true, so the claim is supported." So id=3, title: "Paper 2106.09685", verdict: supported, year:2021, verified:1. So line: 3|Paper 2106.09685|supported|2021|1
+
+Fourth: "Titled 'Mistral 7B architecture', paper 2309.06180 was published in 2023; verification was true, and the claim is supported." id=4, title: "Mistral 7B architecture", verdict: supported, year:2023, verified:1. So line: 4|Mistral 7B architecture|supported|2023|1
+
+Fifth: "Paper 2401.04088 was published in 2024 under the title 'DeepSeekMoE mixture experts'; it was verified as true, and the claim is supported." id=5, title: "Paper 2401.04088", verdict: supported, year:2024, verified:1. So line: 5|Paper 2401.04088|supported|2024|1
+
+Thus output:
+
+1|Paper 2405.05254|refuted|2024|~|
+2|paper 1706.03762|supported|2017|1|
+3|Paper 2106.09685|supported|2021|1|
+4|Mistral 7B architecture|supported|2023|1|
+5|Paper 2401.04088|supported|2024|1|
+
+Make sure no extra spaces. The values: title case? The original titles include capital letters. Should preserve as given. The first line: "Paper 2405.05254". The others: "paper 1706.03762" vs "Paper"? The original says "paper 1706.03762"? Actually the statement says "In 2017, paper 1706.03762 was published with the title 'Attention is all you need'". It didn't specify case, but we can keep lower case as typical. But the example uses lower case for titles? Not sure. There's no strict rule; we can match original case. For record 2: "paper 1706.03762" matches original. It's fine.
+
+Check for any extra spaces: after each pipe, we have no extra spaces. Ensure no trailing spaces. Provide exactly those lines.
+
+Thus final answer.

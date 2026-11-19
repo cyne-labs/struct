@@ -1,0 +1,140 @@
+
+We need to produce five records matching the schema. The schema:
+
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}}]
+We have fields: text, verdict, source, notes. The "notes" is a list of record objects each having text and subnotes. The first line is already data? The instruction: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data." That's confusing. Probably they want the output lines directly as records, each line representing a "claim" entry. The example given is not exactly matching. We need to create records for each of the five items.
+
+We need to parse each item description and extract data. Let's analyze each:
+
+Item 1:
+"Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+So we have:
+- text: likely the claim: "Rope scaling hurts long ctx"? Or maybe include the whole description. The schema says "text" field. Probably the claim text: "Rope scaling hurts long ctx". Or could be "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024". The "text" maybe the claim text. We'll choose a concise version: "Rope scaling hurts long ctx". We'll include the source year (2024) as part of text? The schema includes source:record{id, year:int}. So source record id is "2405.05254", year 2024. The verdict is "refuted". So we have: verdict: "refuted". source: {id: "2405.05254", year: 2024}. Then notes: list of notes. The first note: "notes are from abstract only". That's a note with text and subnotes. So subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]. The second note: "table 3 contradicts", subnote "llama 7b tested only". So subnotes: ["llama 7b tested only"].
+
+Thus record: {text: "Rope scaling hurts long ctx", verdict: "refuted", source: {id: "2405.05254", year: 2024}, notes: [ {"text": "notes are from abstract only", "subnotes": ["abstract mentions 32k limit"]}, {"text": "table 3 contradicts", "subnotes": ["llama 7b tested only"]} ] }
+
+Make sure to escape quotes: The claim includes quotes. In JSON we need to escape them. Since we are outputting raw values, we need to use double quotes for the outer string, and escape inner quotes. Example: text|supported|... but we have single quotes inside. The schema uses text as string, so we can embed text with double quotes. The note's text includes "notes are from abstract only". That's fine. We'll produce that.
+
+Item 2:
+"In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported. The first note is "tested on GLUE and Wikisql", with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns". The second note is "memory footprint reduced 3x", with subnote "optimizer state minimal". The third note is "checkpoint size under 50MB", without any subnotes."
+
+Thus:
+- text: "LoRA matches full finetune"
+- verdict: "supported"
+- source: id "2106.09685", year 2021
+- notes: three notes:
+   1. text: "tested on GLUE and Wikisql", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+   2. text: "memory footprint reduced 3x", subnotes: ["optimizer state minimal"]
+   3. text: "checkpoint size under 50MB", subnotes: [] (empty list)
+
+Thus record accordingly.
+
+Item 3:
+"Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with subnote "per-head scales help" and "perplexity intact". "The second note is 'outlier channels preserved', with subnote 'per-head scales help' and 'perplexity intact'." Actually there are two notes: first note "outlier channels preserved" subnote "per-head scales help" and "perplexity intact". So two notes. So:
+
+- text: "KV cache quant loses 2x acc"
+- verdict: "refuted"
+- source: id "2406.12345", year 2024
+- notes: [ {"text": "outlier channels preserved", "subnotes": ["per-head scales help"]}, {"text": "perplexity intact", "subnotes": ["perplexity intact"]} ] Wait the second note text is "perplexity intact"? Actually the note says: "The second note is 'outlier channels preserved', with the subnote 'per-head scales help' and 'perplexity intact'." That implies the note's text is "outlier channels preserved"? Or maybe the note is that "outlier channels preserved" and its subnotes are the two listed. So the note's text is "outlier channels preserved". So we have that. So we have two notes: one with that text, and another note with same text? Actually there are two separate notes: one is "outlier channels preserved" with subnotes "per-head scales help" and "perplexity intact". The second note is "perplexity intact"? Wait reading: "It has a note 'outlier channels preserved', with the subnote 'per-head scales help' and 'perplexity intact'. The second note is 'table 3 contradicts'..." Wait the description: "Paper 2406.12345 ... It has a note "outlier channels preserved", with the subnote "per-head scales help" and "perplexity intact". A second note says "table 3 contradicts", with the subnote "llama 7b tested only". Actually there is also a "second note" that is "table 3 contradicts"? Let's re-read:
+
+"Paper 2406.12345 made the claim ... but the verdict is refuted. It has a note "outlier channels preserved", with the subnote "per-head scales help" and "perplexity intact". The second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+Wait there are two notes: first note: "outlier channels preserved" with subnotes "per-head scales help" and "perplexity intact". Second note: "table 3 contradicts" with subnote "llama 7b tested only". But earlier they said "It has a note 'outlier channels preserved', with the subnote ...". Then "The second note says 'table 3 contradicts'..." Actually there is a mismatch. Let's parse original item 3: "Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with the subnote "per-head scales help" and "perplexity intact". The second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+Thus indeed there are two notes: one is the note with text "outlier channels preserved" and subnotes "per-head scales help" and "perplexity intact". The second note is "table 3 contradicts" with subnote "llama 7b tested only". So there are two notes, not three. The earlier part about "the second note says 'table 3 contradicts'" is the second note. So correct: two notes. So we have:
+
+Notes:
+1. text: "outlier channels preserved", subnotes: ["per-head scales help", "perplexity intact"]
+2. text: "table 3 contradicts", subnotes: ["llama 7b tested only"]
+
+Thus record accordingly.
+
+Item 4:
+"Published in 2022, paper 2203.15556 claimed "Chinchilla tokens beat params", which is supported. One note states "optimal ratio is 20 to 1", with subnotes "tested across 400 models" and "cosine schedule used". Another note is "kaplan tokens were suboptimal", with the subnote "fixed learning rate flawed"."
+
+Thus:
+- text: "Chinchilla tokens beat params"
+- verdict: "supported"
+- source: id "2203.15556", year 2022
+- notes: [ note1: text "optimal ratio is 20 to 1", subnotes ["tested across 400 models"], note2: text "kaplan tokens were suboptimal", subnotes ["fixed learning rate flawed"] ]
+
+Item 5:
+"Published in 2020, paper 2005.14165 claimed "Language models few-shot", and the claim is supported. There is a note "scaling curve is smooth", with subnotes "tested up to 175B" and "in-context learning observed"."
+
+Thus:
+- text: "Language models few-shot"
+- verdict: "supported"
+- source: id "2005.14165", year 2020
+- notes: [ note1: text "scaling curve is smooth", subnotes ["tested up to 175B"], note2: text "in-context learning observed", subnotes [] ]
+
+Now we need to output each record in Struct format, one per line, values in schema order: text, verdict, source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]. The fields order: text, verdict, source, notes. The source is an object with id and year. So we need to produce something like:
+
+{
+  "text": "...",
+  "verdict": "...",
+  "source": {
+    "id": "...",
+    "year": ...
+  },
+  "notes": [
+    { "text": "...", "subnotes": [...] },
+    { "text": "...", "subnotes": [...] }
+  ]
+}
+
+But they said "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data."
+
+Probably they want each record as a JSON object, with proper escaping of quotes. And no extra lines. So each line is a JSON object representing a claim. The first line is already data? Might be they want just the records directly, not a surrounding array.
+
+Thus we produce five JSON lines.
+
+Make sure to escape quotes inside strings. For note subnotes, each subnote string should be quoted. For example: "tested across 400 models". That's fine.
+
+Also note that inside a value, write \| for | and \ for \. In our notes, we have subnotes separated by commas. The note's text may contain spaces. That's fine.
+
+We need to ensure each line ends with |. So each record ends with a line containing the closing |.
+
+Thus line 1:
+
+{"text":"Rope scaling hurts long ctx","verdict":"refuted","source":{"id":"2405.05254","year":2024},"notes":[{"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}]}
+
+But we need to escape the double quotes inside the string? The outer quotes are double, and inner quotes are not present. The claim includes quotes around "Rope scaling hurts long ctx". That's double quotes. In JSON, we need to escape them as \", but we are using a text string. Usually we would use double quotes for the JSON string and escape internal double quotes. So we need to replace " with \". However the example given in the instruction: "Inside a value, write \| for | and \ for \". It does not say we need to escape quotes. Actually they said: "write \r for line breaks...". For quotes, they didn't specify. But typical JSON uses double quotes for strings, so we need to escape them. The instruction: "write \r for | and \ for \". That's for line breaks and escaped backslash. It doesn't mention quotes. So we can include unescaped quotes inside the string? That would break JSON. I think we need to escape them. So we need to replace " with \". So the string becomes: "Rope scaling hurts long ctx". That's fine. No internal quotes. So it's okay.
+
+Thus we need to ensure we don't have stray double quotes. So we must write each JSON line with proper escaping.
+
+Let's construct each line carefully.
+
+Line1:
+
+{"text":"Rope scaling hurts long ctx","verdict":"refuted","source":{"id":"2405.05254","year":2024},"notes":[{"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}]}
+
+Check: The note text "notes are from abstract only" doesn't have quotes. Good.
+
+Line2:
+
+{"text":"LoRA matches full finetune","verdict":"supported","source":{"id":"2106.09685","year":2021},"notes":[{"text":"tested on GLUE and Wikisql","subnotes":["rank 4 sufficient","higher ranks show diminishing returns"]},{"text":"memory footprint reduced 3x","subnotes":["optimizer state minimal"]},{"text":"checkpoint size under 50MB",null}]}
+
+But note: there is no subnotes for third note, so subnotes array empty. In JSON, we can have "subnotes":[] . That's fine. However the third note had no subnotes, so we just have empty array. Should we include the key? Yes.
+
+Line3:
+
+{"text":"KV cache quant loses 2x acc","verdict":"refuted","source":{"id":"2406.12345","year":2024},"notes":[{"text":"outlier channels preserved","subnotes":["per-head scales help","perplexity intact"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}]}
+
+Line4:
+
+{"text":"Chinchilla tokens beat params","verdict":"supported","source":{"id":"2203.15556","year":2022},"notes":[{"text":"optimal ratio is 20 to 1","subnotes":["tested across 400 models"]},{"text":"kaplan tokens were suboptimal","subnotes":["fixed learning rate flawed"]}]}
+
+Line5:
+
+{"text":"Language models few-shot","verdict":"supported","source":{"id":"2005.14165","year":2020},"notes":[{"text":"scaling curve is smooth","subnotes":["tested up to 175B"]},{"text":"in-context learning observed",null}]}
+
+Check each note's subnotes: for line2 third note, we have empty array. That's correct.
+
+Now ensure each line ends with |. Yes.
+
+Thus final output is five lines. No extra commentary.
+
+We need to ensure no extra spaces at line ends. Provide exactly those lines.
+
+Let's produce.

@@ -1,0 +1,30 @@
+~|~|~|~|~|~|~|~|
+~|supported|~|~|~|~|~|
+text|Rope scaling hurts long ctx|~|~|~|~|~|~|
+verdict|refuted|~|~|~|~|~|~|
+source|Paper 2405.05254|year|2024|~|~|~|
+notes|> notes are from abstract only|~|> abstract mentions 32k limit|>> llama 7b tested only|
+|>|~|~|~|~|~|~|~|
+text|LoRA matches full finetune|supported|~|~|~|~|~|
+verdict|~|~|~|~|~|~|~|~|
+source|Paper 2106.09685|year|2021|~|~|~|
+notes|>|tested on GLUE and Wikisql|> rank 4 sufficient>> higher ranks show diminishing returns|
+|>|memory footprint reduced 3x|> optimizer state minimal|
+|>|checkpoint size under 50MB|~|~|~|~|~|
+~|~|~|~|~|~|~|~|
+~|refuted|~|~|~|~|~|~|
+text|KV cache quant loses 2x acc|~|~|~|~|~|~|
+verdict|~|~|~|~|~|~|~|~|
+source|Paper 2406.12345|year|2024|~|~|~|
+notes|> outlier channels preserved|> per-head scales help>> perplexity intact|
+|>|~|~|~|~|~|~|~|
+text|Chinchilla tokens beat params|supported|~|~|~|~|~|
+verdict|~|~|~|~|~|~|~|~|
+source|Paper 2203.15556|year|2022|~|~|~|
+notes|>|optimal ratio is 20 to 1|> tested across 400 models>> cosine schedule used|
+|>|kaplan tokens were suboptimal|> fixed learning rate flawed|
+|>|~|~|~|~|~|~|~|
+text|Language models few-shot|supported|~|~|~|~|~|
+verdict|~|~|~|~|~|~|~|~|
+source|Paper 2005.14165|year|2020|~|~|~|
+notes|>|scaling curve is smooth|> tested up to 175B>> in-context learning observed|

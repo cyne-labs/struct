@@ -1,0 +1,1522 @@
+We need to parse the problem carefully.
+
+We have a schema:
+
+schema: claim { text, verdict: enum(supported, refuted, unknown), source: record{id, year:int}, notes: list[record{text, subnotes:list[str]}] }
+
+We need to produce data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |. ~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \. A record{...} field adds its extra columns, in order. List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+We have 5 items described in the prompt. Each item corresponds to a claim. We need to produce Struct records for each claim, presumably in the order given? The prompt says "Reply with data only in Struct format: ... One record per line ...". So we need to output 5 lines, each representing a claim record, following the schema.
+
+The schema order: claim fields: text, verdict, source (record{id, year:int}), notes (list[record{text, subnotes:list[str]}])
+
+So each line should have values: text, verdict, source.id, source.year, then notes... But notes is a list of records each with text and subnotes list. How to represent notes in the flat columns? The schema says: "A record{...} field adds its fields as extra columns, in order." So for notes: list[record{text, subnotes:list[str]}]. That means for each note record, we need to output its text and then its subnotes list. How to flatten? Possibly each note becomes a set of columns: noteText, subnote1, subnote2, ...? Or subnotes list is represented as a list of strings maybe separated by something? The example in the prompt: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+So there are two notes. The first note has text "notes are from abstract only", subnotes ["abstract mentions 32k limit", "appendix B clarifies"]. The second note has text "table 3 contradicts", subnotes ["llama 7b tested only"].
+
+We need to represent notes in the output. The format: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." That suggests that for each note, we might need to output additional lines prefixed with > or >>? Wait, the instruction: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This is ambiguous. It might refer to how to represent nested lists in the output: for each item in a list, we start a line with > or >> depending on depth. But we already have one record per line for each claim. However notes are part of the claim record. How to include notes? Possibly each note becomes a separate line under the claim line, prefixed with > for the note text? Or maybe the notes are appended as additional columns after the source fields, but the list items go on lines below their parent. That suggests that for each claim record, after the claim record line, we may have additional lines for each note, each starting with > or >> depending on depth. But the instruction says "One record per line: values in schema order, separated by |". That seems to indicate each line is a record. But then it says "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This might be for representing nested structures like records within records. For example, the source is a record{id, year:int}. That would be two extra columns after the source fields? Actually source is a record, so its fields id and year are extra columns appended after the source fields? Wait the schema: claim { text, verdict, source: record{id, year:int}, notes: list[record{text, subnotes:list[str]}] }
+
+So the flat order for a claim record would be: text, verdict, source.id, source.year, then notes... But notes is a list of records each with text and subnotes list. How to flatten notes? Possibly each note contributes columns: noteText, subnote1, subnote2, ...? Or subnotes list could be represented as a single string with | separators? The instruction about list items going on lines below their parent suggests that for each note, we might need to output a line starting with > noteText, then subnotes lines starting with >> subnote? But that would break the "One record per line" rule. However the instruction says "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." So perhaps the overall output consists of lines that are either claim records or list items indented with > etc. But the earlier instruction says "One record per line: values in schema order, separated by |". That seems contradictory.
+
+Let's read the whole prompt carefully:
+
+"Reply with data only in Struct format: no prose, no code fences.
+Never write a header row or column names. The first line is already data.
+One record per line: values in schema order, separated by |, and every line ends with |.
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \ for \.
+A record{...} field adds its fields as extra columns, in order.
+List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |."
+
+So the output format is somewhat hierarchical. We have top-level claim records. Each claim record has fields: text, verdict, source (record), notes (list of records). The source record adds its fields as extra columns in order (id, year). The notes list: each note is a record with text and subnotes list. Subnotes list is a list of strings.
+
+How to represent this in the flat columns? The instruction "A record{...} field adds its fields as extra columns, in order." So for source, we add columns for id and year after the source fields? Actually source is a field in the claim, so the claim record columns are: text, verdict, source.id, source.year, then notes... But notes is a list, so perhaps we need to flatten each note's text and subnotes into columns as well. But the instruction about list items going on lines below their parent suggests that for each note, we might need to output separate lines for the note and its subnotes, indented with > and >>.
+
+But the earlier "One record per line: values in schema order, separated by |" suggests each line is a record. However notes are part of the claim record, so maybe each note is itself a record? But the schema says notes: list[record{text, subnotes:list[str]}]. So each note is a record. So we could have multiple note records per claim. But how to associate them? Perhaps after the claim record line, we have lines for each note, prefixed with > to indicate they are notes of the claim. And for subnotes, we could have lines prefixed with >> for each subnote.
+
+The instruction: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." So for a list item (like a note), we start a line with > then the item's fields? Or the > is part of the line prefix before the | separated values? Probably the line starts with > then the values separated by |. Similarly, subnotes would be >> then values.
+
+Thus the output might look like:
+
+claim_line: text|verdict|source.id|source.year| ... (maybe notes count?) but notes are separate lines.
+
+Then for each note: > noteText| ... (maybe subnotes fields?) then for each subnote: >> subnoteText| ...?
+
+But the schema for note record is {text, subnotes:list[str]}. So a note has a text and a list of subnotes. How to represent subnotes? Possibly as additional columns after the note text, each subnote as a separate column? Or as a nested list indicated by lines with >>.
+
+Given the instruction "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This suggests that for a note (which is an item in the notes list), we start a line with > followed by the note's fields (maybe just text?). Then for each subnote in that note's subnotes list, we start a line with >> followed by the subnote text.
+
+Thus the output structure for a claim with notes would be:
+
+Claim line: text|verdict|source.id|source.year| ... (maybe no notes fields in the claim line?) Then subsequent lines starting with > for each note, then >> for each subnote.
+
+But the instruction "One record per line: values in schema order, separated by |" might apply to each line, whether it's a claim or a note or subnote. The > and >> are prefixes added to the line, not part of the values. So the line starts with > or >> then the values separated by |.
+
+Thus we need to produce lines like:
+
+text|verdict|source.id|source.year| ... (for the claim)
+> noteText| ... (for each note)
+>> subnoteText| ... (for each subnote)
+
+But what about the subnotes list within a note? The note record has text and subnotes list. So perhaps the note line includes the note text and then the subnotes as separate fields? Or the note line has the note text, and then subnotes are represented as separate lines with >> prefix.
+
+The instruction "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This matches: the notes list is a list of items (notes). Each note is an item, so we prefix with >. The subnotes list is a list of strings within a note, so each subnote is an item under the note, prefixed with >> (one more >). So indeed:
+
+Claim line: ... (no prefix)
+> note1 text ... (maybe no subnotes fields)
+>> subnote1 text ...
+>> subnote2 text ...
+> note2 text ...
+>> subnote ...
+
+But what fields does each line contain? For the claim line, the schema order is text, verdict, source.id, source.year, notes... But notes is a list, so perhaps the claim line does not include notes fields; instead notes are represented as separate lines. However the schema says notes is a field of the claim record. If we don't include notes in the claim line, how do we satisfy the schema? Maybe the claim line includes a placeholder for notes, like a count or empty, and then the note lines provide the notes. But the instruction says "A record{...} field adds its fields as extra columns, in order." So for the claim record, if it has a notes field, that field would be represented as extra columns in the claim line? But notes is a list, not a simple value. How to represent a list in columns? Possibly as multiple columns, one per note, with each note's text and subnotes? That seems messy.
+
+Let's look at examples from the prompt. The prompt gives an example of a paper claim: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+If we were to construct the struct for this claim, what would it look like? The claim text is "Rope scaling hurts long ctx". Verdict is refuted. Source id is 2405.0524? Actually paper ID is 2405.05254. Year is 2024. Notes: two notes. First note text: "notes are from abstract only". Subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]. Second note text: "table 3 contradicts". Subnotes: ["llama 7b tested only"].
+
+How to represent this in the format? Possibly:
+
+Claim line: "Rope scaling hurts long ctx"|refuted|2405.05254|2024| ... (maybe notes count 2?) but then note lines:
+
+> notes are from abstract only| ... (maybe subnotes fields?)
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+
+But the instruction says "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." So the notes are items under the claim, so each note line starts with >. The subnotes are items under the note, so each subnote line starts with >> . That matches.
+
+Thus the claim line may not include notes fields; instead notes are represented as separate lines prefixed with >. But then what about the schema? The claim record has a notes field, but we are not including it in the claim line. However the output format is not strictly bound to the schema columns after all; it's a way to represent the data. The instruction says "A record{...} field adds its fields as extra columns, in order." That applies to nested records. For the claim record, the notes field is a list of records. When we encounter that field, we need to output its items as lines with appropriate prefixes.
+
+Thus the claim line will have columns for text, verdict, source.id, source.year. Then after that, we start listing the notes list items, each on a new line prefixed with > and then the note's fields (text, and maybe subnotes?). But subnotes are also a list, so for each note, we might need to output its subnotes as lines prefixed with >> . So the note line could have the note text as a field, and then subnotes lines follow.
+
+But what about the subnotes field in the note record? The note record has text and subnotes list. So the note line could have the note text, and then for each subnote, a line with >> subnote text. Or the note line could have the note text and then the subnotes as separate columns? The instruction about list items going on lines below their parent suggests that subnotes are separate lines, not columns.
+
+Thus the output for each claim will be:
+
+Line 1: claim text|verdict|source.id|source.year (and any other fields? There's no other fields in claim besides these four plus notes which are handled separately). So line 1 has 4 columns.
+
+Then for each note in notes:
+Line: > noteText| (maybe additional columns for subnotes count? But subnotes are separate lines)
+Then for each subnote in note.subnotes:
+Line: >> subnoteText|
+
+But what about the note's other fields? The note record only has text and subnotes list. So the note line could just have the note text. The subnotes are listed on subsequent lines with >>.
+
+Thus the output for the first claim would be:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+But we need to ensure that the lines are separated by | and end with |. Also need to handle text with line breaks etc. The claim text may contain quotes or special characters, but we can keep as is, escaping | and \ as needed.
+
+Now we have 5 claims to process. We need to produce lines for each claim, with their notes and subnotes as described.
+
+We need to parse each of the 5 bullet points:
+
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only".
+
+So for this claim:
+text: "Rope scaling hurts long ctx"
+verdict: refuted
+source: id: 2405.05254, year: 2024
+notes: two notes:
+ note1: text: "notes are from abstract only", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+ note2: text: "table 3 contradicts", subnotes: ["llama 7b tested only"]
+
+2. In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported. The first note is "tested on GLUE and Wikisql", with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns". The second note is "memory footprint reduced 3x", with the subnote "optimizer state minimal". The third note is "checkpoint size under 50MB", without any subnotes.
+
+So claim:
+text: "LoRA matches full finetune"
+verdict: supported
+source: id: 2106.09685, year: 2021
+notes: three notes:
+ note1: text: "tested on GLUE and Wikisql", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+ note2: text: "memory footprint reduced 3x", subnotes: ["optimizer state minimal"]
+ note3: text: "checkpoint size under 50MB", subnotes: [] (empty list)
+
+3. Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with subnotes "per-head scales help" and "perplexity intact".
+
+Claim:
+text: "KV cache quant loses 2x acc"
+verdict: refuted
+source: id: 2406.12345, year: 2024
+notes: one note:
+ note1: text: "outlier channels preserved", subnotes: ["per-head scales help", "perplexity intact"]
+
+4. Published in 2022, paper 2203.15556 claimed "Chinchilla tokens beat params", which is supported. One note states "optimal ratio is 20 to 1", with subnotes "tested across 400 models" and "cosine schedule used". Another note states "kaplan tokens were suboptimal", with the subnote "fixed learning rate flawed".
+
+Claim:
+text: "Chinchilla tokens beat params"
+verdict: supported
+source: id: 2203.15556, year: 2022
+notes: two notes:
+ note1: text: "optimal ratio is 20 to 1", subnotes: ["tested across 400 models", "cosine schedule used"]
+ note2: text: "kaplan tokens were suboptimal", subnotes: ["fixed learning rate flawed"]
+
+5. Paper 2005.14165 from 2005 claimed "Language models few-shot", and the claim is supported. There is a note "scaling curve is smooth", with subnotes "tested up to 175B" and "in-context learning observed".
+
+Claim:
+text: "Language models few-shot"
+verdict: supported
+source: id: 2005.14165, year: 2005 (but paper year is 2005, but the bullet says "from 2005")
+notes: one note:
+ note1: text: "scaling curve is smooth", subnotes: ["tested up to 175B", "in-context learning observed"]
+
+Now we need to format each claim and its notes according to the output format.
+
+The output format: One record per line, values in schema order, separated by |, ending with |. For the claim line, we have text, verdict, source.id, source.year. Then notes are represented as separate lines with > prefix.
+
+But how to include the notes in the claim line? The claim line probably does not include notes fields, but the notes are separate lines. However the schema says notes is a field of the claim record. But the output format might expect that after the claim line, we have lines for notes with > prefix. The instruction "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." suggests that for the notes list (which is a list item under the claim), we start each note line with >. So the claim line is just the claim fields, then subsequent lines start with > for each note, and subnotes lines start with >>.
+
+Thus for each claim, we will output:
+
+Claim line: text|verdict|id|year| (ending with |)
+Then for each note: > noteText| (ending with |)
+Then for each subnote in that note: >> subnoteText| (ending with |)
+
+But what about the case where a note has no subnotes? Then we just have the > noteText| line, and no >> lines for that note.
+
+Also, what about the case where a note has subnotes, we need to output each subnote on its own line with >>.
+
+Now we need to decide how to represent the noteText and subnoteText values. They may contain | or \ characters? Probably not, but we should escape if needed. The text examples given are simple phrases without | or \, so we can just use them as is. But we need to ensure that if the text contains | or \, we would need to escape, but not needed here.
+
+Also, we need to handle the case where text has line breaks or spaces at start/end. None of these have that.
+
+Thus we can produce output as:
+
+For claim 1:
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+But wait, the claim text is "Rope scaling hurts long ctx". It contains quotes? The bullet says claimed "Rope scaling hurts long ctx" in 2024. So the text is that phrase. We'll use that.
+
+Verdict: refuted.
+
+Source id: 2405.05254, year: 2024.
+
+Now claim 2:
+LoRA matches full finetune|supported|2106.09685|2021|
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Note that the third note has no subnotes, so just > checkpoint size under 50MB|
+
+Claim 3:
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4:
+Chinchilla tokens beat params|supported|2203.15556|2022|
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5:
+Language models few-shot|supported|2005.14165|2005|
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to ensure each line ends with |. Also, the claim line has four fields: text, verdict, id, year. So we need to separate by | and end with |. So:
+
+Claim line: text|verdict|id|year|
+
+Thus for claim 1: Rope scaling hurts long ctx|refuted|2405.05254|2024|
+
+But the text "Rope scaling hurts long ctx" contains no |, so fine.
+
+Now for the > lines: > noteText| ... but do we need to include any extra fields for the note record? The note record has text and subnotes list. In our representation, the > line contains the note text. It does not contain subnotes list explicitly; subnotes are represented by subsequent >> lines. So the > line has just the note text as the only field? Or does it have additional columns for something else? The note record schema is {text, subnotes:list[str]}. So the note line could have the text field, and then perhaps a placeholder for subnotes count or something, but we are representing subnotes as separate lines. So the > line could just have the text, ending with |. Then each >> line has the subnote text.
+
+Thus > line: > noteText|
+
+>> line: >> subnoteText|
+
+That seems consistent.
+
+Now we need to ensure that we separate lines correctly. Also, we need to ensure that we don't include any extra columns or headers.
+
+Thus the output will be a series of lines, each ending with |, and lines starting with > or >> for notes and subnotes.
+
+Now we need to produce the data only, in Struct format, no prose. So we just output the lines.
+
+But we need to be careful about the order: The claim lines first, then the notes lines indented with > and >>. Since there are multiple claims, we need to output all lines for all claims sequentially. Probably we should output claim 1 lines, then claim 2 lines, etc., one after another, without any separator between claims.
+
+Thus the output will be:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+LoRA matches full finetune|supported|2106.09685|2021|
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+Chinchilla tokens beat params|supported|2203.15556|2022|
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+Language models few-shot|supported|2005.14165|2005|
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+But we need to check each claim's year: For paper 2005.14165, the bullet says "from 2005", so year is 2005.
+
+Now we need to ensure that the ids are correct: The paper IDs are given in the bullets: 2405.05254, 2106.09685, 2406.12345, 2203.15556, 2005.14165. Yes.
+
+Now we need to ensure the verdict enum values are exactly "supported", "refuted", or "unknown". We have refuted for first, supported for second, refuted for third, supported for fourth, supported for fifth. Good.
+
+Now we need to check if any text contains | or \ that would need escaping. The texts seem simple.
+
+Now we need to check if any text has line breaks or spaces at start/end. No.
+
+Thus the output lines as above should be correct.
+
+But we need to ensure that each line ends with |. In our lines above, we have ended with | after each value. For claim lines, we have four values separated by |, then | at the end. For > lines, we have > noteText| (just one value after >?). Actually the line starts with > then the values separated by |. Since the note record only has text field, the line would be > noteText| (ending with |). Similarly, >> subnoteText|.
+
+Thus we need to format:
+
+Claim line: text|verdict|id|year|
+
+Note line: > noteText|
+
+Subnote line: >> subnoteText|
+
+But wait, the > and >> are prefixes, not part of the values. So the line starts with > then a pipe-separated list of values for the note record. The note record has text field. So the line would be > noteText| (i.e., > followed by noteText, then |). But is there a field for the note record's text? Yes. So the line is > noteText| . That means the first field after > is noteText. But there is no separation between > and noteText? Actually the line starts with > then immediately the first value? Or is > considered part of the value? The instruction: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This suggests that the line starts with > then the values separated by |. So the line would be > noteText| ... . So there is no extra field for the prefix; it's just part of the line prefix. So the line content after the > is the record's fields. So for a note line, it would be > noteText| . That is, the line starts with >, then noteText, then |. So the line is "> noteText|". Similarly, subnote line: ">> subnoteText|".
+
+Thus in the output, we need to include the > and >> characters at the start of the line, before the pipe separators.
+
+Our earlier representation without > was incorrect; we need to include > and >> prefixes.
+
+Thus the output lines should be:
+
+Claim line: no prefix, just text|verdict|id|year|
+
+Note line: > noteText|
+
+Subnote line: >> subnoteText|
+
+But wait, the note line has only one field (noteText). So it would be > noteText| . Similarly, subnote line: >> subnoteText| .
+
+Thus for claim 1:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+But we need to ensure that the > and >> lines are properly formatted with the prefixes.
+
+Now check claim 2 notes:
+
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Yes.
+
+Claim 3:
+
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4:
+
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5:
+
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to ensure that each line ends with |. For claim lines, we have four fields ending with |. For note lines, we have one field (noteText) after the >, ending with |. For subnote lines, we have one field (subnoteText) after the >> , ending with |.
+
+Thus the output will be a series of lines as above.
+
+Now we need to produce the output exactly as required: no prose, no code fences, just the lines.
+
+We must also ensure that we don't include any extra columns or fields. For claim lines, we have text, verdict, id, year. That's it.
+
+Now let's write out each line explicitly, ensuring proper escaping if needed. None of the texts contain | or \, so fine.
+
+Let's list all lines:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. > notes are from abstract only
+3. >> abstract mentions 32k limit
+4. >> appendix B clarifies
+5. > table 3 contradicts
+6. >> llama 7b tested only
+7. LoRA matches full finetune|supported|2106.09685|2021|
+8. > tested on GLUE and Wikisql
+9. >> rank 4 sufficient
+10. >> higher ranks show diminishing returns
+11. > memory footprint reduced 3x
+12. >> optimizer state minimal
+13. > checkpoint size under 50MB
+14. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+15. > outlier channels preserved
+16. >> per-head scales help
+17. >> perplexity intact
+18. Chinchilla tokens beat params|supported|2203.15556|2022|
+19. > optimal ratio is 20 to 1
+20. >> tested across 400 models
+21. >> cosine schedule used
+22. > kaplan tokens were suboptimal
+23. >> fixed learning rate flawed
+24. Language models few-shot|supported|2005.14165|2005|
+25. > scaling curve is smooth
+26. >> tested up to 175B
+27. >> in-context learning observed
+
+Wait, we need to check the order of claims. The bullets are 1 to 5. We have listed them in order.
+
+But we need to ensure that for claim 2, the note "tested on GLUE and Wikisql" is the first note, then "rank 4 sufficient", "higher ranks show diminishing returns" are its subnotes. Then second note "memory footprint reduced 3x" with subnote "optimizer state minimal". Third note "checkpoint size under 50MB" with no subnotes.
+
+Thus the lines for claim 2 should be:
+
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Yes.
+
+Now check claim 3: only one note with two subnotes.
+
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4: two notes, each with subnotes.
+
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5: one note with two subnotes.
+
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to ensure that the claim lines have the correct text. Let's write them out:
+
+Claim 1 text: "Rope scaling hurts long ctx" -> Rope scaling hurts long ctx
+Claim 2 text: "LoRA matches full finetune" -> LoRA matches full finetune
+Claim 3 text: "KV cache quant loses 2x acc" -> KV cache quant loses 2x acc
+Claim 4 text: "Chinchilla tokens beat params" -> Chinchilla tokens beat params
+Claim 5 text: "Language models few-shot" -> Language models few-shot
+
+All good.
+
+Now we need to ensure that the source ids and years are correct:
+
+1. id 2405.05254, year 2024
+2. id 2106.09685, year 2021
+3. id 2406.12345, year 2024
+4. id 2203.15556, year 2022
+5. id 2005.14165, year 2005
+
+Yes.
+
+Now we need to ensure that the verdict strings are exactly "refuted", "supported", etc.
+
+Now we need to produce the output lines exactly as described, with each line ending with |. Let's write each line with | at the end.
+
+For claim lines:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+LoRA matches full finetune|supported|2106.09685|2021|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+Language models few-shot|supported|2005.14165|2005|
+
+For note lines with >:
+
+> notes are from abstract only
+> table 3 contradicts
+> tested on GLUE and Wikisql
+> memory footprint reduced 3x
+> outlier channels preserved
+> optimal ratio is 20 to 1
+> checkpoint size under 50MB
+> scaling curve is smooth
+> kaplan tokens were suboptimal
+
+Wait, we need to include all notes from all claims. Let's list all note texts:
+
+Claim 1 notes:
+- notes are from abstract only
+- table 3 contradicts
+
+Claim 2 notes:
+- tested on GLUE and Wikisql
+- memory footprint reduced 3x
+- checkpoint size under 50MB
+
+Claim 3 notes:
+- outlier channels preserved
+
+Claim 4 notes:
+- optimal ratio is 20 to 1
+- kaplan tokens were suboptimal
+
+Claim 5 notes:
+- scaling curve is smooth
+
+So total note texts: 2 + 3 + 1 + 2 + 1 = 9 notes.
+
+Thus we have 9 > lines.
+
+Subnote texts:
+
+Claim 1 subnotes:
+- abstract mentions 32k limit (under note "notes are from abstract only")
+- appendix B clarifies (same note)
+- llama 7b tested only (under note "table 3 contradicts")
+
+So subnotes for claim 1: 2 + 1 = 3 subnotes.
+
+Claim 2 subnotes:
+- rank 4 sufficient (under "tested on GLUE and Wikisql")
+- higher ranks show diminishing returns (same note)
+- optimizer state minimal (under "memory footprint reduced 3x")
+
+So 2 + 1 = 3 subnotes.
+
+Claim 3 subnotes:
+- per-head scales help
+- perplexity intact
+
+So 2 subnotes.
+
+Claim 4 subnotes:
+- tested across 400 models (under "optimal ratio is 20 to 1")
+- cosine schedule used (same note)
+- fixed learning rate flawed (under "kaplan tokens were suboptimal")
+
+So 2 + 1 = 3 subnotes.
+
+Claim 5 subnotes:
+- tested up to 175B
+- in-context learning observed
+
+So 2 subnotes.
+
+Total subnotes: 3+3+2+3+2 = 15 subnotes.
+
+Thus total lines: 5 claim lines + 9 note lines + 15 subnote lines = 29 lines.
+
+We need to order them: For each claim, we output the claim line, then its notes and subnotes in order. The order of notes within a claim is as given. The order of subnotes within a note is as given.
+
+Thus the sequence should be:
+
+Claim 1 line
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+Claim 2 line
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Claim 3 line
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4 line
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5 line
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to write these lines exactly, with prefixes and values, ending with |.
+
+Let's write each line:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. > notes are from abstract only
+3. >> abstract mentions 32k limit
+4. >> appendix B clarifies
+5. > table 3 contradicts
+6. >> llama 7b tested only
+7. LoRA matches full finetune|supported|2106.09685|2021|
+8. > tested on GLUE and Wikisql
+9. >> rank 4 sufficient
+10. >> higher ranks show diminishing returns
+11. > memory footprint reduced 3x
+12. >> optimizer state minimal
+13. > checkpoint size under 50MB
+14. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+15. > outlier channels preserved
+16. >> per-head scales help
+17. >> perplexity intact
+18. Chinchilla tokens beat params|supported|2203.15556|2022|
+19. > optimal ratio is 20 to 1
+20. >> tested across 400 models
+21. >> cosine schedule used
+22. > kaplan tokens were suboptimal
+23. >> fixed learning rate flawed
+24. Language models few-shot|supported|2005.14165|2005|
+25. > scaling curve is smooth
+26. >> tested up to 175B
+27. >> in-context learning observed
+
+Wait, we need to check the ordering of notes for claim 2: The notes are:
+- first note: "tested on GLUE and Wikisql" with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns".
+- second note: "memory footprint reduced 3x" with subnote "optimizer state minimal".
+- third note: "checkpoint size under 50MB" without any subnotes.
+
+Thus the > lines for claim 2 should be in that order:
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Yes.
+
+For claim 4:
+Notes:
+- first note: "optimal ratio is 20 to 1" with subnotes "tested across 400 models" and "cosine schedule used".
+- second note: "kaplan tokens were suboptimal" with subnote "fixed learning rate flawed".
+
+Thus > lines:
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Yes.
+
+For claim 5:
+Note: "scaling curve is smooth" with subnotes "tested up to 175B" and "in-context learning observed".
+Thus > line: > scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Yes.
+
+Now we need to ensure that each line ends with |. For lines with > or >> prefixes, we need to include the prefix as part of the line, then the value(s) separated by |, ending with |.
+
+For example, line 2: > notes are from abstract only
+
+This line starts with >, then the value "notes are from abstract only", then |. So the line is "> notes are from abstract only|"? Wait, we need to separate with |. The format is values separated by |. So if there's a prefix > before the first value, then the values after that are separated by |. Since the note record has only text field, the line would be > notes are from abstract only| . But we need to include the > as part of the line, not as a separate field. So the line would be "> notes are from abstract only|". However, the > is not a value; it's a prefix indicating the level. How to represent this in the | separated format? The instruction says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This suggests that the line starts with > then the record's fields separated by |. So the line would be "> notes are from abstract only|". There is no field before the >, so the first field after > is the note text. So the line is "> notes are from abstract only|". Similarly, subnote line: ">> abstract mentions 32k limit|".
+
+Thus we need to output lines like:
+
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+...
+
+But earlier we wrote "> notes are from abstract only" without the final |. We need to add | at the end. Also, we need to ensure that the > and >> are part of the line prefix, and then the values follow, separated by |. Since there's only one value (the text), it will be just that value followed by |.
+
+Thus the correct lines are:
+
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+
+Similarly for others.
+
+Now for claim lines, they have no prefix, just values separated by |, ending with |.
+
+Thus we need to adjust our lines accordingly.
+
+Let's rewrite all lines with proper | endings and prefixes.
+
+Claim lines:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. LoRA matches full finetune|supported|2106.09685|2021|
+3. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+4. Chinchilla tokens beat params|supported|2203.15556|2022|
+5. Language models few-shot|supported|2005.14165|2005|
+
+Note lines (with > prefix):
+
+6. > notes are from abstract only|
+7. > table 3 contradicts|
+8. > tested on GLUE and Wikisql|
+9. > memory footprint reduced 3x|
+10. > outlier channels preserved|
+11. > optimal ratio is 20 to 1|
+12. > checkpoint size under 50MB|
+13. > scaling curve is smooth|
+14. > kaplan tokens were suboptimal|
+
+Wait, we need to list all note lines in order per claim.
+
+Let's list all note texts in order they appear across claims:
+
+Claim 1 notes:
+- notes are from abstract only
+- table 3 contradicts
+
+Claim 2 notes:
+- tested on GLUE and Wikisql
+- memory footprint reduced 3x
+- checkpoint size under 50MB
+
+Claim 3 notes:
+- outlier channels preserved
+
+Claim 4 notes:
+- optimal ratio is 20 to 1
+- kaplan tokens were suboptimal
+
+Claim 5 notes:
+- scaling curve is smooth
+
+So total note lines (with >) in order:
+
+6. > notes are from abstract only|
+7. > table 3 contradicts|
+8. > tested on GLUE and Wikisql|
+9. > memory footprint reduced 3x|
+10. > checkpoint size under 50MB|
+11. > outlier channels preserved|
+12. > optimal ratio is 20 to 1|
+13. > kaplan tokens were suboptimal|
+14. > scaling curve is smooth|
+
+But we also have subnote lines (with >>). Let's list subnote lines in order as they appear under each note.
+
+Subnotes for claim 1:
+- under note "notes are from abstract only": subnotes: "abstract mentions 32k limit", "appendix B clarifies"
+- under note "table 3 contradicts": subnote: "llama 7b tested only"
+
+So subnote lines:
+15. >> abstract mentions 32k limit|
+16. >> appendix B clarifies|
+17. >> llama 7b tested only|
+
+Subnotes for claim 2:
+- under note "tested on GLUE and Wikisql": subnotes: "rank 4 sufficient", "higher ranks show diminishing returns"
+- under note "memory footprint reduced 3x": subnote: "optimizer state minimal"
+- under note "checkpoint size under 50MB": no subnotes
+
+So subnote lines:
+18. >> rank 4 sufficient|
+19. >> higher ranks show diminishing returns|
+20. >> optimizer state minimal|
+
+Subnotes for claim 3:
+- under note "outlier channels preserved": subnotes: "per-head scales help", "perplexity intact"
+
+So:
+21. >> per-head scales help|
+22. >> perplexity intact|
+
+Subnotes for claim 4:
+- under note "optimal ratio is 20 to 1": subnotes: "tested across 400 models", "cosine schedule used"
+- under note "kaplan tokens were suboptimal": subnote: "fixed learning rate flawed"
+
+So:
+23. >> tested across 400 models|
+24. >> cosine schedule used|
+25. >> fixed learning rate flawed|
+
+Subnotes for claim 5:
+- under note "scaling curve is smooth": subnotes: "tested up to 175B", "in-context learning observed"
+
+So:
+26. >> tested up to 175B|
+27. >> in-context learning observed|
+
+Thus total lines: 5 claim lines + 14 note lines + 15 subnote lines = 34 lines.
+
+But earlier we counted 29 lines; that was without the > and >> prefixes and without counting all note lines correctly. Let's recount properly.
+
+Claim lines: 5
+
+Note lines (with >): Let's count notes per claim:
+
+Claim 1: 2 notes -> 2 lines with >
+Claim 2: 3 notes -> 3 lines with >
+Claim 3: 1 note -> 1 line with >
+Claim 4: 2 notes -> 2 lines with >
+Claim 5: 1 note -> 1 line with >
+Total > lines = 2+3+1+2+1 = 9 lines with >.
+
+Subnote lines (with >>): 15 lines.
+
+Total lines = 5 + 9 + 15 = 29 lines. Wait, earlier we had 14 > lines, but now we have 9 > lines. Let's list > lines again:
+
+Claim 1: > notes are from abstract only, > table 3 contradicts -> 2 lines
+Claim 2: > tested on GLUE and Wikisql, > memory footprint reduced 3x, > checkpoint size under 50MB -> 3 lines
+Claim 3: > outlier channels preserved -> 1 line
+Claim 4: > optimal ratio is 20 to 1, > kaplan tokens were suboptimal -> 2 lines
+Claim 5: > scaling curve is smooth -> 1 line
+Total = 2+3+1+2+1 = 9 lines. Yes, 9 > lines.
+
+Subnote lines: we counted 15.
+
+So total lines = 5 claim + 9 > + 15 >> = 29 lines. That matches earlier count of 29 lines.
+
+But in my latest list I had 14 > lines, which was wrong because I included duplicate or extra. Let's correct.
+
+The > lines are exactly the note texts, which are:
+
+Claim 1 notes:
+1. notes are from abstract only
+2. table 3 contradicts
+
+Claim 2 notes:
+3. tested on GLUE and Wikisql
+4. memory footprint reduced 3x
+5. checkpoint size under 50MB
+
+Claim 3 notes:
+6. outlier channels preserved
+
+Claim 4 notes:
+7. optimal ratio is 20 to 1
+8. kaplan tokens were suboptimal
+
+Claim 5 notes:
+9. scaling curve is smooth
+
+So there are 9 > lines, as expected.
+
+Now subnote lines (>>):
+
+Claim 1 subnotes:
+- under note 1: abstract mentions 32k limit, appendix B clarifies -> 2 lines
+- under note 2: llama 7b tested only -> 1 line
+Total 3
+
+Claim 2 subnotes:
+- under note 1: rank 4 sufficient, higher ranks show diminishing returns -> 2 lines
+- under note 2: optimizer state minimal -> 1 line
+- under note 3: none
+Total 3
+
+Claim 3 subnotes:
+- under note 1: per-head scales help, perplexity intact -> 2 lines
+Total 2
+
+Claim 4 subnotes:
+- under note 1: tested across 400 models, cosine schedule used -> 2 lines
+- under note 2: fixed learning rate flawed -> 1 line
+Total 3
+
+Claim 5 subnotes:
+- under note 1: tested up to 175B, in-context learning observed -> 2 lines
+Total 2
+
+Sum = 3+3+2+3+2 = 15 lines.
+
+Thus total lines = 5 + 9 + 15 = 29.
+
+Now we need to order them correctly: For each claim, we should output the claim line, then its notes and subnotes in order. So the sequence of lines should be:
+
+Claim 1 line
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+Claim 2 line
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+
+Claim 3 line
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4 line
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5 line
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to write each line with proper | endings.
+
+Let's write each line explicitly:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. LoRA matches full finetune|supported|2106.09685|2021|
+3. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+4. Chinchilla tokens beat params|supported|2203.15556|2022|
+5. Language models few-shot|supported|2005.14165|2005|
+
+Now note lines for claim 1:
+
+6. > notes are from abstract only|
+7. >> abstract mentions 32k limit|
+8. >> appendix B clarifies|
+9. > table 3 contradicts|
+10. >> llama 7b tested only|
+
+Claim 2 lines:
+
+11. > tested on GLUE and Wikisql|
+12. >> rank 4 sufficient|
+13. >> higher ranks show diminishing returns|
+14. > memory footprint reduced 3x|
+15. >> optimizer state minimal|
+16. > checkpoint size under 50MB|
+
+Claim 3 lines:
+
+17. > outlier channels preserved|
+18. >> per-head scales help|
+19. >> perplexity intact|
+
+Claim 4 lines:
+
+20. > optimal ratio is 20 to 1|
+21. >> tested across 400 models|
+22. >> cosine schedule used|
+23. > kaplan tokens were suboptimal|
+24. >> fixed learning rate flawed|
+
+Claim 5 lines:
+
+25. > scaling curve is smooth|
+26. >> tested up to 175B|
+27. >> in-context learning observed|
+
+Wait, we have 27 lines now, but we expected 29. Let's count: We have 5 claim lines (1-5). Then for claim 1, we have 4 lines (6-9). That's 5+4=9 so far. Claim 2 has 6 lines? Let's see: claim 2 line is line 11? Actually we need to number properly.
+
+Let's list all lines in order with indices:
+
+1: Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2: LoRA matches full finetune|supported|2106.09685|2021|
+3: KV cache quant loses 2x acc|refuted|2406.12345|2024|
+4: Chinchilla tokens beat params|supported|2203.15556|2022|
+5: Language models few-shot|supported|2005.14165|2005|
+
+Now claim 1 notes and subnotes:
+
+6: > notes are from abstract only|
+7: >> abstract mentions 32k limit|
+8: >> appendix B clarifies|
+9: > table 3 contradicts|
+10: >> llama 7b tested only|
+
+Claim 2 notes and subnotes:
+
+11: > tested on GLUE and Wikisql|
+12: >> rank 4 sufficient|
+13: >> higher ranks show diminishing returns|
+14: > memory footprint reduced 3x|
+15: >> optimizer state minimal|
+16: > checkpoint size under 50MB|
+
+Claim 3 notes and subnotes:
+
+17: > outlier channels preserved|
+18: >> per-head scales help|
+19: >> perplexity intact|
+
+Claim 4 notes and subnotes:
+
+20: > optimal ratio is 20 to 1|
+21: >> tested across 400 models|
+22: >> cosine schedule used|
+23: > kaplan tokens were suboptimal|
+24: >> fixed learning rate flawed|
+
+Claim 5 notes and subnotes:
+
+25: > scaling curve is smooth|
+26: >> tested up to 175B|
+27: >> in-context learning observed|
+
+Now count lines: 1-27 = 27 lines. But we expected 29 lines. Did we miss any lines? Let's recount the number of lines per claim:
+
+Claim 1: 1 claim line + 4 note/subnote lines = 5 lines.
+Claim 2: 1 claim line + 6 note/subnote lines = 7 lines.
+Claim 3: 1 claim line + 3 note/subnote lines = 4 lines.
+Claim 4: 1 claim line + 4 note/subnote lines = 5 lines.
+Claim 5: 1 claim line + 3 note/subnote lines = 4 lines.
+
+Total lines = 5+7+4+5+4 = 25 lines. Wait, that sums to 25. But earlier we calculated 5 + 9 + 15 = 29. There's a discrepancy because we double-counted something.
+
+Let's recount notes and subnotes per claim more carefully.
+
+Claim 1:
+- Notes: 2 notes.
+  - Note A: text "notes are from abstract only", subnotes: 2 ("abstract mentions 32k limit", "appendix B clarifies")
+  - Note B: text "table 3 contradicts", subnotes: 1 ("llama 7b tested only")
+So total lines for claim 1 after claim line:
+  > notes are from abstract only|   (1)
+  >> abstract mentions 32k limit|   (2)
+  >> appendix B clarifies|         (3)
+  > table 3 contradicts|          (4)
+  >> llama 7b tested only|       (5)
+So 5 lines after claim line. So claim 1 total lines = 1 + 5 = 6 lines.
+
+Claim 2:
+- Notes: 3 notes.
+  - Note 1: text "tested on GLUE and Wikisql", subnotes: 2 ("rank 4 sufficient", "higher ranks show diminishing returns")
+  - Note 2: text "memory footprint reduced 3x", subnotes: 1 ("optimizer state minimal")
+  - Note 3: text "checkpoint size under 50MB", subnotes: 0
+So lines after claim line:
+  > tested on GLUE and Wikisql|          (1)
+  >> rank 4 sufficient|                (2)
+  >> higher ranks show diminishing returns| (3)
+  > memory footprint reduced 3x|      (4)
+  >> optimizer state minimal|        (5)
+  > checkpoint size under 50MB|       (6)
+So 6 lines after claim line. Total claim 2 lines = 1 + 6 = 7 lines.
+
+Claim 3:
+- Notes: 1 note.
+  - Note: text "outlier channels preserved", subnotes: 2 ("per-head scales help", "perplexity intact")
+Lines after claim line:
+  > outlier channels preserved|        (1)
+  >> per-head scales help|           (2)
+  >> perplexity intact|              (3)
+So 3 lines after claim line. Total claim 3 lines = 1 + 3 = 4 lines.
+
+Claim 4:
+- Notes: 2 notes.
+  - Note 1: text "optimal ratio is 20 to 1", subnotes: 2 ("tested across 400 models", "cosine schedule used")
+  - Note 2: text "kaplan tokens were suboptimal", subnotes: 1 ("fixed learning rate flawed")
+Lines after claim line:
+  > optimal ratio is 20 to 1|        (1)
+  >> tested across 400 models|       (2)
+  >> cosine schedule used|          (3)
+  > kaplan tokens were suboptimal|   (4)
+  >> fixed learning rate flawed|     (5)
+So 5 lines after claim line. Total claim 4 lines = 1 + 5 = 6 lines.
+
+Claim 5:
+- Notes: 1 note.
+  - Note: text "scaling curve is smooth", subnotes: 2 ("tested up to 175B", "in-context learning observed")
+Lines after claim line:
+  > scaling curve is smooth|          (1)
+  >> tested up to 175B|             (2)
+  >> in-context learning observed|   (3)
+So 3 lines after claim line. Total claim 5 lines = 1 + 3 = 4 lines.
+
+Now sum total lines: Claim1:6, Claim2:7, Claim3:4, Claim4:6, Claim5:4 = 6+7+4+6+4 = 27 lines. That matches our line count of 27 lines (1-27). So earlier we thought 29 was wrong; it's 27 lines.
+
+Thus we need to output 27 lines.
+
+Our list of lines 1-27 matches this count. Let's verify each line corresponds to the correct content.
+
+Lines 1-5 are claim lines:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. LoRA matches full finetune|supported|2106.09685|2021|
+3. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+4. Chinchilla tokens beat params|supported|2203.15556|2022|
+5. Language models few-shot|supported|2005.14165|2005|
+
+Lines 6-10 are claim 1 notes and subnotes:
+
+6. > notes are from abstract only|
+7. >> abstract mentions 32k limit|
+8. >> appendix B clarifies|
+9. > table 3 contradicts|
+10. >> llama 7b tested only|
+
+Lines 11-16 are claim 2 notes and subnotes:
+
+11. > tested on GLUE and Wikisql|
+12. >> rank 4 sufficient|
+13. >> higher ranks show diminishing returns|
+14. > memory footprint reduced 3x|
+15. >> optimizer state minimal|
+16. > checkpoint size under 50MB|
+
+Lines 17-19 are claim 3 notes and subnotes:
+
+17. > outlier channels preserved|
+18. >> per-head scales help|
+19. >> perplexity intact|
+
+Lines 20-24 are claim 4 notes and subnotes:
+
+20. > optimal ratio is 20 to 1|
+21. >> tested across 400 models|
+22. >> cosine schedule used|
+23. > kaplan tokens were suboptimal|
+24. >> fixed learning rate flawed|
+
+Lines 25-27 are claim 5 notes and subnotes:
+
+25. > scaling curve is smooth|
+26. >> tested up to 175B|
+27. >> in-context learning observed|
+
+Yes, that matches.
+
+Now we need to ensure that each line ends with |. In our lines above, we have included | at the end. For lines with > and >>, we have "> text|" and ">> text|". That is correct: the line starts with > or >> then the text, then |.
+
+But we need to check if the > and >> are considered part of the value or prefix. The instruction says "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This suggests that the line starts with > or >> as a prefix, and then the record's fields. Since the record has only one field (text), the line would be > text| or >> text|. So our lines are correct.
+
+Now we need to ensure that we haven't missed any fields like source id and year for notes? No, notes are separate records with only text field. So fine.
+
+Now we need to ensure that the claim lines have the correct fields: text, verdict, source.id, source.year. We have those.
+
+Now we need to check that the source ids are correct: 2405.05254, 2106.09685, 2406.12345, 2203.15556, 2005.14165. Yes.
+
+Now we need to check that the years are correct: 2024, 2021, 2024, 2022, 2005. Yes.
+
+Now we need to check that the verdict strings are exactly "refuted", "supported". We have refuted for claims 1 and 3, supported for 2,4,5. Yes.
+
+Now we need to check that the text fields are exactly as described, with proper capitalization and punctuation. Let's copy them:
+
+Claim 1 text: "Rope scaling hurts long ctx" -> Rope scaling hurts long ctx
+Claim 2 text: "LoRA matches full finetune" -> LoRA matches full finetune
+Claim 3 text: "KV cache quant loses 2x acc" -> KV cache quant loses 2x acc
+Claim 4 text: "Chinchilla tokens beat params" -> Chinchilla tokens beat params
+Claim 5 text: "Language models few-shot" -> Language models few-shot
+
+Notes texts:
+
+Claim 1 note1: "notes are from abstract only" -> notes are from abstract only
+Claim 1 note2: "table 3 contradicts" -> table 3 contradicts
+Claim 2 note1: "tested on GLUE and Wikisql" -> tested on GLUE and Wikisql
+Claim 2 note2: "memory footprint reduced 3x" -> memory footprint reduced 3x
+Claim 2 note3: "checkpoint size under 50MB" -> checkpoint size under 50MB
+Claim 3 note: "outlier channels preserved" -> outlier channels preserved
+Claim 4 note1: "optimal ratio is 20 to 1" -> optimal ratio is 20 to 1
+Claim 4 note2: "kaplan tokens were suboptimal" -> kaplan tokens were suboptimal
+Claim 5 note: "scaling curve is smooth" -> scaling curve is smooth
+
+Subnote texts:
+
+Claim 1 subnote1: "abstract mentions 32k limit" -> abstract mentions 32k limit
+Claim 1 subnote2: "appendix B clarifies" -> appendix B clarifies
+Claim 1 subnote3: "llama 7b tested only" -> llama 7b tested only
+Claim 2 subnote1: "rank 4 sufficient" -> rank 4 sufficient
+Claim 2 subnote2: "higher ranks show diminishing returns" -> higher ranks show diminishing returns
+Claim 2 subnote3: "optimizer state minimal" -> optimizer state minimal
+Claim 3 subnote1: "per-head scales help" -> per-head scales help
+Claim 3 subnote2: "perplexity intact" -> perplexity intact
+Claim 4 subnote1: "tested across 400 models" -> tested across 400 models
+Claim 4 subnote2: "cosine schedule used" -> cosine schedule used
+Claim 4 subnote3: "fixed learning rate flawed" -> fixed learning rate flawed
+Claim 5 subnote1: "tested up to 175B" -> tested up to 175B
+Claim 5 subnote2: "in-context learning observed" -> in-context learning observed
+
+All good.
+
+Now we need to ensure that the lines are exactly as required: values in schema order separated by |, and every line ends with |. For claim lines, we have text|verdict|id|year|. For note lines with >, we have > text|. For subnote lines with >>, we have >> text|.
+
+Thus the output should be:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+LoRA matches full finetune|supported|2106.09685|2021|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+Language models few-shot|supported|2005.14165|2005|
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+Wait, we need to order the lines correctly per claim. The above ordering mixes claim lines and notes. We need to keep claim lines in order 1-5, then claim 1 notes and subnotes, then claim 2 notes and subnotes, etc. But the above list seems to have all claim lines first, then all notes lines. However the notes lines are interleaved per claim. But is it required to keep the notes lines after their respective claim lines? The output is just a list of lines; there is no requirement to keep the hierarchical structure beyond the prefixes. The prefixes > and >> indicate the level, but the order might not need to be grouped by claim. However, typically you would want the notes to follow their claim, but the output is just a sequence of lines. The prefixes > and >> might be sufficient to indicate the hierarchy regardless of order. But is it allowed to have all claim lines first then all note lines? The instruction doesn't explicitly require that notes appear after their claim, but it's logical. However, the prefixes might allow any order as long as the hierarchy is clear via the prefixes. But to be safe, we should keep the order as per the claims: claim line, then its notes and subnotes, then next claim line, etc. That seems more natural.
+
+Thus the correct output should be:
+
+Line 1: Rope scaling hurts long ctx|refuted|2405.05254|2024|
+Line 2: LoRA matches full finetune|supported|2106.09685|2021|
+Line 3: KV cache quant loses 2x acc|refuted|2406.12345|2024|
+Line 4: Chinchilla tokens beat params|supported|2203.15556|2022|
+Line 5: Language models few-shot|supported|2005.14165|2005|
+Line 6: > notes are from abstract only|
+Line 7: >> abstract mentions 32k limit|
+Line 8: >> appendix B clarifies|
+Line 9: > table 3 contradicts|
+Line 10: >> llama 7b tested only|
+Line 11: > tested on GLUE and Wikisql|
+Line 12: >> rank 4 sufficient|
+Line 13: >> higher ranks show diminishing returns|
+Line 14: > memory footprint reduced 3x|
+Line 15: >> optimizer state minimal|
+Line 16: > checkpoint size under 50MB|
+Line 17: > outlier channels preserved|
+Line 18: >> per-head scales help|
+Line 19: >> perplexity intact|
+Line 20: > optimal ratio is 20 to 1|
+Line 21: >> tested across 400 models|
+Line 22: >> cosine schedule used|
+Line 23: > kaplan tokens were suboptimal|
+Line 24: >> fixed learning rate flawed|
+Line 25: > scaling curve is smooth|
+Line 26: >> tested up to 175B|
+Line 27: >> in-context learning observed|
+
+Wait, we have 27 lines. Let's count: lines 1-5 are claim lines (5). Lines 6-10 are claim 1 notes and subnotes (5 lines). That's 10 so far. Lines 11-16 are claim 2 notes and subnotes (6 lines) -> total 16. Lines 17-19 are claim 3 notes and subnotes (3 lines) -> total 19. Lines 20-24 are claim 4 notes and subnotes (5 lines) -> total 24. Lines 25-27 are claim 5 notes and subnotes (3 lines) -> total 27. Yes.
+
+But we need to ensure that the notes for claim 2 are correctly ordered: > tested on GLUE and Wikisql| (line 11), >> rank 4 sufficient| (12), >> higher ranks show diminishing returns| (13), > memory footprint reduced 3x| (14), >> optimizer state minimal| (15), > checkpoint size under 50MB| (16). That's 6 lines, correct.
+
+Claim 3 notes: > outlier channels preserved| (17), >> per-head scales help| (18), >> perplexity intact| (19). That's 3 lines.
+
+Claim 4 notes: > optimal ratio is 20 to 1| (20), >> tested across 400 models| (21), >> cosine schedule used| (22), > kaplan tokens were suboptimal| (23), >> fixed learning rate flawed| (24). That's 5 lines.
+
+Claim 5 notes: > scaling curve is smooth| (25), >> tested up to 175B| (26), >> in-context learning observed| (27). That's 3 lines.
+
+Thus total lines = 5 + 5 + 6 + 3 + 5 + 3 = 27? Wait, let's sum: Claim1 notes+subnotes = 5 lines (as we counted: > notes..., >>..., >..., >>...). Claim2 notes+subnotes = 6 lines. Claim3 notes+subnotes = 3 lines. Claim4 notes+subnotes = 5 lines. Claim5 notes+subnotes = 3 lines. Sum = 5+6+3+5+3 = 22 lines of notes/subnotes. Plus 5 claim lines = 27 lines. Yes.
+
+Thus the output should have 27 lines in the order: claim1, claim1 notes, claim2, claim2 notes, claim3, claim3 notes, claim4, claim4 notes, claim5, claim5 notes.
+
+But wait, we placed claim lines in order 1-5, but then we placed claim1 notes immediately after claim1 line, then claim2 line, then claim2 notes, etc. However in our line numbering above, we placed claim lines 1-5 first, then claim1 notes lines 6-10, then claim2 notes lines 11-16, etc. But that would mix claim2 line with claim1 notes? Actually we need to interleave: claim1 line, then claim1 notes, then claim2 line, then claim2 notes, etc. But in the list above, we have claim lines 1-5 all first, then claim1 notes, then claim2 notes, etc. That would put claim2 line after claim1 notes, but claim2 line is line 2 in the original order. Actually claim2 line is "LoRA matches full finetune|supported|2106.09685|2021|". In our list above, we have claim lines 1-5 as:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. LoRA matches full finetune|supported|2106.09685|2021|
+3. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+4. Chinchilla tokens beat params|supported|2203.15556|2022|
+5. Language models few-shot|supported|2005.14165|2005|
+
+Then claim1 notes start at line 6. But claim1 notes belong to claim1, which is line 1. So after line 1, we should have claim1 notes, then line 2 (claim2), then claim2 notes, etc. However we have listed claim2 line as line 2, then claim3 line as line 3, etc. That means claim2 line appears before claim1 notes, which is out of order. That would be incorrect because claim2 line should appear after claim1 notes if we follow the natural order of claims. But the order of claims in the output doesn't necessarily have to follow the order of the bullets? The bullets are in order 1 to 5. So we should output claim1, then its notes, then claim2, then its notes, etc. That would be more logical.
+
+Thus the correct order should be:
+
+Line 1: Claim 1 text...
+Line 2: > notes are from abstract only|
+Line 3: >> abstract mentions 32k limit|
+Line 4: >> appendix B clarifies|
+Line 5: > table 3 contradicts|
+Line 6: >> llama 7b tested only|
+Line 7: Claim 2 text...
+Line 8: > tested on GLUE and Wikisql|
+Line 9: >> rank 4 sufficient|
+Line 10: >> higher ranks show diminishing returns|
+Line 11: > memory footprint reduced 3x|
+Line 12: >> optimizer state minimal|
+Line 13: > checkpoint size under 50MB|
+Line 14: Claim 3 text...
+Line 15: > outlier channels preserved|
+Line 16: >> per-head scales help|
+Line 17: >> perplexity intact|
+Line 18: Claim 4 text...
+Line 19: > optimal ratio is 20 to 1|
+Line 20: >> tested across 400 models|
+Line 21: >> cosine schedule used|
+Line 22: > kaplan tokens were suboptimal|
+Line 23: >> fixed learning rate flawed|
+Line 24: Claim 5 text...
+Line 25: > scaling curve is smooth|
+Line 26: >> tested up to 175B|
+Line 27: >> in-context learning observed|
+
+That would be 27 lines, with each claim's notes immediately following its claim line.
+
+But in our earlier list we had all claim lines first then notes. That would be incorrect ordering but might still be acceptable? However the instruction doesn't explicitly require ordering, but it's natural to keep each claim with its notes together. However the output format with prefixes > and >> might allow any order, but to be safe we should follow the logical order: claim line, then its notes and subnotes, then next claim line, etc.
+
+Thus we need to produce lines in that order.
+
+Let's construct the final output accordingly.
+
+Claim 1:
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|
+2. > notes are from abstract only|
+3. >> abstract mentions 32k limit|
+4. >> appendix B clarifies|
+5. > table 3 contradicts|
+6. >> llama 7b tested only|
+
+Claim 2:
+7. LoRA matches full finetune|supported|2106.09685|2021|
+8. > tested on GLUE and Wikisql|
+9. >> rank 4 sufficient|
+10. >> higher ranks show diminishing returns|
+11. > memory footprint reduced 3x|
+12. >> optimizer state minimal|
+13. > checkpoint size under 50MB|
+
+Claim 3:
+14. KV cache quant loses 2x acc|refuted|2406.12345|2024|
+15. > outlier channels preserved|
+16. >> per-head scales help|
+17. >> perplexity intact|
+
+Claim 4:
+18. Chinchilla tokens beat params|supported|2203.15556|2022|
+19. > optimal ratio is 20 to 1|
+20. >> tested across 400 models|
+21. >> cosine schedule used|
+22. > kaplan tokens were suboptimal|
+23. >> fixed learning rate flawed|
+
+Claim 5:
+24. Language models few-shot|supported|2005.14165|2005|
+25. > scaling curve is smooth|
+26. >> tested up to 175B|
+27. >> in-context learning observed|
+
+Thus 27 lines.
+
+Now we need to write these lines exactly, with each line ending with |.
+
+Let's write them:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2005|
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+Check each line ends with |. Yes.
+
+Now we need to ensure that there are no extra spaces or characters. The lines look good.
+
+Now we need to ensure that the > and >> prefixes are correct. For > lines, we have "> notes are from abstract only|". That is correct: the line starts with >, then the text, then |. Similarly for >> lines.
+
+Now check claim 2 note "tested on GLUE and Wikisql" text: > tested on GLUE and Wikisql| . That's fine.
+
+Claim 2 note "memory footprint reduced 3x": > memory footprint reduced 3x| . That's fine.
+
+Claim 2 note "checkpoint size under 50MB": > checkpoint size under 50MB| . That's fine.
+
+Claim 3 note "outlier channels preserved": > outlier channels preserved| . Good.
+
+Claim 4 note "optimal ratio is 20 to 1": > optimal ratio is 20 to 1| . Good.
+
+Claim 4 note "kaplan tokens were suboptimal": > kaplan tokens were suboptimal| . Good.
+
+Claim 5 note "scaling curve is smooth": > scaling curve is smooth| . Good.
+
+Subnotes:
+
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+>> llama 7b tested only|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+>> optimizer state minimal|
+>> tested across 400 models|
+>> cosine schedule used|
+>> fixed learning rate flawed|
+>> tested up to 175B|
+>> in-context learning observed|
+
+All good.
+
+Now we need to ensure that the claim lines have the correct text, verdict, id, year.
+
+Claim 1: Rope scaling hurts long ctx|refuted|2405.05254|2024| . Yes.
+
+Claim 2: LoRA matches full finetune|supported|2106.09685|2021| . Yes.
+
+Claim 3: KV cache quant loses 2x acc|refuted|2406.12345|2024| . Yes.
+
+Claim 4: Chinchilla tokens beat params|supported|2203.15556|2022| . Yes.
+
+Claim 5: Language models few-shot|supported|2005.14165|2005| . Yes.
+
+Now we need to ensure that the ids are correct: 2405.05254, 2106.09685, 2406.12345, 2203.15556, 2005.14165. Yes.
+
+Years: 2024, 2021, 2024, 2022, 2005. Yes.
+
+Verdicts: refuted, supported, refuted, supported, supported. Yes.
+
+Now we need to check if any text contains | or \ that would need escaping. None do.
+
+Thus the final output is the 27 lines as above.
+
+We need to output exactly those lines, no extra prose, no header, no code fences.
+
+Thus the answer should be:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2005|
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+We need to ensure each line ends with |. Yes.
+
+Now we should double-check the ordering of claim lines and notes. In the above, after claim 1 line, we have its notes lines, then claim 2 line, then its notes, etc. That seems correct.
+
+But wait, in the above we have claim 2 line after claim 1 notes. That is correct: claim 1 notes lines are 2-6, then claim 2 line is 7. Yes.
+
+Now check claim 3: after claim 2 notes lines (8-13), we have claim 3 line 14. Yes.
+
+Claim 4: after claim 3 notes lines (15-17), we have claim 4 line 18. Yes.
+
+Claim 5: after claim 4 notes lines (19-23), we have claim 5 line 24. Yes.
+
+Thus the ordering is correct.
+
+Now we need to output exactly these lines.
+
+One more thing: The instruction says "Inside a value, write \| for | and \ for \." Since none of the texts contain | or \, we don't need to escape anything.
+
+Also, "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |." Not applicable.
+
+Thus final answer is the 27 lines as above.
+
+We should output them exactly as plain text, each line separated by newline. No extra characters.
+
+Thus the final response is:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+Chinchilla tokens beat params|supported|2203.15556|2022|
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2005|
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+We need to ensure there is no extra whitespace at start or end of lines. Looks good.
+
+Now we produce this as the final answer.

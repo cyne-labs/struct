@@ -1,0 +1,5 @@
+id|Claim 2405.05254|refuted|2024|0|
+id|Claim 1706.03762|supported|2017|1|
+id|Claim 2106.09685|supported|2021|1|
+id|Claim 2309.06180|supported|2023|1|
+id|Claim 2401.04088|supported|2024|1|

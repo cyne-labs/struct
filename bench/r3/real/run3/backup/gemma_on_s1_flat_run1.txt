@@ -1,0 +1,5 @@
+claim|Rope scaling hurts long ctx|refuted|2024|1
+claim|Attention is all you need|supported|2017|1
+claim|LoRA low rank adaptation|supported|2021|1
+claim|Mistral 7B architecture|supported|2023|1
+claim|DeepSeekMoE mixture experts|supported|2024|1

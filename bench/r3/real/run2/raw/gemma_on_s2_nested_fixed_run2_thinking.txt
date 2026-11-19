@@ -1,0 +1,62 @@
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Schema:** `claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}`
+    *   **Output Format:** Data only in Struct format. No prose, no code fences.
+    *   **Line Format:** One record per line. Values separated by `|`. Every line ends with `|`.
+    *   **Special Formatting:**
+        *   `~` means null.
+        *   `bool` is 1 or 0.
+        *   Enum values must be exact labels.
+        *   `|` and `\` must be escaped inside values.
+        *   Multi-line/indented text must start with `\r`.
+    *   **Record Structure:** `text|verdict|source.id|source.year|verified`
+
+2.  **Process Input Data:**
+
+    *   **Claim 1:** 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false.
+        *   Text: Rope scaling hurts long ctx
+        *   Verdict: refuted
+        *   Source ID: 2405.05254
+        *   Source Year: 2024
+        *   Verified: false (0)
+
+    *   **Claim 2:** 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true.
+        *   Text: Attention is all you need
+        *   Verdict: supported
+        *   Source ID: 1706.03762
+        *   Source Year: 2017
+        *   Verified: true (1)
+
+    *   **Claim 3:** 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true.
+        *   Text: LoRA low rank adaptation
+        *   Verdict: supported
+        *   Source ID: 2106.09685
+        *   Source Year: 2021
+        *   Verified: true (1)
+
+    *   **Claim 4:** 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true.
+        *   Text: Mistral 7B architecture
+        *   Verdict: supported
+        *   Source ID: 2309.06180
+        *   Source Year: 2023
+        *   Verified: true (1)
+
+    *   **Claim 5:** 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true.
+        *   Text: DeepSeekMoE mixture experts
+        *   Verdict: supported
+        *   Source ID: 2401.04088
+        *   Source Year: 2024
+        *   Verified: true (1)
+
+3.  **Construct Output Lines (Applying Formatting Rules):**
+
+    *   *Note on Source structure:* The source is a record `{id, year}`. The output format requires embedding these fields.
+
+    *   Line 1: Rope scaling hurts long ctx|refuted|2405.05254|2024|0
+    *   Line 2: Attention is all you need|supported|1706.03762|2017|1
+    *   Line 3: LoRA low rank adaptation|supported|2106.09685|2021|1
+    *   Line 4: Mistral 7B architecture|supported|2309.06180|2023|1
+    *   Line 5: DeepSeekMoE mixture experts|supported|2401.04088|2024|1
+
+4.  **Final Review against Constraints:** All data is in Struct format, no prose, correct separators, and line endings are present. (Self-Correction: Ensure the ID/Year are treated as standard numerical fields, not nested structures, as the prompt implies a flat structure for the output.)<channel|>

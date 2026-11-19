@@ -1,0 +1,5 @@
+1. 2405.05254 \| Rope scaling hurts long ctx \| supported \| 7 \| false |
+2. 1706.03762 \| Attention is all you need \| supported \| 2017 \| true |
+3. 2106.09685 \| LoRA low rank adaptation \| supported \| 2021 \| true |
+4. 2309.06180 \| Mistral 7B architecture \| supported \| 2023 \| true |
+5. 2401.04088 \| DeepSeekMoE mixture experts \| supported \| 2024 \| true |

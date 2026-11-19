@@ -1,0 +1,37 @@
+
+The user wants output in a specific format: "schema:claim{id, title, verdict:enum(...), year:int, verified:bool}" each line as a record, values in schema order. No prose, no code fences. The first line already data? Actually they say: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data." So they want just the lines of records, each line ends with |. They gave example: "text|text|supported|7|~|". They also say: Inside a value, write \| for | and \ for \. For text with line breaks, etc, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+We need to produce 5 records based on the 5 statements.
+
+We need to assign IDs. The schema claim has fields: id, title, verdict (enum: supported, refuted, unverified), year (int), verified (bool). The statements:
+
+1. Paper 2405.05254 was published in 2024 with title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted.
+Thus:
+id: maybe the paper ID? They didn't specify but likely the paper identifier. Could be "2405.05254". Title: "Rope scaling hurts long ctx". Verdict: refuted. Year: 2024. Verified: false (since it was refuted). So verdict: "refuted". So record:
+2405.05254,"Rope scaling hurts long ctx",refuted,2024,0
+
+2. In 2017, paper 1706.03762 was published with title "Attention is all you need"; verification was true, and the claim is supported.
+id: 1706.03762, title: "Attention is all you need", verdict: supported, year: 2017, verified:1
+
+3. Paper 2106.09685, titled "LoRA low rank adaptation", appeared in 2021; verification was true, claim supported.
+id: 2106.09685, title: "LoRA low rank adaptation", verdict: supported, year: 2021, verified:1
+
+4. Titled "Mistral 7B architecture", paper 2309.06180 was published in 2023; verification was true, claim supported.
+id: 2309.06180, title: "Mistral 7B architecture", verdict: supported, year: 2023, verified:1
+
+5. Paper 2401.04088 was published in 2024 under the title "DeepSeekMoE mixture experts"; it was verified as true, claim supported.
+id: 2401.04088, title: "DeepSeekMoE mixture experts", verdict: supported, year: 2024, verified:1
+
+Now format each line: values separated by |, no extra spaces. For any special characters like | need to be escaped as \|. In the data, we have titles that contain commas, but the overall format is CSV-like, but they want pipe separated, not comma separated. So we need to quote or escape commas? The instruction: "Inside a value, write \| for | and \ for \". For text with line breaks, ... start with \r". There's no mention about quoting. The example uses text|text|supported|7|~|. They didn't use quotes. So we just separate by |. The title contains no pipe, but contains spaces. That's fine. So each line:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+1706.03762|Attention is all you need|supported|2017|1
+2106.09685|LoRA low rank adaptation|supported|2021|1
+2309.06180|Mistral 7B architecture|supported|2023|1
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1
+
+Check: The first line originally "Paper 2405.05254 was published ... it turned out to be false, so the claim is refuted." So we used "Rope scaling hurts long ctx" as title, correct. The verdict is refuted. The year is 2024. Verified is false (0). Good.
+
+Make sure no trailing spaces. No extra lines. Provide exactly 5 lines.
+
+Thus answer.

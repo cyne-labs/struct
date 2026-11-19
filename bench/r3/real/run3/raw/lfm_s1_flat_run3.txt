@@ -1,0 +1,6 @@
+
+1|Paper 2405.05254|refuted|2024|~|
+2|paper 1706.03762|supported|2017|1|
+3|Paper 2106.09685|supported|2021|1|
+4|Mistral 7B architecture|supported|2023|1|
+5|Paper 2401.04088|supported|2024|1|

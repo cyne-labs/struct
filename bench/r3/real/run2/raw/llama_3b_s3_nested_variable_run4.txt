@@ -1,0 +1,5 @@
+1|refuted|2405.05254|2024|\rNote text 'notes are from abstract only',\rwith subnotes 'abstract mentions 32k limit' and 'appendix B clarifies'.|>
+2|supported|2106.09685|2021|\rNote text 'tested on GLUE and Wikisql',\rwith subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'.|
+3|refuted|2406.12345|2024|\rNote text 'outlier channels preserved',\rwith subnotes 'per-head scales help' and 'perplexity intact'.|>
+4|supported|2203.15556|2022|\rNote text 'optimal ratio is 20 to 1',\rwith subnotes 'tested across 400 models' and 'cosine schedule used'.|
+5|supported|2005.14165|2020|\rNote text 'scaling curve is smooth',\rwith subnotes 'tested up to 175B' and 'in-context learning observed'.|>

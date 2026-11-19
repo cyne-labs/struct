@@ -1,0 +1,5 @@
+text|refuted|source{id:2405.05254,year:2024}|notes:[{text:\rRope scaling hurts long ctx\r},subnotes:[\rabstract mentions 32k limit\r,appendix B clarifies\r]},{text:\rtable 3 contradicts\r},subnotes:[\rllama 7b tested only\r]}
+text|supported|source{id:2106.09685,year:2021}|notes:[{text:\rtested on GLUE and Wikisql\r},subnotes:[\rrank 4 sufficient\r,higher ranks show diminishing returns\r]},{text:\rmemory footprint reduced 3x\r},subnotes:[\roptimizer state minimal\r]},{text:\rcheckpoint size under 50MB\r}]
+text|refuted|source{id:2406.12345,year:2024}|notes:[{text:\routlier channels preserved\r},subnotes:[\rper-head scales help\r,perplexity intact\r]]
+text|supported|source{id:2203.15556,year:2022}|notes:[{text:\roptimal ratio is 20 to 1\r},subnotes:[\rtested across 400 models\r,cosine schedule used\r]},{text:\rkaplan tokens were suboptimal\r},subnotes:[\rfixed learning rate flawed\r]]
+text|supported|source{id:2005.14165,year:2020}|notes:[{text:\rscaling curve is smooth\r},subnotes:[\rtested up to 175B\r,in-context learning observed\r]]

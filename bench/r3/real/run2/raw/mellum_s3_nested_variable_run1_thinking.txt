@@ -1,0 +1,49 @@
+We need to parse the problem. We have a schema: claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+
+We need to produce Struct format: One record per line: values in schema order, separated by |, and every line ends with |. So each line ends with a trailing | after the last field.
+
+The fields order: According to schema: claim{ text, verdict, source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}] }.
+
+Thus for each claim record, the top-level fields are: text, verdict, source (which is a record with id and year), notes (list of records each with text and subnotes list). So the flat order for columns likely is: text, verdict, source.id, source.year, then notes... But we need to infer from example.
+
+The example given in the prompt: "Example: text|supported|text|~|". That seems to show a claim record with text field, verdict field, source field? Actually they wrote: text|supported|text|~|. Let's parse: They said "Example: text|supported|text|~|". That might be an example of a record with fields: text, verdict, source id, source year, notes? Not sure.
+
+But we have more guidance: "A record{...} field adds its fields as extra columns, in order." So for source:record{id, year:int}, that adds columns id and year after the source field? Or maybe the source field itself is a record, but we flatten it: we have columns for source.id and source.year directly in the same line? The example "text|supported|text|~|" suggests four columns: text, verdict, source id?, source year?, notes? Actually "text|supported|text|~|" could be: text = "text", verdict = "supported", source id = "text", source year = "~"? That seems odd.
+
+Wait, maybe the example is just a placeholder: "text|supported|text|~|" where the first "text" is the claim text, second "supported" is verdict, third "text" is source id?, fourth "~" is source year? And notes are empty? Not sure.
+
+But we have actual data points 5 claims. We need to produce records for each claim.
+
+We need to output one record per line, values in schema order, separated by |, ending with |.
+
+Schema order: claim has fields: text, verdict, source (record), notes (list). Within source record: id, year. Within notes list: each note is a record with fields: text, subnotes (list of strings). So overall flat order for a claim record might be:
+
+- claim.text
+- claim.verdict
+- source.id
+- source.year
+- then notes... For each note, we need to output note.text and note.subnotes (list of strings). How to represent subnotes list? Probably as a string representation? The schema says subnotes:list[str]. In the output format, we need to represent these values. Possibly we can separate subnotes by commas or something? But we need to follow the format: values separated by |, and for list items we need to start lines with > per level.
+
+The instructions: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So for notes, which is a list of records, each note record has text and subnotes list. How to output? Probably the notes list items appear on separate lines, each prefixed with > for the note record, and within that, subnotes items prefixed with >>? Let's parse.
+
+We have a claim record line that includes the claim text, verdict, source id, source year, and then notes? Or notes are separate lines? The instruction: "One record per line: values in schema order, separated by |, and every line ends with |." That suggests each claim record is a single line? But then they say "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." So if a field is a list, then after the parent line, we add lines for each item, prefixed with > (or >>) depending on depth.
+
+Thus the overall output will have multiple lines: first line for the claim record with its fields (text, verdict, source.id, source.year) and maybe empty notes field? Then subsequent lines for each note, prefixed with > and containing note text and subnotes? And subnotes items prefixed with >>.
+
+We need to infer the exact format.
+
+Let's look at the example they gave: "Example: text|supported|text|~|". That's a single line with four fields. No indication of notes. Could be that notes are empty, so they are not represented? Or maybe the example is truncated.
+
+We need to examine the provided claims data. We have 5 claims, each with notes. We need to produce Struct records.
+
+We need to decide on column order. Let's assume the order is: claim.text, claim.verdict, source.id, source.year, notes.text, notes.subnotes... But notes is a list, so maybe after source fields, we have notes fields repeated for each note.
+
+Alternatively, maybe the schema is flattened as: text, verdict, source_id, source_year, notes_text, notes_subnotes1, notes_subnotes2, ... but that seems messy.
+
+Better to look at the instruction: "A record{...} field adds its fields as extra columns, in order." So for source:record{id, year:int}, when we encounter source in the claim record, we add columns for id and year after the source field? But source itself is a field in the claim record. How is source represented in the flat line? Possibly as a nested record represented by its fields inline? Like source.id and source.year are separate columns after source? But the example "text|supported|text|~|" could be: claim.text = "text", claim.verdict = "supported", source.id = "text", source.year = "~". That matches: source.id is "text" (maybe the id is the string "text"?), source.year is "~" meaning null. So that example suggests that the columns are: claim.text, claim.verdict, source.id, source.year. And notes are not included in that line because maybe notes are separate lines.
+
+Thus the claim record line includes: text, verdict, source.id, source.year. Notes are separate lines prefixed with >.
+
+If that

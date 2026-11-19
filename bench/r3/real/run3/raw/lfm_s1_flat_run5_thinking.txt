@@ -1,0 +1,39 @@
+
+We need to produce data for these claims. The schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. We need to create records for each claim. The claims have numbers with IDs referencing papers. We need to assign an id? The schema includes id, but not required? It says schema: claim{id, title, verdict, year, verified}. Probably each record is a claim, with id being perhaps the paper ID? Or maybe a claim ID? The instruction: "Write these as Struct records." We need to output lines like:
+
+1. Paper 2405.05254 ... | "Rope scaling hurts long ctx" | refuted | 2024 | 0
+
+But we need to ensure we follow the format: values in schema order: id, title, verdict, year, verified. The first line is already data. So likely we need to start with a line containing the first claim's id, maybe the paper ID? Or maybe the claim ID? The example didn't include id. The instruction: "One record per line: values in schema order, separated by |, and every line ends with |." So we need to produce something like:
+
+Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+...
+
+We need to ensure we use null for missing values, bool as 1 or 0. The verdict: "refuted" or "supported"? The schema says enum(supported, refuted, unverified). So we need to use "refuted" or "supported". For claim 1: it says "it turned out to be false, so the claim is refuted." So verdict = refuted. For claims 2 and 3 and 4: "verification was true, so the claim is supported." So verdict = supported. For claim 5: also "verification was true, and the claim is supported." So all but claim 1 are supported.
+
+We need to include id. What should id be? Possibly the paper ID. Or maybe the claim ID? The description: "schema: claim{id, title, verdict:enum..., year:int, verified:bool}". That suggests each claim object has an id field. Could be the paper ID. Since we have paper IDs, we can set id = paper ID. That seems logical. So each record will have id = paper ID, title = title, verdict = "supported" or "refuted", year = year, verified = 1 or 0.
+
+Thus:
+
+Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+Paper 1706.03762|Attention is all you need|supported|2017|1
+Paper 2106.09685|LoRA low rank adaptation|supported|2021|1
+Paper 2309.06180|Mistral 7B architecture|supported|2023|1
+Paper 2401.04088|DeepSeekMoE mixture experts|supported|2024|1
+
+Check ordering: id, title, verdict, year, verified. Yes.
+
+We need to ensure we don't have extra spaces. The title may contain spaces, but that's fine. The title includes quotes? The titles are given in quotes: "Rope scaling hurts long ctx". No quotes needed in output. So we just write the title without quotes. Also we need to escape any internal quotes. There are none.
+
+We need to ensure we don't have code fences. So just raw lines.
+
+Thus final answer:
+
+Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+Paper 1706.03762|Attention is all you need|supported|2017|1
+Paper 2106.09685|LoRA low rank adaptation|supported|2021|1
+Paper 2309.06180|Mistral 7B architecture|supported|2023|1
+Paper 2401.04088|DeepSeekMoE mixture experts|supported|2024|1
+
+Check for any trailing spaces. No extra newline at end? It's okay.
+
+Thus answer.

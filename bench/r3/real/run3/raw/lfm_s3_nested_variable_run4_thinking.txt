@@ -1,0 +1,174 @@
+
+We need to produce a data-only Struct format. The schema:
+
+{
+  "schema": "claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}}]
+}
+
+But they gave a schema that seems to define a root field "schema"? Actually they wrote "schema:claim{...}". But we just need to output the records as per the description: "One record per line: values in schema order, separated by |, and every line ends with |."
+
+Thus each line is a record. The fields in order: text, verdict, source, notes? Actually the schema shows: "claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]]}". But the wording: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data."
+
+Thus we need to produce records that include fields: text, verdict, source, notes. The source is a record with id and year. For notes, each note is a record with text and subnotes (list of strings). They want each record per line, values separated by |. Inside a value, we need to escape | as \| and \ as \". Also need to handle line breaks: if text contains newline, we start with \r then write exactly, ending with |.
+
+We have five papers with claims, verdicts, notes.
+
+We need to interpret each:
+
+Record 1:
+- text: "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted."
+- verdict: "refuted"
+- source: id: 2405.05254, year: 2024
+- notes: list of two notes:
+  1. "notes are from abstract only", with subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+  2. "table 3 contradicts", with subnote: "llama 7b tested only"
+
+Thus each note is a record with text and subnotes list. For first note: text: "notes are from abstract only", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"].
+
+Second note: text: "table 3 contradicts", subnotes: ["llama 7b tested only"].
+
+Record 2:
+- text: "In 2021, paper 2106.09685 made the claim \"LoRA matches full finetune\", and the verdict is supported."
+- verdict: "supported"
+- source: id: 2106.09685, year: 2021
+- notes: three notes:
+  1. "first note is \"tested on GLUE and Wikisql\"" with subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+  2. "second note is \"memory footprint reduced 3x\"" with subnote: ["optimizer state minimal"]
+  3. "third note is \"checkpoint size under 50MB\"" with no subnotes.
+
+Record 3:
+- text: "Paper 2406.12345 claimed \"KV cache quant loses 2x acc\" in 2024, but the verdict is refuted."
+- verdict: "refuted"
+- source: id: 2406.12345, year: 2024
+- notes: one note: "note says \"outlier channels preserved\"" with subnote: ["per-head scales help", "perplexity intact"].
+
+Record 4:
+- text: "Published in 2022, paper 2203.15556 claimed \"Chinchilla tokens beat params\", which is supported."
+- verdict: "supported"
+- source: id: 2203.15556, year: 2022
+- notes: two notes:
+  1. "one note states \"optimal ratio is 20 to 1\"" with subnotes: ["tested across 400 models", "cosine schedule used"]
+  2. "another note states \"kaplan tokens were suboptimal\"" with subnote: ["fixed learning rate flawed"]
+
+Record 5:
+- text: "Paper 2005.14165 from 2020 claimed \"Language models few-shot\", and the claim is supported."
+- verdict: "supported"
+- source: id: 2005.14165, year: 2020
+- notes: one note: "note says \"scaling curve is smooth\"" with subnotes: ["tested up to 175B", "in-context learning observed"]
+
+Now format each record line as:
+
+text|verdict|source_id|year|notes_record1|notes_record2|...
+
+Where source is a record with id and year. However, "source:record{id, year:int}" means source is a record with fields id and year. In the output, we need to include that nested? Or just include the source fields? The schema says "notes:list[record{text, subnotes:list[str]}]". So each note is a record with text and subnotes. The source itself is also a record. So the parent record includes fields: text, verdict, source {id, year}, notes list. So the order of fields in the parent record: text, verdict, source.id, source.year, notes. Or perhaps we need to include source as a nested record? The instruction: "A record{...} field adds its fields as extra columns, in order." So we can just list source.id and source.year as separate fields after verdict. That seems plausible.
+
+Thus each line:
+
+1. "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted., refuted, 2405.05254, 2024, notes|text=notes are from abstract only, subnotes=abstract mentions 32k limit, appendix B clarifies|text=table 3 contradicts, subnotes=llama 7b tested only"
+
+But need to escape quotes: they are using double quotes around the whole text. In the example they used "text|supported|text|~|". They didn't escape internal quotes? Actually they wrote: Example: text|supported|text|~| . That suggests they treat the text as a string, and quotes are part of the text. They didn't escape inner quotes. In the data, the text includes "Rope scaling hurts long ctx". No quotes inside. But there are quotes around the whole phrase. In the schema they used text as string, but we can include the phrase as is. Probably we need to include the text exactly as appears, maybe without surrounding quotes. The example shows "text|supported|text|~|" where the note "notes are from abstract only" is inside a pipe-separated list, not part of the text. The notes themselves are separate.
+
+Thus we need to produce each line accordingly.
+
+We must ensure no prose, no code fences. Provide data only.
+
+We need to handle line breaks and spaces/tabs at start or end: none. Use \r for line breaks. For each note, we need to start with \r then the note text, and if there are subnotes, they are separate lines? Actually they say: "List items go on the lines below their parent, starting with one > for its items, >> for theirs." But they also say "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |." So if the note text contains a line break, we need to start with \r then the text, then continue on new lines? But we can't have multiple lines in a single line? The format expects a single line, but we can embed line breaks using \r\n? But they said "start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |." This is ambiguous. Usually these tasks require that if the note text contains newline characters, they should be escaped as \r\n? However they didn't specify newline handling, but they mention "for text with line breaks". We have no line breaks in the notes; they are single line. So we can just write the note text as a single line, no internal line breaks. So we don't need \r.
+
+Thus each note line will be: text|subnotes|...
+
+But we must ensure each subnote is a separate record with its own text and subnotes list. The subnotes list is inside the note's record: subnotes:list[str]. In the example, they wrote "notes:list[record{text, subnotes:list[str]}]". So each note is a record with fields text and subnotes. So we need to represent each note as a record: text and subnotes array. However, the instruction says "notes:list[record{text, subnotes:list[str]}]". That suggests that notes is a list of such records. So we need to include each note as a separate record, not flatten them. So the parent record's notes field is a list of these note records. In the example, they wrote "notes:list[record{text, subnotes:list[str]}]". That's ambiguous but we can treat each note as a record.
+
+Thus the parent record includes notes: [note1, note2] etc. The order of notes may be as given.
+
+Thus final line: "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted., refuted, 2405.05254, 2024, notes|text=notes are from abstract only, subnotes=abstract mentions 32k limit, appendix B clarifies|text=table 3 contradicts, subnotes=llama 7b tested only"
+
+But need to escape quotes inside the text? The text includes "Rope scaling hurts long ctx". No quotes. So fine.
+
+Now we need to produce five lines.
+
+Make sure no extra spaces at ends. Each line ends with |.
+
+Let's construct each line carefully.
+
+Line1:
+
+Text: "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted."
+Verdict: refuted
+Source: id 2405.05254, year 2024
+Notes: two notes.
+
+We need to embed quotes around the phrase? The original includes quotes around the claim, but we can include the phrase without quotes. The text field is the claim statement, which includes "Rope scaling hurts long ctx". We could include the quotes as part of the text, but that would be ambiguous. The example shows they didn't include quotes around the inner text. I think we should include the claim without extra quotes. So text = "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted." Actually the phrase includes escaped quotes. In JSON, we would need to escape them, but they didn't escape in example. They wrote text|supported|text|~|. They didn't show any escaping. So we can include the quotes as part of the string. Let's include them: "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted." That includes the quotes. That would be okay.
+
+Thus:
+
+text|refuted|2405.05254|2024|notes|text=Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted., subnotes=abstract mentions 32k limit, appendix B clarifies|text=table 3 contradicts, subnotes=llama 7b tested only
+
+But we need to separate fields with |. There's no mention of using pipe for field separators inside subnotes, but we have subnotes as a list. We can separate subnotes with commas. The example used subnotes:list[record{text, subnotes:list[str]}] but they didn't show syntax. We'll just use pipe to separate items. The instruction: "values in schema order, separated by |, and every line ends with |." So we need to separate each field with |. The source fields are separate. So we have: text|verdict|source_id|year|notes. Then notes is a list of note records separated by |. Each note record is itself a pipe-separated list? Or we could embed as "notes|record1|record2". But the example didn't show nested. However they said "List items go on the lines below their parent, starting with one > for its items, >> for theirs." That's about bullet points, not about nested. So we can keep notes as a pipe-separated list of note strings. That might be acceptable.
+
+Thus final line:
+
+Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted.|refuted|2405.05254|2024|notes|text=Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted.|subnotes=abstract mentions 32k limit, appendix B clarifies|subnotes=llama 7b tested only
+
+Similarly for other lines.
+
+We need to ensure no extra spaces after pipes. The example: "text|supported|text|~|". They have no extra spaces. So we need to avoid spaces after pipes. But we have subnotes values that contain spaces. That's okay.
+
+We need to ensure each note line ends with |. Yes.
+
+Now line2:
+
+"In 2021, paper 2106.09685 made the claim \"LoRA matches full finetune\", and the verdict is supported."
+Verdict: supported
+Source: 2106.09685, 2021
+Notes: three notes.
+
+First note: "tested on GLUE and Wikisql" with subnotes: "rank 4 sufficient", "higher ranks show diminishing returns". So note text: "tested on GLUE and Wikisql". Subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"].
+
+Second note: "memory footprint reduced 3x" with subnote: "optimizer state minimal". So text: "memory footprint reduced 3x", subnote: ["optimizer state minimal"].
+
+Third note: "checkpoint size under 50MB" with no subnotes.
+
+Thus line2:
+
+"In 2021, paper 2106.09685 made the claim \"LoRA matches full finetune\", and the verdict is supported.|supported|2106.09685|2021|notes|text=tested on GLUE and Wikisql|subnotes=rank 4 sufficient, higher ranks show diminishing returns|text=memory footprint reduced 3x|subnotes=optimizer state minimal|notes=checkpoint size under 50MB"
+
+Line3:
+
+"Paper 2406.12345 claimed \"KV cache quant loses 2x acc\" in 2024, but the verdict is refuted."
+Verdict: refuted
+Source: 2406.12345, 2024
+Notes: one note: "outlier channels preserved", subnotes: "per-head scales help", "perplexity intact".
+
+Thus line3:
+
+"Paper 2406.12345 claimed \"KV cache quant loses 2x acc\" in 2024, but the verdict is refuted.|refuted|2406.12345|2024|notes|text=KV cache quant loses 2x acc in 2024, but the verdict is refuted.|subnotes=per-head scales help, perplexity intact"
+
+Line4:
+
+"Published in 2022, paper 2203.15556 claimed \"Chinchilla tokens beat params\", which is supported."
+Verdict: supported
+Source: 2203.15556, 2022
+Notes: two notes:
+1. "optimal ratio is 20 to 1", subnotes: "tested across 400 models", "cosine schedule used"
+2. "kaplan tokens were suboptimal", subnote: "fixed learning rate flawed"
+
+Thus line4:
+
+"Published in 2022, paper 2203.15556 claimed \"Chinchilla tokens beat params\", which is supported.|supported|2203.15556|2022|notes|text=Published in 2022, paper 2203.15556 claimed \"Chinchilla tokens beat params\", which is supported.|subnotes=optimal ratio is 20 to 1, tested across 400 models, cosine schedule used|subnotes=fixed learning rate flawed"
+
+Line5:
+
+"Paper 2005.14165 from 2020 claimed \"Language models few-shot\", and the claim is supported."
+Verdict: supported
+Source: 2005.14165, 2020
+Notes: one note: "scaling curve is smooth", subnotes: "tested up to 175B", "in-context learning observed"
+
+Thus line5:
+
+"Paper 2005.14165 from 2020 claimed \"Language models few-shot\", and the claim is supported.|supported|2005.14165|2020|notes|text=Language models few-shot|subnotes=tested up to 175B, in-context learning observed"
+
+Check for any missing fields. Ensure each note has subnotes list. Yes.
+
+Now ensure no extra spaces. The lines start with the text, then pipe, etc. The subnotes values have commas separating subnote texts, but no extra spaces. That's fine.
+
+Now produce final answer with five lines, no extra commentary.

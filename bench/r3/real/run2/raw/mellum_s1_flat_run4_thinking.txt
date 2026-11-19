@@ -1,0 +1,85 @@
+We need to parse the user's instruction.
+
+We have a schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+
+We need to produce data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+So each line should end with a trailing | after the last value. The values are: id, title, verdict, year, verified.
+
+We have 5 claims listed:
+
+1. Claim 2405.05254: title 'Rope scaling hurts long ctx', published in 2024, verdict refuted, verified false.
+2. Claim 1706.03762: title 'Attention is all you need', published in 2017, verdict supported, verified true.
+3. Claim 2106.09685: title 'LoRA low rank adaptation', published in 2021, verdict supported, verified true.
+4. Claim 2309.06180: title 'Mistral 7B architecture', published in 2023, verdict supported, verified true.
+5. Claim 2401.04088: title 'DeepSeekMoE mixture experts', published in 2024, verdict supported, verified true.
+
+We need to extract id, title, verdict, year, verified.
+
+The id is the claim identifier: e.g., 2405.05254, 1706.03762, etc.
+
+The title is given in quotes: 'Rope scaling hurts long ctx', etc. We need to escape | and \ inside the value. Also need to handle line breaks, spaces, tabs, etc. The titles seem to be simple strings without line breaks. But we need to be careful: if there are spaces at start or end, we need to prefix with \r and keep exactly. However, the titles appear to be normal strings without leading/trailing spaces. So we can just put the title as is, escaping any | or \ characters. There are no | in titles. So we can just put the title text.
+
+But we need to ensure that if the title contains | or \, we replace them with \| and \ respectively? Actually the instruction: "Inside a value, write \| for | and \ for \." So if the value contains a literal | character, we need to write \| to represent it. Similarly, if the value contains a literal \ character, we need to write \ for it. But the titles don't contain these characters. So we can just write the title as is.
+
+The verdict is one of supported, refuted, unverified. We have refuted for first, supported for others.
+
+Year is int: 2024, 2017, 2021, 2023, 2024.
+
+Verified is bool: false, true, true, true, true. Represent as 1 or 0. So false => 0, true => 1.
+
+Thus we need to produce lines like:
+
+id|title|verdict|year|verified|
+
+But note: The schema order is id, title, verdict, year, verified. Yes.
+
+And each line ends with |. So after verified value, we put |.
+
+Also need to handle null values with ~. None of these are null.
+
+Now we need to ensure proper escaping for title if it contains | or \. Not needed.
+
+But we need to be careful about the title string: It is given in quotes, but we should not include the quotes in the value? The example in the instruction: "Example: text|text|supported|7|~|" suggests that the title field would contain the text without quotes. The claim description includes title 'Rope scaling hurts long ctx'. So the title is Rope scaling hurts long ctx. We should extract that without quotes.
+
+Thus for first claim: id=2405.05254, title=Rope scaling hurts long ctx, verdict=refuted, year=2024, verified=0.
+
+Second: id=1706.03762, title=Attention is all you need, verdict=supported, year=2017, verified=1.
+
+Third: id=2106.09685, title=LoRA low rank adaptation, verdict=supported, year=2021, verified=1.
+
+Fourth: id=2309.06180, title=Mistral 7B architecture, verdict=supported, year=2023, verified=1.
+
+Fifth: id=2401.04088, title=DeepSeekMoE mixture experts, verdict=supported, year=2024, verified=1.
+
+Now we need to format each line:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+
+1706.03762|Attention is all you need|supported|2017|1|
+
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+
+2309.06180|Mistral 7B architecture|supported|2023|1|
+
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+But we need to check if any title contains | or \. None do.
+
+Also need to check if any title has leading/trailing spaces or line breaks. Not in this case.
+
+Thus the output should be these five lines, each ending with |.
+
+No header row.
+
+No prose.
+
+Thus final answer:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+1706.03762|Attention is all you need|supported|2017|1|
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+2309.06180|Mistral 7B architecture|supported|2023|1|
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+But we need to ensure that the verdict enum values

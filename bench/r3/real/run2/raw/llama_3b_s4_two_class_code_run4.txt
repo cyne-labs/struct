@@ -1,0 +1,13 @@
+~|~|
+~|1. File 'lib.rs' at path 'src/lib.rs'. Patch for 'lib.rs' at line 10 with code: 
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}|~|
+~|2. File 'util.rs' at path 'src/util.rs'. Patch for 'util.rs' at line 5 with code: 
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}|~|
+~|3. File 'main.rs' at path 'src/main.rs'. Patch for 'main.rs' at line 1 with code: 
+fn main() {
+    println!("Hello, world!");
+}|~|

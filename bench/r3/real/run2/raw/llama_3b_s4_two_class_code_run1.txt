@@ -1,0 +1,10 @@
+name|~|~|
+file_name|lib.rs|src/lib.rs|
+file_name|util.rs|src/util.rs|
+file_name|main.rs|src/main.rs|
+code|pub fn add(a: i32, b: i32) -> i32 |\r|a + b\r|~|
+line|10|~|
+code|pub fn greet(name: &str) -> String |\r|format!("Hello, {}!", name)\r|~|
+line|5|~|
+code|fn main |\r|{} |\r|~|
+line|1|~|

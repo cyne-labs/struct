@@ -1,0 +1,10 @@
+1. id:2405.05254|year:2024|supported|~|text|~|\rRope scaling hurts long ctx\r|~|
+  |notes|>  - Note text 'notes are from abstract only', with subnotes 'abstract mentions 32k limit' and 'appendix B clarifies'\r|>>  - Note text 'table 3 contradicts', with subnote 'llama 7b tested only'\r|~|
+2. id:2106.09685|year:2021|supported|~|text|~|\rLoRA matches full finetune\r|~|
+  |notes|>  - Note text 'tested on GLUE and Wikisql', with subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'\r|>>  - Note text 'memory footprint reduced 3x', with subnote 'optimizer state minimal'\r|>>  - Note text 'checkpoint size under 50MB', with no subnotes\r|~|
+3. id:2406.12345|year:2024|refuted|~|text|~|\rKV cache quant loses 2x acc\r|~|
+  |notes|>  - Note text 'outlier channels preserved', with subnotes 'per-head scales help' and 'perplexity intact'\r|>>  - Note text 'perplexity lost 1x', with no subnotes\r|~|
+4. id:2203.15556|year:2022|supported|~|text|~|\rChinchilla tokens beat params\r|~|
+  |notes|>  - Note text 'optimal ratio is 20 to 1', with subnotes 'tested across 400 models' and 'cosine schedule used'\r|>>  - Note text 'kaplan tokens were suboptimal', with subnote 'fixed learning rate flawed'\r|~|
+5. id:2005.14165|year:2020|supported|~|text|~|\rLanguage models few-shot\r|~|
+  |notes|>  - Note text 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'\r|>>  - Note text 'in-context learning not stable', with no subnotes\r|~|

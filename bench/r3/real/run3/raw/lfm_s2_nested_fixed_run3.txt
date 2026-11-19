@@ -1,0 +1,6 @@
+
+Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024; it turned out to be false|refuted|record{2405.05254,2024}|0
+In 2017, paper 1706.03762 claimed 'Attention is all you need'; verification was true|supported|record{1706.03762,2017}|1
+Paper 2106.09685 made the claim 'LoRA low rank adaptation' in 2021; it was verified as true|supported|record{2106.09685,2021}|1
+In 2023, paper 2309.06180 claimed 'Mistral 7B architecture'; verification was true|supported|record{2309.06180,2023}|1
+In 2024, paper 2401.04088 made the claim 'DeepSeekMoE mixture experts'; verified as true|supported|record{2401.04088,2024}|1

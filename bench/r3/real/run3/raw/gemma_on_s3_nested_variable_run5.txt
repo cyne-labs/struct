@@ -1,0 +1,5 @@
+1|refuted|Rope scaling hurts long ctx|{id:2405.05254,year:2024}|{notes:[{text: \rnotes are from abstract only\r,subnotes:[ \rabstract mentions 32k limit\r,\rappendix B clarifies]}, {text: \rtable 3 contradicts\r},subnotes:[ \rllama 7b tested only]}]}
+2|supported|LoRA matches full finetune|{id:2106.09685,year:2021}|{notes:[{text: \rtested on GLUE and Wikisql\r},subnotes:[ \rrank 4 sufficient\r,\rhigher ranks show diminishing returns]}, {text: \rmemory footprint reduced 3x\r},subnotes:[ \roptimizer state minimal]}, {text: \rcheckpoint size under 50MB\r}]}
+3|refuted|KV cache quant loses 2x acc|{id:2406.12345,year:2024}|{notes:[{text: \routlier channels preserved\r},subnotes:[ \rper-head scales help\r,\rperplexity intact]}]}
+4|supported|Chinchilla tokens beat params|{id:2203.15556,year:2022}|{notes:[{text: \rouptimal ratio is 20 to 1\r},subnotes:[ \rtested across 400 models\r,\rcosine schedule used]}, {text: \rkaplan tokens were suboptimal\r},subnotes:[ \rfixed learning rate flawed]}]}
+5|supported|Language models few-shot|{id:2005.14165,year:2020}|{notes:[{text: \rscaling curve is smooth\r},subnotes:[ \rtested up to 175B\r,\rin-context learning observed]}]}

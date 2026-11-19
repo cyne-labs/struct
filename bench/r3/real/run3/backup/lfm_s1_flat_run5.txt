@@ -1,0 +1,6 @@
+
+Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0
+Paper 1706.03762|Attention is all you need|supported|2017|1
+Paper 2106.09685|LoRA low rank adaptation|supported|2021|1
+Paper 2309.06180|Mistral 7B architecture|supported|2023|1
+Paper 2401.04088|DeepSeekMoE mixture experts|supported|2024|1

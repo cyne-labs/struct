@@ -1,0 +1,56 @@
+We need to produce data only in Struct format, no prose, no code fences. The schema: schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to output records per line, values in schema order, separated by |, and every line ends with |. The first line is already data. So each line is a record: presumably fields: text, verdict, source.id, source.year, verified. Wait schema: claim has fields: text, verdict:enum, source:record{id, year:int}, verified:bool. So order: text, verdict, source.id, source.year, verified. Because source is a record with fields id and year, added as extra columns after verdict? The description: "A record{...} field adds its fields as extra columns, in order." So for each claim record, we have fields: text, verdict, then fields from source record: id, year, then verified. So total 5 columns: text, verdict, source.id, source.year, verified.
+
+We need to produce Struct records? Actually they want "Reply with data only in Struct format: no prose, no code fences." The example given: "Example: text|supported|text|7|~|" That seems to be a record with fields: text, verdict, source.id, source.year, verified? Wait example: "text|supported|text|7|~|" Let's parse: They have text value "text", verdict "supported", source.id "text"? That seems odd. Maybe the example is just illustrative: first field is text, second verdict, third source.id, fourth source.year, fifth verified. In the example, they put "text" as source.id? Actually example: "text|supported|text|7|~|". So field1 = "text" (the claim text?), field2 = "supported" (verdict), field3 = "text" (source id?), field4 = "7" (source year), field5 = "~" (verified null). That seems mismatched. But maybe the example is just placeholder. However we must follow the schema: text, verdict, source.id, source.year, verified.
+
+We have 5 claims listed in the prompt:
+
+1. Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false.
+2. Claim 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true.
+3. Claim 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true.
+4. Claim 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true.
+5. Claim 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true.
+
+We need to output each as a record line: text|verdict|source.id|source.year|verified
+
+Text should be the claim text, but we need to handle quotes? The claim text is given in single quotes, but we should probably include the text without quotes? The example didn't include quotes. We'll use the claim text as given, but need to escape | and \ if present. None of these texts contain | or \ or line breaks. So fine.
+
+Verdict must be one of supported, refuted, unverified. We have refuted for first, supported for others.
+
+Source id is the given id string, e.g., 2405.05254. Year is integer: 2024, 2017, etc.
+
+Verified is bool: 1 or 0. false => 0, true => 1.
+
+So produce lines:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0
+Attention is all you need|supported|1706.03762|2017|1
+LoRA low rank adaptation|supported|2106.09685|2021|1
+Mistral 7B architecture|supported|2309.06180|2023|1
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1
+
+But need to ensure each line ends with |. The example ended with | after each value? They wrote "text|supported|text|7|~|" notice trailing | at end. So we must add a trailing | after verified value. So format: text|verdict|source.id|source.year|verified|
+
+Thus each line: Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+Similarly others.
+
+Also need to handle escaping if needed. No | in values, so fine.
+
+Thus output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check trailing | after each verified value. Yes.
+
+No extra headers or prose. Just these lines.
+
+Make sure no extra spaces. Use exactly as above.
+
+Let's produce.
+</think>

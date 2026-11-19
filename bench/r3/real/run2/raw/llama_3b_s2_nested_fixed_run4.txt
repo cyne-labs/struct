@@ -1,0 +1,6 @@
+~|refuted|~|2024|~|false|
+\rRope scaling hurts long ctx|supported|\r\r|~|
+\rAttention is all you need|supported|\r\r|1706.03762|true|
+\rLoRA low rank adaptation|supported|\r\r|2106.09685|true|
+\rMistral 7B architecture|supported|\r\r|2309.06180|true|
+\rDeepSeekMoE mixture experts|supported|\r\r|2401.04088|true|

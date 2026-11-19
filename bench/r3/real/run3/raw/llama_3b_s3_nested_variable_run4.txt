@@ -1,0 +1,32 @@
+~|~|refuted|2024|~|~|
+\rPaper 2405.05254 claims \|Rope scaling hurts long ctx\| |supported|~|~|
+\rnotes >abstract mentions 32k limit \|abstract\|
+\rnotes >>appendix B clarifies \|subnotes\|
+\rnotes >>llama 7b tested only \|subnotes\|
+\r~|~|~|2021|~|~|
+\r~|~|supported|~|~|
+\rLoRA matches full finetune \|LoRA matches full finetune\|
+\rnotes >tested on GLUE and Wikisql \|subnotes\|
+\rnotes >>rank 4 sufficient \|subnotes\|
+\rnotes >>higher ranks show diminishing returns \|subnotes\|
+\rnotes >memory footprint reduced 3x \|subnotes\|
+\rnotes >>optimizer state minimal \|subnotes\|
+\rnotes >checkpoint size under 50MB \|subnotes\|
+\r~|~|refuted|2024|~|~|
+\rPaper 2406.12345 claims \|KV cache quant loses 2x acc\| |refuted|~|~|
+\rnotes >outlier channels preserved \|subnotes\|
+\rnotes >>per-head scales help \|subnotes\|
+\rnotes >>perplexity intact \|subnotes\|
+\r~|~|~|2022|~|~|
+\r~|~|supported|~|~|
+\rChinchilla tokens beat params \|Chinchilla tokens beat params\|
+\rnotes >optimal ratio is 20 to 1 \|subnotes\|
+\rnotes >>tested across 400 models \|subnotes\|
+\rnotes >>cosine schedule used \|subnotes\|
+\rnotes >kaplan tokens were suboptimal \|subnotes\|
+\r~|~|~|2020|~|~|
+\r~|~|supported|~|~|
+\rLanguage models few-shot \|Language models few-shot\|
+\rnotes >scaling curve is smooth \|subnotes\|
+\rnotes >>tested up to 175B \|subnotes\|
+\rnotes >>in-context learning observed \|subnotes\|

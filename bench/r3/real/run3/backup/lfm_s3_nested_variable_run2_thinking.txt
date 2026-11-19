@@ -1,0 +1,177 @@
+
+We need to produce a Struct record per line, with fields: schema:claim, verdict, source, notes. The schema includes claim (text), verdict (enum: supported, refuted, unknown), source (record with id, year), notes (list of record with text, subnotes). The notes field should contain entries each as a record with text, subnotes (list). For each claim, we need to include the notes exactly as described.
+
+We need to produce data only in Struct format: no prose, no code fences. No headers. The first line is already data.
+
+We must ensure ordering: The schema fields order: claim, verdict, source, notes. Within source, fields id, year. The first line is already data: presumably the first record? Actually the prompt: "Write these as Struct records." It lists five items. We need to output each as a line in that order, separated by pipes, with each field value. Let's interpret each bullet as a claim.
+
+We need to construct each record.
+
+First, define fields:
+
+- claim: text (string). Should contain the claim sentence. For each record, we need to capture the claim. For example:
+
+1. "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted." So claim: "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted."
+
+2. "In 2021, paper 2106.09685 made the claim 'LoRA matches full finetune', and the verdict is supported." So claim: "In 2021, paper 2106.09685 made the claim 'LoRA matches full finetune', and the verdict is supported."
+
+3. "Paper 2406.12345 made the claim 'KV cache quant loses 2x acc' in 2024, but the verdict is refuted."
+
+4. "Published in 2022, paper 2203.15556 claimed 'Chinchilla tokens beat params', which is supported."
+
+5. "Paper 2005.14165 from 2020 claimed 'Language models few-shot', and the claim is supported."
+
+Now verdict: For each, we need to assign based on description.
+
+1: claim refuted => verdict: refuted.
+
+2: verdict supported => supported.
+
+3: refuted => refuted.
+
+4: supported => supported.
+
+5: supported => supported.
+
+Now source: record with id and year. For each:
+
+1: id: "Paper 2405.05254", year: 2024.
+
+2: id: "paper 2106.09685", year: 2021.
+
+3: id: "Paper 2406.12345", year: 2024.
+
+4: id: "paper 2203.15556", year: 2022.
+
+5: id: "Paper 2005.14165", year: 2020.
+
+Now notes: list of record(s) with text and subnotes.
+
+We need to capture each note.
+
+Item 1: "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". So notes should be a list of two records:
+
+- First note: text: "notes are from abstract only", subnotes: ["abstract mentions 32k limit"]
+
+- Second note: text: "appendix B clarifies", subnotes: [""]? Actually subnotes: "llama 7b tested only". Wait the description: "A note says 'table 3 contradicts', with the subnote 'llama 7b tested only'." That's for record 1. So subnotes: ["llama 7b tested only"].
+
+Thus notes list:
+
+{
+  "text": "notes are from abstract only",
+  "subnotes": ["abstract mentions 32k limit", "appendix B clarifies"]
+}
+{
+  "text": "appendix B clarifies",
+  "subnotes": ["llama 7b tested only"]
+}
+
+But we need to ensure order: The original says: "A note says 'notes are from abstract only', with two subnotes: ... and 'appendix B clarifies'. A second note says 'table 3 contradicts', with the subnote 'llama 7b tested only'." So yes.
+
+Item 2: "first note is 'tested on GLUE and Wikisql', with subnotes 'rank 4 sufficient' and 'higher ranks show diminishing returns'. The second note is 'memory footprint reduced 3x', with subnote 'optimizer state minimal'. The third note is 'checkpoint size under 50MB', without any subnotes."
+
+Thus notes list:
+
+First note: text: "tested on GLUE and Wikisql", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+
+Second note: text: "memory footprint reduced 3x", subnotes: ["optimizer state minimal"]
+
+Third note: text: "checkpoint size under 50MB", subnotes: [] (empty list)
+
+Item 3: "first note is 'outlier channels preserved', with subnote 'per-head scales help' and 'perplexity intact'." So notes:
+
+{
+ "text": "outlier channels preserved",
+ "subnotes": ["per-head scales help", "perplexity intact"]
+}
+
+Item 4: "one note states 'optimal ratio is 20 to 1', with subnotes 'tested across 400 models' and 'cosine schedule used'. Another note states 'kaplan tokens were suboptimal', with subnote 'fixed learning rate flawed'." So notes:
+
+First note: text: "optimal ratio is 20 to 1", subnotes: ["tested across 400 models", "cosine schedule used"]
+
+Second note: text: "kaplan tokens were suboptimal", subnotes: ["fixed learning rate flawed"]
+
+Item 5: "There is a note 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'." So notes:
+
+{
+ "text": "scaling curve is smooth",
+ "subnotes": ["tested up to 175B", "in-context learning observed"]
+}
+
+Now we need to combine into each record line: fields in order: claim, verdict, source, notes. According to schema: claim{text, verdict:enum..., source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}. So we need to include source as an object with id and year. So each line:
+
+Record1:
+claim: "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted."
+verdict: "refuted"
+source: {id: "Paper 2405.05254", year: 2024}
+notes: [ {text: "...", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]}, {text: "...", subnotes: ["llama 7b tested only"]} ]
+
+Record2:
+claim: "In 2021, paper 2106.09685 made the claim 'LoRA matches full finetune', and the verdict is supported."
+verdict: "supported"
+source: {id: "paper 2106.09685", year: 2021}
+notes: [ {text: "...", subnotes: ["tested on GLUE and Wikisql", "higher ranks show diminishing returns"]}, {text: "...", subnotes: ["memory footprint reduced 3x"]}, {text: "...", subnotes: ["optimizer state minimal"]} ]
+
+Record3:
+claim: "Paper 2406.12345 made the claim 'KV cache quant loses 2x acc' in 2024, but the verdict is refuted."
+verdict: "refuted"
+source: {id: "Paper 2406.12345", year: 2024}
+notes: [ {text: "...", subnotes: ["outlier channels preserved", "per-head scales help", "perplexity intact"]}, {text: "...", subnotes: ["perplexity intact"? Wait careful: second note: text "kaplan tokens were suboptimal", subnote "fixed learning rate flawed". So subnotes: ["fixed learning rate flawed"] } ]
+
+But we need to ensure proper ordering: The subnotes are separate. So we have two notes: first note subnotes ["per-head scales help", "perplexity intact"]; second note subnote ["fixed learning rate flawed"].
+
+Record4:
+claim: "Published in 2022, paper 2203.15556 claimed 'Chinchilla tokens beat params', which is supported."
+verdict: "supported"
+source: {id: "paper 2203.15556", year: 2022}
+notes: [ {text: "One note states 'optimal ratio is 20 to 1'...", subnotes: ["tested across 400 models", "cosine schedule used"]; second note: "The third note is 'memory footprint reduced 3x', with subnote 'optimizer state minimal'" Actually third note: "Another note is 'checkpoint size under 50MB', without any subnotes." So we have two notes.
+
+Record5:
+claim: "Paper 2005.14165 from 2020 claimed 'Language models few-shot', and the claim is supported."
+verdict: "supported"
+source: {id: "Paper 2005.14165", year: 2020}
+notes: [ {text: "There is a note 'scaling curve is smooth'...", subnotes: ["tested up to 175B", "in-context learning observed"]}, {text: "There is a note 'scaling curve is smooth'..." Wait there are two notes? Actually only one note? The description: "There is a note 'scaling curve is smooth', with subnotes 'tested up to 175B' and 'in-context learning observed'." So just one note. So notes list contains a single record.
+
+Thus final output: each line is a Struct object with fields separated by commas, fields order: claim, verdict, source, notes. Ensure no extra spaces? Usually JSON-like but they didn't ask for JSON; they said "struct format". The example shows fields in order, but no quotes. We'll produce something like:
+
+claim{text:"Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted.", verdict:refuted, source:{id:"Paper 2405.05254",year:2024}, notes:[{text:"notes are from abstract only",subnotes:["abstract mentions 32k limit","appendix B clarifies"]},{text:"appendix B clarifies",subnotes:["llama 7b tested only"]}]
+
+But we need to ensure quotes and commas correct. Also need to escape double quotes inside text? The example uses | as separator, but they want pipe separation not necessarily JSON. The instruction: "Reply with data only in Struct format: no prose, no code fences." They gave an example of a record with pipe separation. However they also gave example of a note: text|supported|text|~|. That's a different format. But they want "struct format". Possibly they want something like:
+
+claim{text:"...", verdict:refuted, source:{id:"...", year:...}, notes:[{text:"...", subnotes:["...",...]}]
+
+We'll produce that.
+
+Make sure there are no extra spaces at line ends. Each line ends with |. So final output will be five lines, each ending with |.
+
+Let's craft them carefully.
+
+Line 1:
+
+claim{text:"Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024, but the claim was refuted.", verdict:refuted, source:{id:"Paper 2405.05254",year:2024}, notes:[{text:"notes are from abstract only",subnotes:["abstract mentions 32k limit","appendix B clarifies"]},{text:"appendix B clarifies",subnotes:["llama 7b tested only"]} |
+
+Line 2:
+
+claim{text:"In 2021, paper 2106.09685 made the claim 'LoRA matches full finetune', and the verdict is supported.", verdict:supported, source:{id:"paper 2106.09685",year:2021}, notes:[{text:"tested on GLUE and Wikisql",subnotes:["rank 4 sufficient","higher ranks show diminishing returns"]},{text:"memory footprint reduced 3x",subnotes:["optimizer state minimal"]},{text:"checkpoint size under 50MB",subnotes:[]}] |
+
+Line 3:
+
+claim{text:"Paper 2406.12345 made the claim 'KV cache quant loses 2x acc' in 2024, but the verdict is refuted.", verdict:refuted, source:{id:"Paper 2406.12345",year:2024}, notes:[{text:"outlier channels preserved",subnotes:["per-head scales help","perplexity intact"]},{text:"kaplan tokens were suboptimal",subnotes:["fixed learning rate flawed"]}] |
+
+Line 4:
+
+claim{text:"Published in 2022, paper 2203.15556 claimed 'Chinchilla tokens beat params', which is supported.", verdict:supported, source:{id:"paper 2203.15556",year:2022}, notes:[{text:"optimal ratio is 20 to 1",subnotes:["tested across 400 models","cosine schedule used"]},{text:"checkpoint size under 50MB",subnotes:[]}] |
+
+Line 5:
+
+claim{text:"Paper 2005.14165 from 2020 claimed 'Language models few-shot', and the claim is supported.", verdict:supported, source:{id:"Paper 2005.14165",year:2020}, notes:[{text:"scaling curve is smooth",subnotes:["tested up to 175B","in-context learning observed"]}] |
+
+Make sure each line ends with |. No extra spaces after final pipe? Probably okay.
+
+Check for any missing commas: after each field, before next. In JSON-like, we need commas between fields. The last field before notes is notes:, then a comma, then notes: [ ... ]. That's fine.
+
+We need to ensure we didn't include extra quotes inside text. The claim text includes single quotes, which is fine. The subnotes contain words with apostrophes? "llama 7b tested only" no issues. "fixed learning rate flawed" fine. "tested across 400 models" etc.
+
+Make sure no stray spaces before commas. Provide exactly as lines.
+
+Let's produce.

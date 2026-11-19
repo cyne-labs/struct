@@ -1,0 +1,181 @@
+We need to parse the problem. We have a schema:
+
+schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to produce records in Struct format: one record per line, values in schema order, separated by |, and every line ends with |.
+
+The order of fields: The top-level fields are text, verdict, source, verified? Wait schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+So the claim object has fields: text, verdict, source, verified.
+
+But source is a record with fields id and year. So in the flat record per line, we need to include fields in order: text, verdict, source.id, source.year, verified? Or maybe source is a nested record, and its fields are added as extra columns after source fields? The description: "A record{...} field adds its fields as extra columns, in order." So for each claim record, we have fields: text, verdict, source (which is a record{id, year:int}), verified. But the source record's fields are added as extra columns. So the order would be: text, verdict, source.id, source.year, verified.
+
+But we need to confirm from the example they gave: They gave an example line: "1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted."
+
+We need to construct a record for each of the 5 items.
+
+We need to extract:
+
+- text: the claim text? Probably the claim itself, e.g., "Rope scaling hurts long ctx"? Or the statement from the paper? The example in the problem statement: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." So the text is likely the claim string: "Rope scaling hurts long ctx". But we need to be careful: The text field in the schema is the claim text. So we should put the claim text as it appears in quotes. For each item, we need to extract the claim text.
+
+- verdict: enum supported, refuted, unverified. Based on the description: For item 1, it's refuted. Item 2: supported. Item 3: supported. Item 4: supported. Item 5: supported.
+
+- source: record{id, year}. id is the paper ID, e.g., "2405.05254". year is the year of the paper, e.g., 2024 for the first, 2017 for the second, 2021 for the third, 2023 for the fourth, 2024 for the fifth.
+
+- verified: bool. The description says: "In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported." So verified is true (1). For the others, we need to see if verified is mentioned. For item 1: "it turned out to be false, so the claim is refuted." It doesn't explicitly say verification was true or false, but we might infer that the claim was verified? The instruction says: "verified:bool". We need to determine verified value for each record. The problem statement gives some info: For item 2, "verification was true". For item 3, "it was verified as true". For item 4, "verification was true". For item 5, not explicitly mentioned, but likely true as well? Actually item 5: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported." Wait the description for item 5 in the bullet points: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported." Yes, it says verified as true. So all items except maybe the first have verified true. Item 1: "it turned out to be false, so the claim is refuted." It doesn't explicitly say verified, but we can assume it was verified? The phrase "it turned out to be false" suggests that verification happened and found it false. So verified is true as well. But we need to be careful: The schema includes verified:bool. We need to set it to 1 if verified, 0 if not verified. The problem statements for items 2-5 explicitly mention verification was true. For item 1, it says "it turned out to be false", which implies verification occurred and found it false. So verified should be 1 as well. However, we need to check if any item is unverified. None are unverified. So all verified = 1.
+
+But we need to confirm from the initial description: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." This suggests that the claim was evaluated and found false, so verified = true. So all verified = 1.
+
+Now we need to construct each record line with fields in order: text, verdict, source.id, source.year, verified.
+
+But we need to ensure the format: values separated by |, and every line ends with |. So each line will be: text|verdict|source.id|source.year|verified|
+
+But we need to handle text that may contain | or \r etc. The text field may contain line breaks or special characters. We need to escape them according to the rules: Inside a value, write \| for | and \ for \. For line breaks, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break until the closing |.
+
+Wait the instruction: "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break until the closing |."
+
+So if the text contains line breaks or leading/trailing spaces/tabs, we need to prefix the value with \r (which is a backslash then r?) Actually they say: "start the value with \r, then write it exactly as it is". In the example they gave earlier: "1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." That's not an example of text formatting. They gave an example earlier in the prompt: "Example: text|supported|text|7|~|". That's just an example of the record format, not of text with line breaks.
+
+But we need to handle the text field if it contains special characters. The claim texts are simple: "Rope scaling hurts long ctx", "Attention is all you need", "LoRA low rank adaptation", "Mistral 7B architecture", "DeepSeekMoE mixture experts". These don't contain | or \r or line breaks. So we can just put the text as is, without prefix \r. However, we need to check if any text has leading/trailing spaces or tabs. Probably not.
+
+But we need to be careful: The text field is the claim text, which is inside quotes in the description. For example, "Rope scaling hurts long ctx". Should we include the quotes? Probably not; the claim text is the content inside the quotes, without the quotes. Usually the claim text would be the statement itself, without the surrounding quotes. But we need to infer from the data. The bullet points mention the claim text indirectly. For item 1: "Rope scaling hurts long ctx". For item 2: "Attention is all you need". For item 3: "LoRA low rank adaptation". For item 4: "Mistral 7B architecture". For item 5: "DeepSeekMoE mixture experts". So we can use those strings.
+
+Now we need to produce the records.
+
+Let's list each item:
+
+1. text: "Rope scaling hurts long ctx"
+   verdict: refuted
+   source.id: "2405.05254"
+   source.year: 2024
+   verified: 1 (true)
+
+2. text: "Attention is all you need"
+   verdict: supported
+   source.id: "1706.03762"
+   source.year: 2017
+   verified: 1
+
+3. text: "LoRA low rank adaptation"
+   verdict: supported
+   source.id: "2106.09685" (Wait the bullet says Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021. So id is 2106.09685)
+   source.year: 2021
+   verified: 1
+
+4. text: "Mistral 7B architecture"
+   verdict: supported
+   source.id: "2309.06180" (Paper 2309.06180 claimed "Mistral 7B architecture" in 2023)
+   source.year: 2023
+   verified: 1
+
+5. text: "DeepSeekMoE mixture experts"
+   verdict: supported
+   source.id: "2401.04088"
+   source.year: 2024
+   verified: 1
+
+Check item 3: The bullet says "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported." So id is 2106.09685, year 2021.
+
+Item 4: "In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported." So id 2309.06180, year 2023.
+
+Item 5: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported." So id 2401.04088, year 2024.
+
+Now we need to format each line: text|verdict|source.id|source.year|verified|
+
+But we need to ensure that the verdict enum values are exactly one of the listed labels: supported, refuted, unverified. So we use "refuted" for item 1, "supported" for others.
+
+Verified is bool: 1 for true, 0 for false. All are true, so 1.
+
+Now we need to escape any | in the text. None have |. So fine.
+
+Now we need to produce the lines. Each line ends with |. So format: text|verdict|source.id|source.year|verified|
+
+Let's write each line:
+
+1. Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+
+But we need to check if the text should be quoted or not. Probably not. The text is the claim statement. It doesn't contain quotes. So "Rope scaling hurts long ctx" without quotes.
+
+2. Attention is all you need|supported|1706.03762|2017|1|
+
+3. LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+4. Mistral 7B architecture|supported|2309.06180|2023|1|
+
+5. DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Now we need to ensure that the fields are separated by | and each line ends with |. So each line ends with a trailing | after the verified value.
+
+Thus lines:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+But we need to check if any text has line breaks or special characters requiring \r prefix. None.
+
+Now we need to ensure that the record{...} field adds its fields as extra columns, in order. We have source.id and source.year as extra columns after source? Wait the schema: claim{text, verdict:enum(...), source:record{id, year:int}, verified:bool}
+
+So the fields in order for a claim record are: text, verdict, source.id, source.year, verified.
+
+But the source is a record, so its fields are added as extra columns. So the order is: text, verdict, source.id, source.year, verified.
+
+We have that.
+
+Now we need to output one record per line, values separated by |, ending with |.
+
+Thus the output should be exactly those five lines.
+
+But we need to check if there is any header or anything. The instruction says: "Never write a header row or column names. The first line is already data." So no header.
+
+Thus the answer is just the five lines.
+
+But we need to ensure that we use the correct enum values: "refuted" and "supported". Yes.
+
+Now we need to double-check the verified field: All are true, so 1.
+
+But is there any chance that item 1 is not verified? The phrase "it turned out to be false" implies verification happened, so verified true. So 1.
+
+Thus final answer:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+But we need to ensure that the text fields are exactly as they appear, including any punctuation. For item 1, the claim text is "Rope scaling hurts long ctx". No quotes. For item 2, "Attention is all you need". For item 3, "LoRA low rank adaptation". For item 4, "Mistral 7B architecture". For item 5, "DeepSeekMoE mixture experts". These seem correct.
+
+Now check for any special characters that need escaping: None.
+
+Thus final output.
+
+But we need to ensure that each line ends with |. Yes, we have trailing | after verified.
+
+Thus final answer is those five lines.
+
+We should not include any additional text or code fences.
+
+Thus produce:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Wait, check the source.id for item 3: The bullet says "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021". So id is 2106.09685. Good.
+
+Item 4: id 2309.06180.
+
+Item 5: id 2401.04088.
+
+All good.
+
+Now we need to ensure that the year for item 3 is 2021, item 4 is 2023, item 5 is 2024.
+
+Yes.
+
+Thus final answer.

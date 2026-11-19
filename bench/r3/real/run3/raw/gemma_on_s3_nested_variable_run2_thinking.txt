@@ -1,0 +1,116 @@
+The user wants me to extract information from the provided text and format it into a specific schema:
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+
+I need to output the data only in Struct format, no prose, no code fences.
+The format rules are strict:
+1. No header row or column names.
+2. One record per line.
+3. Values separated by |.
+4. Every line ends with |.
+5. `~` for null.
+6. `bool` is 1 or 0.
+7. Enum values must be exact labels (supported, refuted, unknown).
+8. Inside values: `|` for `|` and `\` for `\`.
+9. List items follow the parent using `>`. Sublist items follow the parent using `>>`.
+10. Handle text with line breaks, spaces, tabs: start the value with `\r` and keep formatting exactly.
+
+Let's process each input point.
+
+---
+Point 1: Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only".
+
+Claim Text: "Rope scaling hurts long ctx"
+Verdict: refuted
+Source ID: 2405.05254, Year: 2024
+Notes:
+1. "notes are from abstract only" (Subnotes: "abstract mentions 32k limit", "appendix B clarifies")
+2. "table 3 contradicts" (Subnote: "llama 7b tested only")
+
+---
+Point 2: In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported. The first note is "tested on GLUE and Wikisql", with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns". The second note is "memory footprint reduced 3x", with the subnote "optimizer state minimal". The third note is "checkpoint size under 50MB", without any subnotes.
+
+Claim Text: "LoRA matches full finetune"
+Verdict: supported
+Source ID: 2106.09685, Year: 2021
+Notes:
+1. "tested on GLUE and Wikisql" (Subnotes: "rank 4 sufficient", "higher ranks show diminishing returns")
+2. "memory footprint reduced 3x" (Subnote: "optimizer state minimal")
+3. "checkpoint size under 50MB" (No subnotes)
+
+---
+Point 3: Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with subnotes "per-head scales help" and "perplexity intact".
+
+Claim Text: "KV cache quant loses 2x acc"
+Verdict: refuted
+Source ID: 2406.12345, Year: 2024
+Notes:
+1. "outlier channels preserved" (Subnotes: "per-head scales help", "perplexity intact")
+
+---
+Point 4: Published in 2022, paper 2203.15556 claimed "Chinchilla tokens beat params", which is supported. One note states "optimal ratio is 20 to 1", with subnotes "tested across 400 models" and "cosine schedule used". Another note states "kaplan tokens were suboptimal", with the subnote "fixed learning rate flawed".
+
+Claim Text: "Chinchilla tokens beat params"
+Verdict: supported
+Source ID: 2203.15556, Year: 2022
+Notes:
+1. "optimal ratio is 20 to 1" (Subnotes: "tested across 400 models", "cosine schedule used")
+2. "kaplan tokens were suboptimal" (Subnote: "fixed learning rate flawed")
+
+---
+Point 5: Paper 2005.14165 from 2020 claimed "Language models few-shot", and the claim is supported. There is a note "scaling curve is smooth", with subnotes: "tested up to 175B" and "in-context learning observed".
+
+Claim Text: "Language models few-shot"
+Verdict: supported
+Source ID: 2005.14165, Year: 2020
+Notes:
+1. "scaling curve is smooth" (Subnotes: "tested up to 175B", "in-context learning observed")
+
+---
+Now, I will construct the final output strictly following the requested format rules.
+
+---
+Step 1: Process Point 1
+text: "Rope scaling hurts long ctx"
+verdict: refuted
+source: id=2405.05254, year=2024
+notes:
+  1. text: "notes are from abstract only", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+  2. text: "table 3 contradicts", subnotes: ["llama 7b tested only"]
+
+---
+Step 2: Process Point 2
+text: "LoRA matches full finetune"
+verdict: supported
+source: id=2106.09685, year=2021
+notes:
+  1. text: "tested on GLUE and Wikisql", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+  2. text: "memory footprint reduced 3x", subnotes: ["optimizer state minimal"]
+  3. text: "checkpoint size under 50MB"
+
+---
+Step 3: Process Point 3
+text: "KV cache quant loses 2x acc"
+verdict: refuted
+source: id=2406.12345, year=2024
+notes:
+  1. text: "outlier channels preserved", subnotes: ["per-head scales help", "perplexity intact"]
+
+---
+Step 4: Process Point 4
+text: "Chinchilla tokens beat params"
+verdict: supported
+source: id=2203.15556, year=2022
+notes:
+  1. text: "optimal ratio is 20 to 1", subnotes: ["tested across 400 models", "cosine schedule used"]
+  2. text: "kaplan tokens were suboptimal", subnotes: ["fixed learning rate flawed"]
+
+---
+Step 5: Process Point 5
+text: "Language models few-shot"
+verdict: supported
+source: id=2005.14165, year=2020
+notes:
+  1. text: "scaling curve is smooth", subnotes: ["tested up to 175B", "in-context learning observed"]
+
+---
+Final Output Generation.

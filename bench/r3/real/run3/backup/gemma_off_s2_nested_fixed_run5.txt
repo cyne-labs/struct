@@ -1,0 +1,5 @@
+text|refuted|source|1|0|
+Attention is all you need|supported|record|1706.03762|2017|
+LoRA low rank adaptation|supported|record|2106.09685|2021|
+Mistral 7B architecture|supported|record|2309.06180|2023|
+DeepSeekMoE mixture experts|supported|record|2401.04088|2024|

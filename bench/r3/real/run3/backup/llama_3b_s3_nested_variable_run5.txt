@@ -1,0 +1,27 @@
+~|text| supported |~|
+~|text| Rope scaling hurts long ctx |~|
+~|text| LoRA matches full finetune |supported|~|
+~|text| KV cache quant loses 2x acc |refuted|~|
+~|text| Chinchilla tokens beat params |supported|~|
+~|text| Language models few-shot |supported|~|
+> notes | text | notes are from abstract only |>
+  >> notes | text | abstract mentions 32k limit |>
+  >> notes | text | appendix B clarifies |>
+> notes | text | tested on GLUE and Wikisql |>
+  >> notes | text | rank 4 sufficient |>
+  >> notes | text | higher ranks show diminishing returns |>
+> notes | text | memory footprint reduced 3x |>
+  >> notes | text | optimizer state minimal |>
+  >> notes | text | |>
+> notes | text | checkpoint size under 50MB |>
+> notes | text | outlier channels preserved |refuted|>
+  >> notes | text | per-head scales help |>
+  >> notes | text | perplexity intact |>
+> notes | text | optimal ratio is 20 to 1 |>
+  >> notes | text | tested across 400 models |>
+  >> notes | text | cosine schedule used |>
+> notes | text | kaplan tokens were suboptimal |>
+  >> notes | text | fixed learning rate flawed |>
+> notes | text | scaling curve is smooth |>
+  >> notes | text | tested up to 175B |>
+  >> notes | text | in-context learning observed |>

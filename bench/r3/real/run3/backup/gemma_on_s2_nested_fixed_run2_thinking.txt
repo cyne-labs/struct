@@ -1,0 +1,73 @@
+Thinking Process:
+
+1.  **Analyze the Request:** The goal is to extract information from the provided text and format it into a specific Struct format.
+
+2.  **Define the Schema:**
+    `schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}`
+
+3.  **Define the Output Format Rules:**
+    *   Data only in Struct format.
+    *   No prose, no code fences.
+    *   No header row or column names.
+    *   One record per line.
+    *   Values in schema order: `text`, `verdict`, `source.id`, `source.year`, `verified`.
+    *   Separator: `|`.
+    *   Null value: `~`.
+    *   Boolean: `1` (true) or `0` (false).
+    *   Enum values must be exact labels (`supported`, `refuted`, `unverified`).
+    *   Special handling for multi-line/whitespace text: Start with `\r` followed by the exact text, preserving all internal formatting.
+    *   Special handling for nested structs (`source`): `record{id, year}`.
+
+4.  **Process Input Statements:**
+
+    *   **Statement 1:** "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted."
+        *   `text`: "Rope scaling hurts long ctx"
+        *   `verdict`: refuted
+        *   `source.id`: 2405.05254
+        *   `source.year`: 2024
+        *   `verified`: (Implied by 'refuted'. If refuted, verification happened. It was false, so the result is clear.) Assume `verified: 1` (or true) since a verdict was reached.
+
+    *   **Statement 2:** "In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported."
+        *   `text`: "Attention is all you need"
+        *   `verdict`: supported
+        *   `source.id`: 1706.03762
+        *   `source.year`: 2017
+        *   `verified`: true (1)
+
+    *   **Statement 3:** "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported."
+        *   `text`: "LoRA low rank adaptation"
+        *   `verdict`: supported
+        *   `source.id`: 2106.09685
+        *   `source.year`: 2021
+        *   `verified`: true (1)
+
+    *   **Statement 4:** "In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported."
+        *   `text`: "Mistral 7B architecture"
+        *   `verdict`: supported
+        *   `source.id`: 2309.06180
+        *   `source.year`: 2023
+        *   `verified`: true (1)
+
+    *   **Statement 5:** "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported."
+        *   `text`: "DeepSeekMoE mixture experts"
+        *   `verdict`: supported
+        *   `source.id`: 2401.04088
+        *   `source.year`: 2024
+        *   `verified`: true (1)
+
+5.  **Construct the Output (Applying Formatting Rules):**
+
+    *Self-Correction/Refinement on Text Handling:* The rule states: "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |." Since the input text doesn't seem to contain internal line breaks or leading/trailing whitespace that needs explicit handling (the quoted claim is the core text), I will treat the claims as single strings.
+
+    *Record 1:* Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+    `\r"Rope scaling hurts long ctx"|refuted|record{id:2405.05254,year:2024}|1`
+
+    *Wait, the rule structure implies the `text` field should be the claim itself, not the surrounding narrative. Let's focus on the claim.*
+
+    *Re-evaluating Statement 1:*
+    Claim text: "Rope scaling hurts long ctx"
+    Source ID: 2405.05254, Year: 2024.
+    Verdict: refuted.
+    Verified: true (1).
+
+    *Final structure generation.* (Ensuring `source` is nested as requested.)

@@ -1,0 +1,90 @@
+<think>
+We need to output a Struct (which is a JSON-like object) containing records. The instruction: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data."
+
+We need to produce records according to given schema. The schema:
+
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+But they want to write records in Struct format, i.e., maybe like:
+
+{
+  "claim": "Rope scaling hurts long ctx",
+  "verdict": "refuted",
+  "source": {"id": 2405.05254, "year": 2024},
+  "notes": [
+    {
+      "text": "Note text 'notes are from abstract only'",
+      "subnotes": ["abstract mentions 32k limit", "appendix B clarifies"]
+    },
+    ...
+  ]
+}
+
+But they said "values in schema order". The order: claim, verdict, source, notes. The source is a record with id and year. Inside source, maybe "id" and "year". So we need to embed those.
+
+We need one record per line, separated by |. Actually they say "One record per line: values in schema order, separated by |, and every line ends with |." That suggests each line is a record, but they want each field separated by commas, and within notes array, they have items that themselves have text and subnotes. The example shows:
+
+text|supported|text|~|
+
+So they treat each field separated by |. For notes, they have subnotes as list items, but they also need to be included maybe as subnotes. The example: "notes:list[record{text, subnotes:list[str]}]". So each note is a record with text and subnotes. So we need to produce something like:
+
+"Rope scaling hurts long ctx|refuted|{id:2405.05254,year:2024}|Note text 'notes are from abstract only'|subnotes 'abstract mentions 32k limit', 'appendix B clarifies'|..."
+
+But we need to follow their formatting rules: For text with line breaks or spaces/tabs at start or end, start with \r. Not needed.
+
+We need to include subnotes as separate fields? The example uses "subnotes" as a key inside note. So we should include "subnotes": ["abstract mentions 32k limit", "appendix B clarifies"].
+
+Thus each note line: claim|verdict|source|notes, with notes being a list of objects each with text and subnotes.
+
+We need to ensure no extra columns, no headers. Each line ends with |. The first line is already data, meaning we don't need a header like "struct: ...". So we just start with the first record line.
+
+We need to format properly: Use commas between top-level fields. Inside notes, we have objects with text and subnotes. The subnotes is a list of strings.
+
+We need to ensure that we use correct quoting for strings that contain spaces, punctuation, etc. The instruction: "Inside a value, write \| for | and \ for \". So if we need to include a literal | inside a string, we need to escape it as \|. However, we are not including any literal | inside note text; the note text may contain apostrophes, but that's fine. No need to escape.
+
+Also, they said "bool is 1 or 0". Not needed.
+
+Enum values must be exactly "supported", "refuted", "unknown". So we use "refuted", "supported".
+
+Now let's construct each record.
+
+Record 1:
+
+Claim: "Rope scaling hurts long ctx"
+Verdict: "refuted"
+Source: id: 2405.05254, year: 2024
+Notes: two notes.
+
+First note: text: "Note text 'notes are from abstract only'", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"].
+
+Second note: text: "Note text 'table 3 contradicts'", subnotes: ["llama 7b tested only"].
+
+Thus line:
+
+Rope scaling hurts long ctx|refuted|{\"id\": 2405.05254, \"year\": 2024}|Note text 'Note text \\'notes are from abstract only\\''|subnotes ['abstract mentions 32k limit', 'appendix B clarifies']|
+
+But we need to handle quoting: In JSON, we would use double quotes around strings, and escape inner double quotes. However, the output is not JSON but a Struct format. They didn't specify quoting style, but they gave example: "text|supported|text|~|". In that example, they used single quotes for text, not double quotes. They also didn't escape internal quotes. They used "text|supported|text|~|". So they used plain text without quotes. So we should follow that: fields separated by commas, no quotes. So each field is a string. For subnotes, they used list[record{text, subnotes:list[str]}]. So we can represent notes as an array of objects with text and subnotes fields.
+
+Thus we can write:
+
+Rope scaling hurts long ctx|refuted|2405.05254,2024,Note text 'notes are from abstract only',subnotes ['abstract mentions 32k limit','appendix B clarifies'],Note text 'table 3 contradicts',subnotes ['llama 7b tested only']| (but need commas between notes). Actually we need to separate each note with commas. So:
+
+Rope scaling hurts long ctx|refuted|2405.05254,2024,Note text 'notes are from abstract only',subnotes ['abstract mentions 32k limit','appendix B clarifies'],Note text 'table 3 contradicts',subnotes ['llama 7b tested only']|
+
+That seems correct: claim, verdict, source fields (id and year separated by comma), then note1, note2.
+
+But we need to ensure that the order is claim, verdict, source, notes. Yes.
+
+Now Record 2:
+
+Claim: "LoRA matches full finetune"
+Verdict: "supported"
+Source: id: 2106.09685, year: 2021
+Notes: three notes.
+
+Note1: text: "Note text 'tested on GLUE and Wikisql'", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+Note2: text: "Note text 'memory footprint reduced 3x'", subnotes: ["optimizer state minimal"]
+Note3: text: "Note text 'checkpoint size under 50MB'", no subnotes.
+
+Thus line:
+
+LoRA matches full finetune|supported|2106.09685,2021,Note text 'tested on GLUE and Wikisql',sub

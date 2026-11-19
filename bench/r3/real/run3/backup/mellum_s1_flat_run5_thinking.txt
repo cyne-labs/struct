@@ -1,0 +1,55 @@
+We need to parse the instruction. We need to output data only in Struct format: one record per line, values in schema order: id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool
+
+So each line should have values separated by |, ending with |. Use ~ for null. bool is 1 or 0. enum values must be one of supported, refuted, unverified exactly.
+
+We have 5 papers described in the bullet points. Need to produce Struct records for each. Need to extract id? The schema includes id, but we don't have explicit ids given. Possibly we need to infer id from paper numbers? The paper numbers are like 2405.05254, 1706.03762, etc. Those could be ids. The id field likely expects some identifier. The bullet points mention paper numbers: "Paper 2405.05254", "paper 1706.03762", "Paper 2106.09185"? Actually it's 2106.09685, "paper 2309.06180", "Paper 2401.04088". So we can use those paper numbers as id.
+
+Title: the title given in the bullet: first paper title "Rope scaling hurts long ctx"; second "Attention is all you need"; third "LoRA low rank adaptation"; fourth "Mistral 7B architecture"; fifth "DeepSeekMoE mixture experts". Verdict: from bullet: first paper turned out to be false, so claim is refuted. So verdict = refuted. Year: published year given: 2024 for first, 2017 for second, 2021 for third, 2023 for fourth, 2024 for fifth. Verified: need to infer. The bullet says: "it turned out to be false, so the claim is refuted." That suggests verified? Not sure. The schema has verified: bool. The bullet says "it turned out to be false, so the claim is refuted." Does that imply verified = true? Possibly yes, because they determined it's false. For second: "verification was true, and the claim is supported." So verified = 1 (true). Third: "it was verified as true, so the claim is supported." So verified = true. Fourth: "verification was true, and the claim is supported." So verified = true. Fifth: "it was verified as true, and the claim is supported." So verified = true.
+
+Thus for first paper, verified maybe also true? It says "it turned out to be false, so the claim is refuted." That implies they verified it and found false. So verified = true as well. But we need to check if any bullet explicitly says verification status. Only first says "turned out to be false", not explicitly "verified". But likely it's verified. However we have to decide. The instruction: "Paper 2405.05254 was published in 2024 with the title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted." It doesn't mention verification flag. But we have a field verified:bool. We need to set it. If not specified, maybe we set 0? But we have info that it turned out false, implying some verification happened. I'd assume verified = 1.
+
+But we need to be careful: The bullet points for 2-5 explicitly mention "verification was true" or "it was verified as true". For 1, it doesn't mention verification, just "turned out to be false". Could be considered verified implicitly. I think it's safe to set verified = 1 for all.
+
+Now construct each line: id | title | verdict | year | verified
+
+Values separated by |, ending with |.
+
+Need to escape | and \ in values. The titles contain no | or \ except maybe spaces. No special characters. So fine.
+
+But we must follow the format: "Inside a value, write \| for | and \ for \." So if a value contains | or \, we need to escape them. Our values don't have those, so fine.
+
+Also for text with line breaks or spaces at start/end, we would need to prefix with \r and keep exact. Not needed.
+
+Thus produce lines:
+
+Paper 2405.05254 | Rope scaling hurts long ctx | refuted | 2024 | 1
+
+Paper 1706.03762 | Attention is all you need | supported | 2017 | 1
+
+Paper 2106.09685 | LoRA low rank adaptation | supported | 2021 | 1
+
+Paper 2309.06180 | Mistral 7B architecture | supported | 2023 | 1
+
+Paper 2401.04088 | DeepSeekMoE mixture experts | supported | 2024 | 1
+
+Check enum values: supported, refuted, unverified. We have supported and refuted. Good.
+
+Now ensure each line ends with |. So after verified value, put |.
+
+Thus:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|1|
+
+Wait need to separate by | and end with |. So:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|1|
+
+Similarly others.
+
+But need to ensure id is exactly as given: "2405.05254" etc. Yes.
+
+Now produce five lines.
+
+No header, no prose.
+
+Let's write them.

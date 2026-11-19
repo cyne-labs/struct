@@ -1,0 +1,149 @@
+We need to parse the problem. We have a schema:
+
+schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to produce data only in Struct format: no prose, no code fences. No header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \.
+
+A record{...} field adds its fields as extra columns, in order.
+
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break and until the closing |.
+
+We have 5 items described in the user message. We need to convert each into a Struct record.
+
+The schema order: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+So for each record, we need columns: text, verdict, source.id, source.year, verified.
+
+But note that source is a record{id, year:int}. So inside the main claim record, there is a source field which itself is a record with id and year. How are these represented in the flat column list? The description: "A record{...} field adds its fields as extra columns, in order." So for the source field, we will have columns for id and year after the source fields? Actually the schema is claim{text, verdict, source:record{id, year:int}, verified:bool}. So the order of fields in the claim record is: text, verdict, source (which is a record), verified. But source itself has fields id and year. So overall columns order likely: text, verdict, source.id, source.year, verified.
+
+Thus each line will have 5 values? Let's count: text, verdict, source.id, source.year, verified. That's 5 columns.
+
+But we need to confirm with example format: They gave example: "text|supported|text|7|~|" which seems to have 5 columns: text, verdict, source.id?, source.year?, verified? Actually the example: text|supported|text|7|~|
+
+Interpretation: first column is text? It says "Example: text|supported|text|7|~|"
+
+So columns: 1) text value? It says "text|supported|text|7|~|". The first field is text, which contains the string "text"? Wait the example seems to be a sample record where the text field is the string "text", verdict is "supported", source.id is "text"? That seems odd. Let's parse: They wrote: Example: text|supported|text|7|~|
+
+Maybe they meant: The first field is the text content (which happens to be the word "text"), second field is verdict ("supported"), third field is source.id ("text"), fourth field is source.year ("7"), fifth field is verified (null ~). So indeed columns: text, verdict, source.id, source.year, verified.
+
+Thus we need to produce for each claim: text (the claim text), verdict (supported/refuted/unverified), source.id (paper ID or record id), source.year (int year), verified (bool 1/0).
+
+Now we have 5 items:
+
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+
+So text: "Rope scaling hurts long ctx"? Actually the claim is that "Rope scaling hurts long ctx". The statement: Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+
+Thus text field should be the claim text: "Rope scaling hurts long ctx". Verdict: refuted. Source: id is Paper 2405.05254? Probably the id is "2405.05254". Year: 2024. Verified: false? It says "it turned out to be false", but we have a verified field separate. The verified bool indicates if the claim has been verified? In the description: "verified:bool". In the items, they sometimes say "verification was true, so the claim is supported." or "it was verified as true, and the claim is supported." So we need to set verified bool accordingly.
+
+For item 1: It says "it turned out to be false". Does that mean verified is false? Or maybe verified is whether the claim is verified by some external source. The text says "it turned out to be false", implying that the claim was refuted, so verified is false? But we need to interpret from the pattern: In item 2: "In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported." So here verification was true, and the claim is supported. So verified bool should be 1 (true). Verdict is supported.
+
+In item 3: "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported." So verified is true, verdict supported.
+
+Item 4: "In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported." So verified true, verdict supported.
+
+Item 5: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported." So verified true, verdict supported.
+
+Item 1 is different: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." Here verification is false (since it turned out false). So verified should be 0. Verdict is refuted.
+
+Thus for each item we need to extract:
+
+- text: the claim text inside quotes.
+- verdict: supported/refuted/unverified based on description.
+- source.id: the paper ID (e.g., "2405.05254", "1706.03762", "2106.09685", "2309.06180", "2401.04088").
+- source.year: the year mentioned (2024 for first, 2017 for second, 2021 for third, 2023 for fourth, 2024 for fifth).
+- verified: 1 if verification was true, 0 if false. For item 1, verified is false (0). For others, verified is true (1).
+
+Now we need to format each line: text|verdict|id|year|verified|
+
+But need to handle text field: It may contain spaces, but no line breaks. The text is the claim text. For item 1, text is "Rope scaling hurts long ctx". That's a simple string without special characters. No leading/trailing spaces. So we can just put that string.
+
+But we need to escape | and \ inside the text if any. The text doesn't contain | or \. So fine.
+
+For item 2, text is "Attention is all you need". No special characters.
+
+Item 3: "LoRA low rank adaptation". No special characters.
+
+Item 4: "Mistral 7B architecture". No special characters.
+
+Item 5: "DeepSeekMoE mixture experts". No special characters.
+
+Thus we can directly write the text.
+
+Now we need to ensure the order: text, verdict, source.id, source.year, verified.
+
+So for each line:
+
+1. text: Rope scaling hurts long ctx
+   verdict: refuted
+   id: 2405.05254
+   year: 2024
+   verified: 0
+
+Line: Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+But need to check if year is int, but we just write the number as string.
+
+2. text: Attention is all you need
+   verdict: supported
+   id: 1706.03762
+   year: 2017
+   verified: 1
+
+Line: Attention is all you need|supported|1706.03762|2017|1|
+
+3. text: LoRA low rank adaptation
+   verdict: supported
+   id: 2106.09685
+   year: 2021
+   verified: 1
+
+Line: LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+4. text: Mistral 7B architecture
+   verdict: supported
+   id: 2309.06180
+   year: 2023
+   verified: 1
+
+Line: Mistral 7B architecture|supported|2309.06180|2023|1|
+
+5. text: DeepSeekMoE mixture experts
+   verdict: supported
+   id: 2401.04088
+   year: 2024
+   verified: 1
+
+Line: DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check each: The text for item 5 is "DeepSeekMoE mixture experts". It doesn't have quotes. That's fine.
+
+Now we need to ensure the format: Each line ends with |. So we need a trailing | after the verified value. In the example they had | after each value, including last ~|. So we need to end with |.
+
+Thus lines:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check for any special characters needing escaping: The text "Mistral 7B architecture" contains a space and the digit B. No | or \. So fine.
+
+Thus output should be these 5 lines, no header, no prose.
+
+We must not include any additional text. Just the lines.
+
+Thus final answer:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Make sure each line ends with |. Yes.
+
+Now produce exactly that.

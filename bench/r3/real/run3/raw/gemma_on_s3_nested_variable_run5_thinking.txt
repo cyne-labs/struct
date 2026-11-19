@@ -1,0 +1,80 @@
+The user wants me to extract information from the provided text and format it into a specific Struct format.
+
+Schema:
+claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+
+Output format rules:
+1. Data only in Struct format (no prose, no code fences).
+2. No header row or column names.
+3. The first line is data.
+4. One record per line.
+5. Values in schema order, separated by |.
+6. Every line ends with |.
+7. ~ means null.
+8. bool is 1 or 0.
+9. enum values must be one of the listed labels exactly (supported, refuted, unknown).
+10. Inside a value, use \| for | and \ for \.
+11. Record fields are added as extra columns.
+12. List items (notes/subnotes) go on subsequent lines, starting with > for parent, >> for children.
+13. Text with line breaks, spaces, tabs, or start/end whitespace must start with \r, followed by the exact content.
+
+Let's process each claim.
+
+Claim 1: Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only".
+
+Claim 2: In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported. The first note is "tested on GLUE and Wikisql", with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns". The second note is "memory footprint reduced 3x", with the subnote "optimizer state minimal". The third note is "checkpoint size under 50MB", without any subnotes.
+
+Claim 3: Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with subnotes "per-head scales help" and "perplexity intact".
+
+Claim 4: Published in 2022, paper 2203.15556 claimed "Chinchilla tokens beat params", which is supported. One note states "optimal ratio is 20 to 1", with subnotes "tested across 400 models" and "cosine schedule used". Another note states "kaplan tokens were suboptimal", with the subnote "fixed learning rate flawed".
+
+Claim 5: Paper 2005.14165 from 2020 claimed "Language models few-shot", and the claim is supported. There is a note "scaling curve is smooth", with subnotes "tested up to 175B" and "in-context learning observed".
+
+Formatting requirements check:
+The output must follow the specific nested structure for notes.
+
+---
+Processing Claim 1:
+Text: "Rope scaling hurts long ctx"
+Verdict: refuted
+ID: 2405.05254, Year: 2024
+Notes:
+1. "notes are from abstract only" -> subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+2. "table 3 contradicts" -> subnote: ["llama 7b tested only"]
+
+---
+Processing Claim 2:
+Text: "LoRA matches full finetune"
+Verdict: supported
+ID: 2106.09685, Year: 2021
+Notes:
+1. "tested on GLUE and Wikisql" -> subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+2. "memory footprint reduced 3x" -> subnote: ["optimizer state minimal"]
+3. "checkpoint size under 50MB" -> no subnotes
+
+---
+Processing Claim 3:
+Text: "KV cache quant loses 2x acc"
+Verdict: refuted
+ID: 2406.12345, Year: 2024
+Notes:
+1. "outlier channels preserved" -> subnotes: ["per-head scales help", "perplexity intact"]
+
+---
+Processing Claim 4:
+Text: "Chinchilla tokens beat params"
+Verdict: supported
+ID: 2203.15556, Year: 2022
+Notes:
+1. "optimal ratio is 20 to 1" -> subnotes: ["tested across 400 models", "cosine schedule used"]
+2. "kaplan tokens were suboptimal" -> subnote: ["fixed learning rate flawed"]
+
+---
+Processing Claim 5:
+Text: "Language models few-shot"
+Verdict: supported
+ID: 2005.14165, Year: 2020
+Notes:
+1. "scaling curve is smooth" -> subnotes: ["tested up to 175B", "in-context learning observed"]
+
+Now construct the output following the strict formatting rules.

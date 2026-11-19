@@ -1,0 +1,14 @@
+schema:file{name, path}
+lib.rs|src/lib.rs|
+util.rs|src/util.rs|
+main.rs|src/main.rs|
+schema:patch{file_name, code, line:int}
+lib.rs|\rpub fn add(a: i32, b: i32) -> i2 {
+    a + b
+}|10|
+util.rs|\rpub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}|5|
+main.rs|\rfn main() {
+    println!("Hello, world!");
+}|1|

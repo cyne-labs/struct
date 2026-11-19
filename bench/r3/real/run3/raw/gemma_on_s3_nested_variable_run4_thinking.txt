@@ -1,0 +1,44 @@
+Thinking Process:
+
+1.  **Analyze the Request & Schema:**
+    *   Schema: `claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}`
+    *   Output format: Data only in Struct format. No prose, no code fences.
+    *   Constraints:
+        *   No header row/column names.
+        *   First line is data.
+        *   One record per line.
+        *   Format: `field|value|...` (values separated by `|`).
+        *   `~` for null.
+        *   `bool` is 1 or 0.
+        *   Enum values must be exact labels (`supported`, `refuted`, `unknown`).
+        *   Internal delimiters: `\|` for `|` and `\` for `\`.
+        *   Text handling (line breaks, spaces): Start value with `\r` followed by the exact text, preserving all formatting.
+        *   Lists: Use `>` for parent, `>>` for children.
+
+2.  **Process Input Data (Record by Record):**
+
+    *   **Input 1:** Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only".
+
+        *   `text`: "Rope scaling hurts long ctx"
+        *   `verdict`: refuted
+        *   `source.id`: 2405.05254
+        *   `source.year`: 2024
+        *   `notes`:
+            *   Note 1: "notes are from abstract only"
+                *   Subnotes: "abstract mentions 32k limit", "appendix B clarifies"
+            *   Note 2: "table 3 contradicts"
+                *   Subnotes: "llama 7b tested only"
+
+    *   **Input 2:** In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported. The first note is "tested on GLUE and Wikisql", with subnotes "rank 4 sufficient" and "higher ranks show diminishing returns". The second note is "memory footprint reduced 3x", with the subnote "optimizer state minimal". The third note is "checkpoint size under 50MB", without any subnotes.
+
+    *   **Input 3:** Paper 2406.12345 made the claim "KV cache quant loses 2x acc" in 2024, but the verdict is refuted. It has a note "outlier channels preserved", with subnotes "per-head scales help" and "perplexity intact".
+
+    *   **Input 4:** Published in 2022, paper 2203.15556 claimed "Chinchilla tokens beat params", which is supported. One note states "optimal ratio is 20 to 1", with subnotes "tested across 400 models" and "cosine schedule used". Another note states "kaplan tokens were suboptimal", with the subnote "fixed learning rate flawed".
+
+    *   **Input 5:** Paper 2005.14165 from 2020 claimed "Language models few-shot", and the claim is supported. There is a note "scaling curve is smooth", with subnotes: "tested up to 175B", "in-context learning observed".
+
+3.  **Format the Output (Applying strict formatting rules):** (Self-Correction: Ensure the complex note structure is handled correctly using `>` and `>>`.)
+
+    *   *Focus on handling the multi-level notes carefully.*
+
+4.  **Final Review:** Check against all constraints (no prose, struct format, delimiters, line breaks, etc.). (The requested output must adhere strictly to the specified structure.)

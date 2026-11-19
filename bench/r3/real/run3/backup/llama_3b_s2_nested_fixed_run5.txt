@@ -1,0 +1,20 @@
+~|~|~|~|
+|supported|refuted|unverified|year|verified|
+|text|text|text|text|~|
+|7|0|2024|1|
+
+|supported|refuted|unverified|year|verified|
+|text|text|text|text|~|
+|Attention is all you need|0|2017|1|
+
+|supported|refuted|unverified|year|verified|
+|text|text|text|text|~|
+|LoRA low rank adaptation|1|2021|1|
+
+|supported|refuted|unverified|year|verified|
+|text|text|text|text|~|
+|Mistral 7B architecture|0|2023|1|
+
+|supported|refuted|unverified|year|verified|
+|text|text|text|text|~|
+|DeepSeekMoE mixture experts|1|2024|1|

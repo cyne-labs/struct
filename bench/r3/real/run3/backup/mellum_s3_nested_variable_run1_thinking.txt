@@ -1,0 +1,894 @@
+We need to produce data only in Struct format, one record per line, values in schema order separated by |, each line ends with |. The schema is:
+
+schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}
+
+So each record has fields: text, verdict, source (record with id and year), notes (list of records each with text and subnotes list of strings).
+
+We need to output lines for each of the 5 items described.
+
+We must follow the formatting rules:
+
+- Values separated by |, no extra columns, no header row.
+- For nested fields: source is a record{id, year:int}. So after verdict, we have source fields: id, year. Then notes: list of records each with text and subnotes list.
+
+The order of fields in the top-level claim record: text, verdict, source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]
+
+Thus the columns are:
+
+1. text (string)
+2. verdict (enum: supported|refuted|unknown)
+3. source.id (string? or maybe id is a string, but year is int)
+4. source.year (int)
+5. notes: each note is a record with fields: text, subnotes:list[str]
+
+But how to represent notes in the flat column format? The spec says: "A record{...} field adds its fields as extra columns, in order." So for notes, which is a list of records, each record will add its fields as extra columns? But we have a flat list of values separated by |. How to represent a list? The example earlier: "Paper 2405.05254 claimed ... A note says ... with two subnotes: ... A second note says ...". We need to translate into the flat format.
+
+We need to infer the exact column layout for notes. The schema: notes:list[record{text, subnotes:list[str]}]. So each note is a record with fields: text and subnotes (list of strings). When flattening, for each note record, we need to include its fields as extra columns. Since it's a list, we need to decide how to represent multiple notes in the same line? The spec says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." Wait, that seems to be for when we have nested structures in the output? Actually the instruction: "A record{...} field adds its fields as extra columns, in order. List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So for a list field like notes, each item in the list should be placed on its own line, prefixed with some > characters? The example earlier in the prompt: "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |."
+
+But for list items, we need to output lines below the parent line, with > prefixes indicating nesting level.
+
+The overall output should be a sequence of lines, each line is a record. If a field is a list, then for each item we need to output additional lines representing that item, possibly with > prefixes to indicate nesting.
+
+But the instruction says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So for each note in notes, we need to output a line starting with > maybe? But the parent line already contains the claim record. Then notes items are separate lines? Or are they appended to the same record? The example is not given, but we need to interpret.
+
+The prompt says: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |."
+
+Then: "A record{...} field adds its extra columns, in order. List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So imagine we have a top-level claim record with fields text, verdict, source.id, source.year, notes... But notes is a list of records. For each note record, we need to output additional lines that are children of the parent claim record? The parent claim record line would have some placeholder for notes? Or perhaps the notes fields are included as columns in the same line, but if there are multiple notes, we need to repeat the claim fields for each note? That seems odd.
+
+Alternatively, maybe the output format is such that each line represents a record at the deepest level, and indentation with > indicates deeper nesting. For a list, each item is a new record line prefixed with > (or >>) before the fields.
+
+But the instruction also says: "One record per line: values in schema order, separated by |." That suggests each line is a record. If a field is a list, then there will be multiple lines for that list, each line representing an item, and those lines are additional records that are children of the parent record. The parent record line might have empty or placeholder for the list fields? Or maybe the parent record line includes the list fields as empty values, and then child lines fill in the list items? Not sure.
+
+We need to examine the example given in the prompt earlier: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+This is describing one claim. How would we represent this in the struct? The claim record would have text: something like "Rope scaling hurts long ctx"? Actually the claim is that "Rope scaling hurts long ctx". The paper claimed that, but the claim was refuted. So text field maybe the claim statement? Or the paper's claim? The schema's text field likely is the claim text. Then verdict is refuted. source: id maybe paper id 2405.05254, year 2024. notes: list of notes. There are two notes: first note text "notes are from abstract only", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]. Second note text "table 3 contradicts", subnotes: ["llama 7b tested only"].
+
+So for this claim, we need to produce a line for the claim record, and then lines for each note? Or include the notes as part of the claim record's notes field? The notes field is a list of records. In the flat representation, perhaps each note is represented as a separate record line with the same claim text, verdict, source, but with notes fields filled? That seems redundant.
+
+But the instruction about list items going on lines below their parent suggests that for each note, we output a line starting with > maybe indicating it's a sub-item of the parent claim. However, the instruction also says "One record per line: values in schema order, separated by |." It doesn't explicitly say that child records are prefixed with >. But later it says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+Thus, when we have a list field, we should output lines for each item, but those lines should be prefixed with > characters before the field values? Or the entire line starts with >? The example: "> for its items, >> for theirs." So if a note is an item in a list, we output a line starting with > (maybe just the > character) before the record fields? Or we output the line as "> text | subnote1 | subnote2 | ..." ?
+
+We need to decide.
+
+Let's look at the overall structure: The top-level claim record has fields: text, verdict, source.id, source.year, notes. The notes field is a list of records each with text and subnotes. If we were to flatten this into a table, we might have one row per note, with the claim fields repeated, and the note's text and subnotes filled. But the instruction about > suggests a hierarchical representation where child lines are indented with >.
+
+But the instruction also says: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |."
+
+It then gives guidance on how to handle nested fields and lists. It says: "A record{...} field adds its fields as extra columns, in order." So for a record field like source, we just add its fields as extra columns in the same line. So the line for the claim would include source.id and source.year as additional columns after verdict.
+
+For notes: notes is a list of records. How to represent a list in this flat format? Possibly each item in the list is represented as a separate line, but those lines are still part of the same overall struct, just additional lines. The parent line might have notes field as empty or maybe the first line includes the notes? Not clear.
+
+The instruction about list items going on lines below their parent, starting with one > per level: "> for its items, >> for theirs." This suggests that when we encounter a list field, we should output the list items on subsequent lines, each line prefixed with > (or >>) to indicate nesting level. The parent line itself might not have a notes field value? Or maybe the parent line has a placeholder like ~ for notes, and then child lines fill in? But the instruction says "List items go on the lines below their parent". So the parent line exists, then below it, lines for each list item, possibly prefixed with >.
+
+Thus, for each claim record, we would have a line for the claim itself (with notes field maybe empty or ~). Then for each note, we would have a line starting with > (or maybe just >text | ...) representing the note record, which includes its own text and subnotes.
+
+But the subnotes themselves are a list of strings. How to represent subnotes? Possibly as additional fields? The record for a note has fields: text, subnotes:list[str]. So when we output a line for a note item, we need to include its text and its subnotes. Subnotes are a list of strings; perhaps we can represent them as separate fields? Or as a single string with some encoding? The schema for the note record is text and subnotes list. In the flat format, we might need to output the subnotes as additional columns? But the note record has only two fields: text and subnotes. Subnotes is a list of strings. How to flatten a list within a record? The instruction doesn't explicitly say how to handle lists within lists. It only says for list items (i.e., a field that is a list of records), we go to lines below with >. For subnotes, which is a list of strings inside a record, maybe we treat it similarly: the subnotes list items go on lines below the note line, with >> maybe? Because subnotes are items of the subnotes list, which is a field of the note record. So we might have:
+
+Claim line:
+text | verdict | source.id | source.year | notes (maybe ~) | ...
+
+But notes is a list, so maybe we don't include notes field in the claim line, or we include it as empty.
+
+Then for each note item:
+> note.text | subnotes...? But subnotes is a list, so we might need to output lines for each subnote under the note line.
+
+This is getting complex. Let's try to find a simpler interpretation: Perhaps the intended output is to flatten everything into a single line per top-level claim, with notes represented as concatenated strings or something, but the instructions about > suggest hierarchical output.
+
+Let's read the instruction again carefully:
+
+"schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}"
+
+So the claim record has these fields.
+
+"Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |."
+
+So each line corresponds to a record. If a field is a record, we just add its fields as extra columns in the same line. So for a claim record, the line will have columns: text, verdict, source.id, source.year, notes... but notes is a list of records. How to represent a list in the same line? Possibly we repeat the claim fields for each note? Or we put a placeholder and then child lines? The instruction about list items going on lines below their parent suggests that for a list field, we don't include it in the parent line; instead, we output child lines for each item, prefixed with > to indicate they are list items.
+
+Thus, for the claim record line, we include fields up to before notes? Or we include notes as a placeholder ~ and then below we have the note items.
+
+But the schema order is: text, verdict, source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]
+
+So the columns in order are: text, verdict, source.id, source.year, notes (which is a list). But if notes is a list, perhaps we treat it as a field that may have multiple values across multiple lines. The parent line might have notes as ~ (null), and then child lines for each note item, with the same text, verdict, source.id, source.year? Or maybe the child lines only include the note's text and subnotes, and the parent fields are omitted? Not sure.
+
+Let's look at the example they gave in the prompt earlier (the example of Paper 2405.05254). They described: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024, but the claim was refuted. A note says "notes are from abstract only", with two subnotes: "abstract mentions 32k limit" and "appendix B clarifies". A second note says "table 3 contradicts", with the subnote "llama 7b tested only"."
+
+If we were to produce struct for this, what would it look like? Possibly:
+
+text|refuted|2405.05254|2024|~   (claim line)
+> notes text "notes are from abstract only" | subnotes ...? But subnotes are list of strings. How to represent? Maybe:
+
+> notes text | subnote1 | subnote2
+
+But the note record has fields text and subnotes. So for each note item, we could have a line:
+
+> notes text | subnotes list? But subnotes is a list of strings; maybe we can join them with some separator? Or we can have multiple lines for subnotes as well.
+
+The instruction about subnotes: "subnotes:list[str]". So subnotes is a list of strings. How to represent that in the flat format? Possibly as additional columns for each subnote? Or as a single string with | separators? Not specified.
+
+Given the complexity, perhaps the expected output is simpler: For each claim, we output a single line with the claim's text, verdict, source id, source year, and then for notes, we somehow inline them? But the instruction about list items going below suggests we should output multiple lines for notes.
+
+Let's try to parse the instruction more literally:
+
+- "A record{...} field adds its fields as extra columns, in order." So if we have a field that is a record, like source, we just add its fields (id, year) as additional columns in the same line.
+
+- "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So if a field is a list, then for each item in the list, we go to a new line below the parent line, and prefix that line with > (or >> if nested deeper) to indicate it's a list item. The parent line presumably has that field represented as something? Maybe the parent line has a placeholder for the list field, like ~, and then the child lines provide the actual items.
+
+But the instruction says "List items go on the lines below their parent". It doesn't say the parent line has a field for the list. It just says items go below. So maybe the parent line does not include the list field at all, and the child lines are separate records that are considered part of the same parent claim but not as separate top-level records? However, the overall output is just lines of records. There's no explicit parent-child relationship indicated except by > prefixes.
+
+Thus, we need to output lines, some prefixed with > to indicate they are list items of the previous line? Or maybe the > is part of the record's text field? No, the > is a marker for the line itself indicating nesting level.
+
+For example, if we have a claim with notes, we might output:
+
+text|verdict|id|year|~   (claim line)
+> note1 text|subnote1|subnote2|...
+>> subnote detail...
+
+But we need to determine the exact format.
+
+Let's look at the example they gave in the initial prompt (the example of struct format): They gave an example: "text|supported|text|~|". That seems to be a line with four fields: text, verdict, source.id? Actually "text|supported|text|~|". Wait, that example is: "Example: text|supported|text|~|". That looks like a claim record where text field contains the claim text, verdict is supported, then maybe source.id is "text"? That doesn't make sense. Maybe it's just an example of the format: fields: text, verdict, source.id, source.year, notes... but they gave a truncated example.
+
+Actually the example: "Example: text|supported|text|~|". Could be: text field = "text", verdict = supported, source.id = "text", source.year = ~ (null), notes maybe empty. Not sure.
+
+Given the ambiguity, we need to make a reasonable interpretation that fits the instructions and produces valid output.
+
+We have 5 claims to represent. Let's list each claim's details:
+
+1. Paper 2405.05254 (id maybe "2405.05254"), year 2024. Claim text: "Rope scaling hurts long ctx" (the claim). Verdict: refuted. Notes: two notes.
+   - Note 1: text "notes are from abstract only", subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+   - Note 2: text "table 3 contradicts", subnotes: ["llama 7b tested only"]
+
+2. Paper 2106.09685 (id "2106.09685"), year 2021. Claim text: "LoRA matches full finetune". Verdict: supported. Notes: three notes.
+   - Note 1: text "tested on GLUE and Wikisql", subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+   - Note 2: text "memory footprint reduced 3x", subnotes: ["optimizer state minimal"]
+   - Note 3: text "checkpoint size under 50MB", subnotes: [] (empty list)
+
+3. Paper 2406.12345 (id "2406.12345"), year 2024. Claim text: "KV cache quant loses 2x acc". Verdict: refuted. Notes: one note.
+   - Note text: "outlier channels preserved", subnotes: ["per-head scales help", "perplexity intact"]
+
+4. Paper 2203.15556 (id "2203.15556"), year 2022. Claim text: "Chinchilla tokens beat parameters". Verdict: supported. Notes: two notes.
+   - Note 1: text "optimal ratio is 20 to 1", subnotes: ["tested across 400 models", "cosine schedule used"]
+   - Note 2: text "kaplan tokens were suboptimal", subnotes: ["fixed learning rate flawed"]
+
+5. Paper 2005.14165 (id "2005.14165"), year 2020. Claim text: "Language models few-shot". Verdict: supported. Notes: one note.
+   - Note text: "scaling curve is smooth", subnotes: ["tested up to 175B", "in-context learning observed"]
+
+We need to output these as struct records.
+
+Given the complexity of notes and subnotes, perhaps we can simplify by representing notes as a single string that concatenates the note texts and subnotes, but that would not preserve the structure.
+
+Alternatively, we could output each note as a separate record line prefixed with >, where the line includes the note's text and its subnotes as separate fields. For subnotes list, we could join them with some delimiter, but the instruction says subnotes is a list of strings. Maybe we can represent subnotes as multiple columns, one per subnote, but the note record has only two fields: text and subnotes. If we flatten the note record, we would have columns: note.text, note.subnote1, note.subnote2, ...? But the schema for note record is text and subnotes:list[str]. So flattening could be: note.text, subnote1, subnote2, ... but how many subnotes vary.
+
+The instruction about list items going below their parent might handle this: For a note's subnotes list, each subnote is a list item, so we would output lines with >> prefixes for subnote items.
+
+Thus, the overall output might look like:
+
+Claim line: text | verdict | source.id | source.year | ~ (for notes placeholder?) ... but maybe we omit notes field in claim line.
+
+Then for each note item:
+> note.text | subnote1 | subnote2 | ... (but subnotes are list items, so maybe we need to output subnote lines with >>.
+
+This is getting very tangled.
+
+Maybe the intended interpretation is simpler: They want us to output each claim as a record, and for notes, we include them as a list of strings in the notes field, but since notes is a list of records, we might need to flatten each note record into the same line as additional columns after source.year. For example, we could have columns: text, verdict, source.id, source.year, note1_text, note1_subnote1, note1_subnote2, note2_text, note2_subnote1, ... but that would be messy and not defined.
+
+Given the instructions about > prefixes for list items, I think we must output hierarchical lines with > prefixes for list items and sub-items.
+
+Let's try to construct an example based on the description of one claim with two notes and subnotes.
+
+Suppose we have:
+
+text|verdict|id|year|~   (claim line)
+> notes_text1 | subnote1 | subnote2
+>> subnote_detail1
+>> subnote_detail2
+
+But that seems not right.
+
+Alternatively, maybe each note is a record that itself has text and subnotes list, and we output it as:
+
+> note_text | subnote1 | subnote2
+
+If subnotes is empty, we just have empty fields.
+
+And if subnotes has multiple items, we could separate them with | in the same line, like note_text | subnote1 | subnote2.
+
+But the subnotes are a list of strings, not necessarily records. So we could flatten them as separate columns.
+
+Given the lack of clarity, perhaps we should look at the example they gave in the initial prompt: "Example: text|supported|text|~|". That line has four fields: text, verdict, source.id?, source.year?, notes? Actually "text|supported|text|~|". Could be: text field = "text", verdict = supported, source.id = "text", source.year = ~, notes maybe empty. So they used "text" as a placeholder for source.id. So the order is: text, verdict, source.id, source.year, notes... but notes maybe after year.
+
+Thus, for our claims, we should output lines with fields: text, verdict, source.id, source.year, notes... but notes is a list. How to represent notes in the same line? Maybe we can represent notes as a string that is the concatenation of note texts, or we can omit notes if it's a list and just use ~ for now, and then output note items below with >.
+
+The instruction: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+So for each claim, we output a line for the claim itself (with text, verdict, source.id, source.year, and maybe notes field as ~ or empty). Then for each note in notes, we output a line starting with > (since it's an item of the notes list) and then the note's text and subnotes fields. If subnotes is a list, then for each subnote, we might need to output lines with >> prefixes? But the instruction only mentions list items going below their parent, starting with one > per level. So for a note's subnotes list, each subnote is an item in that list, so we would output lines with >> prefix (since it's one level deeper). However, the note record has subnotes as a list of strings, not records. So maybe we just output the subnotes as separate fields in the same line as the note, separated by |, but if there are multiple subnotes, we need to decide how to represent them. Perhaps we can join them with a delimiter like space or something, but that would not preserve list structure.
+
+Given the complexity, perhaps the expected output is to flatten everything into a single line per top-level claim, and for notes and subnotes, we just include them as concatenated strings with some encoding, but the > prefixes are not used because we are not supposed to include them? But the instruction explicitly says to use > prefixes for list items.
+
+Wait, maybe the > prefixes are only for the purpose of indicating nesting in the output when we are writing the struct manually, but the final output should not include > prefixes? No, the instruction says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." This is part of the struct format specification. So we must include > characters at the beginning of lines for list items and deeper items.
+
+Thus, the output will contain lines that start with >, >, etc.
+
+So we need to produce lines like:
+
+text|verdict|id|year|~
+> note1_text|subnote1|subnote2
+>> subdetail1
+>> subdetail2
+
+But we need to map the data accordingly.
+
+Let's try to parse the data for claim 1:
+
+Claim text: "Rope scaling hurts long ctx"
+Verdict: refuted
+Source id: 2405.05254
+Source year: 2024
+Notes: list of two notes.
+
+Note 1:
+ text: "notes are from abstract only"
+ subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+
+Note 2:
+ text: "table 3 contradicts"
+ subnotes: ["llama 7b tested only"]
+
+So for claim 1, we might output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+> notes are from abstract only|abstract mentions 32k limit|appendix B clarifies
+> table 3 contradicts|llama 7b tested only|~
+
+But the subnotes for note 1 are two items, we could put them as separate columns: subnote1, subnote2. For note 2, subnotes has one item, so we could have subnote1, and subnote2 maybe ~.
+
+But the note record fields are text and subnotes:list[str]. So when we flatten the note record, we might have columns: note.text, subnote1, subnote2, ... up to the number of subnotes. If there are more subnotes than columns, we might need to handle deeper nesting? But the instruction about >> for deeper levels suggests that if subnotes is a list, we might need to output each subnote as a separate line with >> prefix.
+
+Thus, for note 1 with two subnotes, we could output:
+
+> notes are from abstract only|abstract mentions 32k limit|appendix B clarifies
+
+But that puts both subnotes as columns in the same line, which might be okay if we limit to two columns. But if there were more than two, we might need to nest.
+
+Given the small size of subnotes lists (max 2 or 3), we could just put them as columns.
+
+But the instruction about >> suggests that if subnotes is a list, we should treat each subnote as a list item, thus output lines with >> prefix for each subnote. However, the note record has subnotes as a list of strings, not records. So maybe we should output:
+
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+
+But that would be three lines for note 1: the note line with just the text, then subnote lines with >> prefix. But the note line would have no subnotes fields.
+
+This is getting too ambiguous.
+
+Perhaps we should look at the original problem statement from the user. The user gave a schema and then listed 5 claims in a narrative. They want us to convert these claims into struct format as described. They gave an example of the format: "Example: text|supported|text|~|". That example seems to have only four fields: text, verdict, source.id?, source.year? Actually "text|supported|text|~|". That could be: text field = "text", verdict = supported, source.id = "text", source.year = ~. So they used "text" as a placeholder for source.id. So maybe source.id is a string that can be any identifier, and source.year is an int or ~ if null.
+
+Thus, for our claims, we should output lines with fields: text, verdict, source.id, source.year, and then notes? But notes is a list, maybe we can represent it as a string list? But the example didn't include notes.
+
+Maybe the example was just a minimal example.
+
+Given the difficulty, perhaps we should output each claim as a single line with the fields up to source.year, and then for notes, we can include them as a JSON-like string? But that would violate the struct format.
+
+Alternatively, we could output each claim with notes flattened as additional columns after source.year, where each note is represented by its text and its subnotes joined by some separator. But that would not match the hierarchical > requirement.
+
+Let's re-read the instruction about list items: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+This suggests that if we have a parent line (the claim), and it has a notes field which is a list, then the lines for each note item should start with > (since they are items of the notes list). If those note items themselves have subnotes list, then the lines for subnote items should start with >> (since they are items of the subnotes list). So we need to output:
+
+Claim line: text|verdict|source.id|source.year|~ (maybe notes placeholder)
+> note1_text|subnote1|subnote2|...
+>> subdetail1
+>> subdetail2
+...
+
+But we need to decide the columns for note lines. The note record has fields: text and subnotes:list[str]. So when we output a line for a note item, we need to include its text and its subnotes. The subnotes are a list, so we could either flatten them as multiple columns or use nesting with >>.
+
+Given the instruction about >> for deeper items, it suggests that subnotes should be output as separate lines with >> prefix, each line containing the subnote text (maybe as a single field). So the note line would just have the note text, and then subnote lines would have the subnote texts.
+
+Thus, the structure could be:
+
+Claim line: text|verdict|source.id|source.year|~ (notes maybe omitted)
+> note_text1
+>> subnote1_1
+>> subnote1_2
+> note_text2
+>> subnote2_1
+
+But then what about the subnotes field in the note record? It would be represented by the >> lines.
+
+This seems plausible: Each claim line has no notes field (or notes as ~). Then for each note in the notes list, we output a line starting with > containing the note's text. Then for each subnote in that note's subnotes list, we output a line starting with >> containing the subnote text.
+
+But the note record also has subnotes list, so we need to output those subnotes as separate lines.
+
+Thus, for claim 1:
+
+Claim line: Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+But wait, the note "table 3 contradicts" has subnotes list ["llama 7b tested only"]. So we would have:
+
+> table 3 contradicts
+>> llama 7b tested only
+
+Yes.
+
+For claim 2:
+
+Claim line: LoRA matches full finetune|supported|2106.09685|2021|~
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+>> ~ (maybe empty subnotes, so just > line with empty?)
+
+But for the third note "checkpoint size under 50MB", subnotes is empty list. So we would have:
+
+> checkpoint size under 50MB
+(no subnote lines)
+
+But according to the structure, if subnotes is empty, we might just have the > line with no subnote lines.
+
+Similarly for other claims.
+
+Thus, this hierarchical representation seems consistent with the instructions.
+
+Now we need to produce the output accordingly.
+
+We need to ensure that the claim line includes the fields in order: text, verdict, source.id, source.year, notes? But we are putting ~ for notes placeholder. However, the schema includes notes as a field, but we are not including it in the claim line; instead we are outputting note lines below. Is that acceptable? The instruction says "List items go on the lines below their parent". So the parent line likely has the notes field as something, maybe ~, and then the list items follow. But we could also omit the notes field entirely from the parent line, but the schema order expects it. However, the example "text|supported|text|~|" suggests that after source.year, there is a ~ which might represent notes (or something). In that example, notes might be ~ because it's null or empty.
+
+Thus, we should include a field for notes in the claim line, even if it's a placeholder ~, because the schema includes notes. Then the list items for notes go below, prefixed with >.
+
+So the claim line should have fields: text, verdict, source.id, source.year, notes (placeholder). Since notes is a list, but we don't have the list yet, we can put ~ for now, and then below we will have the actual note items with > prefixes.
+
+Thus, each claim line will end with |~| maybe? Actually the fields are: text, verdict, source.id, source.year, notes. So five fields. The notes field is a list, but we put ~ as placeholder.
+
+Then for each note in the notes list, we output a line starting with > (since it's an item of the notes list). That line will have its own fields according to the note record schema: text, subnotes? Wait, the note record has fields: text, subnotes:list[str]. So when we output a line for a note item, what are its fields? It should be: note.text, and then perhaps subnotes placeholder or actual subnotes. But since subnotes is also a list, we might need to output it similarly: the line for the note item could have fields: text, subnotes (placeholder), and then subnote items below with >>.
+
+But the instruction says: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." So for the notes list items (which are notes), we use > prefix. For each note's subnotes list items, we use >> prefix.
+
+Thus, the line for a note item might only need to contain the note's text, because subnotes will be handled on subsequent lines with >>. But the note record has a subnotes field, which is a list. So perhaps the line for the note item should include its text and maybe a placeholder for subnotes, and then subnote lines follow with >>.
+
+Alternatively, we could include the subnotes directly in the note line as additional fields, but that would conflict with the hierarchical approach.
+
+Given the instruction, I think the correct approach is:
+
+- Claim line: text|verdict|source.id|source.year|~   (notes placeholder)
+- For each note in the claim's notes list:
+   - Line: > note.text   (maybe with other fields if any)
+   - For each subnote in note.subnotes:
+        - Line: >> subnote   (maybe just the subnote text)
+
+But what about the subnotes field in the note record? It's a list of strings. So we can output each subnote as a separate line with >> prefix, containing just the subnote text.
+
+Thus, the output would be:
+
+Claim line: text|verdict|id|year|~
+> note1_text
+>> subnote1_1
+>> subnote1_2
+> note2_text
+>> subnote2_1
+...
+
+If a note has no subnotes, we just have the > line with no following >> lines.
+
+If a claim has no notes, we just have the claim line with ~ and no > lines.
+
+This seems plausible.
+
+Let's test with claim 1:
+
+Claim line: Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+Yes.
+
+Claim 2:
+
+Claim line: LoRA matches full finetune|supported|2106.09685|2021|~
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+(no subnotes, so just the > line, no >> lines)
+
+Claim 3:
+
+Claim line: KV cache quant loses 2x acc|refuted|2406.12345|2024|~
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4:
+
+Claim line: Chinchilla tokens beat parameters|supported|2203.15556|2022|~
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5:
+
+Claim line: Language models few-shot|supported|2005.14165|2020|~
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now we need to format each line with fields separated by |, ending with |.
+
+For claim lines, we have 5 fields: text, verdict, source.id, source.year, notes. So we need to put the text, verdict, id, year, ~.
+
+For note lines, we have lines starting with > or >> followed by the content. But what fields do these lines have? They are records for notes or subnotes. The note record has fields: text, subnotes:list[str]. But if we are outputting subnote lines separately, maybe the note line only contains the note text, and subnote lines contain the subnote text. So the note line would have only one field: the note text. But the schema for note record includes subnotes, but we are not representing it as fields; we are representing it as separate lines.
+
+However, the instruction says "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs." It doesn't specify the fields for those lines. It just says list items go on lines below their parent, starting with one > per level. So the lines themselves are records, but what are their fields? They should follow the schema of the item record. For a note item, the record schema is text, subnotes:list[str]. But if we are outputting subnotes as separate lines with >>, then perhaps the note line should have fields: text, subnotes (maybe placeholder), and then subnote lines have the subnote texts.
+
+Alternatively, maybe the note line should have both text and subnotes fields, but subnotes is a list, so we could put the subnotes as additional columns, but then subnote lines would be redundant.
+
+Given the instruction about >> for deeper items, it suggests that subnotes are also a list, so they should be handled similarly: the note line would have text and maybe a placeholder for subnotes, and then subnote lines with >> prefix contain the subnote items.
+
+Thus, the note line could have fields: text, subnotes (maybe ~), and then subnote lines with >> contain the subnote texts.
+
+But the note line is a record of type note, which has fields text and subnotes. So it should have two fields: text and subnotes. But subnotes is a list, so we could represent it as a string list? Or we could represent it as a single field that is a list? Not sure.
+
+Given the complexity, perhaps the simplest is to output each note line with just the note text, and then subnote lines with just the subnote text, ignoring the subnotes field in the note line. But that would not match the schema.
+
+Alternatively, we could output note lines with two fields: note text and a placeholder for subnotes (like ~), and then subnote lines with >> and the subnote text.
+
+But the instruction doesn't give examples.
+
+We need to make a decision. Let's look at the original instruction again: "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs."
+
+This suggests that if we have a parent claim with a notes list, we output lines for each note item, each line prefixed with >. Those lines are the note records. If those note records have their own subnotes list, then for each subnote item, we output lines prefixed with >>, which are the subnote records. The subnote records likely have a simple text field (since subnotes are just strings). So the >> lines would contain just the subnote text.
+
+Thus, the > lines (note items) would contain the note's text and perhaps other fields if any, but the note record has text and subnotes. However, if subnotes are handled on subsequent lines, maybe the > line only needs to contain the note text, and the subnotes are handled below. Or the > line could contain the note text and a placeholder for subnotes.
+
+But the note record schema includes subnotes, so maybe the > line should include both text and subnotes fields. But then why would we need >> lines for subnotes? Unless subnotes is a list of records, not strings. But it's listed as subnotes:list[str], so subnotes are strings, not records. So there is no further nesting for subnotes; they are just items in a list. So why would we need >> lines? Because list items go on lines below their parent with > prefix. So for a list of strings, each string is an item, so we would output each string on a line with >> prefix? That seems odd.
+
+Wait, maybe the hierarchy is: Claim has notes list (list of note records). Each note record has text and subnotes list (list of strings). So the notes list items are note records. For each note record, we need to output its fields: text and subnotes. Since subnotes is a list, we need to output its items as separate lines with >> prefix. So the > lines are for note records, containing the note's text and maybe a placeholder for subnotes. Then the >> lines are for each subnote string.
+
+Thus, the > line would have fields: note.text, subnotes (maybe as a list placeholder). But we could instead output the > line with just note.text, and then the >> lines provide the subnotes. But then the note record's subnotes field is not represented in the > line.
+
+Given the instruction "List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.", it seems that for any list field, we output its items on separate lines with appropriate > prefixes. So for the notes list in the claim, we output > lines for each note item. For each note item, if it has a subnotes list, we output >> lines for each subnote item.
+
+Thus, the > lines should represent the note records, but perhaps they only need to contain the note's text, because the subnotes will be handled on subsequent >> lines. However, the note record has a subnotes field, which is a list. So maybe the > line should contain the note's text and then the subnotes list as separate fields, but then we wouldn't need >> lines. But the instruction says >> for deeper items, implying that subnotes are also a list and should be handled with their own lines.
+
+Thus, the > line could contain the note's text and maybe a placeholder for subnotes, and then >> lines contain the subnote texts.
+
+Alternatively, the > line could contain both the note's text and the subnotes list as a single string joined by spaces, but that would not use >> lines.
+
+Given the instruction explicitly mentions >> for deeper items, we should use >> lines for subnotes.
+
+Thus, the structure is:
+
+Claim line: text|verdict|source.id|source.year|~
+> note_text1
+>> subnote1_1
+>> subnote1_2
+> note_text2
+>> subnote2_1
+...
+
+Where note_text lines are prefixed with >, and subnote lines are prefixed with >>.
+
+Now, what about the note's other fields? The note record has only text and subnotes. So the > line contains the note's text. The subnotes are the >> lines. That seems to match: the > line is the note record, but only its text field is shown (since subnotes are handled below). The subnotes list is empty in the > line, but the >> lines provide the subnotes.
+
+But then the note record's subnotes field is not represented in the > line, but it's represented by the >> lines. That could be acceptable.
+
+Similarly, if a note has no subnotes, we just have the > line with no >> lines.
+
+Thus, we can produce output as:
+
+Claim line: text|verdict|source.id|source.year|~
+> note_text
+>> subnote1
+>> subnote2
+...
+
+If a note has no subnotes, just > note_text.
+
+Now, we need to handle the case where a claim has no notes. Then the claim line ends with ~ and there are no > lines.
+
+Now, let's apply this to our 5 claims.
+
+We need to extract source.id and source.year from the descriptions.
+
+1. Paper 2405.05254, year 2024. So id = 2405.05254, year = 2024.
+   Claim text: "Rope scaling hurts long ctx"
+   Verdict: refuted
+   Notes:
+      Note1 text: "notes are from abstract only"
+         subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+      Note2 text: "table 3 contradicts"
+         subnotes: ["llama 7b tested only"]
+
+2. Paper 2106.09685, year 2021. id = 2106.09685.
+   Claim text: "LoRA matches full finetune"
+   Verdict: supported
+   Notes:
+      Note1 text: "tested on GLUE and Wikisql"
+         subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+      Note2 text: "memory footprint reduced 3x"
+         subnotes: ["optimizer state minimal"]
+      Note3 text: "checkpoint size under 50MB"
+         subnotes: [] (empty)
+
+3. Paper 2406.12345, year 2024. id = 2406.12345.
+   Claim text: "KV cache quant loses 2x acc"
+   Verdict: refuted
+   Notes:
+      Note text: "outlier channels preserved"
+         subnotes: ["per-head scales help", "perplexity intact"]
+
+4. Paper 2203.15556, year 2022. id = 2203.15556.
+   Claim text: "Chinchilla tokens beat parameters"
+   Verdict: supported
+   Notes:
+      Note1 text: "optimal ratio is 20 to 1"
+         subnotes: ["tested across 400 models", "cosine schedule used"]
+      Note2 text: "kaplan tokens were suboptimal"
+         subnotes: ["fixed learning rate flawed"]
+
+5. Paper 2005.14165, year 2020. id = 2005.14165.
+   Claim text: "Language models few-shot"
+   Verdict: supported
+   Notes:
+      Note text: "scaling curve is smooth"
+         subnotes: ["tested up to 175B", "in-context learning observed"]
+
+Now, we need to produce lines.
+
+For each claim, first line: claim_text|verdict|id|year|~
+
+Then for each note in claim.notes:
+   > note_text
+   then for each subnote in note.subnotes:
+       >> subnote
+
+If a note has no subnotes, just > note_text and no >> lines.
+
+Now, we need to ensure that the text fields may contain | or \, so we need to escape them? The instruction says: "Inside a value, write \| for | and \ for \." So if a value contains | or \, we need to replace | with \| and \ with \\. Also, if the value contains line breaks, we need to start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |. But our values here are simple strings without | or \, except maybe the claim text contains spaces but no |. The note texts also contain spaces but no |. So we can probably just write them as is, without escaping, unless they contain | or \. They don't. So we can just write the text directly.
+
+But we need to be careful: The claim text "Rope scaling hurts long ctx" has spaces but no |. So fine.
+
+Now, let's write the lines.
+
+Claim 1 line:
+Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+
+Note lines:
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+
+Claim 2 line:
+LoRA matches full finetune|supported|2106.09685|2021|~
+
+Note lines:
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+(no subnotes for last note, so just > line)
+
+Claim 3 line:
+KV cache quant loses 2x acc|refuted|2406.12345|2024|~
+
+Note lines:
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+
+Claim 4 line:
+Chinchilla tokens beat parameters|supported|2203.15556|2022|~
+
+Note lines:
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+
+Claim 5 line:
+Language models few-shot|supported|2005.14165|2020|~
+
+Note lines:
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now, we need to ensure each line ends with |. So each line should have fields separated by |, and end with |. For the claim line, we have 5 fields: text, verdict, id, year, notes. So we write: text|verdict|id|year|~|
+
+But the example "text|supported|text|~|" had four fields? Actually it had three fields before ~? Let's count: "text|supported|text|~|". That's four fields: field1=text, field2=supported, field3=text, field4=~. So maybe the schema is: text, verdict, source.id, source.year, notes. But the example shows source.id as "text". That seems weird. But maybe they just used "text" as placeholder for id. So we should follow that: after verdict, we put source.id, then source.year, then notes. So five fields after text? Wait, the claim line fields order: text, verdict, source.id, source.year, notes. So that's five fields. The example "text|supported|text|~|" has four fields: text, verdict, text, ~. So maybe they omitted source.year? Or they combined source.id and source.year into one field? Not sure.
+
+But the schema clearly says source:record{id, year:int}. So source.id and source.year are separate fields. So we should have five fields: text, verdict, source.id, source.year, notes.
+
+Thus, claim line: text|verdict|id|year|~|
+
+Yes.
+
+Now, for note lines: What are the fields? The note line is a record of type note, which has fields: text, subnotes:list[str]. But we are not representing subnotes in the note line; we are using >> lines for subnotes. So the note line might just have the text field, and perhaps a placeholder for subnotes? But the schema for note record includes subnotes. However, the instruction about >> for deeper items suggests that subnotes are handled on subsequent lines, so the note line might only need to contain the note text, and subnotes are separate lines. But then the note line would have only one field: text. But the note record has two fields: text and subnotes. If we don't include subnotes field, it's incomplete.
+
+Alternatively, we could include subnotes as a field in the note line, but since subnotes is a list, we could put a placeholder ~ for subnotes, and then the >> lines provide the actual subnotes. That would be consistent: note line fields: text, subnotes (placeholder ~). Then for each subnote, we output >> line with the subnote text.
+
+Thus, note line would be: > note_text|~|
+
+And then for each subnote, >> subnote_text|
+
+But the >> lines would then have only one field: the subnote text. That could work.
+
+But the instruction doesn't specify the fields for those lines. It just says list items go on lines below their parent with > or >> prefixes. It doesn't say what fields those lines contain. They could be just the item text.
+
+Given the ambiguity, I think the safest is to follow the simplest representation that still respects the hierarchical > and >> prefixes and includes the text content. We can output:
+
+For each note:
+> note_text
+
+For each subnote:
+>> subnote_text
+
+This uses only the text content, ignoring the subnotes field in the note record, but it's still representing the data because the subnote texts are on >> lines.
+
+Similarly, for the claim line, we include all required fields.
+
+Thus, the output would be:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+> notes are from abstract only
+>> abstract mentions 32k limit
+>> appendix B clarifies
+> table 3 contradicts
+>> llama 7b tested only
+LoRA matches full finetune|supported|2106.09685|2021|~
+> tested on GLUE and Wikisql
+>> rank 4 sufficient
+>> higher ranks show diminishing returns
+> memory footprint reduced 3x
+>> optimizer state minimal
+> checkpoint size under 50MB
+KV cache quant loses 2x acc|refuted|2406.12345|2024|~
+> outlier channels preserved
+>> per-head scales help
+>> perplexity intact
+Chinchilla tokens beat parameters|supported|2203.15556|2022|~
+> optimal ratio is 20 to 1
+>> tested across 400 models
+>> cosine schedule used
+> kaplan tokens were suboptimal
+>> fixed learning rate flawed
+Language models few-shot|supported|2005.14165|2020|~
+> scaling curve is smooth
+>> tested up to 175B
+>> in-context learning observed
+
+Now, we need to ensure each line ends with |. So for claim lines, we have five fields ending with ~|, so line ends with | after ~. For note lines, we need to decide how many fields. If we only have one field (the note text), then the line would be: > note_text|. But we need to separate fields with |. If there's only one field, it would be > note_text|. But we also need to account for possible subnotes placeholder? Not if we use >> lines for subnotes.
+
+But the note line as > note_text would be just one field after the >? Actually the > is a prefix, not a field. The line starts with > then the record fields. So if the record has one field (text), then the line would be: > note_text|. But we need to separate fields with |, so if there's only one field, it's just > note_text|.
+
+Similarly, >> subnote_text| would be just >>.subnote_text|.
+
+But is that correct? The > and >> are part of the line prefix, not fields. So the line content after the prefix should be the record fields separated by |. So for a note line with only text field, it would be: > note_text|.
+
+For a subnote line with only subnote text, it would be: >> subnote_text|.
+
+Thus, we need to produce lines like:
+
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+
+But wait, the note line for "notes are from abstract only" should have its text field "notes are from abstract only". So the line would be: > notes are from abstract only|.
+
+Similarly, subnote lines: >> abstract mentions 32k limit|.
+
+Yes.
+
+Thus, the output lines will have the > or >> at the beginning, then the record fields separated by |, ending with |.
+
+Now, for claim lines, no prefix, just the fields.
+
+Thus, final output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|~
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|~
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|~
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+Chinchilla tokens beat parameters|supported|2203.15556|2022|~
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2020|~
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+We need to ensure that the claim lines have the correct number of fields: text, verdict, id, year, notes. We have text, verdict, id, year, notes. notes is ~ for now.
+
+Check each claim:
+
+1. text: "Rope scaling hurts long ctx"
+   verdict: refuted
+   id: 2405.05254
+   year: 2024
+   notes: ~
+
+2. text: "LoRA matches full finetune"
+   verdict: supported
+   id: 2106.09685
+   year: 2021
+   notes: ~
+
+3. text: "KV cache quant loses 2x acc"
+   verdict: refuted
+   id: 2406.12345
+   year: 2024
+   notes: ~
+
+4. text: "Chinchilla tokens beat parameters"
+   verdict: supported
+   id: 2203.15556
+   year: 2022
+   notes: ~
+
+5. text: "Language models few-shot"
+   verdict: supported
+   id: 2005.14165
+   year: 2020
+   notes: ~
+
+Now, note texts:
+
+1. Note1 text: "notes are from abstract only"
+   subnotes: ["abstract mentions 32k limit", "appendix B clarifies"]
+
+2. Note2 text: "table 3 contradicts"
+   subnotes: ["llama 7b tested only"]
+
+2. Note1 text: "tested on GLUE and Wikisql"
+   subnotes: ["rank 4 sufficient", "higher ranks show diminishing returns"]
+
+2. Note2 text: "memory footprint reduced 3x"
+   subnotes: ["optimizer state minimal"]
+
+2. Note3 text: "checkpoint size under 50MB"
+   subnotes: [] (empty)
+
+3. Note text: "outlier channels preserved"
+   subnotes: ["per-head scales help", "perplexity intact"]
+
+4. Note1 text: "optimal ratio is 20 to 1"
+   subnotes: ["tested across 400 models", "cosine schedule used"]
+
+4. Note2 text: "kaplan tokens were suboptimal"
+   subnotes: ["fixed learning rate flawed"]
+
+5. Note text: "scaling curve is smooth"
+   subnotes: ["tested up to 175B", "in-context learning observed"]
+
+Now, we need to ensure that for notes with no subnotes, we just have the > line with no >> lines. For claim 2 note3 "checkpoint size under 50MB", we have > checkpoint size under 50MB| and no >> lines.
+
+Now, we need to check if any of these texts contain | or \. They don't. So fine.
+
+Now, we need to output each line ending with |. So each line should end with | after the last field. For claim lines, we have 5 fields ending with ~|, so line ends with |. For note lines, we have one field (the text) ending with |, so line ends with |. For subnote lines, similarly.
+
+Thus, the lines are:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|~|
+> notes are from abstract only|
+>> abstract mentions 32k limit|
+>> appendix B clarifies|
+> table 3 contradicts|
+>> llama 7b tested only|
+LoRA matches full finetune|supported|2106.09685|2021|~|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+KV cache quant loses 2x acc|refuted|2406.12345|2024|~|
+> outlier channels preserved|
+>> per-head scales help|
+>> perplexity intact|
+Chinchilla tokens beat parameters|supported|2203.15556|2022|~|
+> optimal ratio is 20 to 1|
+>> tested across 400 models|
+>> cosine schedule used|
+> kaplan tokens were suboptimal|
+>> fixed learning rate flawed|
+Language models few-shot|supported|2005.14165|2020|~|
+> scaling curve is smooth|
+>> tested up to 175B|
+>> in-context learning observed|
+
+Wait, we have a line "> checkpoint size under 50MB|" after the note for memory footprint? Actually in claim 2, the notes are:
+
+- Note1: tested on GLUE and Wikisql
+- Note2: memory footprint reduced 3x
+- Note3: checkpoint size under 50MB
+
+So after the > lines for note1 and note2, we should have a > line for note3: > checkpoint size under 50MB|. And no >> lines for it.
+
+In our current output above, we have:
+
+LoRA matches full finetune|supported|2106.09685|2021|~|
+> tested on GLUE and Wikisql|
+>> rank 4 sufficient|
+>> higher ranks show diminishing returns|
+> memory footprint reduced 3x|
+>> optimizer state minimal|
+> checkpoint size under 50MB|
+
+Yes, that matches.
+
+Now, check claim 1: we have two notes, each with subnotes. We have > notes are from abstract only| then >> lines, then > table 3 contradicts| then >> line. That matches.
+
+Claim 3: one note with two subnotes: > outlier channels preserved| then >> lines.
+
+Claim 4: two notes, each with subnotes.
+
+Claim 5: one note with two subnotes.
+
+Now, we need to ensure that the claim lines are correctly ordered: text, verdict, id, year, notes. We have that.
+
+Now, we need to ensure that the verdict enum values are exactly "supported", "refuted", or "unknown". We have "supported" and "refuted". Good.
+
+Now, we need to ensure that the source.id is the paper id as given. We used the ids from the descriptions: 2405.05254, 2106.09685, 2406.12345, 2203.15556, 2005.14165. These match the paper ids mentioned.
+
+Now, we need to ensure that the year is correct: 2024 for first three, 2021 for second, 2022 for fourth, 2020 for fifth. Yes.
+
+Now, we need to check if any of the texts contain | or \. They don't. So no escaping needed.
+
+Now, we need to check if any of the values need to be quoted or escaped. The instruction says: "Inside a value, write \| for | and \ for \." Since there are no | or \, we can leave as is.
+
+Now, we need to ensure that each line ends with |. We have that.
+
+Now, we need to ensure that the > and >> prefixes are correctly placed. The lines starting with > or >> are note and subnote lines. They should be exactly as we have.
+
+Now, let's write the final output as a single block of lines, each line ending with |, and no extra spaces or lines.
+
+We need to be careful with the ordering of fields in claim lines: text, verdict, id, year, notes. We have that.
+
+Now, let's produce the final answer.

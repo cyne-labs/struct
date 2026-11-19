@@ -1,0 +1,153 @@
+We need to parse the user's request. They gave a schema: schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \.
+
+A record{...} field adds its extra columns, in order. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break and until the closing |.
+
+Example: text|supported|text|7|~|
+
+We have 5 items described in bullet points. Need to convert each into a record.
+
+The schema order: claim has fields: text, verdict, source (which is a record with id and year), verified.
+
+But the schema: schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+So the top-level fields in order: text, verdict, source (which itself has id, year), verified.
+
+Thus each record should have columns: text, verdict, source.id, source.year, verified.
+
+But the example "text|supported|text|7|~|" seems to show: text, verdict, source.id?, source.year?, verified? Actually example: text|supported|text|7|~|
+
+Interpretation: first column is text (the claim text), second is verdict (supported/refuted/unverified), third is source.id? But they wrote "text" as the third column? Wait example: "text|supported|text|7|~|"
+
+Maybe they meant: text value is "text", verdict is "supported", source.id is "text", source.year is "7", verified is "~" (null). That seems odd. But likely the example is just placeholder.
+
+Better to follow the schema: For each claim, we need to output columns: text, verdict, source.id, source.year, verified.
+
+Thus 5 columns after text and verdict? Actually total columns: text, verdict, source.id, source.year, verified. That's 5 columns.
+
+But the example shows 5 columns: text, verdict, text, 7, ~. So yes, 5 columns.
+
+Thus we need to produce lines with 5 values separated by |, ending with |.
+
+Values:
+
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+
+So text: "Rope scaling hurts long ctx" maybe? Or the claim text is "Rope scaling hurts long ctx". The bullet says: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted."
+
+Thus text field should be the claim text: "Rope scaling hurts long ctx". Verdict: refuted. Source: id is paper ID: 2405.05254? Or maybe the paper's id is 2405.05254. Year: 2024. Verified: bool? It says "it turned out to be false, so the claim is refuted." Does that imply verified? Not explicitly. The schema has verified:bool. We need to infer from the description. For item 1, it says "it turned out to be false, so the claim is refuted." That suggests the claim was tested and found false, so maybe verified is true? Or maybe verified refers to whether the claim has been verified by evidence? The description includes verification status in other items: "verification was true", "it was verified as true", "verification was true", "verification was true". For item 1, it says "it turned out to be false", which implies some verification happened, so verified could be 1 (true). But we need to decide.
+
+Looking at item 2: "In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported." Here they explicitly say verification was true, and the claim is supported. So verified: 1, verdict: supported.
+
+Item 3: "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported." So verified: 1, verdict: supported.
+
+Item 4: "In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported." So verified: 1, verdict: supported.
+
+Item 5: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported." So verified: 1, verdict: supported.
+
+Item 1 is different: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." It doesn't explicitly say "verification was true", but "it turned out to be false" implies some verification happened. However, we might treat verified as 1 as well, because the claim was tested. But we need to infer from the pattern. Items 2-5 all have explicit "verification was true". Item 1 says "it turned out to be false", which also implies verification occurred. So likely verified: 1.
+
+But we need to be careful: The schema has verified:bool. We need to output 1 or 0. I think we should set verified: 1 for all five, because each claim is about a paper claim and they are evaluated. However, item 1 says "it turned out to be false", which is a verification result. So yes, verified: 1.
+
+Now source.id: The paper ID string, e.g., "2405.05254". source.year: integer year, e.g., 2024.
+
+Verdict enum: supported, refuted, unverified. For item 1, verdict is refuted. For items 2-5, verdict is supported.
+
+Thus we need to produce 5 lines:
+
+Line 1: text: "Rope scaling hurts long ctx" (need to escape any | or \ if present). The claim text contains no | or \, but has quotes. The text value should be exactly the claim text, but if it contains line breaks or spaces at start/end, we need to prefix with \r and keep exact content. Here it's a simple sentence with no special formatting. So we can just put the text as is, but need to escape | and \ if any. There's no |. So text = Rope scaling hurts long ctx (without quotes?). Should we include the quotes? The claim is "Rope scaling hurts long ctx". Typically the text is the claim string inside quotes. Might include the quotes? The example didn't include quotes. Probably just the claim text without quotes. Let's use Rope scaling hurts long ctx.
+
+Verdict = refuted.
+
+source.id = 2405.05254
+
+source.year = 2024
+
+verified = 1
+
+Thus line: Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+
+But need to ensure values are separated by | and line ends with |. So format: text|verdict|source.id|source.year|verified|
+
+Thus: Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+
+Second: Paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported.
+
+Text: Attention is all you need
+
+Verdict: supported
+
+source.id: 1706.03762
+
+source.year: 2017
+
+verified: 1
+
+Line: Attention is all you need|supported|1706.03762|2017|1|
+
+Third: Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported.
+
+Text: LoRA low rank adaptation
+
+Verdict: supported
+
+source.id: 2106.09685
+
+source.year: 2021
+
+verified: 1
+
+Line: LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+Fourth: In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported.
+
+Text: Mistral 7B architecture
+
+Verdict: supported
+
+source.id: 2309.06180
+
+source.year: 2023
+
+verified: 1
+
+Line: Mistral 7B architecture|supported|2309.06180|2023|1|
+
+Fifth: Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported.
+
+Text: DeepSeekMoE mixture experts
+
+Verdict: supported
+
+source.id: 2401.04088
+
+source.year: 2024
+
+verified: 1
+
+Line: DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check for any special characters: None.
+
+Need to ensure that if text contains line breaks or spaces at start/end, we prefix with \r. Not needed.
+
+Thus final output should be these 5 lines, each ending with |.
+
+Make sure no extra spaces or lines. Just the lines.
+
+Thus:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check each line ends with |. Yes.
+
+Now ensure no prose, no header, no code fences. Just these lines.
+
+Thus final answer.

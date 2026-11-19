@@ -1,0 +1,62 @@
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   Goal: Extract data from the provided text and format it into a specific Struct format.
+    *   Schema: `claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}`
+    *   Output Format Constraints:
+        *   Data only in Struct format.
+        *   No prose, no code fences.
+        *   No header row or column names.
+        *   One record per line.
+        *   Values separated by `|`.
+        *   Every line ends with `|`.
+        *   `~` means null.
+        *   `bool` is 1 or 0.
+        *   Enum values must be exact labels (`supported`, `refuted`, `unverified`).
+        *   Special handling for text containing internal formatting (spaces, tabs, line breaks): start the value with `\r`, then write the content exactly.
+
+2.  **Process Input Text (Record by Record):**
+
+    *   **Claim 1:** "Paper 2405.05254 was published in 2024 with the title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted."
+        *   ID: 2405.05254
+        *   Title: Rope scaling hurts long ctx
+        *   Year: 2024
+        *   Verdict: refuted
+        *   Verified: (Implied false/refuted, but let's check the structure. The text says "it turned out to be false," which maps to `refuted`. Since it was refuted, it implies verification occurred.)
+        *   *Self-Correction on Verified:* The prompt doesn't explicitly state if the verification itself was true or false, only the result. I will assume `verified: true` if a verdict is given, unless specified otherwise.
+
+    *   **Claim 2:** "In 2017, paper 1706.03762 was published with the title "Attention is all you need"; verification was true, and the claim is supported."
+        *   ID: 1706.03762
+        *   Title: Attention is all you need
+        *   Year: 2017
+        *   Verdict: supported
+        *   Verified: true (1)
+
+    *   **Claim 3:** "Paper 2106.09685, titled "LoRA low rank adaptation", appeared in 2021; it was verified as true, so the claim is supported."
+        *   ID: 2106.09685
+        *   Title: LoRA low rank adaptation
+        *   Year: 2021
+        *   Verdict: supported
+        *   Verified: true (1)
+
+    *   **Claim 4:** "Titled "Mistral 7B architecture", paper 2309.06180 was published in 2023; verification was true, and the claim is supported."
+        *   ID: 2309.06180
+        *   Title: Mistral 7B architecture
+        *   Year: 2023
+        *   Verdict: supported
+        *   Verified: true (1)
+
+    *   **Claim 5:** "Paper 2401.04088 was published in 2024 under the title "DeepSeekMoE mixture experts"; it was verified as true, and the claim is supported."
+        *   ID: 2401.04088
+        *   Title: DeepSeekMoE mixture experts
+        *   Year: 2024
+        *   Verdict: supported
+        *   Verified: true (1)
+
+3.  **Format the Output (Adhering to Strict Rules):**
+    *   Format: id|title|verdict|year|verified
+    *   Handle text formatting carefully (especially quotes and internal spaces).
+
+    *   *Reviewing special formatting rule:* "Inside a value, write \| for | and \ for \. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is..." (This usually applies to multi-line text, but here it seems focused on quoted/spaced titles).
+
+4.  **Final Output Generation.** (Executing the format).

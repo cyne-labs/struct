@@ -1,0 +1,54 @@
+
+We need to produce a data set of 5 records, each with fields according to the schema:
+
+```
+schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+```
+
+But the description says: "Reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |."
+
+So each line should be a record object with fields "text", "verdict", "source", "verified". The order of fields in schema is claim{text, verdict, source, verified}. It says "values in schema order". So the first line should have: text, verdict, source, verified.
+
+Thus each line: text = claim text (the claim description). For each of the 5 items, we need to craft the claim text. Also we need to include source: record{id, year:int} where id is presumably the paper number? The problem gives paper numbers: 2405.05254, 1706.03762, 2106.09685, 2309.06180, 2401.04088. The year is 2024 for the first, 2017 for second, 2021 for third, 2023 for fourth, 2024 for fifth. Also we need to include verdict: "refuted", "supported", "supported", "supported", "supported". According to the description:
+
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted. So text: "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024; it turned out to be false". Verdict: refuted. Source: id=2405.05254, year=2024. Verified: false (bool 0? Actually bool is 1 or 0, where 1 = true, 0 = false? The schema: verdict is enum(supported,refuted,unverified). Verified is bool. So we need verified:bool: if claim is refuted, verified should be false. So verified:0.
+
+Second: In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported. So text: "In 2017, paper 1706.03762 claimed 'Attention is all you need'; verification was true". Verdict: supported. Source id=1706.03762, year=2017. Verified: true (1). No extra fields.
+
+Third: Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported. So text: "Paper 2106.09685 made the claim 'LoRA low rank adaptation' in 2021; it was verified as true". Verdict: supported. Source id=2106.09685, year=2021, verified=1.
+
+Fourth: In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported. So text: "In 2023, paper 2309.06180 claimed 'Mistral 7B architecture'; verification was true". Verdict: supported. Source id=2309.06180, year=2023, verified=1.
+
+Fifth: Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported. So text: "In 2024, paper 2401.04088 made the claim 'DeepSeekMoE mixture experts'; verified as true". Verdict: supported. Source id=2401.04088, year=2024, verified=1.
+
+Now format each line: "text|verdict|source|verified". Where source is "record{id, year:int}". That means source value is something like "record{2405.05254,2024}" (with commas). The schema: source:record{id, year:int}. So we need to include "source:record{id,year}". Probably exactly that format: "source:record{id,year}". No extra spaces? The example: "text|supported|text|7|~|". For that example, they used "text|supported|text|7|~|". That shows they have "source:record{text}|". Actually the example: "text|supported|text|7|~|". It seems they placed "source:record{...}". But they also said "source:record{id, year:int}". So we should produce "source:record{2405.05254,2024}" etc.
+
+Thus each line: text|verdict|source|verified
+
+Example line 2: "In 2017, paper 1706.03762 claimed 'Attention is all you need'; verification was true|supported|record{1706.03762,2017}|1"
+
+But we need to ensure the text includes the claim and the verification statement. The first line includes "it turned out to be false". The second says "verification was true". We may incorporate both. Keep it concise. The schema says "text, verdict, source, verified". So we can have the entire claim and verification text as one field. That's okay.
+
+We need to ensure no extra spaces around pipes? Typically they separate fields with |. So "text|verdict|source|verified". No spaces. So line: "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024; it turned out to be false|refuted|record{2405.05254,2024}|0". That's correct.
+
+Make sure to escape internal quotes. Use single quotes around the claim text as in examples. The claim text includes single quotes. That's fine.
+
+Thus final output: 5 lines, each ending with |.
+
+Let's write them:
+
+Line1: Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024; it turned out to be false|refuted|record{2405.05254,2024}|0
+
+Line2: In 2017, paper 1706.03762 claimed 'Attention is all you need'; verification was true|supported|record{1706.03762,2017}|1
+
+Line3: Paper 2106.09685 made the claim 'LoRA low rank adaptation' in 2021; it was verified as true|supported|record{2106.09685,2021}|1
+
+Line4: In 2023, paper 2309.06180 claimed 'Mistral 7B architecture'; verification was true|supported|record{2309.06180,2023}|1
+
+Line5: In 2024, paper 2401.04088 made the claim 'DeepSeekMoE mixture experts'; verified as true|supported|record{2401.04088,2024}|1
+
+Check ordering: schema says claim{text, verdict, source, verified}. So we have text, then verdict, then source, then verified. Good.
+
+Make sure there is no trailing space after last |. Also ensure no extra newline at end? Typically fine.
+
+Thus output exactly those 5 lines.

@@ -1,0 +1,165 @@
+We need to parse the problem.
+
+We have a schema: claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to produce data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \.
+
+A record{...} field adds its extra columns, in order. So the source is a record with fields id and year. So the overall order of columns for a claim record should be: text, verdict, source:record{id, year} fields, verified.
+
+Thus columns: text, verdict, source_id, source_year, verified.
+
+We need to produce one line per claim, with values separated by |, ending with |.
+
+We have 5 claims described in the user message. We need to construct Struct records for each.
+
+We need to extract from each bullet:
+
+1. Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted.
+
+So text: "Rope scaling hurts long ctx". verdict: refuted. source: record{id: 2405.05254?, year: 2024}. verified: ? The statement "it turned out to be false" suggests verification maybe false? The bullet says "it turned out to be false, so the claim is refuted." It doesn't explicitly say verification status. But we have a field verified: bool. We need to determine verified? The bullet says "it turned out to be false". That could be considered verified as false? But verified is a separate field. The schema includes verified: bool. In the example earlier they gave "Paper 2405.05254 claimed ...; it turned out to be false, so the claim is refuted." We need to infer verified maybe 0? Or maybe verified is 1 if verified true, 0 if false? The description: "verified:bool". It doesn't specify meaning. In the bullet they say "it turned out to be false". That could mean the claim was verified as false, so verified could be 0? Or maybe verified is 1 if the claim has been verified (i.e., checked), but here it's false. Hmm.
+
+Look at other bullets:
+
+2. In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported.
+
+Here they explicitly say "verification was true". So verified: 1 (true). verdict: supported.
+
+3. Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported.
+
+Again "verified as true". So verified: 1. verdict: supported.
+
+4. In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported.
+
+Again verified: 1. verdict: supported.
+
+5. Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported.
+
+Again verified: 1. verdict: supported.
+
+So only the first bullet lacks explicit "verification was true/false". It says "it turned out to be false, so the claim is refuted." That could be interpreted as the claim is refuted, and perhaps verified is 1? Or maybe verified is 0 because it's false? But the field verified is bool, not sure.
+
+We need to decide. The schema includes verified: bool. In the example they gave earlier: "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." They didn't mention verified explicitly. But we need to fill verified.
+
+Perhaps we can infer that if the claim is refuted, it might still be verified (i.e., they checked and found it false). So verified could be 1. But the bullet says "it turned out to be false", which implies verification happened and found false. So verified: 1.
+
+Alternatively, maybe verified is 0 if the claim is unverified. But here it's refuted, so verified is true that it's false. So verified: 1.
+
+But we need to be consistent with the other bullets where they say "verification was true". They set verified: 1. So for the first, if it's false but verified, maybe also verified: 1. However, they didn't explicitly say "verification was true". But "turned out to be false" implies verification.
+
+Thus we set verified: 1 for all? But the schema might expect verified: 0 for unverified claims. In the first bullet, it's refuted, so it's verified (i.e., we have evidence). So verified: 1.
+
+Thus for claim 1: text: "Rope scaling hurts long ctx", verdict: refuted, source id: 2405.05254, source year: 2024, verified: 1.
+
+But need to check the id format: Paper 2405.05254. So id is "2405.05254". Year: 2024.
+
+Now claim 2: text: "Attention is all you need", verdict: supported, source id: 1706.03762, source year: 2017, verified: 1 (since verification was true).
+
+Claim 3: text: "LoRA low rank adaptation", verdict: supported, source id: 2106.09685, source year: 2021, verified: 1.
+
+Claim 4: text: "Mistral 7B architecture", verdict: supported, source id: 2309.06180, source year: 2023, verified: 1.
+
+Claim 5: text: "DeepSeekMoE mixture experts", verdict: supported, source id: 2401.04088, source year: 2024, verified: 1.
+
+Now we need to format each record as: text | verdict | source_id | source_year | verified |
+
+All values separated by |, ending with |.
+
+We need to escape | and \ in values. The text may contain quotes or other characters, but we need to ensure proper escaping: Inside a value, write \| for | and \ for \. Also if the text contains line breaks or spaces, we need to start the value with \r? Wait the instruction: "For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break until the closing |."
+
+But our texts are simple sentences without line breaks or leading/trailing spaces. So we don't need to prefix with \r. However, we need to escape any | or \ characters inside the text. The texts don't contain | or \. So we can just write the text as is.
+
+But we need to be careful: The value for text is enclosed in quotes? No, the format is just the value itself, separated by |. So if the text contains | or \, we need to escape them as \| or \. But our texts don't have those.
+
+Thus each line: text|verdict|source_id|source_year|verified|
+
+Where verdict is one of supported, refuted, unverified.
+
+So let's construct:
+
+1. text: Rope scaling hurts long ctx
+verdict: refuted
+source_id: 2405.05254
+source_year: 2024
+verified: 1
+
+Line: Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+
+But need to ensure no extra spaces.
+
+2. text: Attention is all you need
+verdict: supported
+source_id: 1706.03762
+source_year: 2017
+verified: 1
+
+Line: Attention is all you need|supported|1706.03762|2017|1|
+
+3. text: LoRA low rank adaptation
+verdict: supported
+source_id: 2106.09685
+source_year: 2021
+verified: 1
+
+Line: LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+4. text: Mistral 7B architecture
+verdict: supported
+source_id: 2309.06180
+source_year: 2023
+verified: 1
+
+Line: Mistral 7B architecture|supported|2309.06180|2023|1|
+
+5. text: DeepSeekMoE mixture experts
+verdict: supported
+source_id: 2401.04088
+source_year: 2024
+verified: 1
+
+Line: DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Check if any text contains underscores or other characters that might need escaping. No.
+
+Now we need to ensure the order: text, verdict, source:record{id, year}. The source record fields are id and year, in order. So after verdict, we have id, then year. Then verified.
+
+Thus the columns are: text, verdict, source_id, source_year, verified.
+
+All good.
+
+Now we need to output one record per line, each ending with |.
+
+Thus output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+But we need to check if any text has leading/trailing spaces or line breaks. No.
+
+Now check if any | appears in text. None.
+
+Thus final answer is these five lines.
+
+But we need to ensure that the first line is data, no header. That's fine.
+
+Now double-check the schema: schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+So source is a record with id and year. We have represented id and year as separate columns. That's correct.
+
+Now check if we need to escape any characters in the text like quotes. The texts are simple.
+
+Thus final output:
+
+Rope scaling hurts long ctx|refuted|2405.05254|2024|1|
+Attention is all you need|supported|1706.03762|2017|1|
+LoRA low rank adaptation|supported|2106.09685|2021|1|
+Mistral 7B architecture|supported|2309.06180|2023|1|
+DeepSeekMoE mixture experts|supported|2401.04088|2024|1|
+
+Make sure each line ends with |. Yes.
+
+Now output exactly that.

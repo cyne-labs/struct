@@ -1,0 +1,6 @@
+
+{"text":"Rope scaling hurts long ctx","verdict":"refuted","source":{"id":"2405.05254","year":2024},"notes":[{"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}]}
+{"text":"LoRA matches full finetune","verdict":"supported","source":{"id":"2106.09685","year":2021},"notes":[{"text":"tested on GLUE and Wikisql","subnotes":["rank 4 sufficient","higher ranks show diminishing returns"]},{"text":"memory footprint reduced 3x","subnotes":["optimizer state minimal"]},{"text":"checkpoint size under 50MB",null}]}
+{"text":"KV cache quant loses 2x acc","verdict":"refuted","source":{"id":"2406.12345","year":2024,"notes":[{"text":"outlier channels preserved","subnotes":["per-head scales help","perplexity intact"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}]}
+{"text":"Chinchilla tokens beat params","verdict":"supported","source":{"id":"2203.15556","year":2022,"notes":[{"text":"optimal ratio is 20 to 1","subnotes":["tested across 400 models"]},{"text":"kaplan tokens were suboptimal","subnotes":["fixed learning rate flawed"]}]}
+{"text":"Language models few-shot","verdict":"supported","source":{"id":"2005.14165","year":2020,"notes":[{"text":"scaling curve is smooth","subnotes":["tested up to 175B"]},{"text":"in-context learning observed",null}]}

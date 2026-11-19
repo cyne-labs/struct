@@ -1,0 +1,103 @@
+We need to parse the instruction: We need to produce data only in Struct format, one record per line, values in schema order: id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool
+
+So each line: id | title | verdict | year | verified |
+
+But the schema given: schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+
+Thus order: id, title, verdict, year, verified
+
+We have to fill based on the provided papers.
+
+We have five papers described in the bullet points:
+
+1. Paper 2405.05254 was published in 2024 with the title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted.
+
+So id? Not given explicitly. Probably we need to use some id? The bullet points mention paper numbers but not ids. Might need to infer id from paper number? The schema expects id field. Could be something like "2405.05254"? Or maybe we need to use the paper identifier as id. The bullet says "Paper 2405.05254". So id could be "2405.05254". Title is "Rope scaling hurts long ctx". Verdict is refuted (since false). Year is 2024. Verified? The claim is refuted, but verified field is bool: maybe verified indicates if the claim has been verified? In the bullet, it says "it turned out to be false, so the claim is refuted." Does that imply verified? Not necessarily. The schema has verified:bool. We need to infer from context. For papers where verification was mentioned: "verification was true" meaning verified = 1? Or maybe verified refers to whether the claim has been verified as true? Actually the schema: claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}. So verified likely indicates whether the claim has been verified (i.e., evidence verified) regardless of verdict? But we need to assign based on given info.
+
+ bullet 1: No mention of verification status, just says it turned out false, so claim is refuted. Does that imply verified = false? Or maybe verified = 1 because it's verified as false? The field is bool, could be 1 if verified, 0 if not. ambiguous.
+
+ bullet 2: "verification was true, and the claim is supported." So here verification was true, claim supported. So verified = 1 (true). Verdict = supported.
+
+ bullet 3: "it was verified as true, so the claim is supported." So verified = 1, verdict = supported.
+
+ bullet 4: "verification was true, and the claim is supported." So verified = 1, verdict = supported.
+
+ bullet 5: "it was verified as true, and the claim is supported." So verified = 1, verdict = supported.
+
+ For bullet 1, no explicit verification status, but it says "it turned out to be false, so the claim is refuted." Could be considered verified? It turned out false, so maybe it's verified as false. But the field verified is bool, not sure if it means verified irrespective of direction. Might be safer to set verified = 1 if there is any verification mentioned, else 0. Since bullet 1 says "turned out to be false", that implies some verification happened. So verified = 1. But the verdict is refuted.
+
+ However, we need to be careful: The schema includes verdict enum supported, refuted, unverified. So if verified is false, maybe verdict could be refuted but verified false? That seems odd. But we follow the data given.
+
+ Let's parse each bullet:
+
+ 1. Paper 2405.05254, title "Rope scaling hurts long ctx", published 2024, claim is false => verdict = refuted. No explicit verification mention, but "turned out to be false" implies some verification. We'll set verified = 1.
+
+ 2. Paper 1706.03762, title "Attention is all you need", published 2017, verification was true, claim is supported => verified = 1, verdict = supported.
+
+ 3. Paper 2106.09685, title "LoRA low rank adaptation", published 2021, verified as true, claim supported => verified = 1, verdict = supported.
+
+ 4. Paper titled "Mistral 7B architecture", paper 2309.06180, published 2023, verification was true, claim supported => verified = 1, verdict = supported.
+
+ 5. Paper 2401.04088, title "DeepSeekMoE mixture experts", published 2024, verified as true, claim supported => verified = 1, verdict = supported.
+
+ We need id field. For each, id could be the paper identifier (the arXiv or similar). The bullets give paper numbers: 2405.05254, 1706.03762, 2106.09685, 2309.06180, 2401.04088. So we can use those as id.
+
+ Title field: the title given in bullet. For paper 1, title is "Rope scaling hurts long ctx". For paper 2, title is "Attention is all you need". For paper 3, title is "LoRA low rank adaptation". For paper 4, title is "Mistral 7B architecture". For paper 5, title is "DeepSeekMoE mixture experts".
+
+ Verdict: as above.
+
+ Year: extract from bullet: 2024, 2017, 2021, 2023, 2024.
+
+ Verified: 1 for all? For paper 1, we assume 1. Others are 1.
+
+Thus we produce five lines:
+
+id | title | verdict | year | verified
+
+But need to escape | in titles if any. None have |.
+
+Need to format: id|title|verdict|year|verified
+
+No header row.
+
+So line1: 2405.05254|Rope scaling hurts long ctx|refuted|2024|1
+
+line2: 1706.03762|Attention is all you need|supported|2017|1
+
+line3: 2106.09685|LoRA low rank adaptation|supported|2021|1
+
+line4: 2309.06180|Mistral 7B architecture|supported|2023|1
+
+line5: 2401.04088|DeepSeekMoE mixture experts|supported|2024|1
+
+Check if any title contains |? No.
+
+Check if any field needs escaping for | or \. None.
+
+Check if any field contains line breaks? No.
+
+Thus output five lines separated by newlines, each ending with |? Wait the instruction: "One record per line: values in schema order, separated by |, and every line ends with |."
+
+It says every line ends with |. That means after the last field (verified), we need a trailing |. So each line should be: id|title|verdict|year|verified|
+
+Yes, include trailing pipe.
+
+Thus:
+
+2405.05254|Rope scaling hurts long ctx|refuted|2024|1|
+
+1706.03762|Attention is all you need|supported|2017|1|
+
+2106.09685|LoRA low rank adaptation|supported|2021|1|
+
+2309.06180|Mistral 7B architecture|supported|2023|1|
+
+2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Check schema order: id, title, verdict, year, verified. Yes.
+
+Enum values must be one of supported, refuted, unverified. We have supported, refuted. No unverified.
+
+Bool is 1 or 0. We used 1.
+
+Thus final answer.

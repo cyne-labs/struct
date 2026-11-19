@@ -1,0 +1,55 @@
+
+We need to produce a struct format record for each claim. The schema:
+
+schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+We have 5 records. The first line is already data. That means we need to output data only, no extra prose. The format: values in schema order, separated by |, each line ends with |. No header row. No code fences. So something like:
+
+"Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|~"
+
+But we need to follow the order: id, title, verdict, year, verified.
+
+Given each claim:
+
+1. Paper 2405.05254 was published in 2024 with the title "Rope scaling hurts long ctx"; it turned out to be false, so the claim is refuted.
+
+Thus id: "Paper 2405.05254". Title: "Rope scaling hurts long ctx". Verdict: refuted (since turned out false). Year: 2024. Verified: false (since refuted). So boolean: false (0). So line: "Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0"
+
+But need to check if they want "verified:bool" maybe false as 0. Yes.
+
+2. In 2017, paper 1706.03762 was published with the title "Attention is all you need"; verification was true, and the claim is supported.
+
+So id: "paper 1706.03762"? The id probably the paper ID. Title: "Attention is all you need". Verdict: supported. Year: 2017. Verified: true (1). So line: "paper 1706.03762|Attention is all you need|supported|2017|1"
+
+But note case: they wrote "paper 1706.03762"? In the example they gave "Paper 2405.05254". So maybe case-sensitive? Usually IDs are as given. Use same case as given? The claim text includes "paper 1706.03762"? Actually they wrote "paper 1706.03762"? The description: "In 2017, paper 1706.03762 was published..." So id is "1706.03762". Title: "Attention is all you need". So line: "1706.03762|Attention is all you need|supported|2017|1". But the instruction: "id, title, verdict...". It didn't specify case. So we can use the ID as given. I'd use "paper 1706.03762"? But it's ambiguous. Usually ID is numeric, but it's okay. I'll use "paper 1706.03762" because that's how it's mentioned. But to be safe, use the numeric part only? The claim numbers are numeric. The ID is "paper 1706.03762". I'll stick with that.
+
+3. Paper 2106.09685, titled "LoRA low rank adaptation", appeared in 2021; it was verified as true, so the claim is supported.
+
+Thus id: "Paper 2106.09685"? Or "paper 2106.09685". Title: "LoRA low rank adaptation". Verdict: supported. Year: 2021. Verified: true (1). So line: "Paper 2106.09685|LoRA low rank adaptation|supported|2021|1"
+
+But need to ensure no extra spaces. Title includes "LoRA". That's fine.
+
+4. Titled "Mistral 7B architecture", paper 2309.06180 was published in 2023; verification was true, claim supported.
+
+Thus id: "paper 2309.06180"? Title: "Mistral 7B architecture". Verdict: supported. Year: 2023. Verified: true (1). So line: "paper 2309.06180|Mistral 7B architecture|supported|2023|1"
+
+5. Paper 2401.04088 was published in 2024 under the title "DeepSeekMoE mixture experts"; it was verified as true, claim supported.
+
+Thus id: "paper 2401.04088". Title: "DeepSeekMoE mixture experts". Verdict: supported. Year: 2024. Verified: true (1). So line: "Paper 2401.04088|DeepSeekMoE mixture experts|supported|2024|1"
+
+Now we need to ensure values with quotes? The instruction: "Reply with data only in Struct format: no prose, no code fences. Inside a value, write \| for | and \ for \". For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |."
+
+Our values have no line breaks or internal quotes. So we can just put them in quotes? The example they gave: "text|text|supported|7|~|". They didn't use quotes. They said "values in schema order, separated by |, and every line ends with |." They didn't require quotes. Usually struct format uses quotes for strings. But they didn't explicitly require quotes. However "Reply with data only in Struct format: no prose, no code fences." Usually you'd output plain values separated by pipes, without quotes. But they used quotes in the example? They wrote: ~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \". For text with line breaks... The example: text|text|supported|7|~|. So they didn't put quotes. So we can output without quotes.
+
+Thus each line: "Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0|"
+
+Note we need to ensure trailing pipe? The example ends with | after the last field. So each line ends with |. So we include trailing |.
+
+Thus final output:
+
+Paper 2405.05254|Rope scaling hurts long ctx|refuted|2024|0|
+paper 1706.03762|Attention is all you need|supported|2017|1|
+Paper 2106.09685|LoRA low rank adaptation|supported|2021|1|
+paper 2309.06180|Mistral 7B architecture|supported|2023|1|
+Paper 2401.04088|DeepSeekMoE mixture experts|supported|2024|1|
+
+Make sure no extra spaces. That should satisfy.

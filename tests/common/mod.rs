@@ -4,6 +4,8 @@
 
 #![allow(dead_code)]
 
+pub mod generator;
+
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, PartialEq, Eq)]

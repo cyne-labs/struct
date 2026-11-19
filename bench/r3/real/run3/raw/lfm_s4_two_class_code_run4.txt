@@ -1,0 +1,42 @@
+
+schema:name
+lib
+src/lib.rs
+line:10
+code:"pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}"
+line:5
+util
+src/util.rs
+code:"pub fn greet(name: &str) -> String {\n    format!(\"Hello, {}!\", name)\}"
+line:1
+main
+src/main.rs
+code:"fn main() {\n    println!(\"Hello, world!\");\n}"
+line:10
+schema:name
+lib
+src/lib.rs
+line:5
+util
+src/util.rs
+code:"pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}"
+line:1
+main
+src/main.rs
+code:"fn main() {\n    println!(\"Hello, world!\");\n}"
+line:10
+schema:name
+main
+src/main.rs
+line:10
+util
+src/util.rs
+code:"pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}"
+line:1
+lib
+src/lib.rs
+line:5
+util
+src/util.rs
+code:"pub fn greet(name: &str) -> String {\n    format!(\"Hello, {}!\", name)\}"
+line:10

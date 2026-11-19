@@ -1,0 +1,131 @@
+
+We need to produce data for each of the five papers as Struct records per the given schema. Format: each line is a record with fields: schema, claim, verdict, source, notes. The schema record has text, verdict (enum supported/refuted/unknown), source (record {id, year:int}), notes (list of record). The notes are list of record with text, subnotes list of str. The notes themselves: first note is a string, then subnotes list. The example shows "notes are from abstract only", with subnotes. For each paper we have multiple notes. The structure: "schema{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}}}. Reply with data only in Struct format: no prose, no code fences. No header row or column names. The first line is already data (so we just output lines). One record per line: values in schema order, separated by |, and every line ends with |. The fields order: text, verdict, source, notes. Within notes, each note is a record? The schema says: "notes:list[record{text, subnotes:list[str]}]". So each note is a record with text and subnotes. So we need to represent each note as a record. Possibly like:
+
+{
+  "text":"Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted.",
+  "verdict":"refuted",
+  "source":{"id":"1","year":2024},
+  "notes":[
+    {"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit","appendix B clarifies"]},
+    {"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}
+  ]
+}
+
+But we need to ensure values are correctly quoted, escaped. Use double quotes for JSON-like strings. Need to escape internal quotes and backslashes. The instruction: "Inside a value, write \| for | and \ for \". That means if we want to include literal '|' inside a value, we need to escape as \|. But we have no such internal '|' except in text. The text fields have quotes. For example, "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted." That's fine: we need to escape the inner quotes with backslashes. Also we need to escape double quotes inside the text with \". Also need to handle the backslashes for line breaks? The text may contain line breaks; if so, start with \r then line break. But the given texts don't have line breaks. So we can just embed them.
+
+Also need to ensure each line ends with |. Also fields are separated by commas, and each line ends with |. Also we need to ensure no extra spaces at start or end of lines? Probably fine.
+
+We need to produce 5 lines, each representing a record. Let's parse each paper:
+
+Paper 1:
+- ID: "1."? In the list they label "1." then content. Should we use the ID as "1"? The schema: source:record{id, year:int}. So id is string. Probably use the numeric part? The example: they used "paper 2405.05254" etc. But they didn't specify format for id. Probably we can use the numeric identifier after the dot? The first line is "1. Paper 2405.05254 claimed ...". So the record id could be "2405.05254". The year is 2024. The text: "Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted." The verdict: refuted (since claim was refuted). The first note: "notes are from abstract only" with subnotes: "abstract mentions 32k limit" and "appendix B clarifies". Second note: "table 3 contradicts", subnote "llama 7b tested only". So notes array has two objects.
+
+Thus line:
+
+{
+  "text":"Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted.",
+  "verdict":"refuted",
+  "source":{"id":"2405.05254","year":2024},
+  "notes":[
+    {"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit","appendix B clarifies"]},
+    {"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}
+  ]
+}
+
+But need to ensure commas and ordering: text, verdict, source, notes. That's correct.
+
+Paper 2:
+- ID: "2". Year: 2021. Claim: "LoRA matches full finetune", verdict: supported. First note: "tested on GLUE and Wikisql", subnotes: "rank 4 sufficient" and "higher ranks show diminishing returns". Second note: "memory footprint reduced 3x", subnote "optimizer state minimal". Third note: "checkpoint size under 50MB", no subnotes. So notes array of three objects.
+
+Thus:
+
+{
+  "text":"In 2021, paper 2106.09685 made the claim \"LoRA matches full finetune\", and the verdict is supported.",
+  "verdict":"supported",
+  "source":{"id":"2106.09685","year":2021},
+  "notes":[
+    {"text":"tested on GLUE and Wikisql","subnotes":["rank 4 sufficient","higher ranks show diminishing returns"]},
+    {"text":"memory footprint reduced 3x","subnotes":["optimizer state minimal"]},
+    {"text":"checkpoint size under 50MB"}
+  ]
+}
+
+But need to ensure the sentence ends with period. The original text includes period at end? The description: "In 2021, paper 2106.09685 made the claim "LoRA matches full finetune", and the verdict is supported." So we can include that. Good.
+
+Paper 3:
+- ID: "3". Year: 2024. Claim: "KV cache quant loses 2x acc", verdict: refuted. Note: "outlier channels preserved", subnotes: "per-head scales help" and "perplexity intact". So notes array of one object.
+
+Thus:
+
+{
+  "text":"Paper 2406.12345 made the claim \"KV cache quant loses 2x acc\" in 2024, but the verdict is refuted.",
+  "verdict":"refuted",
+  "source":{"id":"2406.12345","year":2024},
+  "notes":[
+    {"text":"outlier channels preserved","subnotes":["per-head scales help","perplexity intact"]}
+  ]
+}
+
+Paper 4:
+- ID: "4". Year: 2022. Claim: "Chinchilla tokens beat params", verdict: supported. First note: "optimal ratio is 20 to 1", subnotes: "tested across 400 models" and "cosine schedule used". Second note: "kaplan tokens were suboptimal", subnote: "fixed learning rate flawed". No further notes. So notes array of two objects.
+
+Thus:
+
+{
+  "text":"Published in 2022, paper 2203.15556 claimed \"Chinchilla tokens beat params\", which is supported.",
+  "verdict":"supported",
+  "source":{"id":"2203.15556","year":2022},
+  "notes":[
+    {"text":"optimal ratio is 20 to 1","subnotes":["tested across 400 models","cosine schedule used"]},
+    {"text":"kaplan tokens were suboptimal","subnotes":["fixed learning rate flawed"]}
+  ]
+}
+
+Paper 5:
+- ID: "5". Year: 2020. Claim: "Language models few-shot", verdict: supported. Note: "scaling curve is smooth", subnotes: "tested up to 175B" and "in-context learning observed". So notes array of one object.
+
+Thus:
+
+{
+  "text":"Paper 2005.14165 from 2020 claimed \"Language models few-shot\", and the claim is supported.",
+  "verdict":"supported",
+  "source":{"id":"2005.14165","year":2020},
+  "notes":[
+    {"text":"scaling curve is smooth","subnotes":["tested up to 175B","in-context learning observed"]}
+  ]
+}
+
+We need to ensure we have correct ordering of fields: text, verdict, source, notes. Within notes, each note is a record with text and subnotes. The subnotes are a list of strings. That matches.
+
+Now check for any required escaping: The text includes double quotes around phrases. We need to escape them with backslash. Already did. Also the text includes backslashes? No. There's "tested on GLUE and Wikisql" no backslashes. "optimal ratio is 20 to 1" no backslashes. "language models few-shot" no special chars. Good.
+
+Now ensure each line ends with |. Also no extra spaces before or after. The line should start with { and end with }. We need to ensure we have proper commas between fields. Also ensure we don't have trailing commas. Also ensure we have no extra newline inside lines (line break only at end). So each line is a single line.
+
+Let's write them:
+
+Line1:
+{ "text":"Paper 2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024, but the claim was refuted.", "verdict":"refuted", "source":{"id":"2405.05254","year":2024}, "notes":[{"text":"notes are from abstract only","subnotes":["abstract mentions 32k limit","appendix B clarifies"]},{"text":"table 3 contradicts","subnotes":["llama 7b tested only"]}] }
+
+But note we need to include the closing brace at the end. Also need to ensure we have a space after commas? The example shows no spaces, but it's okay. The instruction: "values in schema order, separated by |, and every line ends with |." Actually they said "values in schema order, separated by |, and every line ends with |." That suggests they might want pipe separated values rather than JSON. But the example they gave earlier was JSON-like, but they said "schema:claim{...}" and then "Reply with data only in Struct format: no prose, no code fences." The example they gave earlier is a JSON-like structure. However they also gave the instruction "schema:claim{text, verdict:enum(...), source:record{...}, notes:list[record{...}]}" which is a schema, not a JSON. Then they gave "Reply with data only in Struct format: no prose, no code fences." The example they gave earlier: "text|supported|text|~|". That's ambiguous. However they want "values in schema order, separated by |" which could mean each field separated by commas, not pipes. But they also said "One record per line: values in schema order, separated by |, and every line ends with |." That suggests fields separated by commas, not pipes. But the example they gave earlier uses pipe as delimiter for list items. Actually they said "List items go on the lines below their parent, starting with one > for its items, > for its items, >> for theirs." That's about indentation. The earlier example: "~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \". A record{...} field adds its fields as extra columns, in order." This is confusing.
+
+Given typical usage, they likely want a JSON-like representation. The phrase "struct format" might refer to a data structure, not necessarily JSON. But we can produce JSON. Since they didn't forbid JSON, and they gave example with quotes and braces, it's safe. Also they said "no prose, no code fences". So we should not include triple backticks. So we output lines as above, each line starting with { and ending with }.
+
+Make sure there is no extra trailing spaces. Also ensure that we include the correct quotes around strings. For the note text "notes are from abstract only" we have internal quotes around "Rope scaling hurts long ctx". We escaped them. Also "table 3 contradicts" etc.
+
+Now check each note: The first note for paper 1: "notes are from abstract only". That's fine. The second note: "llama 7b tested only". No extra quotes.
+
+Second note for paper 2: "memory footprint reduced 3x". Subnote "optimizer state minimal". Good.
+
+Third note for paper 2: "checkpoint size under 50MB". No subnotes.
+
+Third note for paper 3: "outlier channels preserved". Subnotes "per-head scales help" and "perplexity intact". Good.
+
+Second note for paper 4: "kaplan tokens were suboptimal". Subnote "fixed learning rate flawed". Good.
+
+First note for paper 4: "optimal ratio is 20 to 1". Subnotes "tested across 400 models" and "cosine schedule used". Good.
+
+All good.
+
+Now ensure ordering of fields: text, verdict, source, notes. Yes.
+
+Thus final answer: five lines as described.

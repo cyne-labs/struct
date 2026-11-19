@@ -1,0 +1,13 @@
+
+schema:name lib.rs
+schema:file name="src/lib.rs" path="lib.rs"
+schema:code 'pub fn add(a: i32, b: i32) -> i32\n    a + b'
+schema:line 10
+schema:name util.rs
+schema:file name="src/util.rs" path="util.rs"
+schema:code 'pub fn greet(name: &str) -> String {\n    format!("Hello, {}!", name)'
+schema:line 5
+schema:name main.rs
+schema:file name="src/main.rs" path="main.rs"
+schema:code 'fn main() {\n    println!("Hello, world!");}'
+schema:line 1

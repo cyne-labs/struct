@@ -1,0 +1,103 @@
+
+We need to produce a list of struct records per the given schema. The schema:
+
+schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+Reply with data only in Struct format: no prose, no code fences. No header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |.
+
+We need to parse the given 5 statements (1-5). Each is a claim with a source (paper). We need to produce a record for each.
+
+We need to map each claim's details:
+
+- text: likely the claim text? Or maybe a summary? The schema: claim has fields: text, verdict, source, verified. Possibly the "text" field is the claim content? But we have statements that include both claim text and verification. For each, we need to produce a struct with those fields. The schema includes "verdict" enum: supported, refuted, unverified. Based on statements:
+
+1. "Paper 2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted." So the claim text is "Paper 2405.05254 claimed 'Rope scaling hurts long ctx' in 2024". Or maybe just the claim content? The schema says text, verdict, source, verified. So text could be the claim description, verdict = refuted, source = record with id and year? The source field is record{id, year:int}. So we need to include source id and year. The source for this claim is paper 2405.05254, year 2024. So source: {id: "2405.05254", year: 2024}. Then verified: bool = 0 (since refuted). The verdict is "refuted". So we have:
+
+{
+"text","verdict":"refuted","source":{id:"2405.05254",year:2024}, "verified":0
+}
+
+But need to ensure ordering: schema: claim{text, verdict:enum..., source:record{id, year:int}, verified:bool}. So order: text, verdict, source, verified. So we need to put text first, then verdict, then source, then verified. No extra spaces. So:
+
+"2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024; it turned out to be false, so the claim is refuted", "refuted", {"id":"2405.05254","year":2024}, 0
+
+But we need to handle quotes inside the text: we can use double quotes for the string. Inside the text, there are double quotes around the claim text. According to the example, they use text|... with escaped quotes: text|supported|... They show text field is inside quotes? Actually the example: "~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \ for \". A record{...} field adds its fields as extra columns, in order.
+For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |."
+
+Thus the value for text is a string. If it contains quotes, we need to escape them? They didn't explicitly say to escape quotes, but they gave example where they didn't have quotes. In many such tasks, you can include double quotes inside the string without escaping, but the example shows they used "text|supported|...". Actually they didn't include quotes. The schema shows "text" as a field, not a string literal. In the example they wrote "~ means null. bool is 1 or 0..." Not relevant. The instructions: "Reply with data only in Struct format: no prose, no code fences." So we produce lines like:
+
+2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted, "refuted", {"id":"2405.05254","year":2024}, 0
+
+But note that the source field is a nested record with id and year. That's okay. Also need to ensure that the text field does not have line breaks. It's fine.
+
+Now record 2: "In 2017, paper 1706.03762 claimed "Attention is all you need"; verification was true, so the claim is supported."
+
+So text: "In 2017, paper 1706.03762 claimed \"Attention is all you need\" in 2017; verification was true, so the claim is supported." Actually the year is 2017 for both claim and verification. So source id: 1706.03762, year: 2017. Verified: true => 1. Verdict: supported.
+
+Thus:
+
+"In 2017, paper 1706.03762 claimed \"Attention is all you need\" in 2017; verification was true, so the claim is supported", "supported", {"id":"1706.03762","year":2017}, 1
+
+Third: "Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported."
+
+So text: "Paper 2106.09685 made the claim \"LoRA low rank adaptation\" in 2021; it was verified as true, and the claim is supported." Verdict: supported. source id: 2106.09685, year: 2021. verified: 1.
+
+Thus:
+
+"Paper 2106.09685 made the claim \"LoRA low rank adaptation\" in 2021; it was verified as true, and the claim is supported", "supported", {"id":"2106.09685","year":2021}, 1
+
+Fourth: "In 2023, paper 2309.06180 claimed "Mistral 7B architecture"; verification was true, and the claim is supported."
+
+So text: "In 2023, paper 2309.06180 claimed \"Mistral 7B architecture\" in 2023; verification was true, and the claim is supported."
+
+source id: 2309.06180, year: 2023. verdict: supported.
+
+Thus:
+
+"In 2023, paper 2309.06180 claimed \"Mistral 7B architecture\" in 2023; verification was true, and the claim is supported", "supported", {"id":"2309.06180","year":2023}, 1
+
+Fifth: "Paper 2401.04088 made the claim "DeepSeekMoE mixture experts" in 2024; it was verified as true, and the claim is supported."
+
+source id: 2401.04088, year: 2024, verdict: supported.
+
+Thus:
+
+"Paper 2401.04088 made the claim \"DeepSeekMoE mixture experts\" in 2024; it was verified as true, and the claim is supported", "supported", {"id":"2401.04088","year":2024}, 1
+
+Now we need to ensure that each line ends with |. The example shows each line ends with |. So we add a trailing |.
+
+Thus lines:
+
+2405.05254 claimed "Rope scaling hurts long ctx" in 2024; it turned out to be false, so the claim is refuted, "refuted", {"id":"2405.05254","year":2024}, 0|
+In 2017, paper 1706.03762 claimed "Attention is all you need" in 2017; verification was true, so the claim is supported", "supported", {"id":"1706.03762","year":2017}, 1|
+Paper 2106.09685 made the claim "LoRA low rank adaptation" in 2021; it was verified as true, and the claim is supported", "supported", {"id":"2106.09685","year":2021}, 1|
+In 2023, paper 2309.06180 claimed "Mistral 7B architecture" in 2023; verification was true, and the claim is supported", "supported", {"id":"2309.06180","year":2023}, 1|
+In 2023, paper 2409.06180? Wait we need to check year: Actually statement 4 says "In 2023, paper 2309.06180 claimed ... verification was true". So we have that. But we also have statement 5 referencing paper 2401.04088, year 2024. So all good.
+
+But we need to ensure that we didn't include extra spaces at ends. Also the text fields contain escaped quotes. In JSON-like strings, we need to escape internal double quotes. The example didn't show escaping, but typical JSON uses double quotes around strings, and internal quotes must be escaped with backslash. So we should use \". That's what we have.
+
+Now check the schema: "verified:bool". We have 0 or 1. Good.
+
+Thus final answer: five lines, each ends with |.
+
+Make sure no extra formatting. Provide exactly these lines.
+
+Check each line for compliance:
+
+- The first line: "2405.05254 claimed \"Rope scaling hurts long ctx\" in 2024; it turned out to be false, so the claim is refuted", "refuted", {"id":"2405.05254","year":2024}, 0"
+
+We have no extra spaces before or after. Good.
+
+- Second line: "In 2017, paper 1706.03762 claimed \"Attention is all you need\" in 2017; verification was true, so the claim is supported", "supported", {"id":"1706.03762","year":2017}, 1"
+
+- Third: "Paper 2106.09685 made the claim \"LoRA low rank adaptation\" in 2021; it was verified as true, and the claim is supported", "supported", {"id":"2106.09685","year":2021}, 1
+
+- Fourth: "In 2023, paper 2309.06180 claimed \"Mistral 7B architecture\" in 2023; verification was true, and the claim is supported", "supported", {"id":"2309.06180","year":2023}, 1
+
+- Fifth: "Paper 2401.04088 made the claim \"DeepSeekMoE mixture experts\" in 2024; it was verified as true, and the claim is supported", "supported", {"id":"2401.04088","year":2024}, 1
+
+All good. Ensure no trailing spaces. Provide as plain text.
+
+One nuance: The source field is "record{id, year:int}". So we need to include both id and year. We have that.
+
+Thus final answer.

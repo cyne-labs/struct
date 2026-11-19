@@ -1,0 +1,57 @@
+We need to parse the user request. The user gave a schema:
+
+schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id, year:int}, verified:bool}
+
+We need to reply with data only in Struct format: no prose, no code fences. Never write a header row or column names. The first line is already data. One record per line: values in schema order, separated by |, and every line ends with |. ~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly. Inside a value, write \| for | and \ for \. A record{...} field adds its fields as extra columns, in order. For text with line breaks, or with spaces or tabs at its start or end, start the value with \r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.
+
+We have five claims provided in the user message after "Write these as Struct records.":
+
+1. Claim 'Rope scaling hurts long ctx', verdict refuted, source id 2405.05254 from year 2024, verified false.
+2. Claim 'Attention is all you need', verdict supported, source id 1706.03762 from year 2017, verified true.
+3. Claim 'LoRA low rank adaptation', verdict supported, source id 1706.03762? Wait check: Actually the third claim: 'LoRA low rank adaptation', verdict supported, source id 2106.09685 from year 2021, verified true.
+4. Claim 'Mistral 7B architecture', verdict supported, source id 2309.06180 from year 2023, verified true.
+5. Claim 'DeepSeekMoE mixture experts', verdict supported, source id 2401.04088 from year 2024, verified true.
+
+We need to produce Struct records for each claim. The schema order: text, verdict, source:record{id, year:int}, verified:bool.
+
+So for each claim, we need to output a line with values: text, verdict, source id, source year, verified.
+
+But note: source is a record{id, year:int}. According to the schema, source is a record field that adds its fields as extra columns, in order. So after verdict, we should have source id, then source year. Then verified bool.
+
+Thus each line should have 5 values: text, verdict, source id, source year, verified.
+
+But we need to be careful about the format: values separated by |, and every line ends with |. So each line should end with a trailing | after the last value.
+
+Also need to handle text that may contain | or \ etc. The text values here are simple phrases without special characters, but we need to check if they contain line breaks, spaces, tabs, etc. They are simple strings like 'Rope scaling hurts long ctx'. That's fine. No special characters except maybe apostrophe? The text is given in quotes, but we should probably output the text without quotes? The example in the prompt: "Example: text|supported|text|7|~|" That seems to indicate that the text value is something like "text". Actually the example is confusing. Let's parse the example: "Example: text|supported|text|7|~|". That looks like a record with fields: text, verdict, source:record{id, year:int}, verified? Actually the example shows text|supported|text|7|~|. That could be: text value = "text", verdict = "supported", source id = "text", source year = 7, verified = ~ (null). But anyway.
+
+We need to output the text exactly as given? The claim text is given in single quotes, e.g., 'Rope scaling hurts long ctx'. Should we include the quotes? Probably not; the text is the claim string without quotes. Usually we would output the claim text as is, without the surrounding quotes. So for claim 1, text = "Rope scaling hurts long ctx". For claim 2, text = "Attention is all you need". etc.
+
+We need to escape | and \ inside the text if any. None of these texts contain | or \. So fine.
+
+We need to output verdict as one of the enum labels exactly: supported, refuted, unverified. We have refuted, supported, supported, supported, supported.
+
+Source id: the given id strings: 2405.05254, 1706.03762, 2106.09685, 2309.06180, 2401.04088. These are strings with dots. They are fine.
+
+Source year: 2024, 2017, 2021, 2023, 2024.
+
+Verified: false, true, true, true, true. Bool is 1 or 0. So false -> 0, true -> 1.
+
+Thus we need to produce lines:
+
+Claim 1: text = Rope scaling hurts long ctx, verdict = refuted, source id = 2405.05254, source year = 2024, verified = 0.
+
+So line: Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+But we need to ensure each line ends with |. So after verified value, we put |. So format: text|verdict|sourceid|sourceyear|verified|
+
+Thus line: Rope scaling hurts long ctx|refuted|2405.05254|2024|0|
+
+Claim 2: text = Attention is all you need, verdict = supported, source id = 1706.03762, year = 2017, verified = 1.
+
+Line: Attention is all you need|supported|1706.03762|2017|1|
+
+Claim 3: text = LoRA low rank adaptation, verdict = supported, source id = 2106.09685, year = 2021, verified = 1.
+
+Line: LoRA low rank adaptation|supported|2106.09685|2021|1|
+
+Claim 4: text = Mistral 7B architecture, verdict = supported, source id = 

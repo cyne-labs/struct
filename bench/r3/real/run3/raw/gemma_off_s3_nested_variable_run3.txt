@@ -1,0 +1,5 @@
+text|refuted|source{id:2405.05254,year:2024}|notes:[{text:\r\nabstract mentions 32k limit\r\nappendix B clarifies,subnotes:[\r\nabstract mentions 32k limit\r\nappendix B clarifies\r\n]},{text:\r\ntable 3 contradicts,subnotes:[\r\nllama 7b tested only\r\n]}]|
+text|supported|source{id:2106.09685,year:2021}|notes:[{text:\r\ntested on GLUE and Wikisql,subnotes:[\r\nrank 4 sufficient\r\nhigher ranks show diminishing returns\r\n]},{text:\r\nmemory footprint reduced 3x,subnotes:[\r\noptimizer state minimal\r\n]},{text:\r\ncheckpoint size under 50MB}]|
+text|refuted|source{id:2406.12345,year:2024}|notes:[{text:\r\noutlier channels preserved,subnotes:[\r\nper-head scales help\r\nperplexity intact\r\n]}]|
+text|supported|source{id:2203.15556,year:2022}|notes:[{text:\r\noptimal ratio is 20 to 1,subnotes:[\r\ntested across 400 models\r\ncosine schedule used\r\n]},{text:\r\nkaplan tokens were suboptimal,subnotes:[\r\nfixed learning rate flawed\r\n]}]|
+text|supported|source{id:2005.14165,year:2020}|notes:[{text:\r\nscaling curve is smooth,subnotes:[\r\ntested up to 175B\r\nin-context learning observed\r\n]}]|
