@@ -194,6 +194,40 @@ For local models run through llama.cpp, an implementation can turn schemas into 
   - **triggered:** the model writes freely, for example while reasoning, until a trigger text appears (`</think>` by default, and configurable). From there on, the output must follow the grammar. This uses llama.cpp's lazy-grammar triggers.
 - **GBNF only for now.** Other engines (vLLM, SGLang, Outlines, llguidance) come later, from the same internal description of the schemas.
 
+## 9. The doctor
+
+Models writing without a grammar make mistakes. The **doctor** takes their output plus the outside schemas (section 6), fixes only what has exactly one possible reading, and reports everything else. It never changes data silently, and it never guesses.
+
+### Safe fixes (the only ones it makes)
+
+Each fix is reported with its line, its column, what it found, and what it wrote instead.
+
+1. **Code fences.** A line that, after trimming, starts with three backticks is removed.
+2. **Echoed schema.** A line identical to one of the outside schema definitions, ignoring spaces, is removed.
+3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value.
+4. **Header row.** A depth-0 line whose values are exactly the class's column names, in order, is removed.
+5. **Missing final `|`.** A line that contains `|` but doesn't end with one gets `|` added, when the result has exactly the right number of columns and every value is valid.
+6. **Cut-off last record.** When the output's last line is an incomplete record (too few columns, or an unclosed raw value), that line is dropped, along with any child lines that would hang under it. Nothing is invented to complete it.
+
+In the maintainer's words: *the box has a hole, the doctor patches it. Not my problem if the water in the box is dirty.*
+
+**The doctor never touches values.** Fixing data is not its job: a value as written may be exactly what was meant, even in quotes. Only `~` is null, a `bool` is only `1` or `0`, and every value that fails its type check makes its line a bad line. That includes an empty field, `null`, `true`, `"2024"` in an int field, `+5`, `1,000`, an enum's wrong capitalisation (`Supported`), and a field-name prefix (`year: 2024`).
+
+### Everything else is a bad line
+
+Anything the fixes above can't resolve is a **bad line**: wrong column count, an unescaped `|` inside text, an enum typo, a depth jump, a missing index, an unclosed raw value in the middle of the file, and so on. The doctor reports each one with its line, its column, the problem, and the original line text. It never edits them.
+
+### What the caller chooses
+
+- **strict:** if there's any bad line, no data is returned, only the full report.
+- **salvage:** every good record is returned. Bad lines are dropped and reported. A dropped line takes its child lines with it, and those are reported too.
+
+### Retry hints
+
+The doctor can also write a short **retry hint** for the model. It lists each bad line with its original text and the problem in a few words, and asks the model to rewrite only those lines, one per line, in the same order. The hint quotes each line's text instead of only giving a line number, because models count lines unreliably. Hints are on by default; the caller can turn them off, for example for small models, which may make changes nobody asked for.
+
+The model's reply is spliced back: its lines replace the bad lines in order, and the result goes through the doctor again. A reply with a different number of lines than were asked for is rejected, with an error.
+
 ---
 
 ## Open questions
@@ -223,3 +257,12 @@ None. Every question raised in review has been decided.
 - **Floats use exponent form outside `0.0001` to `10000`.** That's past 4 digits, where tokenizer vocabularies stop merging digits. This fixes v0.2's encoder, which wrote `1e300` as 301 digits.
 - **Schemas can be supplied from outside the file**, so models write only data.
 - **Grammars are GBNF, canonical-only, in full and triggered forms.** Other engines come later.
+
+### 2026-11-20, the doctor
+
+- **Only `~` is null.** The doctor never reads `null`, `None`, `N/A` or similar words as null. In text they're text; elsewhere they're bad values. Likewise `true`/`false` in a bool field is a bad line, never converted to `1`/`0`.
+- **The doctor fixes structure, never values.** Its only fixes are code fences, echoed schema, chatter, header rows, a missing final `|`, and a cut-off last record. Every wrong value is reported. The user may have meant it, and fixing data isn't the doctor's job.
+- **Safe fixes only.** Guessing was rejected: it burns tokens when a model has to work out why the doctor changed something it shouldn't have. Every case with more than one reading is reported as a bad line.
+- **The caller chooses strict or salvage.**
+- **Retry hints are on by default and can be turned off.** They might confuse small models, but API models handle them well.
+- **Tests come first from synthetic damage.** Real model outputs come after, kept apart and backed up, and never used as test fixtures.
