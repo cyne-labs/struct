@@ -1,52 +1,107 @@
-//! Decoding implementation for Struct (v0.2).
+//! Decoding implementation for Struct (v0.3).
 //!
 //! Converts Struct text into structured data in standard Rust data structures.
 
 use std::collections::BTreeMap;
 use crate::schema::{
-    parse_schema_line, ClassDef, FieldDef, FieldType, ListItemType, ListTarget,
-    ParsedSchemaLine, RecordDef, ScalarType,
+    parse_outside_schemas, parse_schema_line, ClassDef, FieldDef, FieldType, ListItemType,
+    ListTarget, ParsedSchemaLine, RecordDef, ScalarType,
 };
 use crate::types::{Block, DecodedFile, StructError, Value, Warning};
 
-/// Decodes a Struct document string into a `DecodedFile`.
-///
-/// Returns the list of blocks in file order, any warnings generated,
-/// and the registry of defined class schemas.
+/// Decodes a Struct document string with no outside schemas.
 ///
 /// Stops on the first error encountered and returns line and column details.
 pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
+    decode_with("", input)
+}
+
+/// Decodes a Struct document string with schemas supplied from outside the file.
+///
+/// `schemas` contains one or more `schema:name{...}` definition lines.
+/// Errors inside `schemas` report line and column within `schemas` and mention outside schemas.
+pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructError> {
+    let outside_classes = parse_outside_schemas(schemas)?;
+    let num_outside = outside_classes.len();
+
     let mut decoded = DecodedFile::new();
     let mut defined_classes: BTreeMap<String, ClassDef> = BTreeMap::new();
+    for (k, v) in &outside_classes {
+        defined_classes.insert(k.clone(), v.clone());
+        decoded.schemas.insert(k.clone(), v.clone());
+    }
+
     let mut current_block: Option<Block> = None;
     let mut current_class_def: Option<ClassDef> = None;
 
-    // Stack for hierarchical child lines:
+    if num_outside == 1 {
+        let single_class = outside_classes.values().next().unwrap().clone();
+        current_class_def = Some(single_class);
+    }
+
     let mut stack: Vec<StackEntry> = Vec::new();
 
-    // Iterate through lines, preserving 1-based line numbers
-    for (line_idx, raw_line) in input.split('\n').enumerate() {
-        let line_num = line_idx + 1;
-        // Strip CR if Windows line ending
-        let clean_line = raw_line.strip_suffix('\r').unwrap_or(raw_line);
-        let trimmed_line = clean_line.trim_matches(|c| c == ' ' || c == '\t');
+    let mut byte_pos = 0;
+    let mut line_num = 1;
+    let mut line_start_byte = 0;
 
-        // SPEC.md §1: Blank lines, and lines containing only spaces or tabs, are ignored.
-        if trimmed_line.is_empty() {
+    let len = input.len();
+
+    while byte_pos < len {
+        // 1. Skip Windows/Unix newlines for blank lines
+        if input[byte_pos..].starts_with("\r\n") {
+            byte_pos += 2;
+            line_num += 1;
+            line_start_byte = byte_pos;
+            continue;
+        }
+        if input[byte_pos..].starts_with('\n') {
+            byte_pos += 1;
+            line_num += 1;
+            line_start_byte = byte_pos;
             continue;
         }
 
-        // Check if schema line
-        if trimmed_line.starts_with("schema:") {
-            // Unwind entire stack into current block before starting new block
-            unwind_stack(&mut stack, 0, &mut current_block);
+        // 2. Check if remainder of physical line has only spaces and tabs
+        let next_nl = match input[byte_pos..].find('\n') {
+            Some(i) => byte_pos + i,
+            None => len,
+        };
+        let phys_line = &input[byte_pos..next_nl];
+        let phys_line_clean = phys_line.strip_suffix('\r').unwrap_or(phys_line);
+        if phys_line_clean.chars().all(|c| c == ' ' || c == '\t') {
+            byte_pos = next_nl;
+            if byte_pos < len && input[byte_pos..].starts_with('\n') {
+                byte_pos += 1;
+            }
+            line_num += 1;
+            line_start_byte = byte_pos;
+            continue;
+        }
 
-            // If there's an existing block, add it to decoded
+        // 3. Trim leading spaces and tabs on this physical line
+        while byte_pos < len {
+            let c = input[byte_pos..].chars().next().unwrap();
+            if c == ' ' || c == '\t' {
+                byte_pos += 1;
+            } else {
+                break;
+            }
+        }
+
+        // 4. Check if schema line: starts with "schema:" AND contains NO '|' anywhere on this physical line
+        let remaining_phys_line = &input[byte_pos..next_nl];
+        let remaining_clean = remaining_phys_line.strip_suffix('\r').unwrap_or(remaining_phys_line);
+        let trimmed_clean = remaining_clean.trim_end_matches(|c| c == ' ' || c == '\t');
+
+        if trimmed_clean.starts_with("schema:") && !trimmed_clean.contains('|') {
+            // It is a schema line
+            unwind_stack(&mut stack, 0, &mut current_block);
             if let Some(b) = current_block.take() {
                 decoded.blocks.push(b);
             }
 
-            match parse_schema_line(trimmed_line, line_num)? {
+            match parse_schema_line(trimmed_clean, line_num)? {
                 ParsedSchemaLine::Define(class_def) => {
                     let name = class_def.name.clone();
                     if defined_classes.contains_key(&name) {
@@ -82,179 +137,417 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
                     });
                 }
             }
+
+            byte_pos = next_nl;
+            if byte_pos < len && input[byte_pos..].starts_with('\n') {
+                byte_pos += 1;
+            }
+            line_num += 1;
+            line_start_byte = byte_pos;
             continue;
         }
 
-        // Data line
+        // 5. Otherwise, it is a DATA LINE
         let class_def = match current_class_def.as_ref() {
-            Some(cd) => cd,
+            Some(cd) => cd.clone(),
             None => {
-                // SPEC.md §1: A data line that appears before any schema line is an error.
-                return Err(StructError::new(
-                    "data line appears before any schema line",
-                    line_num,
-                    1,
-                ));
+                if num_outside > 1 {
+                    return Err(StructError::new(
+                        "with several outside classes, data before the first schema line is an error",
+                        line_num,
+                        1,
+                    ));
+                } else {
+                    return Err(StructError::new(
+                        "data line appears before any schema line",
+                        line_num,
+                        1,
+                    ));
+                }
             }
         };
 
-        // Count leading '>' child markers
-        let mut depth = 0;
-        let mut chars_iter = trimmed_line.chars();
-        while let Some('>') = chars_iter.clone().next() {
-            depth += 1;
-            chars_iter.next();
+        // If current_block is None (e.g. single outside class initial block), create it now
+        if current_block.is_none() {
+            current_block = Some(Block {
+                class_name: class_def.name.clone(),
+                records: Vec::new(),
+            });
         }
 
-        let content_after_depth = &trimmed_line[depth..];
+        // Count leading '>' depth markers
+        let start_line_num = line_num;
+        let mut depth = 0;
+        while byte_pos < len && input[byte_pos..].starts_with('>') {
+            depth += 1;
+            byte_pos += 1;
+        }
 
-        // SPEC.md §1: Each non-blank line is a data line: it always ends with an unescaped |
-        let raw_fields = split_data_fields(content_after_depth, line_num, depth + 1)?;
+        // Parse fields on this data line (handling \r raw values that can span lines)
+        let mut raw_fields: Vec<RawField> = Vec::new();
 
+        loop {
+            // Trim leading spaces and tabs before field value
+            while byte_pos < len {
+                let c = input[byte_pos..].chars().next().unwrap();
+                if c == ' ' || c == '\t' {
+                    byte_pos += 1;
+                } else {
+                    break;
+                }
+            }
+
+            let field_col = get_col(input, line_start_byte, byte_pos);
+            let field_line = line_num;
+
+            if byte_pos >= len {
+                return Err(StructError::new(
+                    "data line must always end with an unescaped '|'",
+                    field_line,
+                    field_col,
+                ));
+            }
+
+            // Check if field is raw: starts with \r
+            if input[byte_pos..].starts_with(r"\r") {
+                byte_pos += 2; // skip \r
+                let mut raw_val = String::new();
+                let mut closed = false;
+
+                while byte_pos < len {
+                    if input[byte_pos..].starts_with(r"\|") {
+                        raw_val.push('|');
+                        byte_pos += 2;
+                    } else if input[byte_pos..].starts_with(r"\\") {
+                        raw_val.push('\\');
+                        byte_pos += 2;
+                    } else if input[byte_pos..].starts_with('\\') {
+                        let esc_col = get_col(input, line_start_byte, byte_pos);
+                        let esc_c = input[byte_pos + 1..].chars().next().unwrap_or(' ');
+                        return Err(StructError::new(
+                            format!("invalid escape sequence '\\{}' inside raw value", esc_c),
+                            line_num,
+                            esc_col,
+                        ));
+                    } else if input[byte_pos..].starts_with('|') {
+                        byte_pos += 1;
+                        closed = true;
+                        break;
+                    } else if input[byte_pos..].starts_with("\r\n") {
+                        raw_val.push('\n');
+                        byte_pos += 2;
+                        line_num += 1;
+                        line_start_byte = byte_pos;
+                    } else if input[byte_pos..].starts_with('\n') {
+                        raw_val.push('\n');
+                        byte_pos += 1;
+                        line_num += 1;
+                        line_start_byte = byte_pos;
+                    } else {
+                        let c = input[byte_pos..].chars().next().unwrap();
+                        raw_val.push(c);
+                        byte_pos += c.len_utf8();
+                    }
+                }
+
+                if !closed {
+                    return Err(StructError::new(
+                        "raw value has no closing '|' before the end of the file",
+                        field_line,
+                        field_col,
+                    ));
+                }
+
+                if raw_val.is_empty() {
+                    return Err(StructError::new(
+                        "empty raw value is an error",
+                        field_line,
+                        field_col,
+                    ));
+                }
+
+                raw_fields.push(RawField {
+                    value: raw_val,
+                    is_raw: true,
+                    is_null: false,
+                    line: field_line,
+                    col_start: field_col,
+                });
+            } else {
+                // Non-raw field on the CURRENT physical line
+                let start_content = byte_pos;
+                let mut in_escape = false;
+                let mut closed = false;
+                let mut pipe_pos = byte_pos;
+
+                while byte_pos < len {
+                    if in_escape {
+                        in_escape = false;
+                        let c = input[byte_pos..].chars().next().unwrap();
+                        byte_pos += c.len_utf8();
+                        continue;
+                    }
+                    if input[byte_pos..].starts_with('\\') {
+                        in_escape = true;
+                        byte_pos += 1;
+                        continue;
+                    }
+                    if input[byte_pos..].starts_with('|') {
+                        pipe_pos = byte_pos;
+                        byte_pos += 1;
+                        closed = true;
+                        break;
+                    }
+                    if input[byte_pos..].starts_with('\n') || input[byte_pos..].starts_with('\r') {
+                        break;
+                    }
+                    let c = input[byte_pos..].chars().next().unwrap();
+                    byte_pos += c.len_utf8();
+                }
+
+                if in_escape {
+                    return Err(StructError::new(
+                        "dangling backslash escape at end of line",
+                        line_num,
+                        get_col(input, line_start_byte, byte_pos),
+                    ));
+                }
+
+                if !closed {
+                    return Err(StructError::new(
+                        "data line must always end with an unescaped '|'",
+                        line_num,
+                        get_col(input, line_start_byte, byte_pos),
+                    ));
+                }
+
+                let raw_slice = &input[start_content..pipe_pos];
+                let trimmed = raw_slice.trim_end_matches(|c| c == ' ' || c == '\t');
+                if trimmed.is_empty() {
+                    return Err(StructError::new(
+                        "empty field is an error; blank text must be written as '~'",
+                        line_num,
+                        field_col,
+                    ));
+                }
+
+                if trimmed == "~" {
+                    raw_fields.push(RawField {
+                        value: String::new(),
+                        is_raw: false,
+                        is_null: true,
+                        line: line_num,
+                        col_start: field_col,
+                    });
+                } else {
+                    let mut unescaped = String::with_capacity(trimmed.len());
+                    let mut chars = trimmed.char_indices().peekable();
+                    while let Some((ci, c)) = chars.next() {
+                        if c == '\\' {
+                            match chars.next() {
+                                Some((_, '|')) => unescaped.push('|'),
+                                Some((_, '\\')) => unescaped.push('\\'),
+                                Some((_, '~')) => unescaped.push('~'),
+                                Some((_, '>')) => unescaped.push('>'),
+                                Some((_, '#')) => unescaped.push('#'),
+                                Some((_, 'r')) => {
+                                    return Err(StructError::new(
+                                        "invalid escape sequence '\\r'",
+                                        line_num,
+                                        field_col + ci,
+                                    ));
+                                }
+                                Some((_, 'n')) => {
+                                    return Err(StructError::new(
+                                        "invalid escape sequence '\\n'",
+                                        line_num,
+                                        field_col + ci,
+                                    ));
+                                }
+                                Some((_, 's')) => {
+                                    return Err(StructError::new(
+                                        "invalid escape sequence '\\s'",
+                                        line_num,
+                                        field_col + ci,
+                                    ));
+                                }
+                                Some((_, invalid_esc)) => {
+                                    return Err(StructError::new(
+                                        format!("invalid escape sequence '\\{}'", invalid_esc),
+                                        line_num,
+                                        field_col + ci,
+                                    ));
+                                }
+                                None => {
+                                    return Err(StructError::new(
+                                        "dangling backslash escape",
+                                        line_num,
+                                        field_col + ci,
+                                    ));
+                                }
+                            }
+                        } else {
+                            unescaped.push(c);
+                        }
+                    }
+
+                    raw_fields.push(RawField {
+                        value: unescaped,
+                        is_raw: false,
+                        is_null: false,
+                        line: line_num,
+                        col_start: field_col,
+                    });
+                }
+            }
+
+            // Check if this was the last field on the physical line
+            let mut check_pos = byte_pos;
+            while check_pos < len {
+                let c = input[check_pos..].chars().next().unwrap();
+                if c == ' ' || c == '\t' {
+                    check_pos += 1;
+                } else {
+                    break;
+                }
+            }
+            if check_pos >= len || input[check_pos..].starts_with('\n') || input[check_pos..].starts_with("\r\n") {
+                byte_pos = check_pos;
+                if byte_pos < len && input[byte_pos..].starts_with("\r\n") {
+                    byte_pos += 2;
+                    line_num += 1;
+                    line_start_byte = byte_pos;
+                } else if byte_pos < len && input[byte_pos..].starts_with('\n') {
+                    byte_pos += 1;
+                    line_num += 1;
+                    line_start_byte = byte_pos;
+                }
+                break;
+            }
+        }
+
+        // Process data line according to depth
         if depth == 0 {
-            // Unwind entire stack into current block
             unwind_stack(&mut stack, 0, &mut current_block);
 
             let expected_cols = class_def.num_columns();
             let actual_cols = raw_fields.len();
             if actual_cols < expected_cols {
                 return Err(StructError::new(
-                    format!(
-                        "too few columns: expected {}, found {}",
-                        expected_cols, actual_cols
-                    ),
-                    line_num,
+                    format!("too few columns: expected {}, found {}", expected_cols, actual_cols),
+                    start_line_num,
                     1,
                 ));
             } else if actual_cols > expected_cols {
                 return Err(StructError::new(
-                    format!(
-                        "too many columns: expected {}, found {}",
-                        expected_cols, actual_cols
-                    ),
-                    line_num,
+                    format!("too many columns: expected {}, found {}", expected_cols, actual_cols),
+                    start_line_num,
                     1,
                 ));
             }
 
-            // Parse depth 0 record
             let mut col_cursor = 0;
-            let record = parse_record_fields(
-                &class_def.fields,
-                &raw_fields,
-                &mut col_cursor,
-                line_num,
-            )?;
+            let record = parse_record_fields(&class_def.fields, &raw_fields, &mut col_cursor, start_line_num)?;
 
             stack.push(StackEntry {
                 value: record,
-                schema: StackItemSchema::Class(class_def.clone()),
+                schema: StackItemSchema::Class(class_def),
                 target_list_path: Vec::new(),
             });
         } else {
-            // Depth >= 1: Child line
-            // SPEC.md §5: Depth can rise by only one level at a time
+            // Child line at depth > 0
+            if stack.is_empty() {
+                return Err(StructError::new(
+                    format!("depth increased by more than one level (from depth 0 to {})", depth),
+                    start_line_num,
+                    1,
+                ));
+            }
+
             if depth > stack.len() {
                 return Err(StructError::new(
                     format!(
                         "depth increased by more than one level (from depth {} to {})",
-                        stack.len().saturating_sub(1),
+                        stack.len() - 1,
                         depth
                     ),
-                    line_num,
+                    start_line_num,
                     1,
                 ));
             }
 
-            // Unwind stack to depth (so stack[depth - 1] is the parent)
             unwind_stack(&mut stack, depth, &mut current_block);
-            let parent_idx = depth - 1;
 
-            // Identify target list on parent
-            let parent_item = &stack[parent_idx];
+            let parent_item = &stack[depth - 1];
             let list_targets = parent_item.schema.find_lists();
 
             if list_targets.is_empty() {
                 return Err(StructError::new(
                     "parent record has no list fields to attach child line",
-                    line_num,
+                    start_line_num,
                     1,
                 ));
             }
 
             let (target_list, data_fields_start) = if list_targets.len() == 1 {
-                // Exactly 1 list
-                let target = &list_targets[0];
-                let expected_cols = target.item_type.num_columns();
+                let single_target = &list_targets[0];
+                let item_cols = single_target.item_type.num_columns();
 
-                // Check leniency: was an unneeded index provided?
-                if raw_fields.len() == expected_cols + 1 {
-                    let first_field_raw = raw_fields[0].raw.trim();
-                    if target.accepted_indices.iter().any(|idx| idx == first_field_raw) {
+                let mut used_index = false;
+                if raw_fields.len() == item_cols + 1 && !raw_fields[0].is_raw {
+                    let candidate_index = &raw_fields[0].value;
+                    if single_target.accepted_indices.iter().any(|idx| idx == candidate_index) {
+                        used_index = true;
                         decoded.warnings.push(Warning {
                             message: format!(
-                                "unneeded list index '{}' on child line with exactly one list",
-                                first_field_raw
+                                "unneeded list index '{}' for parent with only one list",
+                                candidate_index
                             ),
-                            line: line_num,
+                            line: start_line_num,
                             column: depth + 1,
                         });
-                        (target.clone(), 1)
-                    } else {
-                        let actual_cols = raw_fields.len();
-                        if actual_cols < expected_cols {
-                            return Err(StructError::new(
-                                format!(
-                                    "too few columns for child item: expected {}, found {}",
-                                    expected_cols, actual_cols
-                                ),
-                                line_num,
-                                depth + 1,
-                            ));
-                        } else {
-                            return Err(StructError::new(
-                                format!(
-                                    "too many columns for child item: expected {}, found {}",
-                                    expected_cols, actual_cols
-                                ),
-                                line_num,
-                                depth + 1,
-                            ));
-                        }
                     }
-                } else if raw_fields.len() == expected_cols {
-                    (target.clone(), 0)
+                }
+
+                if used_index {
+                    (single_target.clone(), 1)
                 } else {
                     let actual_cols = raw_fields.len();
-                    if actual_cols < expected_cols {
+                    if actual_cols < item_cols {
                         return Err(StructError::new(
                             format!(
                                 "too few columns for child item: expected {}, found {}",
-                                expected_cols, actual_cols
+                                item_cols, actual_cols
                             ),
-                            line_num,
+                            start_line_num,
                             depth + 1,
                         ));
-                    } else {
+                    } else if actual_cols > item_cols {
                         return Err(StructError::new(
                             format!(
                                 "too many columns for child item: expected {}, found {}",
-                                expected_cols, actual_cols
+                                item_cols, actual_cols
                             ),
-                            line_num,
+                            start_line_num,
                             depth + 1,
                         ));
                     }
+                    (single_target.clone(), 0)
                 }
             } else {
                 // 2 or more lists -> index is REQUIRED
                 if raw_fields.is_empty() {
-                    return Err(StructError::new("empty child line", line_num, depth + 1));
+                    return Err(StructError::new("empty child line", start_line_num, depth + 1));
                 }
-                let index_str = raw_fields[0].raw.trim();
-                let matched_target = list_targets.iter().find(|t| {
-                    t.canonical_index == index_str || t.accepted_indices.iter().any(|a| a == index_str)
-                });
+                let index_field = &raw_fields[0];
+                let index_str = &index_field.value;
+                let matched_target = if index_field.is_raw {
+                    None
+                } else {
+                    list_targets.iter().find(|t| {
+                        t.canonical_index == *index_str || t.accepted_indices.iter().any(|a| a == index_str)
+                    })
+                };
 
                 let target = match matched_target {
                     Some(t) => t.clone(),
@@ -262,7 +555,7 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
                         return Err(validate_unmatched_index(
                             index_str,
                             parent_item.schema.fields(),
-                            line_num,
+                            start_line_num,
                             depth + 1,
                         ));
                     }
@@ -276,7 +569,7 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
                             "too few columns for child item: expected {}, found {}",
                             expected_cols, actual_cols
                         ),
-                        line_num,
+                        start_line_num,
                         depth + 1,
                     ));
                 } else if actual_cols > expected_cols {
@@ -285,7 +578,7 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
                             "too many columns for child item: expected {}, found {}",
                             expected_cols, actual_cols
                         ),
-                        line_num,
+                        start_line_num,
                         depth + 1,
                     ));
                 }
@@ -293,34 +586,23 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
                 (target, 1)
             };
 
-            // Parse list item
             let item_fields = &raw_fields[data_fields_start..];
             let (parsed_item, item_schema) = match &target_list.item_type {
                 ListItemType::Scalar(scalar_type) => {
-                    let val = parse_scalar_value(
-                        &item_fields[0],
-                        *scalar_type,
-                        line_num,
-                    )?;
+                    let val = parse_scalar_value(&item_fields[0], *scalar_type, start_line_num)?;
                     (val, StackItemSchema::Scalar)
                 }
                 ListItemType::Enum(labels) => {
-                    let val = parse_enum_value(&item_fields[0], labels, line_num)?;
+                    let val = parse_enum_value(&item_fields[0], labels, start_line_num)?;
                     (val, StackItemSchema::Enum)
                 }
                 ListItemType::Record(rec_def) => {
                     let mut col_cursor = 0;
-                    let val = parse_record_fields(
-                        &rec_def.fields,
-                        item_fields,
-                        &mut col_cursor,
-                        line_num,
-                    )?;
+                    let val = parse_record_fields(&rec_def.fields, item_fields, &mut col_cursor, start_line_num)?;
                     (val, StackItemSchema::Record(rec_def.clone()))
                 }
             };
 
-            // Push this item onto the stack at depth with target_list_path
             stack.push(StackEntry {
                 value: parsed_item,
                 schema: item_schema,
@@ -329,7 +611,6 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
         }
     }
 
-    // Unwind all remaining stack items into current block
     unwind_stack(&mut stack, 0, &mut current_block);
     if let Some(b) = current_block {
         decoded.blocks.push(b);
@@ -338,7 +619,24 @@ pub fn decode(input: &str) -> Result<DecodedFile, StructError> {
     Ok(decoded)
 }
 
-/// Helper representing an item on the hierarchical tree stack.
+fn get_col(input: &str, line_start_byte: usize, byte_pos: usize) -> usize {
+    if byte_pos <= line_start_byte {
+        1
+    } else {
+        input[line_start_byte..byte_pos].chars().count() + 1
+    }
+}
+
+#[derive(Debug, Clone)]
+struct RawField {
+    value: String,
+    is_raw: bool,
+    is_null: bool,
+    #[allow(dead_code)]
+    line: usize,
+    col_start: usize,
+}
+
 struct StackEntry {
     value: Value,
     schema: StackItemSchema,
@@ -370,11 +668,6 @@ impl StackItemSchema {
     }
 }
 
-/// Validates an unmatched index on a child line when parent has 2 or more lists.
-/// Differentiates between:
-/// - missing index (e.g. data value present where index was expected)
-/// - index naming a non-list field
-/// - index out of range
 fn validate_unmatched_index(
     index_str: &str,
     parent_fields: &[FieldDef],
@@ -465,9 +758,6 @@ impl ListItemType {
     }
 }
 
-/// Unwinds the stack until its length is `target_len`.
-/// Each popped child item is inserted into its parent at `target_list_path`.
-/// If depth 0 is popped, it is pushed into `current_block.records`.
 fn unwind_stack(
     stack: &mut Vec<StackEntry>,
     target_len: usize,
@@ -476,7 +766,6 @@ fn unwind_stack(
     while stack.len() > target_len {
         let entry = stack.pop().unwrap();
         if stack.is_empty() {
-            // Depth 0 item
             if let Some(b) = block_opt.as_mut() {
                 b.records.push(entry.value);
             }
@@ -493,9 +782,6 @@ fn unwind_stack(
     }
 }
 
-/// Recursively appends an item to the target list field in a parent Value.
-/// If the parent was temporarily Value::Null (because its scalar columns were all ~),
-/// it is reconstituted into a Value::Record using its schema so child items can attach.
 fn add_item_to_parent_list(
     parent: &mut Value,
     schema: &StackItemSchema,
@@ -522,12 +808,10 @@ fn add_item_to_parent_list(
         let field_idx = path[0];
         let (_field_name, field_val) = &mut fields[field_idx];
         if path.len() == 1 {
-            // Target list reached
             if let Value::List(items) = field_val {
                 items.push(item);
             }
         } else {
-            // Recurse into nested record
             let sub_schema = match schema {
                 StackItemSchema::Class(c) => match &c.fields[field_idx].field_type {
                     FieldType::Record(r) => StackItemSchema::Record(r.clone()),
@@ -544,68 +828,6 @@ fn add_item_to_parent_list(
     }
 }
 
-/// Raw representation of a field slice on a data line.
-#[derive(Debug, Clone)]
-struct RawField<'a> {
-    raw: &'a str,
-    col_start: usize,
-}
-
-/// Splits a line by unescaped `|` delimiters.
-/// Enforces that line ends with an unescaped `|`.
-fn split_data_fields<'a>(
-    line: &'a str,
-    line_num: usize,
-    base_col: usize,
-) -> Result<Vec<RawField<'a>>, StructError> {
-    let mut fields = Vec::new();
-    let mut start_idx = 0;
-    let mut in_escape = false;
-
-    let chars: Vec<(usize, char)> = line.char_indices().collect();
-    let mut has_trailing_pipe = false;
-
-    for (i, c) in &chars {
-        if in_escape {
-            in_escape = false;
-            continue;
-        }
-        if *c == '\\' {
-            in_escape = true;
-            continue;
-        }
-        if *c == '|' {
-            fields.push(RawField {
-                raw: &line[start_idx..*i],
-                col_start: base_col + start_idx,
-            });
-            start_idx = i + 1;
-            if *i == line.len() - 1 {
-                has_trailing_pipe = true;
-            }
-        }
-    }
-
-    if in_escape {
-        return Err(StructError::new(
-            "dangling backslash escape at end of line",
-            line_num,
-            base_col + line.len(),
-        ));
-    }
-
-    if !has_trailing_pipe {
-        return Err(StructError::new(
-            "data line must always end with an unescaped '|'",
-            line_num,
-            base_col + line.len(),
-        ));
-    }
-
-    Ok(fields)
-}
-
-/// Recursively parses fields for a record from the raw field slice.
 fn parse_record_fields(
     field_defs: &[FieldDef],
     raw_fields: &[RawField],
@@ -646,12 +868,7 @@ fn parse_record_fields(
                 record_fields.push((field_def.name.clone(), val));
             }
             FieldType::Record(sub_rec) => {
-                let sub_val = parse_record_fields(
-                    &sub_rec.fields,
-                    raw_fields,
-                    cursor,
-                    line_num,
-                )?;
+                let sub_val = parse_record_fields(&sub_rec.fields, raw_fields, cursor, line_num)?;
                 if sub_rec.num_columns() > 0 {
                     has_any_columns = true;
                     if !sub_val.is_null() {
@@ -661,14 +878,11 @@ fn parse_record_fields(
                 record_fields.push((field_def.name.clone(), sub_val));
             }
             FieldType::List(_) => {
-                // Lists occupy 0 columns on parent line
                 record_fields.push((field_def.name.clone(), Value::List(Vec::new())));
             }
         }
     }
 
-    // SPEC.md §3: A record can be null. A record whose columns are all ~ reads back as a null record.
-    // A record that contains a list is never null.
     if !contains_list && has_any_columns && all_columns_null {
         Ok(Value::Null)
     } else {
@@ -676,93 +890,27 @@ fn parse_record_fields(
     }
 }
 
-/// Decodes and unescapes a single field string.
-/// Returns Ok(None) for null (~), or Ok(Some(unescaped_text)).
-fn unescape_field(raw_field: &RawField, line_num: usize) -> Result<Option<String>, StructError> {
-    let s = raw_field.raw;
-    let col_start = raw_field.col_start;
-
-    // SPEC.md §3: Spaces next to each | are trimmed. Spaces inside a value are kept.
-    // Untrimmed leading and trailing plain spaces are trimmed.
-    let leading_spaces = s.chars().take_while(|c| *c == ' ' || *c == '\t').count();
-    let trailing_spaces = s.chars().rev().take_while(|c| *c == ' ' || *c == '\t').count();
-
-    if leading_spaces + trailing_spaces > s.len() {
-        // Entirely plain whitespace -> empty field!
-        // SPEC.md §3: An empty field is always an error. There's no empty string. Blank text is written ~.
-        return Err(StructError::new(
-            "empty field is an error; blank text must be written as '~'",
-            line_num,
-            col_start,
-        ));
-    }
-
-    let trimmed = &s[leading_spaces..s.len() - trailing_spaces];
-    if trimmed.is_empty() {
-        return Err(StructError::new(
-            "empty field is an error; blank text must be written as '~'",
-            line_num,
-            col_start,
-        ));
-    }
-
-    // Check for null: exactly '~'
-    if trimmed == "~" {
-        return Ok(None);
-    }
-
-    // Unescape
-    let mut out = String::with_capacity(trimmed.len());
-    let mut chars = trimmed.char_indices().peekable();
-    let base_col = col_start + leading_spaces;
-
-    while let Some((i, c)) = chars.next() {
-        if c == '\\' {
-            match chars.next() {
-                Some((_, '|')) => out.push('|'),
-                Some((_, '\\')) => out.push('\\'),
-                Some((_, 'n')) => out.push('\n'),
-                Some((_, '~')) => out.push('~'),
-                Some((_, 's')) => out.push(' '),
-                Some((_, '>')) => out.push('>'),
-                Some((_, '#')) => out.push('#'),
-                Some((sub_i, invalid_esc)) => {
-                    return Err(StructError::new(
-                        format!("invalid escape sequence '\\{}'", invalid_esc),
-                        line_num,
-                        base_col + sub_i - 1,
-                    ));
-                }
-                None => {
-                    return Err(StructError::new(
-                        "dangling backslash escape",
-                        line_num,
-                        base_col + i,
-                    ));
-                }
-            }
-        } else {
-            out.push(c);
-        }
-    }
-
-    Ok(Some(out))
-}
-
-/// Parses a scalar value for a field.
 fn parse_scalar_value(
     raw_field: &RawField,
     scalar_type: ScalarType,
     line_num: usize,
 ) -> Result<Value, StructError> {
-    let unescaped = unescape_field(raw_field, line_num)?;
-    let text = match unescaped {
-        None => return Ok(Value::Null),
-        Some(t) => t,
-    };
+    if raw_field.is_null {
+        return Ok(Value::Null);
+    }
+
+    if raw_field.is_raw && scalar_type != ScalarType::Str {
+        return Err(StructError::new(
+            format!("raw value '\\r' is not allowed in {} field", scalar_type.as_str()),
+            line_num,
+            raw_field.col_start,
+        ));
+    }
+
+    let text = &raw_field.value;
 
     match scalar_type {
-        ScalarType::Str => Ok(Value::String(text)),
+        ScalarType::Str => Ok(Value::String(text.clone())),
         ScalarType::Int => {
             if text.starts_with('+') {
                 return Err(StructError::new(
@@ -792,14 +940,28 @@ fn parse_scalar_value(
                 }
             }
         }
-        ScalarType::Float => match text.parse::<f64>() {
-            Ok(f) => Ok(Value::Float(f)),
-            Err(_) => Err(StructError::new(
-                format!("type mismatch: '{}' is not a valid float (f64)", text),
-                line_num,
-                raw_field.col_start,
-            )),
-        },
+        ScalarType::Float => {
+            if text == "NaN" {
+                Ok(Value::Float(f64::NAN))
+            } else if text == "inf" {
+                Ok(Value::Float(f64::INFINITY))
+            } else if text == "-inf" {
+                Ok(Value::Float(f64::NEG_INFINITY))
+            } else if text == "-0" {
+                Ok(Value::Float(-0.0))
+            } else if text == "0" {
+                Ok(Value::Float(0.0))
+            } else {
+                match text.parse::<f64>() {
+                    Ok(f) => Ok(Value::Float(f)),
+                    Err(_) => Err(StructError::new(
+                        format!("type mismatch: '{}' is not a valid float (f64)", text),
+                        line_num,
+                        raw_field.col_start,
+                    )),
+                }
+            }
+        }
         ScalarType::Bool => {
             if text == "1" {
                 Ok(Value::Bool(true))
@@ -816,20 +978,26 @@ fn parse_scalar_value(
     }
 }
 
-/// Parses an enum value for a field.
 fn parse_enum_value(
     raw_field: &RawField,
     labels: &[String],
     line_num: usize,
 ) -> Result<Value, StructError> {
-    let unescaped = unescape_field(raw_field, line_num)?;
-    let text = match unescaped {
-        None => return Ok(Value::Null),
-        Some(t) => t,
-    };
+    if raw_field.is_null {
+        return Ok(Value::Null);
+    }
 
-    if labels.iter().any(|l| l == &text) {
-        Ok(Value::Enum(text))
+    if raw_field.is_raw {
+        return Err(StructError::new(
+            "raw value '\\r' is not allowed in enum field",
+            line_num,
+            raw_field.col_start,
+        ));
+    }
+
+    let text = &raw_field.value;
+    if labels.iter().any(|l| l == text) {
+        Ok(Value::Enum(text.clone()))
     } else {
         Err(StructError::new(
             format!(
