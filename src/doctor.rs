@@ -8,6 +8,7 @@ use crate::schema::{
     RecordDef, ScalarType,
 };
 use crate::types::{Block, DecodedFile, StructError, Value};
+use std::collections::BTreeMap;
 
 /// Doctor operating mode: Strict or Salvage.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -36,7 +37,7 @@ impl Default for DoctorOptions {
     }
 }
 
-/// The 5 safe fixes defined in SPEC.md §9.
+/// The 4 safe fixes defined in SPEC.md §9.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum SafeFix {
     /// 1. Markdown code fences (` ``` `) removed.
@@ -45,10 +46,8 @@ pub enum SafeFix {
     EchoedSchema,
     /// 3. Leading and trailing chatter lines removed.
     Chatter,
-    /// 4. Missing final pipe added when values and columns are valid.
+    /// 4. Missing final pipe added.
     MissingFinalPipe,
-    /// 5. Incomplete cut-off record at end of output dropped.
-    CutOffLastRecord,
 }
 
 /// A safe repair made to the document.
@@ -126,7 +125,7 @@ struct SourceLine {
     text: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum ColType {
     Str,
     Int,
@@ -150,9 +149,7 @@ fn collect_columns(fields: &[FieldDef], out: &mut Vec<ColInfo>) {
                     ScalarType::Float => ColType::Float,
                     ScalarType::Bool => ColType::Bool,
                 };
-                out.push(ColInfo {
-                    col_type: ct,
-                });
+                out.push(ColInfo { col_type: ct });
             }
             FieldType::Enum(labels) => {
                 out.push(ColInfo {
@@ -176,9 +173,7 @@ fn item_type_columns(item_type: &ListItemType) -> Vec<ColInfo> {
                 ScalarType::Float => ColType::Float,
                 ScalarType::Bool => ColType::Bool,
             };
-            vec![ColInfo {
-                col_type: ct,
-            }]
+            vec![ColInfo { col_type: ct }]
         }
         ListItemType::Enum(labels) => {
             vec![ColInfo {
@@ -206,7 +201,6 @@ struct ParsedField {
 #[derive(Debug, Clone)]
 struct DoctorEntry {
     start_line_num: usize,
-    #[allow(dead_code)]
     end_line_num: usize,
     text: String,
     depth: usize,
@@ -225,7 +219,12 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
 
     let ws_count = first_line.text.chars().take_while(|&c| c == ' ' || c == '\t').count();
     let depth = first_line.text.chars().skip(ws_count).take_while(|&c| c == '>').count();
-    let post_depth_ws = first_line.text.chars().skip(ws_count + depth).take_while(|&c| c == ' ' || c == '\t').count();
+    let post_depth_ws = first_line
+        .text
+        .chars()
+        .skip(ws_count + depth)
+        .take_while(|&c| c == ' ' || c == '\t')
+        .count();
     let marker_col = ws_count + 1;
     let content_start_col = ws_count + depth + post_depth_ws + 1;
 
@@ -239,23 +238,23 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
         let cur_line = &phys_lines[curr_line_idx];
         let chars: Vec<char> = cur_line.text.chars().collect();
 
-        // Skip spaces and tabs before field value
         while curr_char_idx < chars.len() && (chars[curr_char_idx] == ' ' || chars[curr_char_idx] == '\t') {
             curr_char_idx += 1;
         }
 
         if curr_char_idx >= chars.len() {
-            // Physical line ended without more fields
             break;
         }
 
         let field_start_line = cur_line.line_num;
         let field_start_col = curr_char_idx + 1;
 
-        let is_raw = curr_char_idx + 1 < chars.len() && chars[curr_char_idx] == '\\' && chars[curr_char_idx + 1] == 'r';
+        let is_raw = curr_char_idx + 1 < chars.len()
+            && chars[curr_char_idx] == '\\'
+            && chars[curr_char_idx + 1] == 'r';
 
         if is_raw {
-            curr_char_idx += 2; // skip \ and r
+            curr_char_idx += 2;
             let mut raw_val = String::new();
             let mut invalid_escape = None;
 
@@ -297,13 +296,11 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                     }
                 }
 
-                // End of this physical line inside raw value
                 if curr_line_idx + 1 < phys_lines.len() {
                     curr_line_idx += 1;
                     curr_char_idx = 0;
                     raw_val.push('\n');
                 } else {
-                    // Reached EOF!
                     has_unclosed_raw = true;
                     ends_with_pipe = false;
                     break 'raw_loop;
@@ -323,7 +320,6 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                 break;
             }
 
-            // Check if there are more characters on this physical line
             let cur_chars: Vec<char> = phys_lines[curr_line_idx].text.chars().collect();
             while curr_char_idx < cur_chars.len() && (cur_chars[curr_char_idx] == ' ' || cur_chars[curr_char_idx] == '\t') {
                 curr_char_idx += 1;
@@ -332,7 +328,6 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                 break;
             }
         } else {
-            // Non-raw field on current physical line
             let field_raw_start = curr_char_idx;
             let mut field_chars = Vec::new();
             let mut closed = false;
@@ -399,7 +394,6 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                 break;
             }
 
-            // Skip spaces and check if more on this line
             while curr_char_idx < chars.len() && (chars[curr_char_idx] == ' ' || chars[curr_char_idx] == '\t') {
                 curr_char_idx += 1;
             }
@@ -434,8 +428,6 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
     )
 }
 
-/// Validates whether a value string matches the expected ColType.
-/// Returns Ok(()) or Err(problem_message).
 fn validate_field_value(
     val_str: &str,
     col_type: &ColType,
@@ -462,7 +454,6 @@ fn validate_field_value(
 
     let val_trimmed = val_str.trim();
 
-    // Empty field check: SPEC §3: "An empty field is always an error. There's no empty string. Blank text is written ~."
     if val_trimmed.is_empty() {
         return Err("empty field is not allowed (use ~ for null)".to_string());
     }
@@ -482,8 +473,6 @@ fn validate_field_value(
             if val_trimmed == "NaN"
                 || val_trimmed == "inf"
                 || val_trimmed == "-inf"
-                || val_trimmed == "-0"
-                || val_trimmed == "0"
                 || val_trimmed.parse::<f64>().is_ok()
             {
                 Ok(())
@@ -511,7 +500,6 @@ fn validate_field_value(
     }
 }
 
-/// Converts a field value string into a structl `Value`.
 fn parse_field_to_value(
     val_str: &str,
     col_type: &ColType,
@@ -542,12 +530,9 @@ fn parse_field_to_value(
                 f64::INFINITY
             } else if val_trimmed == "-inf" {
                 f64::NEG_INFINITY
-            } else if val_trimmed == "-0" {
-                -0.0
-            } else if val_trimmed == "0" {
-                0.0
             } else {
-                val_trimmed.parse::<f64>()
+                val_trimmed
+                    .parse::<f64>()
                     .map_err(|_| format!("'{}' is not a valid float (f64)", val_trimmed))?
             };
             Ok(Value::Float(f))
@@ -565,7 +550,6 @@ fn parse_field_to_value(
     }
 }
 
-/// Recursively builds a `Value::Record` from flat column values.
 fn build_record_value(
     fields: &[FieldDef],
     flat_values: &[Value],
@@ -633,131 +617,167 @@ impl NodeSchema {
     }
 }
 
-fn get_entry_schema_at(
-    idx: usize,
-    entries: &[DoctorEntry],
-    outside_classes: &std::collections::BTreeMap<String, ClassDef>,
-    single_outside_class: Option<&ClassDef>,
-) -> Option<NodeSchema> {
-    let mut current_class = single_outside_class.cloned();
-    let mut stack: Vec<NodeSchema> = Vec::new();
+// =========================================================================
+// Step 1 & 2: Line Preparation, Fences, and Echoed Schemas
+// =========================================================================
 
-    for i in 0..=idx {
-        let e = &entries[i];
-        if e.is_schema {
-            stack.clear();
-            if let Some(ref name) = e.schema_name {
-                current_class = outside_classes.get(name).cloned();
-            }
-            if i == idx {
-                return None;
-            }
+fn prepare_lines(text: &str) -> Vec<SourceLine> {
+    let mut raw_lines: Vec<&str> = text.split('\n').collect();
+    if raw_lines.last() == Some(&"") {
+        raw_lines.pop();
+    }
+    raw_lines
+        .into_iter()
+        .enumerate()
+        .map(|(idx, line_str)| SourceLine {
+            line_num: idx + 1,
+            text: line_str.strip_suffix('\r').unwrap_or(line_str).to_string(),
+        })
+        .collect()
+}
+
+fn extract_outside_schema_defs(schemas: &str) -> Vec<String> {
+    let mut defs = Vec::new();
+    for line in schemas.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("schema:") && trimmed.contains('{') && !trimmed.contains('|') {
+            let non_ws: String = trimmed.chars().filter(|c| !c.is_whitespace()).collect();
+            defs.push(non_ws);
+        }
+    }
+    defs
+}
+
+fn remove_fences_and_echoed_schemas(
+    lines: &[SourceLine],
+    outside_schema_defs: &[String],
+) -> (Vec<DoctorEntry>, Vec<Repair>) {
+    let mut entries = Vec::new();
+    let mut repairs = Vec::new();
+    let mut phys_idx = 0;
+
+    while phys_idx < lines.len() {
+        let cur_line = &lines[phys_idx];
+        let trimmed = cur_line.text.trim();
+
+        if trimmed.is_empty() {
+            phys_idx += 1;
             continue;
         }
 
-        let d = e.depth;
-        stack.truncate(d);
-        let parent_schema = if d > 0 && d - 1 < stack.len() {
-            Some(&stack[d - 1])
-        } else {
-            None
-        };
-
-        let node_schema = if d == 0 {
-            current_class.as_ref().map(|cd| NodeSchema::Class(cd.clone()))
-        } else if let Some(ps) = parent_schema {
-            let lists = ps.find_lists();
-            if lists.is_empty() {
-                None
-            } else if lists.len() == 1 {
-                let target = &lists[0];
-                match &target.item_type {
-                    ListItemType::Record(r) => Some(NodeSchema::Record(r.clone())),
-                    ListItemType::Scalar(_) => Some(NodeSchema::Scalar),
-                    ListItemType::Enum(_) => Some(NodeSchema::Enum),
-                }
-            } else {
-                if e.fields.is_empty() {
-                    None
-                } else {
-                    let index_str = e.fields[0].trimmed_val.trim();
-                    let matched = lists.iter().find(|t| {
-                        t.canonical_index == index_str
-                            || t.accepted_indices.iter().any(|a| a == index_str)
-                    });
-                    matched.map(|target| match &target.item_type {
-                        ListItemType::Record(r) => NodeSchema::Record(r.clone()),
-                        ListItemType::Scalar(_) => NodeSchema::Scalar,
-                        ListItemType::Enum(_) => NodeSchema::Enum,
-                    })
-                }
-            }
-        } else {
-            None
-        };
-
-        if let Some(ns) = node_schema {
-            if i == idx {
-                return Some(ns);
-            }
-            stack.push(ns);
-        } else if i == idx {
-            return None;
+        // 1. Code fences
+        if trimmed.starts_with("```") {
+            repairs.push(Repair {
+                line: cur_line.line_num,
+                column: 1,
+                fix: SafeFix::CodeFences,
+                original: cur_line.text.clone(),
+                new_text: String::new(),
+            });
+            phys_idx += 1;
+            continue;
         }
+
+        // 2. Echoed schema
+        if trimmed.starts_with("schema:") && trimmed.contains('{') && !trimmed.contains('|') {
+            let non_ws: String = trimmed.chars().filter(|c| !c.is_whitespace()).collect();
+            if outside_schema_defs.contains(&non_ws) {
+                repairs.push(Repair {
+                    line: cur_line.line_num,
+                    column: 1,
+                    fix: SafeFix::EchoedSchema,
+                    original: cur_line.text.clone(),
+                    new_text: String::new(),
+                });
+                phys_idx += 1;
+                continue;
+            }
+        }
+
+        // Schema block header (e.g. `schema:name` reuse)
+        if trimmed.starts_with("schema:") && !trimmed.contains('|') {
+            let name = trimmed["schema:".len()..].trim().to_string();
+            let ws_count = cur_line.text.chars().take_while(|&c| c == ' ' || c == '\t').count();
+            entries.push(DoctorEntry {
+                start_line_num: cur_line.line_num,
+                end_line_num: cur_line.line_num,
+                text: cur_line.text.clone(),
+                depth: 0,
+                marker_col: ws_count + 1,
+                content_start_col: ws_count + "schema:".len() + 1,
+                is_schema: true,
+                schema_name: Some(name),
+                fields: Vec::new(),
+                ends_with_pipe: false,
+                has_unclosed_raw: false,
+            });
+            phys_idx += 1;
+            continue;
+        }
+
+        let (entry, next_idx) = parse_data_entry(lines, phys_idx);
+        entries.push(entry);
+        phys_idx = next_idx;
     }
 
-    None
+    (entries, repairs)
 }
 
-fn try_fix4(
+// =========================================================================
+// Step 3: Chatter Removal (Fix 3)
+// =========================================================================
+
+/// Tests whether adding `|` to a candidate entry turns it into a valid record under active schemas.
+fn is_valid_record_cand(
     entry: &DoctorEntry,
     active_class: Option<&ClassDef>,
     parent_schema: Option<&NodeSchema>,
-) -> Option<(DoctorEntry, usize)> {
-    if entry.is_schema || entry.has_unclosed_raw || entry.ends_with_pipe {
-        return None;
-    }
-
+) -> bool {
     let cand_content = format!("{}|", entry.text.trim_end());
     let temp_lines = vec![SourceLine {
         line_num: entry.start_line_num,
-        text: cand_content.clone(),
+        text: cand_content,
     }];
     let (cand_entry, _) = parse_data_entry(&temp_lines, 0);
 
     if !cand_entry.ends_with_pipe || cand_entry.has_unclosed_raw {
-        return None;
+        return false;
     }
 
-    let last_phys_line = entry.text.split('\n').last().unwrap_or(&entry.text);
-    let col = last_phys_line.trim_end().chars().count() + 1;
-
     if entry.depth == 0 {
-        let cd = active_class?;
+        let cd = match active_class {
+            Some(c) => c,
+            None => return false,
+        };
         let mut cols = Vec::new();
         collect_columns(&cd.fields, &mut cols);
 
-        if cand_entry.fields.len() == cols.len() {
-            for (c_idx, val) in cand_entry.fields.iter().enumerate() {
-                if val.invalid_escape.is_some()
-                    || validate_field_value(
-                        &val.trimmed_val,
-                        &cols[c_idx].col_type,
-                        val.is_raw,
-                        val.is_null,
-                    )
-                    .is_err()
-                {
-                    return None;
-                }
-            }
-            return Some((cand_entry, col));
+        if cand_entry.fields.len() != cols.len() {
+            return false;
         }
+
+        for (c_idx, val) in cand_entry.fields.iter().enumerate() {
+            if val.invalid_escape.is_some()
+                || validate_field_value(
+                    &val.trimmed_val,
+                    &cols[c_idx].col_type,
+                    val.is_raw,
+                    val.is_null,
+                )
+                .is_err()
+            {
+                return false;
+            }
+        }
+        true
     } else {
-        let ps = parent_schema?;
+        let ps = match parent_schema {
+            Some(p) => p,
+            None => return false,
+        };
         let lists = ps.find_lists();
         if lists.is_empty() {
-            return None;
+            return false;
         }
 
         if lists.len() == 1 {
@@ -782,26 +802,27 @@ fn try_fix4(
                 &cand_entry.fields[..]
             };
 
-            if data_fields.len() == item_cols.len() {
-                for (c_idx, val) in data_fields.iter().enumerate() {
-                    if val.invalid_escape.is_some()
-                        || validate_field_value(
-                            &val.trimmed_val,
-                            &item_cols[c_idx].col_type,
-                            val.is_raw,
-                            val.is_null,
-                        )
-                        .is_err()
-                    {
-                        return None;
-                    }
-                }
-                return Some((cand_entry, col));
+            if data_fields.len() != item_cols.len() {
+                return false;
             }
+
+            for (c_idx, val) in data_fields.iter().enumerate() {
+                if val.invalid_escape.is_some()
+                    || validate_field_value(
+                        &val.trimmed_val,
+                        &item_cols[c_idx].col_type,
+                        val.is_raw,
+                        val.is_null,
+                    )
+                    .is_err()
+                {
+                    return false;
+                }
+            }
+            true
         } else {
-            // Parent has 2 or more lists -> index is required
             if cand_entry.fields.is_empty() {
-                return None;
+                return false;
             }
             let index_str = cand_entry.fields[0].trimmed_val.trim();
             let matched = lists.iter().find(|t| {
@@ -812,159 +833,81 @@ fn try_fix4(
             if let Some(target) = matched {
                 let item_cols = item_type_columns(&target.item_type);
                 let data_fields = &cand_entry.fields[1..];
-                if data_fields.len() == item_cols.len() {
-                    for (c_idx, val) in data_fields.iter().enumerate() {
-                        if val.invalid_escape.is_some()
-                            || validate_field_value(
-                                &val.trimmed_val,
-                                &item_cols[c_idx].col_type,
-                                val.is_raw,
-                                val.is_null,
-                            )
-                            .is_err()
-                        {
-                            return None;
-                        }
-                    }
-                    return Some((cand_entry, col));
+                if data_fields.len() != item_cols.len() {
+                    return false;
                 }
+                for (c_idx, val) in data_fields.iter().enumerate() {
+                    if val.invalid_escape.is_some()
+                        || validate_field_value(
+                            &val.trimmed_val,
+                            &item_cols[c_idx].col_type,
+                            val.is_raw,
+                            val.is_null,
+                        )
+                        .is_err()
+                    {
+                        return false;
+                    }
+                }
+                true
+            } else {
+                false
             }
         }
     }
-
-    None
 }
 
-/// Runs the doctor on `text` with `schemas` and `options`.
-pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorReport {
-    let outside_classes = match parse_outside_schemas(schemas) {
-        Ok(m) => m,
-        Err(_) => {
-            return DoctorReport {
-                data: None,
-                text: String::new(),
-                repairs: Vec::new(),
-                bad_lines: Vec::new(),
-                hint: None,
-            };
+fn node_schema_for_entry(
+    entry: &DoctorEntry,
+    active_class: Option<&ClassDef>,
+    parent_schema: Option<&NodeSchema>,
+) -> Option<NodeSchema> {
+    if entry.depth == 0 {
+        active_class.map(|cd| NodeSchema::Class(cd.clone()))
+    } else if let Some(ps) = parent_schema {
+        let lists = ps.find_lists();
+        if lists.len() == 1 {
+            let target = &lists[0];
+            match &target.item_type {
+                ListItemType::Record(r) => Some(NodeSchema::Record(r.clone())),
+                ListItemType::Scalar(_) => Some(NodeSchema::Scalar),
+                ListItemType::Enum(_) => Some(NodeSchema::Enum),
+            }
+        } else if lists.len() > 1 && !entry.fields.is_empty() {
+            let index_str = entry.fields[0].trimmed_val.trim();
+            let matched = lists.iter().find(|t| {
+                t.canonical_index == index_str
+                    || t.accepted_indices.iter().any(|a| a == index_str)
+            });
+            matched.map(|target| match &target.item_type {
+                ListItemType::Record(r) => NodeSchema::Record(r.clone()),
+                ListItemType::Scalar(_) => NodeSchema::Scalar,
+                ListItemType::Enum(_) => NodeSchema::Enum,
+            })
+        } else {
+            None
         }
-    };
-
-    let mut outside_schema_defs = Vec::new();
-    for line in schemas.lines() {
-        let trimmed = line.trim();
-        if trimmed.starts_with("schema:") && trimmed.contains('{') && !trimmed.contains('|') {
-            let non_ws: String = trimmed.chars().filter(|c| !c.is_whitespace()).collect();
-            outside_schema_defs.push(non_ws);
-        }
-    }
-
-    // 1. Collect physical lines
-    let mut raw_lines: Vec<&str> = text.split('\n').collect();
-    if raw_lines.last() == Some(&"") {
-        raw_lines.pop();
-    }
-
-    let mut lines: Vec<SourceLine> = Vec::new();
-    for (idx, line_str) in raw_lines.into_iter().enumerate() {
-        let clean = line_str.strip_suffix('\r').unwrap_or(line_str);
-        lines.push(SourceLine {
-            line_num: idx + 1,
-            text: clean.to_string(),
-        });
-    }
-
-    let mut repairs: Vec<Repair> = Vec::new();
-
-    let single_outside_class = if outside_classes.len() == 1 {
-        outside_classes.values().next().cloned()
     } else {
         None
-    };
-
-    // Parse entries from physical lines, stripping code fences and echoed schemas outside raw values.
-    let mut raw_entries: Vec<DoctorEntry> = Vec::new();
-    let mut phys_idx = 0;
-
-    while phys_idx < lines.len() {
-        let cur_line = &lines[phys_idx];
-        let trimmed = cur_line.text.trim();
-
-        if trimmed.is_empty() {
-            phys_idx += 1;
-            continue;
-        }
-
-        if trimmed.starts_with("```") {
-            repairs.push(Repair {
-                line: cur_line.line_num,
-                column: 1,
-                fix: SafeFix::CodeFences,
-                original: cur_line.text.clone(),
-                new_text: String::new(),
-            });
-            phys_idx += 1;
-            continue;
-        }
-
-        if trimmed.starts_with("schema:") && trimmed.contains('{') && !trimmed.contains('|') {
-            let non_ws: String = trimmed.chars().filter(|c| !c.is_whitespace()).collect();
-            if outside_schema_defs.contains(&non_ws) {
-                repairs.push(Repair {
-                    line: cur_line.line_num,
-                    column: 1,
-                    fix: SafeFix::EchoedSchema,
-                    original: cur_line.text.clone(),
-                    new_text: String::new(),
-                });
-                phys_idx += 1;
-                continue;
-            }
-        }
-
-        if trimmed.starts_with("schema:") && !trimmed.contains('|') {
-            let name = trimmed["schema:".len()..].trim().to_string();
-            let ws_count = cur_line.text.chars().take_while(|&c| c == ' ' || c == '\t').count();
-            raw_entries.push(DoctorEntry {
-                start_line_num: cur_line.line_num,
-                end_line_num: cur_line.line_num,
-                text: cur_line.text.clone(),
-                depth: 0,
-                marker_col: ws_count + 1,
-                content_start_col: ws_count + "schema:".len() + 1,
-                is_schema: true,
-                schema_name: Some(name),
-                fields: Vec::new(),
-                ends_with_pipe: false,
-                has_unclosed_raw: false,
-            });
-            phys_idx += 1;
-            continue;
-        }
-
-        let (entry, next_idx) = parse_data_entry(&lines, phys_idx);
-        raw_entries.push(entry);
-        phys_idx = next_idx;
     }
+}
 
-    // Leading chatter removal: Fix 4 is tried first before removing as chatter
+fn remove_chatter(
+    raw_entries: &mut Vec<DoctorEntry>,
+    outside_classes: &BTreeMap<String, ClassDef>,
+    single_outside_class: Option<&ClassDef>,
+    repairs: &mut Vec<Repair>,
+) {
+    // Leading chatter: Lines before the first line that contains '|' or is a schema line
     let mut first_non_chatter = 0;
-    let initial_class = single_outside_class.clone();
-
     while first_non_chatter < raw_entries.len() {
         let e = &raw_entries[first_non_chatter];
-        if e.is_schema {
+        if e.is_schema || e.text.contains('|') || e.has_unclosed_raw {
             break;
         }
-        if e.has_unclosed_raw || e.text.contains('|') {
+        if is_valid_record_cand(e, single_outside_class, None) {
             break;
         }
-        // Entry contains no pipe and is not a schema line. Try Fix 4:
-        if try_fix4(e, initial_class.as_ref(), None).is_some() {
-            // Fix 4 can turn it into a valid record!
-            break;
-        }
-        // Otherwise, it's leading chatter
         repairs.push(Repair {
             line: e.start_line_num,
             column: 1,
@@ -980,38 +923,46 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
     }
 
     if raw_entries.is_empty() {
-        repairs.sort_by_key(|r| (r.line, r.column));
-        return DoctorReport {
-            data: None,
-            text: String::new(),
-            repairs,
-            bad_lines: Vec::new(),
-            hint: None,
-        };
+        return;
     }
 
-    // Find the last entry in raw_entries that contains '|', is schema, or has unclosed raw
+    // Trailing chatter: Lines after the last line that contains '|', apart from raw values
     let last_data_line_idx = raw_entries
         .iter()
         .rposition(|e| e.ends_with_pipe || e.text.contains('|') || e.is_schema || e.has_unclosed_raw);
 
-    // Process remaining entries: apply Fix 4 where applicable
-    let mut entries: Vec<DoctorEntry> = Vec::new();
-    let mut active_class = single_outside_class.clone();
+    let mut active_class = single_outside_class.cloned();
     let mut schema_stack: Vec<NodeSchema> = Vec::new();
 
-    let mut raw_iter = raw_entries.into_iter().enumerate();
-    while let Some((idx, mut entry)) = raw_iter.next() {
-        if entry.is_schema {
+    let mut boundary = match last_data_line_idx {
+        Some(idx) => idx,
+        None => 0,
+    };
+
+    for i in 0..=boundary {
+        let e = &raw_entries[i];
+        if e.is_schema {
             schema_stack.clear();
-            if let Some(ref name) = entry.schema_name {
+            if let Some(ref name) = e.schema_name {
                 active_class = outside_classes.get(name).cloned();
             }
-            entries.push(entry);
-            continue;
+        } else {
+            let d = e.depth;
+            schema_stack.truncate(d);
+            let parent_schema = if d > 0 && d - 1 < schema_stack.len() {
+                Some(&schema_stack[d - 1])
+            } else {
+                None
+            };
+            if let Some(ns) = node_schema_for_entry(e, active_class.as_ref(), parent_schema) {
+                schema_stack.push(ns);
+            }
         }
+    }
 
-        let d = entry.depth;
+    while boundary + 1 < raw_entries.len() {
+        let e = &raw_entries[boundary + 1];
+        let d = e.depth;
         schema_stack.truncate(d);
         let parent_schema = if d > 0 && d - 1 < schema_stack.len() {
             Some(&schema_stack[d - 1])
@@ -1019,187 +970,154 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
             None
         };
 
-        let is_trailing_candidate = match last_data_line_idx {
-            Some(last_idx) => idx > last_idx,
-            None => true,
-        };
-
-        if !entry.ends_with_pipe && !entry.has_unclosed_raw {
-            if let Some((repaired_entry, col)) = try_fix4(&entry, active_class.as_ref(), parent_schema) {
+        if is_valid_record_cand(e, active_class.as_ref(), parent_schema) {
+            if let Some(ns) = node_schema_for_entry(e, active_class.as_ref(), parent_schema) {
+                schema_stack.push(ns);
+            }
+            boundary += 1;
+        } else {
+            for rem in raw_entries.drain(boundary + 1..) {
                 repairs.push(Repair {
-                    line: entry.end_line_num,
-                    column: col,
-                    fix: SafeFix::MissingFinalPipe,
-                    original: entry.text.clone(),
-                    new_text: repaired_entry.text.clone(),
-                });
-                entry = repaired_entry;
-            } else if is_trailing_candidate {
-                // Fix 4 cannot turn this trailing line into a valid record.
-                // Therefore this line and all subsequent lines are trailing chatter.
-                repairs.push(Repair {
-                    line: entry.start_line_num,
+                    line: rem.start_line_num,
                     column: 1,
                     fix: SafeFix::Chatter,
-                    original: entry.text,
+                    original: rem.text,
                     new_text: String::new(),
                 });
-                while let Some((_, rem)) = raw_iter.next() {
-                    repairs.push(Repair {
-                        line: rem.start_line_num,
-                        column: 1,
-                        fix: SafeFix::Chatter,
-                        original: rem.text,
-                        new_text: String::new(),
-                    });
-                }
-                break;
             }
+            break;
+        }
+    }
+}
+
+// =========================================================================
+// Step 4: Missing Final Pipe (Fix 4)
+// =========================================================================
+
+fn apply_missing_final_pipe(entries: &mut [DoctorEntry], repairs: &mut Vec<Repair>) {
+    for entry in entries.iter_mut() {
+        if entry.is_schema || (entry.ends_with_pipe && !entry.has_unclosed_raw) {
+            continue;
         }
 
-        let node_schema = if d == 0 {
-            active_class.as_ref().map(|cd| NodeSchema::Class(cd.clone()))
-        } else if let Some(ps) = parent_schema {
-            let lists = ps.find_lists();
-            if lists.len() == 1 {
-                let target = &lists[0];
-                match &target.item_type {
-                    ListItemType::Record(r) => Some(NodeSchema::Record(r.clone())),
-                    ListItemType::Scalar(_) => Some(NodeSchema::Scalar),
-                    ListItemType::Enum(_) => Some(NodeSchema::Enum),
-                }
-            } else if lists.len() > 1 && !entry.fields.is_empty() {
-                let index_str = entry.fields[0].trimmed_val.trim();
-                let matched = lists.iter().find(|t| {
-                    t.canonical_index == index_str || t.accepted_indices.iter().any(|a| a == index_str)
-                });
-                matched.map(|target| match &target.item_type {
-                    ListItemType::Record(r) => NodeSchema::Record(r.clone()),
-                    ListItemType::Scalar(_) => NodeSchema::Scalar,
-                    ListItemType::Enum(_) => NodeSchema::Enum,
-                })
-            } else {
-                None
-            }
+        let last_line = entry.text.split('\n').last().unwrap_or(&entry.text);
+        let (new_text, col) = if entry.has_unclosed_raw {
+            (
+                format!("{}|", entry.text),
+                last_line.chars().count() + 1,
+            )
         } else {
-            None
+            (
+                format!("{}|", entry.text.trim_end()),
+                last_line.trim_end().chars().count() + 1,
+            )
         };
 
-        if let Some(ns) = node_schema {
-            schema_stack.push(ns);
-        }
+        let temp_lines: Vec<SourceLine> = new_text
+            .split('\n')
+            .enumerate()
+            .map(|(li, s)| SourceLine {
+                line_num: entry.start_line_num + li,
+                text: s.to_string(),
+            })
+            .collect();
+        let (repaired_entry, _) = parse_data_entry(&temp_lines, 0);
 
-        entries.push(entry);
+        repairs.push(Repair {
+            line: entry.end_line_num,
+            column: col,
+            fix: SafeFix::MissingFinalPipe,
+            original: entry.text.clone(),
+            new_text: repaired_entry.text.clone(),
+        });
+
+        *entry = repaired_entry;
     }
+}
 
-    // Fix 5: Cut-off last record
-    let mut ambiguous_last_line = false;
+// =========================================================================
+// Step 5: Validation and Decoding
+// =========================================================================
 
-    if let Some(last_entry) = entries.last() {
-        if !last_entry.is_schema {
-            let last_idx = entries.len() - 1;
-            let depth = last_entry.depth;
-            let mut is_incomplete = false;
+fn drop_child_lines(
+    entries: &[DoctorEntry],
+    idx: &mut usize,
+    parent_line: usize,
+    parent_depth: usize,
+    bad_lines: &mut Vec<BadLine>,
+) {
+    while *idx < entries.len() {
+        let next_depth = entries[*idx].depth;
+        if next_depth > parent_depth {
+            bad_lines.push(BadLine {
+                line: entries[*idx].start_line_num,
+                column: 1,
+                problem: format!("dropped as child of line {}", parent_line),
+                original: entries[*idx].text.clone(),
+                dropped_as_child: true,
+            });
+            *idx += 1;
+        } else {
+            break;
+        }
+    }
+}
 
-            let trailing_bs = last_entry.text.trim_end().chars().rev().take_while(|&c| c == '\\').count();
-            let broken_escape = trailing_bs % 2 == 1;
-
-            if last_entry.has_unclosed_raw {
-                is_incomplete = true;
-            } else if broken_escape {
-                is_incomplete = true;
-            } else if depth == 0 {
-                if let Some(cd) = get_entry_schema_at(last_idx, &entries, &outside_classes, single_outside_class.as_ref()) {
-                    if let NodeSchema::Class(c) = cd {
-                        let mut cols = Vec::new();
-                        collect_columns(&c.fields, &mut cols);
-                        if last_entry.fields.len() < cols.len() || !last_entry.ends_with_pipe {
-                            is_incomplete = true;
-                        }
-                    }
+fn add_item_to_value_list(parent: &mut Value, path: &[usize], item: Value) {
+    if let Value::Record(fields) = parent {
+        if path.is_empty() {
+            return;
+        }
+        let field_idx = path[0];
+        if field_idx < fields.len() {
+            let (_, field_val) = &mut fields[field_idx];
+            if path.len() == 1 {
+                if let Value::List(items) = field_val {
+                    items.push(item);
                 }
             } else {
-                let mut parent_entry = None;
-                for prev_idx in (0..last_idx).rev() {
-                    if !entries[prev_idx].is_schema && entries[prev_idx].depth == depth - 1 {
-                        parent_entry = Some(prev_idx);
-                        break;
-                    }
-                }
-                if let Some(p_idx) = parent_entry {
-                    if let Some(ps) = get_entry_schema_at(p_idx, &entries, &outside_classes, single_outside_class.as_ref()) {
-                        let p_lists = ps.find_lists();
-                        if p_lists.len() == 1 {
-                            let target = &p_lists[0];
-                            let item_cols = item_type_columns(&target.item_type).len();
-                            let mut used_index = false;
-                            if last_entry.fields.len() == item_cols + 1 {
-                                let cand_idx = last_entry.fields[0].trimmed_val.trim();
-                                if target.accepted_indices.iter().any(|idx| idx == cand_idx) {
-                                    used_index = true;
-                                }
-                            }
-                            let val_cols = if used_index {
-                                last_entry.fields.len().saturating_sub(1)
-                            } else {
-                                last_entry.fields.len()
-                            };
-                            if val_cols < item_cols || !last_entry.ends_with_pipe {
-                                is_incomplete = true;
-                            }
-                        } else if p_lists.len() > 1 {
-                            if !last_entry.fields.is_empty() {
-                                let v0 = &last_entry.fields[0];
-                                let v0_str = v0.trimmed_val.trim();
-                                let matches_index = p_lists.iter().find(|t| {
-                                    t.canonical_index == v0_str
-                                        || t.accepted_indices.iter().any(|a| a == v0_str)
-                                });
-                                let is_val_for_any = p_lists.iter().any(|t| {
-                                    let cols = item_type_columns(&t.item_type);
-                                    !cols.is_empty()
-                                        && validate_field_value(
-                                            &v0.trimmed_val,
-                                            &cols[0].col_type,
-                                            v0.is_raw,
-                                            v0.is_null,
-                                        )
-                                        .is_ok()
-                                });
-
-                                if let Some(target) = matches_index {
-                                    let item_cols = item_type_columns(&target.item_type).len();
-                                    let val_cols = last_entry.fields.len().saturating_sub(1);
-                                    if val_cols < item_cols || !last_entry.ends_with_pipe {
-                                        if val_cols == 0 && is_val_for_any {
-                                            ambiguous_last_line = true;
-                                        } else {
-                                            is_incomplete = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if is_incomplete {
-                let dropped = entries.pop().unwrap();
-                repairs.push(Repair {
-                    line: dropped.start_line_num,
-                    column: 1,
-                    fix: SafeFix::CutOffLastRecord,
-                    original: dropped.text,
-                    new_text: String::new(),
-                });
+                add_item_to_value_list(field_val, &path[1..], item);
             }
         }
     }
+}
 
-    // Now validate remaining entries and construct decoded file
+struct StackNode {
+    value: Value,
+    schema: NodeSchema,
+    target_list_path: Vec<usize>,
+}
+
+fn flush_stack(
+    stack: &mut Vec<StackNode>,
+    target_len: usize,
+    current_block: &mut Option<Block>,
+) {
+    while stack.len() > target_len {
+        let node = stack.pop().unwrap();
+        if stack.is_empty() {
+            if let Some(b) = current_block.as_mut() {
+                b.records.push(node.value);
+            }
+        } else {
+            let parent_idx = stack.len() - 1;
+            let parent_node = &mut stack[parent_idx];
+            add_item_to_value_list(
+                &mut parent_node.value,
+                &node.target_list_path,
+                node.value,
+            );
+        }
+    }
+}
+
+fn validate_and_decode(
+    entries: &[DoctorEntry],
+    outside_classes: &BTreeMap<String, ClassDef>,
+    single_outside_class: Option<&ClassDef>,
+) -> (DecodedFile, Vec<BadLine>) {
     let mut current_block: Option<Block> = None;
-    let mut current_class_def: Option<ClassDef> = single_outside_class.clone();
+    let mut current_class_def: Option<ClassDef> = single_outside_class.cloned();
 
     if let Some(ref cd) = current_class_def {
         current_block = Some(Block {
@@ -1209,48 +1127,12 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
     }
 
     let mut decoded = DecodedFile::new();
-    for (k, v) in &outside_classes {
+    for (k, v) in outside_classes {
         decoded.schemas.insert(k.clone(), v.clone());
     }
 
     let mut bad_lines: Vec<BadLine> = Vec::new();
-
-    struct StackNode {
-        #[allow(dead_code)]
-        depth: usize,
-        line_num: usize,
-        is_bad: bool,
-        value: Value,
-        schema: NodeSchema,
-        target_list_path: Vec<usize>,
-    }
-
     let mut stack: Vec<StackNode> = Vec::new();
-
-    let flush_stack = |stack: &mut Vec<StackNode>,
-                       target_len: usize,
-                       current_block: &mut Option<Block>| {
-        while stack.len() > target_len {
-            let node = stack.pop().unwrap();
-            if !node.is_bad {
-                if stack.is_empty() {
-                    if let Some(b) = current_block.as_mut() {
-                        b.records.push(node.value);
-                    }
-                } else {
-                    let parent_idx = stack.len() - 1;
-                    let parent_node = &mut stack[parent_idx];
-                    if !parent_node.is_bad {
-                        add_item_to_value_list(
-                            &mut parent_node.value,
-                            &node.target_list_path,
-                            node.value,
-                        );
-                    }
-                }
-            }
-        }
-    };
 
     let mut i = 0;
     while i < entries.len() {
@@ -1284,7 +1166,6 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
             continue;
         }
 
-        // Data line
         let class_def = match current_class_def.as_ref() {
             Some(cd) => cd.clone(),
             None => {
@@ -1310,34 +1191,6 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
         let depth = entry.depth;
         let line_num = entry.start_line_num;
 
-        if entry.has_unclosed_raw {
-            bad_lines.push(BadLine {
-                line: line_num,
-                column: entry.content_start_col,
-                problem: "unclosed raw value".to_string(),
-                original: entry.text.clone(),
-                dropped_as_child: false,
-            });
-            let parent_depth = depth;
-            i += 1;
-            while i < entries.len() {
-                let next_depth = entries[i].depth;
-                if next_depth > parent_depth {
-                    bad_lines.push(BadLine {
-                        line: entries[i].start_line_num,
-                        column: 1,
-                        problem: format!("dropped as child of line {}", line_num),
-                        original: entries[i].text.clone(),
-                        dropped_as_child: true,
-                    });
-                    i += 1;
-                } else {
-                    break;
-                }
-            }
-            continue;
-        }
-
         // Depth check
         if depth > stack.len() {
             let prev_depth = stack.len().saturating_sub(1);
@@ -1351,41 +1204,14 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                 original: entry.text.clone(),
                 dropped_as_child: false,
             });
-            let parent_depth = depth;
             i += 1;
-            while i < entries.len() {
-                let next_depth = entries[i].depth;
-                if next_depth > parent_depth {
-                    bad_lines.push(BadLine {
-                        line: entries[i].start_line_num,
-                        column: 1,
-                        problem: format!("dropped as child of line {}", line_num),
-                        original: entries[i].text.clone(),
-                        dropped_as_child: true,
-                    });
-                    i += 1;
-                } else {
-                    break;
-                }
-            }
+            drop_child_lines(entries, &mut i, line_num, depth, &mut bad_lines);
             continue;
         }
 
         // Parent check for child lines
         if depth > 0 {
             let parent = &stack[depth - 1];
-            if parent.is_bad {
-                bad_lines.push(BadLine {
-                    line: line_num,
-                    column: 1,
-                    problem: format!("dropped as child of line {}", parent.line_num),
-                    original: entry.text.clone(),
-                    dropped_as_child: true,
-                });
-                i += 1;
-                continue;
-            }
-
             let lists = parent.schema.find_lists();
             if lists.is_empty() {
                 bad_lines.push(BadLine {
@@ -1395,41 +1221,10 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                     original: entry.text.clone(),
                     dropped_as_child: false,
                 });
-                let parent_depth = depth;
                 i += 1;
-                while i < entries.len() {
-                    let next_depth = entries[i].depth;
-                    if next_depth > parent_depth {
-                        bad_lines.push(BadLine {
-                            line: entries[i].start_line_num,
-                            column: 1,
-                            problem: format!("dropped as child of line {}", line_num),
-                            original: entries[i].text.clone(),
-                            dropped_as_child: true,
-                        });
-                        i += 1;
-                    } else {
-                        break;
-                    }
-                }
+                drop_child_lines(entries, &mut i, line_num, depth, &mut bad_lines);
                 continue;
             }
-        }
-
-        if ambiguous_last_line && i == entries.len() - 1 {
-            bad_lines.push(BadLine {
-                line: line_num,
-                column: if !entry.fields.is_empty() {
-                    entry.fields[0].start_col
-                } else {
-                    entry.content_start_col
-                },
-                problem: "ambiguous: missing list index or cut-off value".to_string(),
-                original: entry.text.clone(),
-                dropped_as_child: false,
-            });
-            i += 1;
-            continue;
         }
 
         if !entry.ends_with_pipe {
@@ -1440,42 +1235,20 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                 original: entry.text.clone(),
                 dropped_as_child: false,
             });
-            let parent_depth = depth;
             i += 1;
-            while i < entries.len() {
-                let next_depth = entries[i].depth;
-                if next_depth > parent_depth {
-                    bad_lines.push(BadLine {
-                        line: entries[i].start_line_num,
-                        column: 1,
-                        problem: format!("dropped as child of line {}", line_num),
-                        original: entries[i].text.clone(),
-                        dropped_as_child: true,
-                    });
-                    i += 1;
-                } else {
-                    break;
-                }
-            }
+            drop_child_lines(entries, &mut i, line_num, depth, &mut bad_lines);
             continue;
         }
 
-        // Unwind stack to current depth
         flush_stack(&mut stack, depth, &mut current_block);
 
-        let mut line_error: Option<(String, usize, usize)> = None; // (problem, err_line, err_col)
+        let mut line_error: Option<(String, usize, usize)> = None;
 
         if depth == 0 {
             let mut cols = Vec::new();
             collect_columns(&class_def.fields, &mut cols);
 
-            if entry.fields.len() < cols.len() {
-                line_error = Some((
-                    format!("expected {} columns, found {}", cols.len(), entry.fields.len()),
-                    line_num,
-                    entry.content_start_col,
-                ));
-            } else if entry.fields.len() > cols.len() {
+            if entry.fields.len() != cols.len() {
                 line_error = Some((
                     format!("expected {} columns, found {}", cols.len(), entry.fields.len()),
                     line_num,
@@ -1512,9 +1285,6 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                     let mut cursor = 0;
                     let record_val = build_record_value(&class_def.fields, &parsed_vals, &mut cursor);
                     stack.push(StackNode {
-                        depth: 0,
-                        line_num,
-                        is_bad: false,
                         value: record_val,
                         schema: NodeSchema::Class(class_def.clone()),
                         target_list_path: Vec::new(),
@@ -1522,7 +1292,6 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                 }
             }
         } else {
-            // Child line
             let parent = &stack[depth - 1];
             let list_targets = parent.schema.find_lists();
 
@@ -1542,67 +1311,59 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                     }
                 }
 
-                if used_index {
-                    (Some(single_target.clone()), 1)
-                } else if entry.fields.len() < item_cols {
+                let actual_cols = if used_index {
+                    entry.fields.len().saturating_sub(1)
+                } else {
+                    entry.fields.len()
+                };
+
+                if actual_cols != item_cols {
                     line_error = Some((
-                        format!("expected {} columns, found {}", item_cols, entry.fields.len()),
-                        line_num,
-                        entry.content_start_col,
-                    ));
-                    (None, 0)
-                } else if entry.fields.len() > item_cols {
-                    line_error = Some((
-                        format!("expected {} columns, found {}", item_cols, entry.fields.len()),
+                        format!("expected {} columns, found {}", item_cols, actual_cols),
                         line_num,
                         entry.content_start_col,
                     ));
                     (None, 0)
                 } else {
-                    (Some(single_target.clone()), 0)
+                    (Some(single_target.clone()), if used_index { 1 } else { 0 })
                 }
             } else {
-                // 2 or more lists -> index is required
-                if entry.fields.is_empty() {
-                    line_error = Some(("empty child line".to_string(), line_num, entry.content_start_col));
-                    (None, 0)
+                let index_str = if entry.fields.is_empty() {
+                    ""
                 } else {
-                    let index_str = entry.fields[0].trimmed_val.trim();
-                    let matched = list_targets.iter().find(|t| {
-                        t.canonical_index == index_str
-                            || t.accepted_indices.iter().any(|a| a == index_str)
-                    });
+                    entry.fields[0].trimmed_val.trim()
+                };
+                let matched = list_targets.iter().find(|t| {
+                    t.canonical_index == index_str
+                        || t.accepted_indices.iter().any(|a| a == index_str)
+                });
 
-                    match matched {
-                        Some(t) => {
-                            let item_cols = item_type_columns(&t.item_type).len();
-                            let actual_cols = entry.fields.len() - 1;
-                            if actual_cols < item_cols {
-                                line_error = Some((
-                                    format!("expected {} columns, found {}", item_cols, actual_cols),
-                                    line_num,
-                                    entry.content_start_col,
-                                ));
-                                (None, 1)
-                            } else if actual_cols > item_cols {
-                                line_error = Some((
-                                    format!("expected {} columns, found {}", item_cols, actual_cols),
-                                    line_num,
-                                    entry.content_start_col,
-                                ));
-                                (None, 1)
-                            } else {
-                                (Some(t.clone()), 1)
-                            }
-                        }
-                        None => {
+                match matched {
+                    Some(t) => {
+                        let item_cols = item_type_columns(&t.item_type).len();
+                        let actual_cols = entry.fields.len().saturating_sub(1);
+                        if actual_cols != item_cols {
                             line_error = Some((
-                                "missing list index".to_string(),
+                                format!("expected {} columns, found {}", item_cols, actual_cols),
                                 line_num,
-                                entry.fields[0].start_col,
+                                entry.content_start_col,
                             ));
-                            (None, 0)
+                            (None, 1)
+                        } else {
+                            (Some(t.clone()), 1)
                         }
+                    }
+                    None => {
+                        line_error = Some((
+                            "missing list index".to_string(),
+                            line_num,
+                            if entry.fields.is_empty() {
+                                entry.content_start_col
+                            } else {
+                                entry.fields[0].start_col
+                            },
+                        ));
+                        (None, 0)
                     }
                 }
             };
@@ -1650,9 +1411,6 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                     };
 
                     stack.push(StackNode {
-                        depth,
-                        line_num,
-                        is_bad: false,
                         value: parsed_item,
                         schema: node_schema,
                         target_list_path: target.field_path,
@@ -1669,25 +1427,8 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
                 original: entry.text.clone(),
                 dropped_as_child: false,
             });
-
-            // Drop any children hanging under this bad line
-            let parent_depth = depth;
             i += 1;
-            while i < entries.len() {
-                let next_depth = entries[i].depth;
-                if next_depth > parent_depth {
-                    bad_lines.push(BadLine {
-                        line: entries[i].start_line_num,
-                        column: 1,
-                        problem: format!("dropped as child of line {}", line_num),
-                        original: entries[i].text.clone(),
-                        dropped_as_child: true,
-                    });
-                    i += 1;
-                } else {
-                    break;
-                }
-            }
+            drop_child_lines(entries, &mut i, line_num, depth, &mut bad_lines);
             continue;
         }
 
@@ -1701,6 +1442,20 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
         }
     }
 
+    (decoded, bad_lines)
+}
+
+// =========================================================================
+// Step 6: Final Report Assembly
+// =========================================================================
+
+fn build_report(
+    schemas: &str,
+    decoded: DecodedFile,
+    mut repairs: Vec<Repair>,
+    bad_lines: Vec<BadLine>,
+    options: &DoctorOptions,
+) -> DoctorReport {
     let has_usable_records = decoded.blocks.iter().any(|b| !b.records.is_empty());
 
     let (final_data, final_text) = match options.mode {
@@ -1752,23 +1507,66 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
     }
 }
 
-fn add_item_to_value_list(parent: &mut Value, path: &[usize], item: Value) {
-    if let Value::Record(fields) = parent {
-        if path.is_empty() {
-            return;
+// =========================================================================
+// Main Doctor Function
+// =========================================================================
+
+/// Runs the doctor on `text` with `schemas` and `options`.
+pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorReport {
+    // Step 1: Parse outside schemas
+    let outside_classes = match parse_outside_schemas(schemas) {
+        Ok(m) => m,
+        Err(_) => {
+            return DoctorReport {
+                data: None,
+                text: String::new(),
+                repairs: Vec::new(),
+                bad_lines: Vec::new(),
+                hint: None,
+            };
         }
-        let field_idx = path[0];
-        if field_idx < fields.len() {
-            let (_, field_val) = &mut fields[field_idx];
-            if path.len() == 1 {
-                if let Value::List(items) = field_val {
-                    items.push(item);
-                }
-            } else {
-                add_item_to_value_list(field_val, &path[1..], item);
-            }
-        }
+    };
+
+    let outside_schema_defs = extract_outside_schema_defs(schemas);
+    let single_outside_class = if outside_classes.len() == 1 {
+        outside_classes.values().next().cloned()
+    } else {
+        None
+    };
+
+    // Step 2: Prepare lines, remove code fences and echoed schemas (Fixes 1 & 2)
+    let phys_lines = prepare_lines(text);
+    let (mut entries, mut repairs) =
+        remove_fences_and_echoed_schemas(&phys_lines, &outside_schema_defs);
+
+    // Step 3: Remove leading and trailing chatter (Fix 3)
+    remove_chatter(
+        &mut entries,
+        &outside_classes,
+        single_outside_class.as_ref(),
+        &mut repairs,
+    );
+
+    if entries.is_empty() {
+        repairs.sort_by_key(|r| (r.line, r.column));
+        return DoctorReport {
+            data: None,
+            text: String::new(),
+            repairs,
+            bad_lines: Vec::new(),
+            hint: None,
+        };
     }
+
+    // Step 4: Apply missing final pipe unconditionally (Fix 4)
+    apply_missing_final_pipe(&mut entries, &mut repairs);
+
+    // Step 5: Validate entries against schemas and decode blocks
+    let (decoded, bad_lines) =
+        validate_and_decode(&entries, &outside_classes, single_outside_class.as_ref());
+
+    // Step 6: Construct final report according to options
+    build_report(schemas, decoded, repairs, bad_lines, options)
 }
 
 /// Slices out bad lines, replaces them with reply lines, and runs the doctor again.
@@ -1802,20 +1600,35 @@ pub fn splice(
         ));
     }
 
-    let mut orig_lines: Vec<String> = original.split('\n').map(|s| s.to_string()).collect();
+    let mut orig_lines: Vec<String> = original
+        .split('\n')
+        .map(|s| s.strip_suffix('\r').unwrap_or(s).to_string())
+        .collect();
     if orig_lines.last() == Some(&"".to_string()) {
         orig_lines.pop();
     }
 
-    for (i, bad_line) in target_bad_lines.iter().enumerate() {
-        let line_idx = bad_line.line.saturating_sub(1);
-        let count = bad_line.original.lines().count().max(1);
+    // Iterate in reverse order so line removals do not shift lower line indices
+    for (i, bad_line) in target_bad_lines.iter().enumerate().rev() {
+        let count = bad_line.original.split('\n').count().max(1);
+        let first_orig_line = bad_line.original.lines().next().unwrap_or(&bad_line.original);
 
-        if line_idx < orig_lines.len() {
-            orig_lines[line_idx] = reply_lines[i].to_string();
+        let mut start_idx = bad_line.line.saturating_sub(1);
+        if count > 1 {
+            let min_idx = start_idx.saturating_sub(count - 1);
+            for test_idx in (min_idx..=start_idx).rev() {
+                if test_idx < orig_lines.len() && orig_lines[test_idx] == first_orig_line {
+                    start_idx = test_idx;
+                    break;
+                }
+            }
+        }
+
+        if start_idx < orig_lines.len() {
+            orig_lines[start_idx] = reply_lines[i].to_string();
             for _ in 1..count {
-                if line_idx + 1 < orig_lines.len() {
-                    orig_lines.remove(line_idx + 1);
+                if start_idx + 1 < orig_lines.len() {
+                    orig_lines.remove(start_idx + 1);
                 }
             }
         }

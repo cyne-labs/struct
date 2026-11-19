@@ -204,12 +204,13 @@ Each fix is reported with its line, its column, what it found, and what it wrote
 
 1. **Code fences.** A line that, after trimming, starts with three backticks is removed.
 2. **Echoed schema.** A line identical to one of the outside schema definitions, ignoring spaces, is removed.
-3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value. A line that fix 4 turns into a valid record is a record, not chatter: fix 4 is tried first.
-4. **Missing final `|`.** A line that doesn't end with `|` gets `|` added, when the result has exactly the right number of columns and every value is valid. This includes a line with no `|` at all, such as `1706` under a one-column schema. On a record whose raw value spans several lines, the fix is reported on the record's last line, where the `|` was missing.
-5. **Cut-off last record.** When the output's last line is an incomplete record (too few columns, or an unclosed raw value), that line is dropped, along with any child lines that would hang under it. Nothing is invented to complete it.
-   - A raw value still open at the end of the output is a cut-off.
-   - A cut that leaves the last value broken (for example, ending in a lone `\`) is a cut-off.
-   - A child line under a parent with several lists is a cut-off only when it has one reading. If its first value could be either the list's field number or a value with the number left out (for example, `>2|` under a parent whose field 2 is a list), it's a bad line.
+3. **Leading and trailing chatter.** Lines before the first line that contains `|` or is a schema line are removed when they contain no `|`. So are lines after the last line that contains `|`, apart from the inner lines of a raw value. The exception is a line that becomes a valid record once fix 4 adds its `|`. That line is a record, not chatter. Under a schema with a single text column, for example, `Hope this helps!` is a record.
+4. **Missing final `|`.** A data line that doesn't end with `|` gets `|` added. This includes child lines (starting with `>`). That's the whole fix: the doctor doesn't check the result here. If the line is still wrong, it's a bad line, and the caller fixes it.
+   - A raw value still open at the end of the output gets its `|` at the very end, which closes it.
+   - On a record whose raw value spans several lines, the fix is reported on the record's last line.
+   - A record cut off mid-value may become valid this way (`2024|Rope scal` becomes `2024|Rope scal|`). The doctor can't know it was cut. The repair is in the report, and the server's own finish reason says whether the output hit its limit.
+
+Nothing is ever deleted for being incomplete. The doctor only removes fences, echoed schemas and chatter, and only adds a final `|`.
 
 In the maintainer's words: *the box has a hole, the doctor patches it. Not my problem if the water in the box is dirty.*
 
@@ -305,7 +306,7 @@ None. Every question raised in review has been decided.
 ### 2026-11-20, the doctor
 
 - **Only `~` is null.** The doctor never reads `null`, `None`, `N/A` or similar words as null. In text they're text; elsewhere they're bad values. Likewise `true`/`false` in a bool field is a bad line, never converted to `1`/`0`.
-- **The doctor fixes structure, never values.** Its only fixes are code fences, echoed schema, chatter, a missing final `|`, and a cut-off last record.
+- **The doctor fixes structure, never values.** Its only fixes are code fences, echoed schema, chatter, and a missing final `|`. It never deletes a line for being incomplete.
 - **Header rows are never removed.** A line equal to the field names may be a real record. The prompt forbids headers instead. Every wrong value is reported. The user may have meant it, and fixing data isn't the doctor's job.
 - **Safe fixes only.** Guessing was rejected: it burns tokens when a model has to work out why the doctor changed something it shouldn't have. Every case with more than one reading is reported as a bad line.
 - **The caller chooses strict or salvage.**
