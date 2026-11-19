@@ -58,33 +58,39 @@ We counted tokens for three data shapes, in minified JSON, TOON and Struct, with
 - Gemma: `gemma-3-4b-it-Q4_K_M.gguf`
 - LFM: `LFM2.5-8B-A1B-Q4_K_M.gguf`
 
-The Struct rows are Struct v0.2 with the typed schema line included, so every Struct number pays for its own schema. Lower is better. Percentages are of the mean.
+The Struct rows are Struct v0.2 with the typed schema line included, so every Struct number pays for its own schema. Lower is better. Cells are token counts. The last two columns compare Struct with TOON and with minified JSON.
 
 Source: `research/r1-remeasure.md` and `bench/r1/results_r1_fixtures.csv`.
 
 ### Flat table, 20 rows x 5 columns
 
-| Format | Qwen | Llama | Gemma | LFM | Mean | vs min JSON | vs TOON |
-|---|---|---|---|---|---|---|---|
-| Minified JSON | 759 | 617 | 756 | 661 | 698.2 | 0.0% | +40.8% |
-| TOON | 564 | 421 | 570 | 428 | 495.8 | -29.0% | 0.0% |
-| Struct v0.2 | 581 | 418 | 583 | 449 | 507.8 | -27.3% | +2.4% |
+| Model | Minified JSON | TOON | Struct | Struct vs TOON | Struct vs JSON |
+|---|---|---|---|---|---|
+| Qwen3.5-4B | 759 | 564 | 581 | 3.0% worse than TOON | 23.5% better than JSON |
+| Llama-3.2-3B | 617 | 421 | 418 | 0.7% better than TOON | 32.3% better than JSON |
+| gemma-3-4b | 756 | 570 | 583 | 2.3% worse than TOON | 22.9% better than JSON |
+| LFM2.5-8B-A1B | 661 | 428 | 449 | 4.9% worse than TOON | 32.1% better than JSON |
+| **Mean** | 698.2 | 495.8 | 507.8 | 2.4% worse than TOON | 27.3% better than JSON |
 
 ### Nested, fixed shape, 10 records with a 2-field sub-record
 
-| Format | Qwen | Llama | Gemma | LFM | Mean | vs min JSON | vs TOON |
-|---|---|---|---|---|---|---|---|
-| Minified JSON | 397 | 327 | 396 | 350 | 367.5 | 0.0% | +47.9% |
-| TOON | 279 | 208 | 292 | 215 | 248.5 | -32.4% | 0.0% |
-| Struct v0.2 | 305 | 224 | 307 | 242 | 269.5 | -26.7% | +8.5% |
+| Model | Minified JSON | TOON | Struct | Struct vs TOON | Struct vs JSON |
+|---|---|---|---|---|---|
+| Qwen3.5-4B | 397 | 279 | 305 | 9.3% worse than TOON | 23.2% better than JSON |
+| Llama-3.2-3B | 327 | 208 | 224 | 7.7% worse than TOON | 31.5% better than JSON |
+| gemma-3-4b | 396 | 292 | 307 | 5.1% worse than TOON | 22.5% better than JSON |
+| LFM2.5-8B-A1B | 350 | 215 | 242 | 12.6% worse than TOON | 30.9% better than JSON |
+| **Mean** | 367.5 | 248.5 | 269.5 | 8.5% worse than TOON | 26.7% better than JSON |
 
 ### Nested, variable shape, 4 records with 2-level child lists
 
-| Format | Qwen | Llama | Gemma | LFM | Mean | vs min JSON | vs TOON |
-|---|---|---|---|---|---|---|---|
-| Minified JSON | 337 | 304 | 323 | 304 | 317.0 | 0.0% | -18.2% |
-| TOON | 410 | 367 | 404 | 370 | 387.8 | +22.3% | 0.0% |
-| Struct v0.2 | 309 | 252 | 306 | 264 | 282.8 | -10.8% | -27.1% |
+| Model | Minified JSON | TOON | Struct | Struct vs TOON | Struct vs JSON |
+|---|---|---|---|---|---|
+| Qwen3.5-4B | 337 | 410 | 309 | 24.6% better than TOON | 8.3% better than JSON |
+| Llama-3.2-3B | 304 | 367 | 252 | 31.3% better than TOON | 17.1% better than JSON |
+| gemma-3-4b | 323 | 404 | 306 | 24.3% better than TOON | 5.3% better than JSON |
+| LFM2.5-8B-A1B | 304 | 370 | 264 | 28.6% better than TOON | 13.2% better than JSON |
+| **Mean** | 317.0 | 387.8 | 282.8 | 27.1% better than TOON | 10.8% better than JSON |
 
 ### What the numbers say
 
@@ -131,7 +137,7 @@ Types are enforced. A value that doesn't match its type is an error. A type name
 
 | Escape | Meaning |
 |---|---|
-| `\|` | literal pipe |
+| `\\|` | literal pipe |
 | `\\` | literal backslash |
 | `\~` | literal `~`, only when the whole value is `~` |
 | `\>` | literal `>`, when the first value on a line begins with `>` |
