@@ -4,7 +4,7 @@ version = "0.3.0"
 edition = "2021"
 authors = ["Ashman Das"]
 description = "Core library for Struct structured-output format (v0.3)"
-license = "MIT"
+license = "Apache-2.0"
 
 [dependencies]
 # Standard library only - no external crates!
