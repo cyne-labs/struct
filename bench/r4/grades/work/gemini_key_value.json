@@ -1,0 +1,110 @@
+{
+ "model": "gemini",
+ "format": "key_value",
+ "total_questions": 96,
+ "strict_correct": 93,
+ "strict_wrong": 3,
+ "items": [
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_tabular_seed1.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 1,
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "kind": "count_filter",
+   "expected": "7",
+   "strict_grade": "wrong",
+   "strict_parsed_answer": "6"
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_tabular_seed1.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 1,
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "kind": "null_missing",
+   "expected": "null",
+   "strict_grade": "wrong",
+   "strict_parsed_answer": "null (missing/not provided)"
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_tabular_seed3.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 3,
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "kind": "null_missing",
+   "expected": "null",
+   "strict_grade": "wrong",
+   "strict_parsed_answer": "null (no publication year provided)"
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_100_seed3.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 3,
+   "question_number": 2,
+   "question": "What is the publication year of paper 2404.3286?",
+   "kind": "single_lookup",
+   "expected": "2023",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "2023",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_100_seed2.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 2,
+   "question_number": 2,
+   "question": "What is the publication year of paper 2404.3286?",
+   "kind": "single_lookup",
+   "expected": "2023",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "2023",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_100_seed3.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 3,
+   "question_number": 3,
+   "question": "What is the title of paper 2404.9279?",
+   "kind": "single_lookup",
+   "expected": "KV cache quantization losing accuracy on outliers v4",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "KV cache quantization losing accuracy on outliers v4",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_tabular_seed3.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 3,
+   "question_number": 4,
+   "question": "What is the verification status of paper 2309.06180?",
+   "kind": "single_lookup",
+   "expected": "true",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "true",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini\\raw\\gemini_r4_key_value_flat_100_seed1.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 1,
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "kind": "null_missing",
+   "expected": "null",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "null",
+   "spot_check": true
+  }
+ ]
+}

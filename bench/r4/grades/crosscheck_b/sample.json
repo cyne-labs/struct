@@ -1,0 +1,578 @@
+{
+ "items": [
+  {
+   "id": "item_001",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_001.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_002",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_002.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_003",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_003.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_004",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_004.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_005",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_005.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_006",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_006.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_007",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_007.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_008",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_008.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_009",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_009.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_010",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_010.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_011",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_011.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_012",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_012.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_013",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_013.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_014",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_014.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_015",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_015.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_016",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_016.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_017",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_017.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_018",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_018.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_019",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_019.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_020",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_020.txt",
+   "question_number": 6,
+   "question": "What subnotes are listed under the note 'outlier channels preserved'?",
+   "expected": "per-head scales help, perplexity intact"
+  },
+  {
+   "id": "item_021",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_021.txt",
+   "question_number": 2,
+   "question": "What is the verification status for 'Mistral fine tuning rules'?",
+   "expected": "false"
+  },
+  {
+   "id": "item_022",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_022.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_023",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_004.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_024",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_023.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_025",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_024.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_026",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_025.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_027",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_026.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_028",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_027.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_029",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_011.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_030",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_028.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_031",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_029.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_032",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_030.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_033",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_027.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_034",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_031.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_035",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_032.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_036",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_033.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_037",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_034.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_038",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_035.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_039",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_036.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_040",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_037.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_041",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_038.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_042",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_039.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_043",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_039.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_044",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_040.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_045",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_041.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_046",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_042.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_047",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_043.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_048",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_044.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_049",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_045.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_050",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_046.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_051",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_047.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_052",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_048.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_053",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_007.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_054",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_006.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_055",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_049.txt",
+   "question_number": 4,
+   "question": "What is the verification status of paper 2309.06180?",
+   "expected": "true"
+  },
+  {
+   "id": "item_056",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_050.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_057",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_051.txt",
+   "question_number": 4,
+   "question": "What is the verification status of paper 2309.06180?",
+   "expected": "true"
+  },
+  {
+   "id": "item_058",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_052.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_059",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_053.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_060",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_024.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_061",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_054.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_062",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_053.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_063",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_055.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_064",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_012.txt",
+   "question_number": 6,
+   "question": "What subnotes are listed under the note 'outlier channels preserved'?",
+   "expected": "per-head scales help, perplexity intact"
+  },
+  {
+   "id": "item_065",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_056.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_066",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_057.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_067",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_058.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_068",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_015.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_069",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_059.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_070",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_060.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_071",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_009.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_072",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_061.txt",
+   "question_number": 11,
+   "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+   "expected": "none"
+  },
+  {
+   "id": "item_073",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_050.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_074",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_062.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_075",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_008.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_076",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_010.txt",
+   "question_number": 4,
+   "question": "What is the verification status of paper 2309.06180?",
+   "expected": "true"
+  },
+  {
+   "id": "item_077",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_042.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_078",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_063.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_079",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_064.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_080",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_063.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_081",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_002.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_082",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_b\\raw\\answer_065.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  }
+ ]
+}

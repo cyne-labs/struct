@@ -1,0 +1,496 @@
+{
+  "items": [
+    {
+      "id": "item_001",
+      "model_answer": "None (empty)",
+      "grade": "correct",
+      "reason": "States 'None (empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_002",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_003",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_004",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_005",
+      "model_answer": "None (empty/missing)",
+      "grade": "correct",
+      "reason": "States 'None (empty/missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_006",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_007",
+      "model_answer": "None (empty / missing)",
+      "grade": "correct",
+      "reason": "States 'None (empty / missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_008",
+      "model_answer": "null (missing/not provided)",
+      "grade": "correct",
+      "reason": "States 'null (missing/not provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_009",
+      "model_answer": "None (missing / empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing / empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_010",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_011",
+      "model_answer": "None (empty / missing)",
+      "grade": "correct",
+      "reason": "States 'None (empty / missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_012",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_013",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_014",
+      "model_answer": "null (None)",
+      "grade": "correct",
+      "reason": "States 'null (None)', clearly indicating no value."
+    },
+    {
+      "id": "item_015",
+      "model_answer": "None (empty / not specified)",
+      "grade": "correct",
+      "reason": "States 'None (empty / not specified)', clearly indicating no value."
+    },
+    {
+      "id": "item_016",
+      "model_answer": "None / missing (~)",
+      "grade": "correct",
+      "reason": "States 'None / missing (~)', clearly indicating no value."
+    },
+    {
+      "id": "item_017",
+      "model_answer": "None (empty/missing)",
+      "grade": "correct",
+      "reason": "States 'None (empty/missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_018",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_019",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_020",
+      "model_answer": "'per-head scales help' and 'perplexity intact'",
+      "grade": "correct",
+      "reason": "States ''per-head scales help' and 'perplexity intact'', listing exactly the expected items."
+    },
+    {
+      "id": "item_021",
+      "model_answer": "0 (unverified / false)",
+      "grade": "correct",
+      "reason": "States '0 (unverified / false)', clearly indicating false."
+    },
+    {
+      "id": "item_022",
+      "model_answer": "None (empty list / [])",
+      "grade": "correct",
+      "reason": "States 'None (empty list / [])', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_023",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_024",
+      "model_answer": "null (no year provided)",
+      "grade": "correct",
+      "reason": "States 'null (no year provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_025",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_026",
+      "model_answer": "null (None)",
+      "grade": "correct",
+      "reason": "States 'null (None)', clearly indicating no value."
+    },
+    {
+      "id": "item_027",
+      "model_answer": "None (empty)",
+      "grade": "correct",
+      "reason": "States 'None (empty)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_028",
+      "model_answer": "None (blank)",
+      "grade": "correct",
+      "reason": "States 'None (blank)', clearly indicating no value."
+    },
+    {
+      "id": "item_029",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_030",
+      "model_answer": "None (or empty: `[]`)",
+      "grade": "correct",
+      "reason": "States 'None (or empty: `[]`)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_031",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_032",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_033",
+      "model_answer": "None (blank)",
+      "grade": "correct",
+      "reason": "States 'None (blank)', clearly indicating no value."
+    },
+    {
+      "id": "item_034",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_035",
+      "model_answer": "None (empty)",
+      "grade": "correct",
+      "reason": "States 'None (empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_036",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_037",
+      "model_answer": "None (~ / missing)",
+      "grade": "correct",
+      "reason": "States 'None (~ / missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_038",
+      "model_answer": "null (no publication year)",
+      "grade": "correct",
+      "reason": "States 'null (no publication year)', clearly indicating no value."
+    },
+    {
+      "id": "item_039",
+      "model_answer": "None (or empty)",
+      "grade": "correct",
+      "reason": "States 'None (or empty)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_040",
+      "model_answer": "null (no publication year provided)",
+      "grade": "correct",
+      "reason": "States 'null (no publication year provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_041",
+      "model_answer": "null (missing/none)",
+      "grade": "correct",
+      "reason": "States 'null (missing/none)', clearly indicating no value."
+    },
+    {
+      "id": "item_042",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_043",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_044",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_045",
+      "model_answer": "null (no publication year provided)",
+      "grade": "correct",
+      "reason": "States 'null (no publication year provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_046",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_047",
+      "model_answer": "None (missing / blank)",
+      "grade": "correct",
+      "reason": "States 'None (missing / blank)', clearly indicating no value."
+    },
+    {
+      "id": "item_048",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_049",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_050",
+      "model_answer": "None (missing / ~)",
+      "grade": "correct",
+      "reason": "States 'None (missing / ~)', clearly indicating no value."
+    },
+    {
+      "id": "item_051",
+      "model_answer": "None (or empty list / no subnotes)",
+      "grade": "correct",
+      "reason": "States 'None (or empty list / no subnotes)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_052",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_053",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_054",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_055",
+      "model_answer": "1 (verified)",
+      "grade": "correct",
+      "reason": "States '1 (verified)', clearly indicating true."
+    },
+    {
+      "id": "item_056",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_057",
+      "model_answer": "true (verified)",
+      "grade": "correct",
+      "reason": "States 'true (verified)', clearly indicating true."
+    },
+    {
+      "id": "item_058",
+      "model_answer": "null (no publication year provided)",
+      "grade": "correct",
+      "reason": "States 'null (no publication year provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_059",
+      "model_answer": "None (~ / missing)",
+      "grade": "correct",
+      "reason": "States 'None (~ / missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_060",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_061",
+      "model_answer": "null (no year specified)",
+      "grade": "correct",
+      "reason": "States 'null (no year specified)', clearly indicating no value."
+    },
+    {
+      "id": "item_062",
+      "model_answer": "None (~ / missing)",
+      "grade": "correct",
+      "reason": "States 'None (~ / missing)', clearly indicating no value."
+    },
+    {
+      "id": "item_063",
+      "model_answer": "None / missing (`~`)",
+      "grade": "correct",
+      "reason": "States 'None / missing (`~`)', clearly indicating no value."
+    },
+    {
+      "id": "item_064",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "States 'per-head scales help; perplexity intact', listing exactly the expected items."
+    },
+    {
+      "id": "item_065",
+      "model_answer": "null (no publication year provided)",
+      "grade": "correct",
+      "reason": "States 'null (no publication year provided)', clearly indicating no value."
+    },
+    {
+      "id": "item_066",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_067",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_068",
+      "model_answer": "None (empty / not specified)",
+      "grade": "correct",
+      "reason": "States 'None (empty / not specified)', clearly indicating no value."
+    },
+    {
+      "id": "item_069",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "States 'None (empty list)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_070",
+      "model_answer": "null (missing/none)",
+      "grade": "correct",
+      "reason": "States 'null (missing/none)', clearly indicating no value."
+    },
+    {
+      "id": "item_071",
+      "model_answer": "None (missing / empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing / empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_072",
+      "model_answer": "None (no subnotes listed)",
+      "grade": "correct",
+      "reason": "States 'None (no subnotes listed)', clearly indicating no subnotes."
+    },
+    {
+      "id": "item_073",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_074",
+      "model_answer": "None (missing / ~)",
+      "grade": "correct",
+      "reason": "States 'None (missing / ~)', clearly indicating no value."
+    },
+    {
+      "id": "item_075",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    },
+    {
+      "id": "item_076",
+      "model_answer": "1 (or verified / true)",
+      "grade": "correct",
+      "reason": "States '1 (or verified / true)', clearly indicating true."
+    },
+    {
+      "id": "item_077",
+      "model_answer": "None (null)",
+      "grade": "correct",
+      "reason": "States 'None (null)', clearly indicating no value."
+    },
+    {
+      "id": "item_078",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_079",
+      "model_answer": "null (none)",
+      "grade": "correct",
+      "reason": "States 'null (none)', clearly indicating no value."
+    },
+    {
+      "id": "item_080",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_081",
+      "model_answer": "None (missing/empty)",
+      "grade": "correct",
+      "reason": "States 'None (missing/empty)', clearly indicating no value."
+    },
+    {
+      "id": "item_082",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "States 6 instead of expected count 7."
+    }
+  ]
+}

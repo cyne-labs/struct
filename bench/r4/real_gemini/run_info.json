@@ -1,0 +1,14 @@
+{
+  "command": [
+    "agy",
+    "-p=<prompt>",
+    "--model",
+    "gemini-3.8-flash-low",
+    "--output-format",
+    "json",
+    "--sandbox",
+    "--disable-slash-commands"
+  ],
+  "command_line": "agy -p=<prompt> --model gemini-3.8-flash-low --output-format json --sandbox --disable-slash-commands",
+  "agy_version": "1.5.14"
+}
