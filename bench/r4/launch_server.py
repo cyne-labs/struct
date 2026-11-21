@@ -30,7 +30,26 @@ SHA256_FILE = os.path.join(REAL_DIR, "SHA256SUMS")
 
 SERVER_DIR = r"C:\Users\Ashman Das\Documents\turboquant-llama-cpp"
 LLAMA_SERVER = os.path.join(SERVER_DIR, "llama-server.exe")
-MODEL_PATH = os.path.join(SERVER_DIR, "models", "lmstudio-community", "gemma-4-E2B-it-GGUF", "gemma-4-E2B-it-Q4_K_M.gguf")
+# R4_PROFILE picks the model. Default "gemma4e2b" (R4 decision 14); "qwen35_4b" is Qwen3.5-4B with MTP.
+R4_PROFILE = os.environ.get("R4_PROFILE", "gemma4e2b")
+PROFILES = {
+    "gemma4e2b": {
+        "model": os.path.join(SERVER_DIR, "models", "lmstudio-community", "gemma-4-E2B-it-GGUF", "gemma-4-E2B-it-Q4_K_M.gguf"),
+        "stem": "gemma4e2b",
+        "sampling": {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "min_p": 0.0, "presence_penalty": 0.0, "repeat_penalty": 1.0},
+        "extra_flags": [],
+    },
+    "qwen35_4b": {
+        "model": os.path.join(SERVER_DIR, "models", "unsloth", "Qwen3.5-4B-GGUF", "Qwen3.5-4B-Q4_K_M.gguf"),
+        "stem": "qwen35_4b",
+        # Qwen3.5 model card, thinking mode, general tasks
+        "sampling": {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "min_p": 0.0, "presence_penalty": 1.5, "repeat_penalty": 1.0},
+        "extra_flags": ["--spec-type", "draft-mtp,ngram-mod", "--spec-draft-n-max", "3", "-ctkd", "turbo3", "-ctvd", "turbo2",
+                        "--spec-ngram-mod-n-max", "3", "--spec-ngram-mod-n-min", "2", "--spec-ngram-mod-n-match", "8"],
+    },
+}
+PROFILE = PROFILES[R4_PROFILE]
+MODEL_PATH = PROFILE["model"]
 
 HOST = "127.0.0.1"
 PORT = 8090
@@ -48,15 +67,15 @@ R4_FLAGS = [
     "-np", "4",
     "--kv-unified",
     "--reasoning-budget", "8192",
-    "--temp", "1.0",
-    "--top-p", "0.95",
-    "--top-k", "64",
-    "--min-p", "0.0",
-    "--presence-penalty", "0.0",
-    "--repeat-penalty", "1.0",
+    "--temp", str(PROFILE["sampling"]["temperature"]),
+    "--top-p", str(PROFILE["sampling"]["top_p"]),
+    "--top-k", str(PROFILE["sampling"]["top_k"]),
+    "--min-p", str(PROFILE["sampling"]["min_p"]),
+    "--presence-penalty", str(PROFILE["sampling"]["presence_penalty"]),
+    "--repeat-penalty", str(PROFILE["sampling"]["repeat_penalty"]),
     "--port", str(PORT),
     "--host", HOST,
-]
+] + list(PROFILE["extra_flags"])
 
 def get_launch_cmd_args():
     """Returns the full argument list for starting llama-server."""

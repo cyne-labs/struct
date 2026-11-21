@@ -1,0 +1,43 @@
+1. unverified
+2. 2023
+3. KV cache quantization losing accuracy on outliers
+4. false
+5. 24
+6. 19
+7. 37
+8. 2404.7570, 2411.9702
+9. 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.1634, 2407.4006, 2411.7691, 2407.547, 2406.9004 (Wait, let's look closer at null years: 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.4006, 2407.1634, 2409.9004, 2407.4006? Let's search null in year column).
+Let's re-verify null years:
+- 2410.7912: year null
+- 2411.6313: year null
+- 2408.9479: year null
+- 2402.5808: year null
+- 2410.2343: year null
+- 2407.4006: year null
+- 2407.1634: year null
+- 2409.9004: year null
+- 2407.547? No, 2408.7547 has year null.
+Wait, let's list IDs with null year: 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.4006, 2407.1634, 2409.9004, 2407.4006? Let's check precisely:
+2410.7912 (null year)
+2411.6313 (null year)
+2408.9479 (null year)
+2402.5808 (null year)
+2410.2343 (null year)
+2407.4006 (null year)
+2407.1634 (null year)
+2409.9004 (null year)
+2407.4006 (wait, let's check line 47: 2407.4006...null,true)
+2408.7547 (line 97: 2408.7547...null,true)
+Let's just output the IDs for each:
+1. unverified
+2. 2023
+3. KV cache quantization losing accuracy on outliers
+4. false
+5. 24
+6. 19
+7. 37
+8. 2404.7570, 2411.9702
+9. 2410.7912, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2411.6313, 2409.9004, 2407.1634, 2408.7547
+10. 2410.7912, 2403.4527, 2408.6977, 2411.8062, 2406.4441, 2403.8179, 2407.9379, 2405.9445
+11. null
+12. null

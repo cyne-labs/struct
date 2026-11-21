@@ -1,0 +1,5812 @@
+[
+  {
+    "run_index": 1,
+    "format": "json_min",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_json_min_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.684363842010498,
+    "input_tokens": 996,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 996,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1122,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 996
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 15\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRMT1kR2/Jt7erJsnh+KSRTHub0KBV87kjuA1a7K9TgX8QO8jKeGQMG6WzLQKuVJetzdOgNkjdeZo0+ZXT3FiE7TkC9WeraNMcmeP5Gd1q0T2K7HFCo9k0wnyFqCv6sO5XTyjlaOZRaQqcK/XCsQOmSQFRsKBti8EjAbjhl5PjDgScboDoLMMQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 996,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1122,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 996
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "rrEBa5TLEvGr3LUP9KPmIQ"
+    }
+  },
+  {
+    "run_index": 2,
+    "format": "toon",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_toon_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.1274049282073975,
+    "input_tokens": 828,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 828,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 954,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 828
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2"
+              },
+              {
+                "text": "017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 9\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRM1u8ANgY3kpun9qChU5VceGDOUuz8Q9SFht47rRG3NZE6cYeSbk7sjlu3I0/IFSJDvZBc3oOpxuuJb/2YMb8psRyblHqUl4374B21B6aL3Kk1DoOz5z83InLor0C5A7r5WYJhAmJS+a+v11MyDltsViJhl6jMBUL2vz480qXki08y2MTB6NQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 828,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 954,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 828
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "rrEBa-zCC_yK3LUP4OvR8As"
+    }
+  },
+  {
+    "run_index": 3,
+    "format": "yaml",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_yaml_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.5374374389648438,
+    "input_tokens": 1145,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1145,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1271,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1145
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfROpTFIvOoV5m/dDHYul4/tw5qy0d5YK/DLJsJb9pPi2vBM6ypA6Yk+v9aDiFPG+crDD5zl0qvw/7rPhQr2At7s1dnKjXS1F8ItrLcWhGjWwoo9s6f9/dPAEDN/J8Q1Y4nBKBxwe7zEAkBqK8M+emoGF/PMSWSm8eQSCotHSr5F2nTQQBQufeA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1145,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1271,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1145
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "rrEBa7XQE5bLqfkP5YaL2AM"
+    }
+  },
+  {
+    "run_index": 4,
+    "format": "tsv",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_tsv_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3977084159851074,
+    "input_tokens": 776,
+    "thinking_tokens": 0,
+    "output_tokens": 135,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 776,
+      "candidatesTokenCount": 135,
+      "totalTokenCount": 911,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 776
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. [empty] (not provided in the data)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPZhhNxtgTUYkfnGZKCbNuC18bASapNISgmmTT1ZkHd9KCMJInzYUICSoWZ4upKOLuYTWGIOSH68nH4Hw02QkYnfE44PjU+WDyP3kl6vcJq35rUz01uQTNKQ5zs0o5fec4SgcLTr06Feu66xvhlX7xTwi1v3bR9DSZY+s5pCVf/JrVbe1pjjw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 776,
+        "candidatesTokenCount": 135,
+        "totalTokenCount": 911,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 776
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "rbEBa_jCO6Hq4t4Ph4SLqQE"
+    }
+  },
+  {
+    "run_index": 5,
+    "format": "xml",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_xml_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4399642944335938,
+    "input_tokens": 1702,
+    "thinking_tokens": 0,
+    "output_tokens": 128,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1702,
+      "candidatesTokenCount": 128,
+      "totalTokenCount": 1830,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1702
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. [unknown]\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRNpX136LYfNlfQdr1mcTqmm7XgHLvHNjmK6Xoncd4E+Z+jvsScTT7iYjawDCcaYRhpTqDUme3a/q0vATgZoFcGMntBwBLMx93QQ7fVARsdre4FsI8qh7KYsWssKAFkBYQefWJmF6WMVI+22BhECYxWT572jUYLiipdjhsR+Og4svbwLJg+0DA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1702,
+        "candidatesTokenCount": 128,
+        "totalTokenCount": 1830,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1702
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "r7EBa4C0GauD694Pzsbl0AM"
+    }
+  },
+  {
+    "run_index": 6,
+    "format": "key_value",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_key_value_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4342293739318848,
+    "input_tokens": 1066,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1066,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1192,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1066
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfROcGk7k6TTiPEfPGW4XnDXcM4BKOSC+Acwc+yKpTfa8hLDuDLrDn/ZDLpLW+QG4vwuYwVnPY2qHdvhPeq1Ui/K/owxLtVL+/lAj2JpZZrU5WTK2eXBx6eLMiYom31uaI5dStRfRPT8dPfL2ECHhQalRcclLil6EkRYi8M2nEN9UkuZCQsPuKQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1066,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1066
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "r7EBa-iwKbyB694PqvuB0Aw"
+    }
+  },
+  {
+    "run_index": 7,
+    "format": "struct",
+    "dataset": "flat_tabular",
+    "seed": 1,
+    "file": "gemini_lite_r4_struct_flat_tabular_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.854210376739502,
+    "input_tokens": 820,
+    "thinking_tokens": 0,
+    "output_tokens": 105,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 820,
+      "candidatesTokenCount": 105,
+      "totalTokenCount": 925,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 820
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3."
+              },
+              {
+                "text": " LoRA low rank adaptation\n4. 1\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. None\n10. 2403.09611\n11. ~\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRNOiz9QpUm0njvmMeS7eLeIqS6xpLfxbOVQDuLHEJo03N3K5AHuXuqZRsARLr7onkFnWixRkiM8JMUvvD5/v4dJ5hE3D/am6Qhz4dKBRsKULyFInm59f/WhwyAU/Ue4TdA+FMEcTpCDA5w3oicSrubA3yJ/SRbBvPZjmOsrq07Q7Q2US5HcIQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 820,
+        "candidatesTokenCount": 105,
+        "totalTokenCount": 925,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 820
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "r7EBa-upMOe5juMPo93QsAc"
+    }
+  },
+  {
+    "run_index": 8,
+    "format": "json_min",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_json_min_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3185181617736816,
+    "input_tokens": 4534,
+    "thinking_tokens": 0,
+    "output_tokens": 261,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4534,
+      "candidatesTokenCount": 261,
+      "totalTokenCount": 4795,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4534
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 24\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2402.8962, 2411.8062, 2406.4441, 2403.8179, 2405.9445\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRPgdd/ybBQUlWASJWH6hGv6VeGf1uinX83w00X0nqUAW+Ng14WF7+H0mUZr0CY5tDMcHlPjL3HTTIiBDb6+eL338tXQBCVrEucnzTcjIW8IT8zTa6ARePNFAadqdEf2MzMBJd1eqYhP4Zqa0NhbmJkVfddX4z7ZoxAGRrSz3OCXvRU4Olc+bQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4534,
+        "candidatesTokenCount": 261,
+        "totalTokenCount": 4795,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4534
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "ubUBa97ZGdDY1_oPk-aNgAE"
+    }
+  },
+  {
+    "run_index": 9,
+    "format": "toon",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_toon_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 3.0963611602783203,
+    "input_tokens": 3647,
+    "thinking_tokens": 0,
+    "output_tokens": 1036,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3647,
+      "candidatesTokenCount": 1036,
+      "totalTokenCount": 4683,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3647
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. false\n5. 24\n6. 19\n7. 37\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.1634, 2407.4006, 2411.7691, 2407.547, 2406.9004 (Wait, let's look closer at null years: 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.4006, 2407.1634, 2409.9004, 2407.4006? Let's search null in year column).\nLet's re-verify null years:\n- 2410.7912: year null\n- 2411.6313: year null\n- 2408.9479: year null\n- 2402.5808: year null\n- 2410.2343: year null\n- 2407.4006: year null\n- 2407.1634: year null\n- 2409.9004: year null\n- 2407.547? No, 2408.7547 has year null.\nWait, let's list IDs with null year: 2410.7912, 2411.6313, 2408.9479, 2402.5808, 2410.2343, 2407.4006, 2407.1634, 2409.9004, 2407.4006? Let's check precisely:\n2410.7912 (null year)\n2411.6313 (null year)\n2408.9479 (null year)\n2402.5808 (null year)\n2410.2343 (null year)\n2407.4006 (null year)\n2407.1634 (null year)\n2409.9004 (null year)\n2407.4006 (wait, let's check line 47: 2407.4006...null,true)\n2408.7547 (line 97: 2408.7547...null,true)\nLet's just output the IDs for each:\n"
+              },
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. false\n5. 24\n6. 19\n7. 37\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2411.6313, 2409.9004, 2407.1634, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2411.8062, 2406.4441, 2403.8179, 2407.9379, 2405.9445\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRPL8If4/AJs6sNBcHFi8WdwNnaBudmNKoiHfST46quakuZ7fQpplIpYetrplhKtxIuPE4tWxvfhf1rX/xcspXnRe0BzKVlbd3otkDE1yIjs4pKjj1wlw7RuMqM2yzO88AL+U1twjaKlCCZwVcj8kim2z0HiYViriHWgd/eicLa+9eT2xc7+3A=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3647,
+        "candidatesTokenCount": 1036,
+        "totalTokenCount": 4683,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3647
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "sLEBa_XTMu-omNMPlrTToAQ"
+    }
+  },
+  {
+    "run_index": 10,
+    "format": "yaml",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_yaml_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.113312244415283,
+    "input_tokens": 5288,
+    "thinking_tokens": 0,
+    "output_tokens": 304,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 5288,
+      "candidatesTokenCount": 304,
+      "totalTokenCount": 5592,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5288
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 21\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2409.9004, 2407.1634, 2402.5808, 2407.547, 2410.7912\n10. 2410.7912, 2408.6977, 2402.3504, 2403.8179, 2411.8062, 2405.9445, 2406.4441, 2407.9379, 2412.6138, 2402.8962\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRP7vnGzOA5d6MSIhQLLbQM++pV8msXjzAW70s/ELb5w4ydgMdNshZDlOMUNokCktcDGgLJwYN8xcTwb3f4t7BDslPi3MJMJrCPGEMDCPMElPaCTnkjHG+xZQn374NDO6vQ9yEKfGKM2yE//X8YxTEqlFVbkT6l4X4HjsT/zoMY5o5rUo9GHcg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 5288,
+        "candidatesTokenCount": 304,
+        "totalTokenCount": 5592,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5288
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "sbEBa6KKB5eU4-EPhoq8oQQ"
+    }
+  },
+  {
+    "run_index": 11,
+    "format": "tsv",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_tsv_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.835113763809204,
+    "input_tokens": 3407,
+    "thinking_tokens": 0,
+    "output_tokens": 305,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3407,
+      "candidatesTokenCount": 305,
+      "totalTokenCount": 3712,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3407
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 24\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547, 2410.2343\n10. 2410.7912, 2408.6977, 2403.4527, 2411.8062, 2402.3504, 2403.8179, 2406.7373, 2402.8962, 2405.9445\n11. unknown\n12. unknown",
+                "thoughtSignature": "Eo4BCosBAWkUfRMsCibr9Ijfwuhy9Uyyuf5a95i1M2625WZL+DvYTKlZk6fdZn8l8E8kcSdMEUUVfFHcsottLPmDqvkri8JumMRXi/nGv+KymmcxHJ2CX+1+duKS9Faj0mhpoFfgmG9N4wmlX13xffo5QDP3BpJ9pjkdlUEUIi2tL2Q7CIOkVFjqm5tbmCSqKQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3407,
+        "candidatesTokenCount": 305,
+        "totalTokenCount": 3712,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3407
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "sbEBa7-QNvfq694P1sG2sAI"
+    }
+  },
+  {
+    "run_index": 12,
+    "format": "xml",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_xml_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.542320966720581,
+    "input_tokens": 8047,
+    "thinking_tokens": 0,
+    "output_tokens": 271,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 8047,
+      "candidatesTokenCount": 271,
+      "totalTokenCount": 8318,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 8047
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 16\n6. 12\n7. 49\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2408.9479, 2407.4006, 2402.5808, 2409.9004, 2407.1634, 2411.7691, 2408.7547, 2410.2343\n10. 2410.7912, 2408.6977, 2402.3504, 2412.6138, 2403.8179, 2405.9445, 2407.9379\n11. \n12.",
+                "thoughtSignature": "Eo4BCosBAWkUfROvow5H02/7p9l6feKHxErdSZtcT7jtBMypheDbBF8Y7cFIA1ydcqdF1OoRvZy+uTUzd7DFZB/Y13Dz4KDaoeCpXDkFufRf2gdJ2E+NXiNSw2rbCeu3onHU/y81ipVOH9kqD6La3Qy26yGbT/RhO/cIyTkiHUlHCdkMxYBFamaMd59rQRSkDA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 8047,
+        "candidatesTokenCount": 271,
+        "totalTokenCount": 8318,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8047
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "s7EBa7XGCZy1juMPrYS8gAc"
+    }
+  },
+  {
+    "run_index": 13,
+    "format": "key_value",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_key_value_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.6882867813110352,
+    "input_tokens": 4889,
+    "thinking_tokens": 0,
+    "output_tokens": 305,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4889,
+      "candidatesTokenCount": 305,
+      "totalTokenCount": 5194,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4889
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 20\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2407.4006, 2407.1634, 2409.9004, 2411.7691, 2408.7547, 2410.2343, 2408.9479\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2406.4441, 2402.8962, 2403.8179, 2405.9445, 2407.9379, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRMIDFQCpbsNsxJsMQf0loi1Hgl7ReYJ5Cbiv+Ei+7EHG5tgOKKNoUlABmlhWpE9U/I7qOwtWyn1IqnwV+EZR1CFeGJwJZjJj66lqLsRR8RZmXwuJ+t0MkiL3daZVcqHZagC5rF+jY3Aq/3EkA0gU1v4AY64e3GHf+dasoj8rSjoBOdbvl7C6Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4889,
+        "candidatesTokenCount": 305,
+        "totalTokenCount": 5194,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4889
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "s7EBa9PbGryB694PkLqCiA4"
+    }
+  },
+  {
+    "run_index": 14,
+    "format": "struct",
+    "dataset": "flat_100",
+    "seed": 1,
+    "file": "gemini_lite_r4_struct_flat_100_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.989696979522705,
+    "input_tokens": 3558,
+    "thinking_tokens": 0,
+    "output_tokens": 348,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3558,
+      "candidatesTokenCount": 348,
+      "totalTokenCount": 3906,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3558
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. 0\n5. 24\n6. 13\n7. 46\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2411.7691, 2407.4006, 2407.1634, 2410.2343, 2408.7547, 2409.9004\n10. 2410.7912, 2403.4527, 2408.6977, 2402.8962, 2411.8062, 2403.8179, 2407.3088, 2405.9445, 2411.7691, 2407.4006, 2407.9379, 2402.3504, 2412.6138\n11. ~\n12. ~",
+                "thoughtSignature": "Eo4BCosBAWkUfRNVdiwpSlIj6KVcyZMFhKVs6D1gKtwuKvHDDb6yqsMUVjKe9th6UDiD/yck+eJFry3Squ6J2vrFXYE8oSL45s93DQc21HDaWX7daEu+GnJWVpeE0C93FJ23pB77Qe6cTnFukOasVPKy1/UsMMB4hf2pJOA7X6BxXiuvMOmbPkKbdFQENshsmg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3558,
+        "candidatesTokenCount": 348,
+        "totalTokenCount": 3906,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3558
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "tLEBa4HsEdzPjuMPm6mHiQg"
+    }
+  },
+  {
+    "run_index": 15,
+    "format": "json_min",
+    "dataset": "nested_fixed",
+    "seed": 1,
+    "file": "gemini_lite_r4_json_min_nested_fixed_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.1340229511260986,
+    "input_tokens": 632,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 632,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 728,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 632
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfROBFqWm8iLxp+aEDVFwnEKYjZRvZImxWgQNBOrTRuSnCc+mUSH8ZKRlDIFpl8xHZCZoZg56jiOxRUV3p8Aoy3kCsMlpvQzexMqTVw+bc2L82vNC6HLzkWnn7xF7lOQ8sSMqiVcjapXluxlwxoB4zdd+gEzirPqxo8IJRnIiZWe36tApcQ6dFQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 632,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 728,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 632
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "tLEBa4GIG_jJz7sPmoSWiQs"
+    }
+  },
+  {
+    "run_index": 16,
+    "format": "toon",
+    "dataset": "nested_fixed",
+    "seed": 1,
+    "file": "gemini_lite_r4_toon_nested_fixed_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.7189891338348389,
+    "input_tokens": 526,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 526,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 622,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 526
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfROPKWMCWTrvTbdFeGlwPKGjklkpV0t1Hdrc3ot0pWFzLmGGxVcxQvVznAUqhBSVlTgiWFyMU65UWALqNHyQ/nYEHrf5UBTnzKTMm8G6AXDPLkm30sbeAPRCEvlaLC+5AwAGIUfakCHr36F6wJy/cDn9UlrxJboJI5iMM2KWANGczZmm8/R2lA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 526,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 622,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 526
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "tbEBa5PXDtLj4t4PuY6kkQk"
+    }
+  },
+  {
+    "run_index": 17,
+    "format": "yaml",
+    "dataset": "nested_fixed",
+    "seed": 1,
+    "file": "gemini_lite_r4_yaml_nested_fixed_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4206783771514893,
+    "input_tokens": 724,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 724,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 820,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 724
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRMtZlGlQ6UNgKZurV4kZsU3oiESyAg5jzvsWw923iERPmnR0mIDqv7aKD/MQGNGeni4VUEwuUFazsTFdBQtdhniJwpaXFwyhDU4ijmtgYn4pPsc6NkB1I+PiYo2eiOv0LnBraSSdNDx0GPJLJrjPaLOQQ74E6rHUkiZuKsyHLUu+DieZuOOaw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 724,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 820,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 724
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "trEBa57FA-6W0r4P_LfOoQU"
+    }
+  },
+  {
+    "run_index": 18,
+    "format": "xml",
+    "dataset": "nested_fixed",
+    "seed": 1,
+    "file": "gemini_lite_r4_xml_nested_fixed_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.9076104164123535,
+    "input_tokens": 1062,
+    "thinking_tokens": 0,
+    "output_tokens": 100,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1062,
+      "candidatesTokenCount": 100,
+      "totalTokenCount": 1162,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1062
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. [None/Missing]\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfROHEkO8xNAVH9tyxfNafdGc1i3OIOh50QugoFHHGbOwo1dc6jPzX1piS/6hP3Qy8BaFKPc5Ndl1uB73tosTDBB6ULfvQfp1mpNE/QuoCT0V8KqdnqKH7a/Kk+7GqpzFzLCvIaotsPmvb81FkSp7rlC0L8VGXZHzLPGBbWrNLQvEC41rF2qV8Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1062,
+        "candidatesTokenCount": 100,
+        "totalTokenCount": 1162,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1062
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "ubUBa__JGbyB694PqvuB0Aw"
+    }
+  },
+  {
+    "run_index": 19,
+    "format": "struct",
+    "dataset": "nested_fixed",
+    "seed": 1,
+    "file": "gemini_lite_r4_struct_nested_fixed_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.6375446319580078,
+    "input_tokens": 540,
+    "thinking_tokens": 0,
+    "output_tokens": 94,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 540,
+      "candidatesTokenCount": 94,
+      "totalTokenCount": 634,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 540
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. 0\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. ~\n12. Direct preference optim",
+                "thoughtSignature": "Eo4BCosBAWkUfROh8a2ymNfwckTTIF9DdPRtSYoKLM0MLIVIvaD2BsrN2fn27XSid8SMKXeeSXAgWMDD+yf78gEUhQKXfG0IT9+PTZT0J19F7Zzr5FEUohg8whW23olxPTMsYFQSoqfb/zw1TrtnVIsGCcZ+m9OjPwy0frGKZAom6WEr3ViGVpYUTalFR8R/Cg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 540,
+        "candidatesTokenCount": 94,
+        "totalTokenCount": 634,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 540
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "ubUBa6qRDK2J4-EP05uHEQ"
+    }
+  },
+  {
+    "run_index": 20,
+    "format": "json_min",
+    "dataset": "nested_variable",
+    "seed": 1,
+    "file": "gemini_lite_r4_json_min_nested_variable_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.6381778717041016,
+    "input_tokens": 589,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 589,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 687,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 589
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNvJqA3LIEC5yV4vJhSc6tCNDmgyzGJrO4UiMTYa+fNYU7rd94ogauXzWJC3JS7XmJuFQMrf6BNkJWT9ynX6lkm1exgZmL8p46sYAQZlSvPzLtGeqShkFQgiiiJD8ANjaqLv+w/96mZVfA2U0bdfNWcfwjNU0pMK7uoIAqPj7Rgp7+kl8VSiA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 589,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 687,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 589
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "ubUBa6S_DK7Lv_gPsc2hyAk"
+    }
+  },
+  {
+    "run_index": 21,
+    "format": "toon",
+    "dataset": "nested_variable",
+    "seed": 1,
+    "file": "gemini_lite_r4_toon_nested_variable_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.5170741081237793,
+    "input_tokens": 672,
+    "thinking_tokens": 0,
+    "output_tokens": 97,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 672,
+      "candidatesTokenCount": 97,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 672
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit,appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help,perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNG/EJmrkAbCXryT93ZZPiODO2/F25CIoNW8Fi0xVpJVOO5Z0nNzqWa0d2b012djkEuPpvwc3wprWswnMasLBZpZ+d+V5NBfQS2J9Xg6njvM6mEy19JfBOKjacfVZjwxpBQPO110ff8Q/lpqjmqg/PkJHr93lfAGflY0mdFDWIqVLPEgLUjOA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 672,
+        "candidatesTokenCount": 97,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 672
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urUBa5LkJ42z694P6eyNqAM"
+    }
+  },
+  {
+    "run_index": 22,
+    "format": "yaml",
+    "dataset": "nested_variable",
+    "seed": 1,
+    "file": "gemini_lite_r4_yaml_nested_variable_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2108502388000488,
+    "input_tokens": 671,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 671,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 671
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRPloeB741A/n3RMjr4GpMS9lNsq7aydFA3HYssjm8+ptVkPVlPaDW24XJI5mpMpI2EOHhK0h/JCqwsHg8fxCOeD8BfGhZTfsUjHIvs56jCqjhfAh0/yYWYGpjel5r3wl/YSWVJb2VVR9E/eNu27FDmATJxZlbRu2LTTOZTMffPQhZ7M0Nncqg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 671,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 671
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urUBa9ztFZbZjNAPlPeXwQI"
+    }
+  },
+  {
+    "run_index": 23,
+    "format": "xml",
+    "dataset": "nested_variable",
+    "seed": 1,
+    "file": "gemini_lite_r4_xml_nested_variable_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 15.535785675048828,
+    "input_tokens": 1056,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1056,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1154,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1056
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNWQMcfD5lrkWhPviyS9I/9VLLjl81ufXqA18l5jtrxFzER+INhJDC16MGf0kMlBWcDgS/QU9IniA55EPIs/TnKSOPDb44ziVDNcE3M6kQkmSzxmUhh4cyRK1Sx1/AOBk0U16eIuNpnye7PCouN/MdyrXguOHkR0G33SjkiT+GVmAU5MUNLzw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1056,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1154,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1056
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urUBa8b0Oc6D694PsZit8AM"
+    }
+  },
+  {
+    "run_index": 24,
+    "format": "struct",
+    "dataset": "nested_variable",
+    "seed": 1,
+    "file": "gemini_lite_r4_struct_nested_variable_seed1.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3796000480651855,
+    "input_tokens": 569,
+    "thinking_tokens": 0,
+    "output_tokens": 99,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 569,
+      "candidatesTokenCount": 99,
+      "totalTokenCount": 668,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 569
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. memory footprint reduced 3x\n11. optimizer state minimal\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRO9gYdMIYpF8WXFxkTFsE2Me8iKNDHAApmOofSOCjFZs4MKQ6M9Ie7Tys/N4jDxOqnfp7wyhh+09uz8PcuaO3/CVA5qFCbM+07Nqom55tNrkRRKGY6J5zVhJX+FQyh5j6FAO7btMdCSApokzns/K0reYPD0JTB/r7I6kDNPWlgreWkU+YblJQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 569,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 668,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 569
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "u7UBa_GsE7yB694PkLqCiA4"
+    }
+  },
+  {
+    "run_index": 25,
+    "format": "json_min",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_json_min_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 0.8328323364257812,
+    "input_tokens": 996,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 996,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1122,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 996
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPNcLCYtGrLLbCHXmSVSfE8Sk6yD8KwlwanjT6ML6k7hq1+S0MWgPT5qw1poEOvFg4Aolzyd7hGXFdfmDT++YhdRh6jrAxY01RkaP8Babn8RFjL2BAmy4VKfJ1SnfM/qJw4os0HlM0I5JFcOXuRQFxJW3tZ1j2gozYVmJSptdlSOf7zUFTGSQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 996,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1122,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 996
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "yrUBa6iaC6TYjNAPqsGZyAM"
+    }
+  },
+  {
+    "run_index": 26,
+    "format": "toon",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_toon_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.5415034294128418,
+    "input_tokens": 828,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 828,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 954,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 828
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRM3eUj1BJXSO4xkEwgH2LJQJi1q+aGLX6mNuQ6ErtOVKEbsX7WDXcWmO6prUq8yrEVfQ1HrXBt8kjMXn+aya9efv4cwQUk+PUuli6h+7GNNCt46CjlU3CyTI/iw1JzlcJX4fcdytVryyDXK5h04QduRpLE1eAph+gIuxUW1xShJGUGb2jA7aQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 828,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 954,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 828
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "yrUBa6_4Hejg694P9IGw6AI"
+    }
+  },
+  {
+    "run_index": 27,
+    "format": "yaml",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_yaml_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.949517011642456,
+    "input_tokens": 1145,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1145,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1271,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1145
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRM016cUSdcbSGqdTZ1N81F6la5lhiohSQzyicgcBItY7JgJP27dt76p3hfqPxl5z1Md5dkdFJP+b4R1p/umpZHszZgh+qqIT54BAFRMvrhEzgG9Ob9oNMw83SS+MmS+8wh73kKmSSGVIccxHhz74YNNhDohPRsMX5xIVm9U/WElEcttjFXV/Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1145,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1271,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1145
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "yrUBa6H_HsvB694PifLGyAc"
+    }
+  },
+  {
+    "run_index": 28,
+    "format": "tsv",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_tsv_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.393345594406128,
+    "input_tokens": 776,
+    "thinking_tokens": 0,
+    "output_tokens": 132,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 776,
+      "candidatesTokenCount": 132,
+      "totalTokenCount": 908,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 776
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. [empty] (or missing)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRMn/n/fKalKqa5UIRs0VuHsx2MOL5Dp5Kj1u4TTS5IhEHD8EV7yhxbXgKijGyzuRoUHrzTswRBpFK/+e0rbddDVBn53nQrp3YumsNjM6pvcKt/LUaZ0QEaM6OxYFoUwErkiqqJbacTbtwH0ry7IsDF4r44s2+TJhXVMnEFwlYOG7qI2OQQ6Lg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 776,
+        "candidatesTokenCount": 132,
+        "totalTokenCount": 908,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 776
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "yrUBa5GcIOihmNMP_qnOkQM"
+    }
+  },
+  {
+    "run_index": 29,
+    "format": "xml",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_xml_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3701488971710205,
+    "input_tokens": 1702,
+    "thinking_tokens": 0,
+    "output_tokens": 129,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1702,
+      "candidatesTokenCount": 129,
+      "totalTokenCount": 1831,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1702
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. (not provided)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRODeJ8YMIRofrHRyYjfCjZ3SiKbnCkTdnG7Pkg2H7iVySh3wGWvbGchqoeh7p58QjInAeC/gobAnBXl/3KmZcGKZHtxVCAXqp5L0W/PGFyt6XKhkWanDJXe16m3H62Z9Cz3QPQMf6qjFk2BD6Pgh9n3y2CY72gA/rrDVRs4fuUDoX7LfJSNGw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1702,
+        "candidatesTokenCount": 129,
+        "totalTokenCount": 1831,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1702
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "y7UBa_zBIauF3LUP_ZP00QE"
+    }
+  },
+  {
+    "run_index": 30,
+    "format": "key_value",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_key_value_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.079709053039551,
+    "input_tokens": 1066,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1066,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1192,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1066
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 6\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRMGEqCBUHo+Eoy8AnQl1hzKhGL9omwU6LajqbOHqxZ+Fq81DaXrktBt3hchj/BWoM1jtAm9u3g4UF9gyJyKaPkOOUNMxBcJ1TG92re0qsl4Nx/qVfA0ra55/OX80Q9Z27F2LYtHoO0ujB0exkBjUmNnSlpKDX5oO5hSnrAp29RU0cPupdvwIw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1066,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1066
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "y7UBa7LoN-erjuMPgqPs2QI"
+    }
+  },
+  {
+    "run_index": 31,
+    "format": "struct",
+    "dataset": "flat_tabular",
+    "seed": 2,
+    "file": "gemini_lite_r4_struct_flat_tabular_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4943342208862305,
+    "input_tokens": 820,
+    "thinking_tokens": 0,
+    "output_tokens": 105,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 820,
+      "candidatesTokenCount": 105,
+      "totalTokenCount": 925,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 820
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. 1\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. None\n10. 2403.09611\n11. ~\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRNhIPriBHQcyCLeIO0hDBRfiYVi9YRgBb9iwVJagbprUX/6BHqom2Pnikc3Net6OqiQfdvDqNLvNkL7/5plckMlVyB7htuHTgVO6qXW6OGiH4C0sKvdt6KLctYOk8u1EcO6cN/rSYpvqIclK46c1DLCH08PvBxGQwu9fmeapaK/ALRtQkUVuQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 820,
+        "candidatesTokenCount": 105,
+        "totalTokenCount": 925,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 820
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9bUBa6iaArLYjuMPisbyoQI"
+    }
+  },
+  {
+    "run_index": 32,
+    "format": "json_min",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_json_min_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.927048921585083,
+    "input_tokens": 4534,
+    "thinking_tokens": 0,
+    "output_tokens": 305,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4534,
+      "candidatesTokenCount": 305,
+      "totalTokenCount": 4839,
+      "cachedContentTokenCount": 2033,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4534
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2033
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2411.8062, 2403.8179, 2402.8962, 2407.3088, 2406.4441, 2407.9379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRO3dwlPOKwvYGTtZVgComGwBhxKzQsN8QZ1elhe4GF2TkEyUd0pDBh7NLNpn4bwJc48KMotv7v56EEWW38EDkgaYSCyk3df01n5j6peu+kRYBgRt7nISYH3wiGwkOZuL7ieJdvfTWwOJ6D1J3xhQOG4iL7Kye8+CTxVGzphC/Hx03ncvs0Liw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4534,
+        "candidatesTokenCount": 305,
+        "totalTokenCount": 4839,
+        "cachedContentTokenCount": 2033,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4534
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2033
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9LUBa4iaOMmfjuMP76yb6QU"
+    }
+  },
+  {
+    "run_index": 33,
+    "format": "toon",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_toon_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 8.037744760513306,
+    "input_tokens": 3647,
+    "thinking_tokens": 3060,
+    "output_tokens": 292,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3647,
+      "candidatesTokenCount": 292,
+      "totalTokenCount": 6999,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3647
+        }
+      ],
+      "thoughtsTokenCount": 3060,
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. false\n5. 25\n6. 11\n7. 44\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2402.5808, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445\n11. null\n12. null",
+                "thoughtSignature": "EpspCpgpAWkUfRMFlnaLz+BKDEQLmfXRFXIGx36AppgK8Gg6ws9kr0hAVcZObZlfK5pPLv3VSxJfI0jljrBPjz0y7ezZTdaGGdXoqDQbp4eAy+sh/IWPMY2E+qlTujDn9y+qvBSiwJ6WRmcnzSWwwQUWyQ18rXZMAaSicvzHKcT3B3Vyb1N7O29Ql+7HirrLhsuH41A9CcHNgAt0EINjFncIk7kQKXd3PjXEtDy06ARkXc8FaCa1JOXOrOjO69tpqAUjuHUbtm3Hy5s9Z4WoVaxJJQeqYnt20i4xbZLIlzo/oFc7Q8NvoyC+/9/Xsh6rVh2cyp+rFongcehYDmUE2rYwFXOnPuAKi0f/eFnaAcw07IwCNOWIVH3H+sb2U1B/YTtIJnOAzxQw2sRkCcytHACgAhfX3/AnzRyNsom8QuirtsLOCOl3OTydsarrvBoue2cDYuFGBpw9B0EeGLxFVTsY7x121gDPo4YVl+t1tDLIxqRWT39XJ6+6J+Mch5ctFjisKZt4KPA2Wfla+F/wvfGz45atuslhInE0RhW4z5a4tfGJ8f/ITTRGH5cL5HaYfB5Dx/ihHjupbPi7B74aCL7CYf2oXD8wR2cprepjMJIQZYhomqblfXOPFjWOIUPIPoeqyRWvlDjFEIYb5wADgA8+iMz5acJPwrOve0kVyNuUND8gWFY/XBTGDOtcbowWJLjQfkSUw9t29e76bXb9Gs/Q7RzK+MyxML6WR/jqBLv5q3UgYjShxpfW6HaqN9rMcTHtDCsxmNGJ4RRSmPabHNNcVSIwluJrpa11enqAss1V75ziiz2hwmuBbmLUsQcF/iVkjdGj0PA5reBwSZiYnFUk6k3nBWTS6EHFhj6qjOuDjYRJQ84MwncHZ0rJbLUDgQp5MYI7NvSv4zm6WjQijVEoDub88ORE3RJPrpn1t7Tbz6ugKv2YQsVXveyieE/HyvmBV2OpP0kTNvErxES2Gtti10UPn06RARo0mnNEHKLtQsegnMR6SVzqxnGIrU0fXBwImDW3JrU04AGKDNjaxepzCTYrTSyhms1oXyEED0WhxsdqaCUCmdSNdXOHjoRKlEAU+voolS1ckaLJLVHWmGrJUkPqTFS3j5c1hSp2j/RPUlmkmdqssN7yElfWf8LHwAxFyW2HRWBKD6S90RRzWtwGE5ZSxS8IlpYMHZg7uUwlUvoLj8lGWTV3ePDfjqdRxCIVHYiXHiLMkhLiLZZbntIs2GxcLCDYsYqCxUveOyYeRayJmPbnWbmRaAsYnpNIrT3U7vEFRWXrEA1k/apO+cnHTWXPbhujuFB7F1/49ZDLKk3APkZrgKpDOPJYbAPVFeBLOYBXNww1oiKP9fAyMITEhuV5LMbdtNn5a2XNzvQhfIF5wbc9IV3AcBRdlLJLQLvT49+1gf3i9ktbh6Mb6M+eR+50X5CJWEN8Z6COHp/xwVyL5gCb9t61iyohI4ZuPMK1IsrE3a2i7ameDseQam51UKRIuLvkyKhj9gBwcWiYQHZkI5mHHhj79K/F/8/+Fcoe1qJWfqDjeZoVW8wYwkvlHJfVtSP/Lmk2Mjgzo2TRH1YR2+Y/ZNbE0O/p+iCo+q+wIbwcrP5sWhZaYsAKNDOAJqbsBUhgG1eaVy/5hvJXryTEHfX7ynp+SM98em3wMjN4XKmHjz6T+d0lKFt5xcKp8jC1LLF6VITc2uqXTfJ+WWtyqsQLnAfY1whJ6tVzKfyxqvJrzEU8/OShRw3fwFbvXLxaK/Dxwg+nf7fA8FG81jvRwIdhcRNgaw7LZxRu6fJdoEbsUGRe0b0UjDVe1Xb5frF2QgBpKvyB8RDNUaDULJJLcyNC/75er1WdL1TFK5TSirfbTQ7YKuSowQUYeUgD5EvJVfnBzSXe20feKVwMWcUJUMnJ371VLi3qVPlhwjPTUGyLgoJLp0Fu1s5BnzKyFMu0Wr5b0yAxEKeMP0W+NoQU0ilykK2xgZ2k8/aN+ielLJjKD2F34JzsuzSMuyiw4Lbfd5BCd56Vb8vDBbObge5ja3BzAh1RlM7TQ7FlifWv82JjGjJWYH+QAk43aghwdzJf3Pb7w3VcOPUggN+8xnsqaxGkA07vCaJVYBVrPI3JbREU9OJNIEXuYZ3R4KLlkDcUVVeqE5XiDYZPAhHgBGPifMCA4/Zm6sz5ubfyt9QRTZ2GuT0rjohhuLbvM++itJ1lnX8oF60tnIhz/1sCYHQKUd/7YrlnwS++0pXkANQQ9M/L56WfoK7/GA5WX0YEYRKywaeXC2bQCTuwHxm/tu4WTxHG72/TJWSA8MeRe33j2lcY1zj3Ibkbg36mNXEuQ+bCaRRkMm/2gCufuDkUWjv5Jx0S3yosYzHcl6fiJUbfn9tPB1WVVcuLR9hua4VdpH87GaGS/wZAV4iekYNulM+PKhyUP7aEPvFpzGSbe564TFvNeliylWyUhadwz5reZZjUKPOwwS8hTD1bf8ONT++fDTOLVS7XqxqYXt404h5s6KCb+Igu8OYcqNOjB+akQIlULs16SXUlCPr4sh6Mx4QGu104zBBYsO+H79kBh8GolK6RQFJSSeDUM60ExqZVKfYoKW+C5MdKcVUoCTPqnsX/FltM8nyYHPgF6I+9N+CNK72r/Bl/ROo+pIm1q7VCOkOWAKJ8hfRgVdVuHvbt1uxfVHGwSHIrPu744kM74JdQfNYaggbrYlN4fEFTlQfLGaD4+oGFJjp+PKnO3qAH1Ud3Y+yWa5n1grjTNQpFMdalhNArH/MJrYhsYlSmNmiBcMUfltBi9S8dZluVvM5e61oGRA7jTuTtRDlW0UslznrJwocPI+s71Hx2QX/BlTCSA2kHPoOfQ0H4AI8QluVp2fOdyPj7DChADERK+SsbdmaAq8oMv5bWWp+su7OjduMQjR4uBUL83N4BIuloApQGRu8SU/kaRs+b7H//EajFWWJ83WSUPdaZXJE7D+HQtINCVURl6Quw5Jsd8SBfEwpv6cQAGk/eU2EH6LSpZOYCOLSvjhHApFXlRHSA44CFy/QnwpxmtjRxxxDBrHRS8n+4+TxgrjWp7878ypLnJScqxeRUPFGPWf1ZtPEqLedaLIlXKmJTKZzZYQqesAZe1resvGIiJvTm01Vs8bqTTGJwaIBJGdH0EG7LaQUE6PVOoLSja1V/gPIeVq6ahpLQT4/gy7r4L02GufHcTcTdZAFp2Vh2KItuDtIIOQkGo9sPb54OiA31K81LqEGlxn+6hCYmrsZscysGY8FoUaL8nUGAbt9OGFsnad9hzREs1N+oHgv66NyNzPbxJrxNBdHTvKA1LcZzbxSKDUYjMzynNZHyCgEvQWubhxoI/9fVsxzKvZv/l3E5IVSC1rhMJAOXgFcLsll0dIR21m091FdgW/sA0joCn7TBZcXaK5zsRwY8jk8LByeXNBo4QAZf65sElRaAfE/BYrj7jFhNR5M7hlefQe6WngRWFqBDTaBo6T63nO/v+wjys7DAJ/d/fItteYJeIa+VKu0ghfcI5uQFyNtNS4KkhQBOS6Iu8Z9GOwtg//+YXG6ebIGw2EdgNzD7GdJ4vk0kNpQ5p6kLsiUYmn9m2jl4KLWwvopfqr4fflmD6Pzkn0Me+JS/65xsMnrQBq1t0o7mzbRD80ZlyQ/ytOYc+hHAbEsI8FCjK5ydIDY6HNf+SVqm+uioCqo565MuxYINq+twFzLE/ML7wPA1zgc+YBEP5CU8T0gGyxPtM+gSVZ/37rAYIHJiUP4MnX+TNxAYCf91zAKthRSVotrO6kvyu2yBRc2agZEZcIsqZXqs+FqFX0kZAJbthrUWxS7MLF34neB53mw70dIFZY1Qq7IyZmrc4l6hgXiatDEgxX2m7BemaI98aVz1W0gwzSOFRPGVqWwCrstnGpRlQ72nAi4XAxWSpIBI2QsjUAuVohG5sztN+uDjnKtN13KVbiBfWk97GjKEpo31uiRyp66ys+srPTijPKc4gV2i+a29V/FYuGTVSTF6vSqCMQGOcv4K1D4XTWYaQh6GuODzDLa62HD+Wgg3BJzsnW60f0Cmg1AYrHL7Uzj0sEiCldvnW4k9kApYMuQIugTLVNZks3g4y/MexxqsgxG4kRulsGat729syrz8xl1YDqNHghMs8Sb52vmVdeWZcsPbW/P/2DbmqqYHooVzkAXNqzcIZvqYcL3OdMDP+BtPBFZP8harymoOfrL6eC6d8kSrcPhfYUg8mJGVR+ycrrtj3b4g4SJl7XVFpDishwkvDjHUXFu+2xqqQ2ap2Np5ADvDB+RsSouqcWSwn2fhtX8niaSqmkjbGVYsG0HDlyUiOyzpADOzESGKzquxpqsYWPuNkCnjZD5P8MFuim6F0OpUlskGemHz6KoeGtirh8LOt9hQUZ0nf/TyCnrp3YtpdA+vfK9h1E1sk5xSPhff7bxZ1d+pKNSeWY1RWZeqFapb+aWRQ8JosLBKQfRUI4fdYOZvIoqwwjmtEIyWX+zldG3/lCe7c17l7BfBLf0Hl4UxBZpDJD4u2tSFeL68gbI4n2HJWgPj+4UgxA6opa1UrNYSi1GTuy0PF7+6pXmyHW66tWFasCnoCoNGsfHOJJFYJV6d5sdekWCJAgtBZAzyIPdguhQiqhrUTZRQliSddS7EpytXXAfHEiCYswPYGeI2GA7224CVtTD8SjJrt+xCw0eDiJbucpRaG/1QxY65UgepnlT6f0YK8DFtNp4Q21qnklzfpPFS5nYT/4UPCbSviuuFGhWPle1X6SoX15C+4Kvw111EagI2uuhA8O1ucQqRmJjs+S7VRnRVyMBFMmFDLA6XkWL84D2aXi2VJ8T935HLt5zU4HlFxaez+19I1bTSqiVKjJvlJimXiYqC/tGRr5r5F2LtIVwDQywy9BrSyOWJXBVog8Tuk5+DuK38UuggV5R4KtDUJGPEFjR+wH7SV+7M9mQJs3gqcG1wdVyaLtR+reFRQapetz9ai0CJDpaxig/XRVu6Xo8vm09AABkhRNOJUt/wcqdKexdZEhVPuwuxepmkOkvWZ2IJt8SmO37M05oU5FdmcG3eTpwsRNOugCTkknNG6FsCmOld4JzJ7DUYkmPSK1mPGqx/CVjkTIaYeNGgp0wX0I43+6OpBcoijxDqA10S2lcZe+ris0F9X0AKPhigpzBrruLxPG3Hwzd8sNBM6LHFfeSda1L9eGdtC24ceMQAC/6tGn+cbmmkhDbihFG+MhDEq+D+rw1+0f3tocVHTNzhdP7d2KwbEAU/gLgzZUM4H5I9q5Ch2YuVl2q0AhRtGcbsxCCGox69mU3KTAJgKIBffLSlaqvrmMpxlm42Bh3CuudFHUX3M6Wgx79bt9o6zhR6opbbWRXqRB2wa0NPBHyWJcDp8ikcmf4uT4HzjVbPhDdhrNCzOCphHdHlQGD8gKPHGT0DHQUZlqwg0bvcZXJu8ehsM0wkvBDEu1JfWd9a3zGqvF/hMNdg1VadNJ8idkLU6pucIhk8WoPJUn0D0UxbsSNSsfVRLYmN5E7nWszioaTpml8WkobSKPX5QPDayl7kzXpF+Q9VgxgD82ZMqg0Sdl7OyVV8U+p3qXyUGKtaPT6N7wagqUc551PsyuTyqaZGCk9Pw8BKbqsORWtOrHyPMzmIKyVyYPEu2UxOFYBbdXLHUft4q5eagwFbsbmMbZqbP+BVbaNwPiIgh8kbnYFllY+QsKwF30EckvMw4tv46AAKKK2zXgyifQfoo8QMi1tzHstYOqgKt0TbVPf/2A6qoKD2bhqusTK0JmC3mbYXpSfulJWTW/VT80uM2oguY2u+J3eFM41lEY3hT1J5uKtP/O4lp4bVDldLnazUXx5Mm34+f1B1sIuXkRwTdDvGLH9ZQMhQZZ2r36fCp5Hrp0V5OHQgb97cFvwhfKxo1iu0Nszhb+mcfUnbKhAcPgq5rQwQrfCz37iKNWZEnRQtc2vH0MLl5qrq5jrJw/WKoyMQZ8lm3IQZgYqetWyVXn5Ncop77WpVbU7Esiryin5KgttwgcOAJJqcTgI2bdYmOhdS5PmXkZ0eWxu5wj674ojYEruIjvKGZsdL/VBcfJ6cRt+0Mux6IlYQ2w5uJDNWQu8T/rq3iESN5ESCm+tNA2t2rqSOAMHgbLxSzvgrhPL4UQ6Czq2sA1nk9paju8PpCbtRr57JRbCdeLMejKfQMWHetP9KF+v8YgQumuLEi/aoH6xFu0Nnz853yYpnHsWHxsLmqcQI7EumsLBBRK5ZEKsihk5yUlJ1ZYg5C/ru+XB04bje4xB+j3H2vQgbzYgaWLBXOguQlE4jSvmR9FPdSr0kMpny0aSTY44MXXOWV1eAGcMSlMhUYaQrXNorrgzo01fusHhT+xx9Lrv2NLyT/c4CzPX+euiRqBu5pduPMabM4KNPa4Pm0+8kO4GiLQrLESgT7o1nGoCcVHh/lCEM5lE1MsW7j0Ki/+6WaMIH5xeLGJGo+90M12C1wIxG8sZmiExGzxosKMIPZ4UaXavwA1WzibklbH6DeQ6amxKVRpupo6v8nnK7cykHm8HSfA2H9rHKMsBcU8kk22PF1gt2WjgWHcoExrQmWIA2udmCwo+LJCO8t2BFFfft5v3IL9WqxXpqb18DK9eB2WG2GOE58nclN7iHM3fqKINk9fsdm8+i4x/6ngS5SdTN8fjmuytD7WYu00mhcqUUzQ8+as3m65+B0jTlk8eP+C9sO4zB/v293xN/ZTxTGPUJt079+mJnpdz5mpRNmPeEHbRxaLEkw2oxwkA3UGICj2Pt/aVM7kuWlqXIrc+QHPDoGCV424p+H4rb2lVk28gipFlzyzx4l+zVZnMhhN9+zvApVRAoIvK2WD7B5aay9TMoS8rbpNtCO148vM2I/esaqOAqYz0R/b0vFxhj3GJLkW/JB/MZ+HOGFUWjsgFRwEpLnPvYSvJIbfRWdwPkxJ2Zk1bikkf5BCJd8+nQ+MlGRVh8O5mTu3WMmdWdhXDEup5bcghKNft+WTjBW4tRQoxsNNm11Hu2+r+vZg0YAeT+nnmkCGh5j07tmUtzFaiE9A=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3647,
+        "candidatesTokenCount": 292,
+        "totalTokenCount": 6999,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3647
+          }
+        ],
+        "thoughtsTokenCount": 3060,
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9bUBa9LrBuSH694PobqAyA4"
+    }
+  },
+  {
+    "run_index": 34,
+    "format": "yaml",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_yaml_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.7892837524414062,
+    "input_tokens": 5288,
+    "thinking_tokens": 0,
+    "output_tokens": 294,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 5288,
+      "candidatesTokenCount": 294,
+      "totalTokenCount": 5582,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5288
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 16\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2402.5808, 2408.9479, 2408.7547\n10. 2410.7912, 2408.6977, 2402.3504, 2412.6138, 2403.8179, 2411.8062, 2405.9445, 2407.9379, 2402.8962, 2406.4441\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfROn9NHtrq/C8R0QLuiQHt7JtGyBRAnE9qudu2x3ijR9fY+bsi76ph7udCB3ThQXqBt+A7s+3AyB+SOPn+opPqJ3/05Ea+8AvuGvABNjFSLN4/SAiBBJuIGVE6r/Yex5mmL1IgoQ/QtfZoExiwAfbkx/LXRZQedQOp79tXLZw3nSOoasMhYSdA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 5288,
+        "candidatesTokenCount": 294,
+        "totalTokenCount": 5582,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5288
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9LUBa9HlNvaC694P2c7P4AI"
+    }
+  },
+  {
+    "run_index": 35,
+    "format": "tsv",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_tsv_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3986575603485107,
+    "input_tokens": 3407,
+    "thinking_tokens": 0,
+    "output_tokens": 315,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3407,
+      "candidatesTokenCount": 315,
+      "totalTokenCount": 3722,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3407
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 17\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2405.9445, 2402.8962, 2403.8179, 2407.3088, 2412.6138\n11. \n12.",
+                "thoughtSignature": "Eo4BCosBAWkUfRMXQPIkVEouEq6fpt/vllX+2yWupZqbD3xNiqMncJHA4MzY8e1NERpWay3Tv3E9itf2yLnRmYjv1sCvWyBT4AXKN/Hgw5TqwIT0ScjUDWl2CQsYlF8BYd/jwmWTt26Slr5EBLkdZPvpQjOgTjS5lS/ag0NH97S7EJNEo0tJNVZ5V46HyFgyEg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3407,
+        "candidatesTokenCount": 315,
+        "totalTokenCount": 3722,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3407
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "97UBa4boAvit694PtOOX-AI"
+    }
+  },
+  {
+    "run_index": 36,
+    "format": "xml",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_xml_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.0991904735565186,
+    "input_tokens": 8047,
+    "thinking_tokens": 0,
+    "output_tokens": 293,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 8047,
+      "candidatesTokenCount": 293,
+      "totalTokenCount": 8340,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 8047
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 17\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2408.9479, 2407.4006, 2402.5808, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2402.3504, 2412.6138, 2403.8179, 2411.8062, 2407.9379, 2405.9445\n11. unknown (or not provided)\n12. unknown (or not provided)",
+                "thoughtSignature": "Eo4BCosBAWkUfROl4/Cu3i3MF2sbV23c19woXYcKEwlKG+A4wSy0RCiVM0z0DHYGCaNkjHU/xn5XqnYAh0e9AOXIkNceigtyVsEXNHQmUM9oAfjpUZY9w0JD16xjplNE6ZuXFkK+CGQtVDpSHbMJyfVkxz0F/m2ODtGhPgxE6QNqJEoFvETCXDo7HGoKxXLoMQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 8047,
+        "candidatesTokenCount": 293,
+        "totalTokenCount": 8340,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8047
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "97UBa7znApC-694Ppu7dKQ"
+    }
+  },
+  {
+    "run_index": 37,
+    "format": "key_value",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_key_value_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 3.0970537662506104,
+    "input_tokens": 4889,
+    "thinking_tokens": 0,
+    "output_tokens": 283,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4889,
+      "candidatesTokenCount": 283,
+      "totalTokenCount": 5172,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4889
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2407.1634, 2411.7691, 2409.8752, 2410.2343\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfROGugVhx8oK5Eb6boWx94fpXXIGVxl/y9K5uNTJZgZDBvw7Pqy5u0wYbFoNctSGKvosXax+52yI88O4EfG2YWKlrUwv3/NV+KwbGea098uAXLKcMHKMbsL8gdVUrTbzloBJHxTfIgsC6oTwFppu5D6RqNUT1bO0k7rs3WCK8aoAJ9EqB8DbFg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4889,
+        "candidatesTokenCount": 283,
+        "totalTokenCount": 5172,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4889
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9rUBa5HtMvaC694P2c7P4AI"
+    }
+  },
+  {
+    "run_index": 38,
+    "format": "struct",
+    "dataset": "flat_100",
+    "seed": 2,
+    "file": "gemini_lite_r4_struct_flat_100_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.647559881210327,
+    "input_tokens": 3558,
+    "thinking_tokens": 0,
+    "output_tokens": 500,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3558,
+      "candidatesTokenCount": 500,
+      "totalTokenCount": 4058,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3558
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. 0\n5. 23\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2411.7691, 2408.7547, 2410.2343, 2407.4006, 2407.1634, 2409.9004\n10. 2410.7912, 2403.4527, 2408.6977, 2402.8962, 2411.8062, 2403.8179, 2407.3088, 2407.3088 is not it wait: 2402.3504, 2412.6138, 2405.9445, 2403.837 (let me just scan: 2410.7912, 2403.4527, 2408.6977, 2402.8962, 2411.8062, 2407.4006, 2403.8179, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2405.9445, 2402.3504, 2412.6138)\n11. ~\n12. ~",
+                "thoughtSignature": "Eo4BCosBAWkUfRO2BeUJjywHSBYhFOmQnTJiCDkdpPKsjsMZAlFy+//KjDdUWO3SFs93MhRLfd2UtOsmhvgQuOpjEe2Wp/qOJ1lFBcgkJ+LZ6AoyzLbeOsjKNcTVoVxrpNjdFLNTnXQu23OnLM+ciWzA+SynEvdd3XicL1LBz9S/niHG/Lvy7iyRJm5IhPpKmg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3558,
+        "candidatesTokenCount": 500,
+        "totalTokenCount": 4058,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3558
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "-bUBa9-XCsHXz7sPkavb-As"
+    }
+  },
+  {
+    "run_index": 39,
+    "format": "json_min",
+    "dataset": "nested_fixed",
+    "seed": 2,
+    "file": "gemini_lite_r4_json_min_nested_fixed_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.0302083492279053,
+    "input_tokens": 632,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 632,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 728,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 632
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRNyXXozsrr1ONU9uw+w0kLUEFlS1eBqmrh7RIuEuqNK6dPcFJQW7E6NZC9RO4Z5nbM2ZYdttcHmTTOLYi20Ps7/kDNQUHfMl6xe9AQCiiFWCDHGYPpvHPAahvqVnZwvdbK5uPOSBSUd+Y7ViqVk4SqDSucCuBoxkdsyyBcvOBbn/Uys1K3ONw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 632,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 728,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 632
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "BrYBa5GMCu7g694P5su98AQ"
+    }
+  },
+  {
+    "run_index": 40,
+    "format": "toon",
+    "dataset": "nested_fixed",
+    "seed": 2,
+    "file": "gemini_lite_r4_toon_nested_fixed_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 0.8858952522277832,
+    "input_tokens": 526,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 526,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 622,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 526
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRNa4C0ywUP7PYzRD8UurXwO00wwmS40zR5dguWE0ymyV+1Kh1u+1vV0uKZWkkuhkhgH75ei/q8SgL5BxcHc8RuytYYuF0RxklAwRSZRPsKgcfg1iYHWaEVX/Bfrcz1hxMYY6VqkrD+mOgVPxVV4rKvoZZPPwhvkkRBLGDrAvTTRdeyvWSHR/w=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 526,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 622,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 526
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "BrYBa9LCCbPTqfkPn-_8-AQ"
+    }
+  },
+  {
+    "run_index": 41,
+    "format": "yaml",
+    "dataset": "nested_fixed",
+    "seed": 2,
+    "file": "gemini_lite_r4_yaml_nested_fixed_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.880323886871338,
+    "input_tokens": 724,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 724,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 820,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 724
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRO1SmYRLVhYUqPf1hu3v+3rqkbC944LP02ws2f1TlR/TsonfILu0s8kDWphXuy7uJ8EPa+O9TZljIminm+p6U8pIVUFVLu/2eVZv94/Prw6jzlDFuifKSGPmnecr7sDDHkUwk6xcy4Hc1hGLF2xG9+h0R01i5PWraPo7d57cpgdGpJBlv51Dg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 724,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 820,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 724
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "BrYBa_LxK_CL3LUP2IPaCQ"
+    }
+  },
+  {
+    "run_index": 42,
+    "format": "xml",
+    "dataset": "nested_fixed",
+    "seed": 2,
+    "file": "gemini_lite_r4_xml_nested_fixed_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3098554611206055,
+    "input_tokens": 1062,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1062,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1160,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1062
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 2\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. [missing]\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRP0N3vH3JN8MhC/RwPEXmN0mwBvzZm+3SrbyVW3C+9MC/NlQ07+73jK6DQTyekx0NG+vZlUO+LQAufdBTmhB1u7j/44P3H6CLbO5ljUaAVQFODn/s3v/RySPwaBuHmKu+FN9ZlfGixHkpgCfiPtLAj8jnY7BkeeNNzBkkgF+OmWTZfCQrEoFw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1062,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1160,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1062
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "BrYBa7fxHsLrz7sPq5D12AE"
+    }
+  },
+  {
+    "run_index": 43,
+    "format": "struct",
+    "dataset": "nested_fixed",
+    "seed": 2,
+    "file": "gemini_lite_r4_struct_nested_fixed_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 0.9618082046508789,
+    "input_tokens": 540,
+    "thinking_tokens": 0,
+    "output_tokens": 94,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 540,
+      "candidatesTokenCount": 94,
+      "totalTokenCount": 634,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 540
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. 0\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. ~\n12. Direct preference optim",
+                "thoughtSignature": "Eo4BCosBAWkUfRM9w/xrieJm3ujbP5H8vcMbnJgjxS3tq1dUqwmQ+QKFt8AEZEQWvU3orfJQg6iFIT2hsy2iig1eKKOc5lAePpLB4zlulwIkK055ajXUcLfCsvHBFxroRgpQ/qPyqz2QKVB5f8zZYag3Ck+s7QRleJSXwuohMc0PQpcYB70Xw723mnM7ASnT6Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 540,
+        "candidatesTokenCount": 94,
+        "totalTokenCount": 634,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 540
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "B7YBa-CWBfOh3LUPltThIA"
+    }
+  },
+  {
+    "run_index": 44,
+    "format": "json_min",
+    "dataset": "nested_variable",
+    "seed": 2,
+    "file": "gemini_lite_r4_json_min_nested_variable_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4666004180908203,
+    "input_tokens": 589,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 589,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 687,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 589
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfROT8UHgtj9sPhXndT98Z0OD92UeCQ0w1hPCrtzFL0G/DNcjeckSqfbOU7EpR9h/5jvS9MCi5+dEm1bL5Xo9h/7ATdncUrzLk8soQZC//gASLj+V/bcRaFaHYRCWrXo885WgV45Go3UHi+N4JzSMF5VqDGKMAB6Zk0FyLKHFkMgCXJVGHHFAPw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 589,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 687,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 589
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MLYBa_bcPM_7z7sPhdzI2AU"
+    }
+  },
+  {
+    "run_index": 45,
+    "format": "toon",
+    "dataset": "nested_variable",
+    "seed": 2,
+    "file": "gemini_lite_r4_toon_nested_variable_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.461909294128418,
+    "input_tokens": 672,
+    "thinking_tokens": 0,
+    "output_tokens": 97,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 672,
+      "candidatesTokenCount": 97,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 672
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit,appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help,perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRPqScY0gLDZTp6DUJI1j1NjlApFTEQyQdcolFYcptnKYzViXakoIsEqqAe+4BEDTFUF5IFk7dnLsIF/NPmTjRJETDhj+z6g4Obo5oa41/dVy2qglnI23Rmw2wp/QrPAwMz4W109AJ3ScyjhbZZB1V6pfvXpf3BXNtdPK95iVzl4tSoBcLkTRg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 672,
+        "candidatesTokenCount": 97,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 672
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "B7YBa9zIN8qAg8UPia3HgAQ"
+    }
+  },
+  {
+    "run_index": 46,
+    "format": "yaml",
+    "dataset": "nested_variable",
+    "seed": 2,
+    "file": "gemini_lite_r4_yaml_nested_variable_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3219897747039795,
+    "input_tokens": 671,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 671,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 671
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNDrd3Ip9rt91bckvfdDRBVDG8hsxXFxDwvIa+RLlsvofC3QRGEmWZWz95Q8ESsM/F1Ph2lh8XqyyNqEF/v5zWqZLw8r6O6iAz++5Zk4u2xKuyK/JCbR8wCBclLI5e2BM2Ffm5tEmgrWvmOo1i0QJgc2rdl0WwfW8JWRaMGuNFsR7rtq5xcDg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 671,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 671
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MLYBa5ytO4q4694PhdDZ4AM"
+    }
+  },
+  {
+    "run_index": 47,
+    "format": "xml",
+    "dataset": "nested_variable",
+    "seed": 2,
+    "file": "gemini_lite_r4_xml_nested_variable_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3235490322113037,
+    "input_tokens": 1056,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1056,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1154,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1056
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNrmluO2Pe/03c3XucU5lSAfQca6Ydlzyx1U3HnIE1g1cN9HB814hCey1TKhFxxWFIz1Xoy++XuTV7ezJjMn9M6216Q7+CXb5/ew+VADByCKaHTg4JcID0LPS2K2wO5yYkcTHYq5/aX/PpGQX5sTAo1wVeLAxkrOGvOVwHw0h23rKFTYjVAlg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1056,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1154,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1056
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MLYBa9GiNvit694P0amLsA4"
+    }
+  },
+  {
+    "run_index": 48,
+    "format": "struct",
+    "dataset": "nested_variable",
+    "seed": 2,
+    "file": "gemini_lite_r4_struct_nested_variable_seed2.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.606018304824829,
+    "input_tokens": 569,
+    "thinking_tokens": 0,
+    "output_tokens": 99,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 569,
+      "candidatesTokenCount": 99,
+      "totalTokenCount": 668,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 569
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. memory footprint reduced 3x\n11. optimizer state minimal\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRNdgtSPnIim/8orYRS3C0RVn8b+9CFn4jgNJDcTOciOnUlwwHpWjCNWGUY4+Ud3jK+OlN2gR9fuXbhCvA/rCxoq/qgEWVOD2zJvEJugnZcvCgqMHreafSucRHvmimKVCQCooxmOkyq4+lRpslhY/s9biOJLJRRSb5SwYSWxpa17iM8HCfCZ0g=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 569,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 668,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 569
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MbYBa7biDP_xz7sPn_HZyQE"
+    }
+  },
+  {
+    "run_index": 49,
+    "format": "json_min",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_json_min_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 3.0684235095977783,
+    "input_tokens": 996,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 996,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1122,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 996
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 15\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRODpzQIEyyUuWgyl+a2MNf8Qo+jEgUIoBZLHPdtuBC5R3YSJ9zqD4X+i2KbBFJTTgJJUfAgwlGjHWj1+lpZDE6BTcYs+NF8tkO2SjgIXviZGrpHNbmgAb665ln/LVvzsNSGY2i2KWNaFleLD0iNO6vwlRi836u8E57jTlFFsG0X9LKJaSEOKg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 996,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1122,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 996
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MrYBa5m9NOCO3LUPyOCxkA4"
+    }
+  },
+  {
+    "run_index": 50,
+    "format": "toon",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_toon_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.526928424835205,
+    "input_tokens": 828,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 828,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 954,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 828
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRO3fuIrnse0YFydBvqt3SSM0QIpApH3cmvJVHXV5wzC3wFeyo7K3tJHttExCXwCBIkslz3vbaAir8MJaUG3Kg+L25iwiOHxVCEg8ZDcNPD+cdXMl7zO1pkocIF6nm6FtH8G1EVdq7phSzy66uzYoqgrExH9Vm4N4B8pMKxl0uMjOC7td676XA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 828,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 954,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 828
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MrYBa-y0J_CL3LUP2IPaCQ"
+    }
+  },
+  {
+    "run_index": 51,
+    "format": "yaml",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_yaml_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 0.810776948928833,
+    "input_tokens": 1145,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1145,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1271,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1145
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRMwMJEcmDpTPVRHqjpcrtqIUj7UBDDi2B55HZwOxE44TyA+lVGLjsslzoPt6B24uH1iRMhPQW6S7EwXcSJ0OCV1zXZeyCDWo08VRCy+2lxAUyPmyA9JX2D2Zli9WExwGZ12Pw7j+84wr3SRrpZpplWfEPS/Q+pF3tmh7SajYUdJ9ikECPJk2Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1145,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1271,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1145
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "MrYBa6iEJYnf694PjaPbkAc"
+    }
+  },
+  {
+    "run_index": 52,
+    "format": "tsv",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_tsv_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4435362815856934,
+    "input_tokens": 776,
+    "thinking_tokens": 0,
+    "output_tokens": 130,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 776,
+      "candidatesTokenCount": 130,
+      "totalTokenCount": 906,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 776
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. (missing in data)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRNjiXMTLjhQQO4pjVVzAShj7eu2kQt2XCg87i9KgCp8qTGM8aSZ9naC40XPZ1GX/wgoWB6SWWB6b1BTeEYaF+RmYWYnEO45UHAC6RPRbG5VP1hYNW/lXX2FMiUFNJeUc2JGZTfVf86qGNE0+pBqsntHU680g+nhUlIW2GLVASu0EZRbYjwFBA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 776,
+        "candidatesTokenCount": 130,
+        "totalTokenCount": 906,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 776
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "QrYBa_D2Ff3i694P1_nCkQ4"
+    }
+  },
+  {
+    "run_index": 53,
+    "format": "xml",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_xml_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3032283782958984,
+    "input_tokens": 1702,
+    "thinking_tokens": 0,
+    "output_tokens": 128,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1702,
+      "candidatesTokenCount": 128,
+      "totalTokenCount": 1830,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1702
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. (missing)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRNWkpQ/iNONDxaV76xdIp2nLo4VC+7cITsx4von0NZF18x6WiOFGvsRxY3E7cP/QMicdlkayv31ny72bx4U3x0+X7wfixZg7ufYKPOD3RBCm57gT6rpnRoxzohxIB/zcmaBMmDcTTXdUWe/6/XfahDBVns5yhANBS7+LNImWgB++vA+m+CZzg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1702,
+        "candidatesTokenCount": 128,
+        "totalTokenCount": 1830,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1702
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "QrYBa-L-Csvj4t4P0OCn-Ao"
+    }
+  },
+  {
+    "run_index": 54,
+    "format": "key_value",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_key_value_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2277209758758545,
+    "input_tokens": 1066,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1066,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1192,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1066
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 6\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPkPCWhDb1gW8WcZUDeps+Q/0hPScD5ExdxjmeHXwUgHNKBcD+xcaDNPuInKVpCpKUOQ2KcoUAQ6S1w2y2A4ORkFFw8DW3EltDkuswQSf+MG5qhq+KQ23PUJkbODCp6A07v3xvUKCpqaIzJQ4EWn1FBg/hHOVU2JCH/y78BnJvCFtLUSywiSg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1066,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1066
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "NLYBa-r_Jdmjz7sP47Oj4Ag"
+    }
+  },
+  {
+    "run_index": 55,
+    "format": "struct",
+    "dataset": "flat_tabular",
+    "seed": 3,
+    "file": "gemini_lite_r4_struct_flat_tabular_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.7300455570220947,
+    "input_tokens": 820,
+    "thinking_tokens": 0,
+    "output_tokens": 105,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 820,
+      "candidatesTokenCount": 105,
+      "totalTokenCount": 925,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 820
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. 1\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. None\n10. 2403.09611\n11. ~\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfROx68uSjHdS8wusGyN+tjXermEjIaTJt3L+NH+0nQn6wFqTF/UMZ+zEGeTuhoMFeakuBsTjxFCMY2lClA+KuSKWZpTZIM5nDq8GChtStLOmSs0yNH55WeJ0+oInhxHmEz1H2oyst1yspxAXA+MERPOmNkdbYYeDv+2vMzUCGb8sxiL5IK8beg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 820,
+        "candidatesTokenCount": 105,
+        "totalTokenCount": 925,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 820
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "QrYBa4GoMfCL3LUP2IPaCQ"
+    }
+  },
+  {
+    "run_index": 56,
+    "format": "json_min",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_json_min_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3209879398345947,
+    "input_tokens": 4534,
+    "thinking_tokens": 0,
+    "output_tokens": 283,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4534,
+      "candidatesTokenCount": 283,
+      "totalTokenCount": 4817,
+      "cachedContentTokenCount": 2033,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4534
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2033
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 13\n7. 39\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2402.8962, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRNp95lXAYRRbCHEV9Ry6VExPzmhtkddPZDP+9ELN0P+5IGxqOKB/thRRhVv/T9deSlFMRTRh/15uHr6du5dzATnbi2kRrMHWTDAUFwXdwnQP7OTgfQTP12a9y3olpTKANbfkyRj4okMY79M42XZ/0R3CdNkpFSsWuw9Hl5KsQlKrrxVKAl/VA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4534,
+        "candidatesTokenCount": 283,
+        "totalTokenCount": 4817,
+        "cachedContentTokenCount": 2033,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4534
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2033
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "bbYBa_iSG9OtjuMPu9LQ-AE"
+    }
+  },
+  {
+    "run_index": 57,
+    "format": "toon",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_toon_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3869667053222656,
+    "input_tokens": 3647,
+    "thinking_tokens": 0,
+    "output_tokens": 284,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3647,
+      "candidatesTokenCount": 284,
+      "totalTokenCount": 3931,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3647
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. false\n5. 24\n6. 17\n7. 37\n8. \"2404.7570\", \"2411.9702\"\n9. \"2410.7912\", \"2411.6313\", \"2402.5808\", \"2408.9479\", \"2407.4006\", \"2410.2343\", \"2409.9004\", \"2407.1634\", \"2411.7691\", \"2408.7547\"\n10. \"2410.7912\", \"2403.4527\", \"2408.6977\", \"2402.3504\", \"2405.3287\", \"2406.4441\", \"2407.9379\", \"2405.9445\"\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRMhc47/zaKrJQSSszDa7lWupZWz3UjCsTTHtevoonaE3t7WIzUzes1/yZ9Of6JiqaESF5t3GZrKTQzoA5JFbJDpEDCjdDrvMFKYd/pwkRdrhiK1yH5RtsgevUxacTbIRclNrQh3AW7+Tz8bArxpmKUphu7+2pHgxKFdB4DF8mY1KM7hNBM5Pg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3647,
+        "candidatesTokenCount": 284,
+        "totalTokenCount": 3931,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3647
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "RLYBa5K6Affq694P1sG2sAI"
+    }
+  },
+  {
+    "run_index": 58,
+    "format": "yaml",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_yaml_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 3.2332241535186768,
+    "input_tokens": 5288,
+    "thinking_tokens": 0,
+    "output_tokens": 911,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 5288,
+      "candidatesTokenCount": 911,
+      "totalTokenCount": 6199,
+      "cachedContentTokenCount": 2035,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5288
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2035
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 20\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547, 2402.5808 (Wait, let me double check null years: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547? Let me scan properly. Let's list the IDs with null year: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547 (Wait, 2407.547 is 2408.7547? Let's check 2408.7547 has year: null). So: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2408.7547, 2402.5808, 2409.9004.)\nLet's re-verify null years:\n- 2403.4527: year: null\n- 2411.6313: year: null\n- 2402.5808: year: null\n- 2408.9479: year: null\n- 2407.4006: year: null\n- 2410.2343: year: null\n- 2407.1634: year: null\n- 2411.7691: year: null\n- 2407.547? wait 2408.7547: year: null\n- 2409.9004: year: null\nTotal 10 items. Let's list them cleanly.\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2405.4346 (wait, 2405.4346 is verified: true), let's check verified: null -> 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138.\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfROY8hkEuvQnsr0yznk3tlcC8rrIgNkw7zpSE51cLsRkBb0YVmXDbCztVkYt0TmGmJrG/WHokCQ+p/rktnP68hIkG1gwFovqKwwIY4uaRbkeR0hls0LF41SL3beWHwokRjkMYfgwc0FH7IhAb38cY9mfAvtvkUdK0K0tjb0wuWiE+0dLo7kREA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 5288,
+        "candidatesTokenCount": 911,
+        "totalTokenCount": 6199,
+        "cachedContentTokenCount": 2035,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5288
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2035
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "Q7YBa_mDNuDX3LUP05OCoAE"
+    }
+  },
+  {
+    "run_index": 59,
+    "format": "tsv",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_tsv_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.0322515964508057,
+    "input_tokens": 3407,
+    "thinking_tokens": 0,
+    "output_tokens": 315,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3407,
+      "candidatesTokenCount": 315,
+      "totalTokenCount": 3722,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3407
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 26\n6. 17\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2407.3088, 2402.8962, 2406.4441, 2405.9445\n11. \n12.",
+                "thoughtSignature": "Eo4BCosBAWkUfROCiLObIARoFb8WVwNNgdf5nYYpTpSmUpcIXcfQyNo3abc0GZ2tlNetxE/kmMaV/T/tEF1uaoM3arVqIFzYB91mIZzj7k66rpoNEI+4M0FwS096IJQ0T9PfqVa2hudeKTvHSX02wNVPMFMEaGltMUI+L6TaDGMu2GzTOlSmCn3g/tAvteC4vQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3407,
+        "candidatesTokenCount": 315,
+        "totalTokenCount": 3722,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3407
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "bbYBa7OzDv76694PvZjnmQc"
+    }
+  },
+  {
+    "run_index": 60,
+    "format": "xml",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_xml_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.6056275367736816,
+    "input_tokens": 8047,
+    "thinking_tokens": 0,
+    "output_tokens": 293,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 8047,
+      "candidatesTokenCount": 293,
+      "totalTokenCount": 8340,
+      "cachedContentTokenCount": 4079,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 8047
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4079
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 16\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2407.9379, 2403.8179, 2405.9445, 2412.6138\n11. [None/Not provided]\n12. [None/Not provided]",
+                "thoughtSignature": "Eo4BCosBAWkUfRNt85x2/uzgsKJibO+0PAE6SGRfWbN/b7/mUQJaXLvIXhEkT2je+LPM9t0zgSBY5VmS02OnGDSD+haELNB+w9Wzu/9U2HT2LVw206/gJdoo0NLllHhsYYTD3/po9TvJqO8jihF+K4kQVobllZ5Kb2Hqh1iyZkwDZOJHnTclec74dr566eYL6g=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 8047,
+        "candidatesTokenCount": 293,
+        "totalTokenCount": 8340,
+        "cachedContentTokenCount": 4079,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8047
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4079
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "bbYBa5X4G6er4-EPoc-vuAE"
+    }
+  },
+  {
+    "run_index": 61,
+    "format": "key_value",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_key_value_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.0368025302886963,
+    "input_tokens": 4889,
+    "thinking_tokens": 0,
+    "output_tokens": 283,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4889,
+      "candidatesTokenCount": 283,
+      "totalTokenCount": 5172,
+      "cachedContentTokenCount": 2034,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4889
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2034
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2407.1634, 2411.7691, 2409.8752, 2410.2343\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRMcW553bFoIoexT/3HDLkkf7tD0EMGGujseY/Kw7OfbVzC4ay75J/uXFAYnoM41UFPFWf3gIOMadCml1c3e838KU6HW/l5J0DQltK2TzZ9WmGaSoF0qsUtQ7Z9/0VnCg6Idd4PyvB4nDYW921xfxtRvZoBNMdlXXb2IqOJYkNWGGJjxUfXA7Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4889,
+        "candidatesTokenCount": 283,
+        "totalTokenCount": 5172,
+        "cachedContentTokenCount": 2034,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4889
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2034
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "bbYBa4ODDMLrz7sPq5D12AE"
+    }
+  },
+  {
+    "run_index": 62,
+    "format": "struct",
+    "dataset": "flat_100",
+    "seed": 3,
+    "file": "gemini_lite_r4_struct_flat_100_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.257882595062256,
+    "input_tokens": 3558,
+    "thinking_tokens": 0,
+    "output_tokens": 335,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3558,
+      "candidatesTokenCount": 335,
+      "totalTokenCount": 3893,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3558
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. 0\n5. 23\n6. 13\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2407.4006, 2412.6138, 2403.81"
+              },
+              {
+                "text": "79, 2409.9004, 2406.73, 2407.9379, 2405.9445\n11. ~\n12. ~",
+                "thoughtSignature": "Eo4BCosBAWkUfRMeXlDdw/6coCUHgLPNkRW5Acz7//I7AVtq+Z6TziRS70eSQiixXyUeYunXhFQfwElmgfrFS8g4Hk3YYKtJxab8s5v33uNr3xLdQ1/ud7LRI8VlkGjBv8imje4MEmH+2NWkgN2iNicjlto+j77PB4g5sHqI+SZzWtS7FwPb5sxQ1YsJ/nu4WA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3558,
+        "candidatesTokenCount": 335,
+        "totalTokenCount": 3893,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3558
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "brYBa77ZO5ipz7sP1NHKwAs"
+    }
+  },
+  {
+    "run_index": 63,
+    "format": "json_min",
+    "dataset": "nested_fixed",
+    "seed": 3,
+    "file": "gemini_lite_r4_json_min_nested_fixed_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.353888750076294,
+    "input_tokens": 632,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 632,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 728,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 632
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRNpP0k9yEwJkzsQ00iRjWMOXQRKd+nvEkkybn3uzd3NVz5Nbv7TH0ehbi+Flif/OwrxwkiBG9e7p7aY5+rPLetvOFQ9d33DQQVv3cqcKfXl0oFeqpGycXcEUIoeB9emdmTMh+NjRYnLoH5thXYdv8Ef7bX0cToj0cHdG5ZPUmKZmqNl1hS0Zw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 632,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 728,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 632
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "brYBa_izL8iqjuMP1PuGoQc"
+    }
+  },
+  {
+    "run_index": 64,
+    "format": "toon",
+    "dataset": "nested_fixed",
+    "seed": 3,
+    "file": "gemini_lite_r4_toon_nested_fixed_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2535982131958008,
+    "input_tokens": 526,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 526,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 622,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 526
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRPxKuCx+qg3FNYCRzgiuf2ZHG5+uMV1YpDE75L0+H/zvC2yBCjjE22IHn8/CHGTNNC1mRNbChAOakcV2V3BCvlKTQim+ZMjiTZpbqhW0UZTbF0Lx2Dqf5D080SIqS4Q+hjE4K3j0hWr47MIAdq8jQnGHyXIDO6mfPj57suzHXzE5ixSoei9cQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 526,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 622,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 526
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "b7YBa4mwA62J4-EP05uHEQ"
+    }
+  },
+  {
+    "run_index": 65,
+    "format": "yaml",
+    "dataset": "nested_fixed",
+    "seed": 3,
+    "file": "gemini_lite_r4_yaml_nested_fixed_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.9423587322235107,
+    "input_tokens": 724,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 724,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 820,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 724
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRO8mK5Pl5ztXixlex1HziCfm7uGfBAt0joFhTqdqiihH2k4LMY3jvk3MqoByy5BRQLHXEJMnnCIug8mZ0LX41hJW8RNLjfOUCI1aqcxdDX8sq8cy9aKrhu8AjNCojPJNhms0wAsN89mceRnp83OpMeLp79u6xm5JLM/pv+PIIhK3yc9QypcnQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 724,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 820,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 724
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "cLYBa6zHJdGPmNMPjNO_6Ak"
+    }
+  },
+  {
+    "run_index": 66,
+    "format": "xml",
+    "dataset": "nested_fixed",
+    "seed": 3,
+    "file": "gemini_lite_r4_xml_nested_fixed_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.4449515342712402,
+    "input_tokens": 1062,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1062,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 1158,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1062
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted"
+              },
+              {
+                "text": "\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. \n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRNJxbWLc31+QTF2tJQcHHg4QILtktLcPnMCWP58awh1xPyD5aUdSRYDg06Q9z8lE5HybQlGGpQXOMuSms94w2rvtN7WA+RpO9CtCoYi2GNnueIPddI8gdWuYoZQOHF0HDTrR4FZRxPZ+2V88IE8dvR5HZkzySJlNbFWymgCfSAx3LfjzXvi8Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1062,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 1158,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1062
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "frYBa9fxKtT_z7sPmIvhoAk"
+    }
+  },
+  {
+    "run_index": 67,
+    "format": "struct",
+    "dataset": "nested_fixed",
+    "seed": 3,
+    "file": "gemini_lite_r4_struct_nested_fixed_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4549410343170166,
+    "input_tokens": 540,
+    "thinking_tokens": 0,
+    "output_tokens": 94,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 540,
+      "candidatesTokenCount": 94,
+      "totalTokenCount": 634,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 540
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. 0\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. ~\n12. Direct preference optim",
+                "thoughtSignature": "Eo4BCosBAWkUfRORpmf8ARX/oHZw0paEWXuE77/fJpCnA1krk3M7aamt981k07tDMevAsPNrcsi7hkKtQOKWuzqs9AUNCa09BueL43u4qbPK1Hxy+SZZA4+QpWPRNtqb5yCrtmf03rAKtchVZYoD5M5NpA5iMX+0y8PYhEBALrFlBbUEOlwuzBUxLEQV8oHRWg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 540,
+        "candidatesTokenCount": 94,
+        "totalTokenCount": 634,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 540
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "frYBa9SyH9n2juMP1peBuAE"
+    }
+  },
+  {
+    "run_index": 68,
+    "format": "json_min",
+    "dataset": "nested_variable",
+    "seed": 3,
+    "file": "gemini_lite_r4_json_min_nested_variable_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3057751655578613,
+    "input_tokens": 589,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 589,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 687,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 589
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRMLn4vrQCcYWq983Fkfe/CSE3+IjBar1osmMA/EypVNSDLWDOj0yk1cxp9/vjcCllLaEYGr+Ugk2MZpM6KA7KW4p8mhCShb55oGX/U0xxJO1Su4wjlc1iqrpCoPea2hLLQnSlhiYghxjZWwg9g8tWsOoJQ3afOAbBQKtaOPNmidPRabX7x/fA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 589,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 687,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 589
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "frYBa9-PH6vNqfkP_-6GuQI"
+    }
+  },
+  {
+    "run_index": 69,
+    "format": "toon",
+    "dataset": "nested_variable",
+    "seed": 3,
+    "file": "gemini_lite_r4_toon_nested_variable_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4435796737670898,
+    "input_tokens": 672,
+    "thinking_tokens": 0,
+    "output_tokens": 97,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 672,
+      "candidatesTokenCount": 97,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 672
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit,appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help,perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRMUcRX+zqyidniwNuOctj5x9GZ/YweSS0FFJT5N6ytPaLUV7EHrQoADlMljP2wGQeU0sq8QLhyTSBMFRkTGn3ImeYa1mhTBGkKTJWn804Hrk3f6JmJ8F4cQFfFw3R4yc+vpx4TrWaL6LFhNHnsBBlj6VgiIiNbAEnDD7V6FT3jCMoEBpztH3Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 672,
+        "candidatesTokenCount": 97,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 672
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "frYBa4mRHpvKv_gPwIf1sQI"
+    }
+  },
+  {
+    "run_index": 70,
+    "format": "yaml",
+    "dataset": "nested_variable",
+    "seed": 3,
+    "file": "gemini_lite_r4_yaml_nested_variable_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.5093367099761963,
+    "input_tokens": 671,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 671,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 671
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRPmVcowlXQ9lxF5TPBrV+kj9y8MgQRQCzXDRbfP84Lp2/peRDbIRvmZ5edxu72eueGeEjEHK/nD8vblPJRcBS8IYbXNpMiHMBd6cL50f6j8HJ83lYxreu5sCmmNgYY9puahhO4rkUG/amOh4z8czqe46+lDiSVrwUWbVUCO79eydG/6/Q5Naw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 671,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 671
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "f7YBa5jhPNTF694Pl5aNOA"
+    }
+  },
+  {
+    "run_index": 71,
+    "format": "xml",
+    "dataset": "nested_variable",
+    "seed": 3,
+    "file": "gemini_lite_r4_xml_nested_variable_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3803398609161377,
+    "input_tokens": 1056,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1056,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1154,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1056
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRPTBW7wg1oquiBx/KlxJt/A0mDGyS95OyFqeLZENd2KpKRC+SPMM5m5ZAt/0Y7LcJJlXj1SV9854+HMUWUJrPuzahq7g2Lefnoe3ZlelyHXN9tUNvv2HmdHPbx9uXEGtF3YkurVsrF9kCshWCNgbTux2BBE+9TkAelzAb6JVlqRp4vdid/tbA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1056,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1154,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1056
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "f7YBa7TIMrD4jNAP-5Lc-Ao"
+    }
+  },
+  {
+    "run_index": 72,
+    "format": "struct",
+    "dataset": "nested_variable",
+    "seed": 3,
+    "file": "gemini_lite_r4_struct_nested_variable_seed3.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.272130012512207,
+    "input_tokens": 569,
+    "thinking_tokens": 0,
+    "output_tokens": 99,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 569,
+      "candidatesTokenCount": 99,
+      "totalTokenCount": 668,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 569
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. memory footprint reduced 3x\n11. optimizer state minimal\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfROys2SZUQ5nd6nHqXv9noCmFNG2HdFw1Lg+ti4sHoZOgQjL2CdRENTssgXZJ1fzxUPpD9G4Gu4bl53GU6G2joKC7OiHMng0+KNPlji9Y1onzYFMhk/xQdJyry0Sg9hd3WcGRYlRhoUqU8an4xaQymJT9jK9OTl0zCYKCMJQQt1I2n96TINnrg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 569,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 668,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 569
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "qLYBa6DpNt-A3LUPk7eCgAs"
+    }
+  },
+  {
+    "run_index": 73,
+    "format": "json_min",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_json_min_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.513887882232666,
+    "input_tokens": 996,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 996,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1122,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 996
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfROIaLVV8Orls2qXw/dzbVdIs+R0vkg18RfoRHZhvI9DuC6L2/v56kmqx7y2xn7cocUbZTJYdZ53A8QYmyX5+ebP3BJxe3Q+teaDHH8DbpL8Dis0PXVWWSBsk0+TGlZHAXO4935F9z0q01EtUpKigvhrwjMKWD703xxVJG/ZgCbQvZGwAr6jTQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 996,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1122,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 996
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "qrYBa7C1IdS63LUPibflAQ"
+    }
+  },
+  {
+    "run_index": 74,
+    "format": "toon",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_toon_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2360906600952148,
+    "input_tokens": 828,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 828,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 954,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 828
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPLy5tnWU/0jTYRV8xbx+OXXWHhN0UKDgyqmo2ZDQPNCeIIq5DKOk4LpZtBf6Uo7yf9hKs1X489EIjeVBsE98wcGSq9tgew5AT7uzu4aI+qmAzZs3EOe44VN58PrqGiD/UTN+zGHgRmx5v1zKCDSHUorQFksZcvGuTdUSEsVtjBNIucljnHVA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 828,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 954,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 828
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "qrYBa8zTFOSj694PjcW3sAI"
+    }
+  },
+  {
+    "run_index": 75,
+    "format": "yaml",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_yaml_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2408506870269775,
+    "input_tokens": 1145,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1145,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1271,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1145
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 7\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPJFWJVOTqLbsqe2Ryt3gsReds9J6/RPrS3rNYU6vzWsBAbtEuGzFc+4Z0y4lqrrYT5x/KKgXxC+HdGoC56WNruRb+o28cR4rNACYbQHjnF3J6uDdvGYof5TxRCjNtDezHDLtZ2eKq/58A2YrIYf3m2Mk51029UBxbAWdGlpgyB1YI+LsGpkw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1145,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1271,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1145
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "qrYBa-KyAeHz3LUPldL0qQ0"
+    }
+  },
+  {
+    "run_index": 76,
+    "format": "tsv",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_tsv_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3498048782348633,
+    "input_tokens": 776,
+    "thinking_tokens": 0,
+    "output_tokens": 135,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 776,
+      "candidatesTokenCount": 135,
+      "totalTokenCount": 911,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 776
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. [empty] (not provided in the data)\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPawBC7noYtWyXH216WV0FYSneg5IZ1CicgjurBeqz2px+/Owufw2tp6HwLNQn4J9RYBUSOCPlvqJhomZTpCBzE34KQbxMao0mrlHkViuSgKtykoNvEizDY3rZGxu8MdBmdUs/VbHz8ghXnEs8+o9i+4pbsPxnScMg6E0h+SPlzPw79LMnDrw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 776,
+        "candidatesTokenCount": 135,
+        "totalTokenCount": 911,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 776
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "q7YBa5WNApG_694P6Len-QQ"
+    }
+  },
+  {
+    "run_index": 77,
+    "format": "xml",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_xml_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.1123836040496826,
+    "input_tokens": 1702,
+    "thinking_tokens": 0,
+    "output_tokens": 130,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1702,
+      "candidatesTokenCount": 130,
+      "totalTokenCount": 1832,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1702
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. [Unknown / empty]\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPvn3yfBpzT1TSOWe0a0tnHpnAOA3ioVbWsLoZMJhaI9jnp6uf4GDls+eVEawsAxuYnL9QvDhnhDLLBexwmhtwD2xDh5G0QciOT886915PVNj/8ILCK/48Mtp3Pa3k49qeJcmaAhQA02xCBh4bN72u+V17L2C+yQavhL7qGJku5svp2JtqAjA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1702,
+        "candidatesTokenCount": 130,
+        "totalTokenCount": 1832,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1702
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "q7YBa_rZHtOz694Pmevk4QI"
+    }
+  },
+  {
+    "run_index": 78,
+    "format": "key_value",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_key_value_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.4946951866149902,
+    "input_tokens": 1066,
+    "thinking_tokens": 0,
+    "output_tokens": 126,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1066,
+      "candidatesTokenCount": 126,
+      "totalTokenCount": 1192,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1066
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. true\n5. 1\n6. 16\n7. 6\n8. 2310.06825, 2406.11794\n9. 2203.15556, 2404.14219\n10. 2403.09611\n11. null\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfRPtGuWQIb7BpGyxT3vZ3+Bi6yJ5gG8eiu95RNza29JMANmK7XH8UiRibOmlB9j4lWZpjMUaLCSkZP6sjFNUQERgDSKC1KalVZhpXSio3e2n2+8e4jHydyY/McC45vov/wc2t5Va56hLyUGVj6UIgNJBdwVqxhvGXV8HeQyTg/fO8Bsm8CWiRQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1066,
+        "candidatesTokenCount": 126,
+        "totalTokenCount": 1192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1066
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "q7YBa9-pJtjIv_gPg6nayAM"
+    }
+  },
+  {
+    "run_index": 79,
+    "format": "struct",
+    "dataset": "flat_tabular",
+    "seed": 4,
+    "file": "gemini_lite_r4_struct_flat_tabular_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.3542635440826416,
+    "input_tokens": 820,
+    "thinking_tokens": 0,
+    "output_tokens": 105,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 820,
+      "candidatesTokenCount": 105,
+      "totalTokenCount": 925,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 820
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. refuted\n2. 2017\n3. LoRA low rank adaptation\n4. 1\n5. 1\n6. 16\n7. 8\n8. 2310.06825, 2406.11794\n9. None\n10. 2403.09611\n11. ~\n12. 2408.03314",
+                "thoughtSignature": "Eo4BCosBAWkUfROevpdmhGMC1F0y30ZYZzVheI3pcrXWZN9j1SntgJsigINQR7m5XBx+6upxrb7SbJdV5codfF0T6eUcjeKCH0VNskzM0sDTCYRV1XA6lY9/53ILN9LjWmoqaHd8f4J0OqIh9NQ2keNlcyr7GmHos23rM7vVlv4H4gPs1k8mK8FU0+tosjRWPQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 820,
+        "candidatesTokenCount": 105,
+        "totalTokenCount": 925,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 820
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "rLYBa-joN42z694P_LjygQQ"
+    }
+  },
+  {
+    "run_index": 80,
+    "format": "json_min",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_json_min_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.73317813873291,
+    "input_tokens": 4534,
+    "thinking_tokens": 0,
+    "output_tokens": 294,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4534,
+      "candidatesTokenCount": 294,
+      "totalTokenCount": 4828,
+      "cachedContentTokenCount": 2033,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4534
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2033
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 23\n6. 13\n7. 37\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2407.4006, 2402.5808, 2407.1634, 2410.2343, 2409.9004, 2408.9479, 2408.7547, 2411.7691\n10. 2410.7912, 2408.6977, 2411.8062, 2402.8962, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRN58F9nlpGu7rG5ww3UF0eI/1vLfR2MGSbP4b3z4dwtP3FxLlsfUn2dEhmT7xkn+9tJmpXaAPmZXOfXkHFkt/vh6kZ2e6GILWQdRBmVLAT8/3Qup3cPPd/PWZ8TsAI9WEOt332P+63Y3XL4vk151iD7PhGT5jbchZVhOl1IlK5SbAzLOcz5zA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4534,
+        "candidatesTokenCount": 294,
+        "totalTokenCount": 4828,
+        "cachedContentTokenCount": 2033,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4534
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2033
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urYBa4vZNsrn4t4Pqr6Z8Ao"
+    }
+  },
+  {
+    "run_index": 81,
+    "format": "toon",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_toon_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.8901331424713135,
+    "input_tokens": 3647,
+    "thinking_tokens": 0,
+    "output_tokens": 262,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3647,
+      "candidatesTokenCount": 262,
+      "totalTokenCount": 3909,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3647
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. false\n5. 26\n6. 15\n7. 37\n8. \"2404.7570\", \"2411.9702\"\n9. \"2410.7912\", \"2411.6313\", \"2402.5808\", \"2408.9479\", \"2407.4006\", \"2410.2343\", \"2407.1634\", \"2409.9004\", \"2409.3085\", \"2408.7547\"\n10. \"2410.7912\", \"2403.4527\", \"2408.6977\", \"2406.4441\", \"2407.9379\", \"2405.9445\"\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRNZwxUVptniIz7Kq7CDOvREFKPfo2R29mSLjdcWx5NJdFMsRF6Ld+swGjxiV3AP6hl4GyFUQ+J+RBJyywrPMCWIZC69x80wYMRGR8m5+3HYYF0Y0/hyqUvHBa9KYrtA23fNp0SOgx74W+ioGO7/BdOgWHfijG7DHuWbAsubb/4PFpUz5cv/3A=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3647,
+        "candidatesTokenCount": 262,
+        "totalTokenCount": 3909,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3647
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urYBa-eyILyB694PkLqCiA4"
+    }
+  },
+  {
+    "run_index": 82,
+    "format": "yaml",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_yaml_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.5862812995910645,
+    "input_tokens": 5288,
+    "thinking_tokens": 0,
+    "output_tokens": 304,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 5288,
+      "candidatesTokenCount": 304,
+      "totalTokenCount": 5592,
+      "cachedContentTokenCount": 2035,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5288
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2035
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2"
+              },
+              {
+                "text": "023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 20\n6. 12\n7. 42\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2402.5808, 2407.547\n10. 2410.7912, 2408.6977, 2402.3504, 2403.8179, 2411.8062, 2405.9445, 2406.4441, 2407.9379, 2412.6138, 2402.8962\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRMPaTxFFLwmSGPk7dMvlxhXjiYb75/nBslk7vY9OLjiPn8EdyzxK2mPK/OL91KKKPTveyT3FH32VtsOu+JwkUivnpJjJfM+z3r7yDrBy+VgLAqwmkvrpEXLlvY2w4mtB74J1K1Sa4LwU5v9OqKTyyTVUWVFr5llTvFVFbdxhv3IiFmi1sZ9/Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 5288,
+        "candidatesTokenCount": 304,
+        "totalTokenCount": 5592,
+        "cachedContentTokenCount": 2035,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5288
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2035
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urYBa4e1F8iqjuMP1PuGoQc"
+    }
+  },
+  {
+    "run_index": 83,
+    "format": "tsv",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_tsv_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.1722655296325684,
+    "input_tokens": 3407,
+    "thinking_tokens": 0,
+    "output_tokens": 320,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3407,
+      "candidatesTokenCount": 320,
+      "totalTokenCount": 3727,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3407
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 26\n6. 17\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2407.3088, 2402.8962, 2406.4441, 2405.9445\n11. [missing]\n12. [missing]",
+                "thoughtSignature": "Eo4BCosBAWkUfROOUGBfHNdk6c8+tWKuSSeCWXgbv35Ti0M5o8Jw6RyfJ8UpZ9ibdKXu71WP/sWz4loA70cVlprjG+u+zKsRUGG2nA14Ws7uyGHV8Cx08ytPegXzZwExShjY5ZnsnBOYpLCIDzZc0XJJXZzM6Lztg8uojkxoTWn7ICriLsn8McP72CFHd32dTg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3407,
+        "candidatesTokenCount": 320,
+        "totalTokenCount": 3727,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3407
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "urYBa6i-K_it694PtOOX-AI"
+    }
+  },
+  {
+    "run_index": 84,
+    "format": "xml",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_xml_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 2.0983095169067383,
+    "input_tokens": 8047,
+    "thinking_tokens": 0,
+    "output_tokens": 311,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 8047,
+      "candidatesTokenCount": 311,
+      "totalTokenCount": 8358,
+      "cachedContentTokenCount": 4079,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 8047
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4079
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 18\n6. 13\n7. 46\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2408.9479, 2407.4006, 2402.5808, 2409.9004, 2407.1634, 2411.7691, 2408.7547, 2410.2343\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2407.9379, 2405.9445, 2413.6138 (Wait, 2412.6138)\n11. unknown (or blank/not provided)\n12. unknown (or blank/not provided)",
+                "thoughtSignature": "Eo4BCosBAWkUfRPP0pYxYjrbX6C90A7gGrGm9ln5ktUK09cTRQf3GbJtTpbK4SwWQ3d+YtNgMe1/uXHu8oaB3NQ+JUO3LsKIu+f5rw6nuD/Die/Eyw3lZrV8dT8HPcpIBzf+LzHK1h0GuaC+anfpueDiw9ekdmDfOdjCM1goLnBRRqnWnp6uNjaDrQOQwYk3bg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 8047,
+        "candidatesTokenCount": 311,
+        "totalTokenCount": 8358,
+        "cachedContentTokenCount": 4079,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8047
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4079
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "vLYBa8SAJtyt694P87GiiAQ"
+    }
+  },
+  {
+    "run_index": 85,
+    "format": "key_value",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_key_value_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.6688141822814941,
+    "input_tokens": 4889,
+    "thinking_tokens": 0,
+    "output_tokens": 282,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 4889,
+      "candidatesTokenCount": 282,
+      "totalTokenCount": 5171,
+      "cachedContentTokenCount": 2034,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 4889
+        }
+      ],
+      "cacheTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 2034
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers v4\n4. false\n5. 21\n6. 12\n7. 43\n8. 2404.7570, 2411.9702\n9. 2403.4527, 2411.6313, 2402.5808, 2407.4006, 2407.1634, 2409.9004, 2411.7691, 2408.7547, 2410.2343\n10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2406.4441, 2403.8179, 2409.379, 2405.9445, 2412.6138\n11. null\n12. null",
+                "thoughtSignature": "Eo4BCosBAWkUfRPND5bu5hNCY8OUNI5xhF0wu7RtD041xqDrw9bkbeWBmZWu9/nBew/steFx2U89FAeW2FXGdPOUcrh04o1309dkndvp0tvRXkT9DIWpz0FadcCXrfKJCVPE0Z2cDcWxAGpks3k28EpwoZ8ZJDpQLEaPGPlK/Nk3xvekPsA1VRhsPa2EZ1Nixg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 4889,
+        "candidatesTokenCount": 282,
+        "totalTokenCount": 5171,
+        "cachedContentTokenCount": 2034,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4889
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2034
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "vLYBa8bcI4bWz7sPlJz94A4"
+    }
+  },
+  {
+    "run_index": 86,
+    "format": "struct",
+    "dataset": "flat_100",
+    "seed": 4,
+    "file": "gemini_lite_r4_struct_flat_100_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.7984850406646729,
+    "input_tokens": 3558,
+    "thinking_tokens": 0,
+    "output_tokens": 326,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 3558,
+      "candidatesTokenCount": 326,
+      "totalTokenCount": 3884,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 3558
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. unverified\n2. 2023\n3. KV cache quantization losing accuracy on outliers\n4. 0\n5. 24\n6. 14\n7. 43\n8. 2404.7570, 2411.9702\n9. 2410.7912, 2403.4527, 2411.6313, 2402.5808, 2408.9479, 2411.7691, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2408.7547\n10. 2410.7912, 2403.4527, 2408.6977, 2402.8962, 2411.8062, 2403.8179, 2407.3088, 2406.7373, 2407.9379, 2412.6138, 2405.9445\n11. ~\n12. ~",
+                "thoughtSignature": "Eo4BCosBAWkUfRMSshSXDi3HOTRXGTqx9rDrL5Z7CCV+pyuO2+AS8RhMqgTKkFqeyzi0ucW8tHLwKsfBaanXCUa+6rdQn6RrbdQJfFBJtN96qKSF81I77ZBVZ//ld4nY3jDY4BxsdSDzsry+v6okOC52MG4KULZM/k50EQu3FGSX/9nNf+DSAltjIid1HLzPog=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 3558,
+        "candidatesTokenCount": 326,
+        "totalTokenCount": 3884,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3558
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "5rYBa_2HF8L6694Px_D3kA8"
+    }
+  },
+  {
+    "run_index": 87,
+    "format": "json_min",
+    "dataset": "nested_fixed",
+    "seed": 4,
+    "file": "gemini_lite_r4_json_min_nested_fixed_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.5180928707122803,
+    "input_tokens": 632,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 632,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 728,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 632
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRNb+X87n68ZOYwSA0gK1OmMs5rFkJZNwzHKpf2eS6oe+HD8aEZPbHyVcw4cSbczz1u3sX5mm8usmIFwGB3WCLHOsmP80+UGJdxFV9zvpkbdG1SNiOW2khc6fo+rcn3YTkC1D8vbAuZehJQj3PAnnA1m86nZtVLb1/zsSm4W8DW+tqAg6Jm2JA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 632,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 728,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 632
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "5rYBa6-FF638694Pu_yZ0AU"
+    }
+  },
+  {
+    "run_index": 88,
+    "format": "toon",
+    "dataset": "nested_fixed",
+    "seed": 4,
+    "file": "gemini_lite_r4_toon_nested_fixed_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.438889503479004,
+    "input_tokens": 526,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 526,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 622,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 526
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRMiY7cP3DOVh2VNW8DUUTxfTrzsRXhZbznafwMBEBaZpnSaYgm+FlJHBBExpRoD7NOeJWe3c87Dodg/esBOR4HFnKjD2CcbFeAQJnVeIu5hBRSKu3mN4RqYL3acotdXC+ANiZ1vbFIFBUWEYWHHtExbD6fTN2fEqzMNZ3q5k1uBlOuaUOzPMg=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 526,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 622,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 526
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "5LYBa9bnPOn7jNAPp4ay2QI"
+    }
+  },
+  {
+    "run_index": 89,
+    "format": "yaml",
+    "dataset": "nested_fixed",
+    "seed": 4,
+    "file": "gemini_lite_r4_yaml_nested_fixed_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.085381031036377,
+    "input_tokens": 724,
+    "thinking_tokens": 0,
+    "output_tokens": 96,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 724,
+      "candidatesTokenCount": 96,
+      "totalTokenCount": 820,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 724
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 7\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. null\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRMZWfo7lz3u5tNijA3PBA8N9VvxeMwkGWm3dqbsSba/hfffVhONxGzTf9SFrJ41zZSgXPpSA68MYutKN5A/De6wChONC0rDO146Q09BPYZvi7iw6HRNPj7U72TiapfSnivHTdtnYCyYPA4d4dqjNnozjqA9UH6/uk+qJW8bVE0e1i0uhJRDMw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 724,
+        "candidatesTokenCount": 96,
+        "totalTokenCount": 820,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 724
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "5rYBa4v8CbXa4t4PovnQiQs"
+    }
+  },
+  {
+    "run_index": 90,
+    "format": "xml",
+    "dataset": "nested_fixed",
+    "seed": 4,
+    "file": "gemini_lite_r4_xml_nested_fixed_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.06386137008667,
+    "input_tokens": 1062,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1062,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1160,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1062
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. false\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 2\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. [missing]\n12. StarCoder 2 training code",
+                "thoughtSignature": "Eo4BCosBAWkUfRMSaa40p1Uy1I1fdmjtS8UsWSmAXWL6Fu1ZMklO+8VbW1d189WD9jc2BcoqSIXgkr25Fd67KtL0J9i/q3+tE9cfydAJYJLOzvl0QOd6ls83jkYZ1kKTiuLhqBgLHXVg4YrS6QvIsj2rJgIuaK8AKCDdujWaolW7iTF0QdWqBH+qlN6FtYa9XQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1062,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1160,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1062
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "5rYBa4uWK9jIv_gPg6nayAM"
+    }
+  },
+  {
+    "run_index": 91,
+    "format": "struct",
+    "dataset": "nested_fixed",
+    "seed": 4,
+    "file": "gemini_lite_r4_struct_nested_fixed_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3386034965515137,
+    "input_tokens": 540,
+    "thinking_tokens": 0,
+    "output_tokens": 94,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 540,
+      "candidatesTokenCount": 94,
+      "totalTokenCount": 634,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 540
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. 0\n3. refuted\n4. 1706.03762\n5. 2021\n6. 2203.15556\n7. 6\n8. 3\n9. 2405.05254\n10. DeepSeekMoE mixture experts\n11. ~\n12. Direct preference optim",
+                "thoughtSignature": "Eo4BCosBAWkUfRNCmg2wohdAqO3oP3035yfYVD7tG4eNRk/k0lQ36utSGfB7+CzgLeQX9AyuWLVCO1k+DPH911rsbJKAXu+fNkPHyrRUDESh06Pk7/aSe8Uolt1CeICsVeNdSvyU+Xf3ENWO0l9KHrHBSrz3KhugGbK+nJ5P19QSdsh26329dn5QUV7+J9TI4w=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 540,
+        "candidatesTokenCount": 94,
+        "totalTokenCount": 634,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 540
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "57YBa6-nJZPE4-EPy-XYiQQ"
+    }
+  },
+  {
+    "run_index": 92,
+    "format": "json_min",
+    "dataset": "nested_variable",
+    "seed": 4,
+    "file": "gemini_lite_r4_json_min_nested_variable_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3615033626556396,
+    "input_tokens": 589,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 589,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 687,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 589
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRMb/S7LoxEagFwnclUbA3OoOe9VRu3Vq4DfneyH57Z8j3eYm0zlTyKss+3Ek5+LwibP2eac1S59qMZr3AU27bB6V2nMgTyfBpyk8xSuLYL9icFJDgRWbqnEWUHpPU08wnjWG5ednv8/lxtMtsbVS8mD5kNylThGx+ZXLCWOhg0JX6pokfxPnA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 589,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 687,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 589
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "57YBa77POOqy694P2c7S0QM"
+    }
+  },
+  {
+    "run_index": 93,
+    "format": "toon",
+    "dataset": "nested_variable",
+    "seed": 4,
+    "file": "gemini_lite_r4_toon_nested_variable_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.6521403789520264,
+    "input_tokens": 672,
+    "thinking_tokens": 0,
+    "output_tokens": 97,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 672,
+      "candidatesTokenCount": 97,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 672
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit,appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help,perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRMoXCKBpUceqFpsZmxFQLel7LDE+Yd7NSZcN4+rcdKscvS8Be4COHIgPBMoK5QThlkftqn0Kcr/Fm+slWaAngdLkYWYjSoZglQGKoxkKLkU7jaqZN4MDxgYfFJGCn1r4uiL+mqV/m9gSQwdwVOuZdI2r6Zk/BxzC7nchjRqk70HgcP0jGXIeQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 672,
+        "candidatesTokenCount": 97,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 672
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9rYBa6WRKtDY1_oP-L6N0A0"
+    }
+  },
+  {
+    "run_index": 94,
+    "format": "yaml",
+    "dataset": "nested_variable",
+    "seed": 4,
+    "file": "gemini_lite_r4_yaml_nested_variable_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.0347907543182373,
+    "input_tokens": 671,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 671,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 769,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 671
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRO7buPQhOORKM+wEZRHX7lL1HGuizzcOHbxXleloGxcHKEr+OWAiPp8bd1W17XloRuLxRdkdcwyCh9VjKN9g4krmu97cBhS8nOvRtD1BinGcVLADjfTihEKsf1okp4JGGt2+PMg+LPt0YGS7Sgtdir5rz1fdPJQ47ECL2hfCVee3IkjEDLu7g=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 671,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 769,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 671
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "6LYBa4eGJP_e694Ptdq9yA4"
+    }
+  },
+  {
+    "run_index": 95,
+    "format": "xml",
+    "dataset": "nested_variable",
+    "seed": 4,
+    "file": "gemini_lite_r4_xml_nested_variable_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.3624935150146484,
+    "input_tokens": 1056,
+    "thinking_tokens": 0,
+    "output_tokens": 98,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 1056,
+      "candidatesTokenCount": 98,
+      "totalTokenCount": 1154,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1056
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. checkpoint size under 50MB\n11. none\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRMqaGSd7KOwTISyuhXWgTTaIcCm6BKAcV4g+kp/VNog1W02o9ky9ndYroZLkhqdVaMpjYKIMIQCImGLDsi2jHJbCmuV+2lN1pk9XggS+T4p11eXEzxwo+KbVySoSlop8VEUfAqKW3+E5vnVpYpY0JDKRR+gKT7iR5hPwBl9Psk3eFcKjfTnuQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 1056,
+        "candidatesTokenCount": 98,
+        "totalTokenCount": 1154,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1056
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9rYBa5D6HLCSz7sPpeuOsAw"
+    }
+  },
+  {
+    "run_index": 96,
+    "format": "struct",
+    "dataset": "nested_variable",
+    "seed": 4,
+    "file": "gemini_lite_r4_struct_nested_variable_seed4.txt",
+    "success": true,
+    "finish_reason": "STOP",
+    "finishReason": "STOP",
+    "elapsed_sec": 1.2128968238830566,
+    "input_tokens": 569,
+    "thinking_tokens": 0,
+    "output_tokens": 99,
+    "model_id": "gemini-3.5-flash-lite",
+    "modelVersion": "gemini-3.5-flash-lite",
+    "usageMetadata": {
+      "promptTokenCount": 569,
+      "candidatesTokenCount": 99,
+      "totalTokenCount": 668,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 569
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "raw_response": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "1. supported\n2. refuted\n3. 2203.15556\n4. abstract mentions 32k limit, appendix B clarifies\n5. llama 7b tested only\n6. per-head scales help, perplexity intact\n7. 3\n8. 2\n9. 2\n10. memory footprint reduced 3x\n11. optimizer state minimal\n12. LoRA matches full finetune",
+                "thoughtSignature": "Eo4BCosBAWkUfRN1PXqCGtJqNJjRQmmYkCC1foXqdCDMUqUVpxUOsHTD5Qi22e4fiYNAT/J1fxVyqrEG+q7d5U2iZTNWVbhs0JZlrawx8HqNCOzgivuz2jXDf3zKKdhEfw+gSKnGqlyjTvjKw5z8YCopBC3LE5h1zGDREWcsoi6OJVQIvlCPZHO/vJ+quWbqbA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "usageMetadata": {
+        "promptTokenCount": 569,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 668,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 569
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "modelVersion": "gemini-3.5-flash-lite",
+      "responseId": "9rYBa6vPCcKm694Pk9S12AM"
+    }
+  }
+]

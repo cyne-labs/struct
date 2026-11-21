@@ -142,6 +142,26 @@ Gemini read every format almost perfectly. At that accuracy, Struct was the chea
 
 Source: `research/r4-retrieval-gemini.md`, `bench/r4/grades/gemini_*.json` and `bench/r4/grades/crosscheck_b/`.
 
+## Retrieval accuracy (R4): Gemini 3.5 Flash Lite, thinking off and on
+
+A much weaker model, called directly through the Gemini API (no agent prompt, exact token counts), 4 times per prompt. We ran it twice: with thinking at `low`, where it barely thinks (0 thinking tokens on almost every call), and with thinking at `high`. Grading is by meaning, with graders that weren't told which model they were grading, then a blind re-grade: 73 of 76 sampled answers agreed for the low run, and all 55 for the high run.
+
+| Format | Thinking low | Thinking high | Mean thinking tokens (high) | Mean input tokens |
+|---|---|---|---|---|
+| **Struct** | 140/192 (72.9%) | **191/192 (99.5%)** | 5,408 | **1,372** |
+| XML-style tags | 164/192 (85.4%) | 191/192 (99.5%) | 4,684 | 2,967 |
+| YAML | 170/192 (88.5%) | 190/192 (99.0%) | 5,900 | 1,957 |
+| Minified JSON | 168/192 (87.5%) | 188/192 (97.9%) | 5,508 | 1,688 |
+| TOON | 159/192 (82.8%) | 188/192 (97.9%) | 4,394 | 1,418 |
+| `key: value` lines (flat data only) | 75/96 (78.1%) | 94/96 (97.9%) | 8,279 | 2,978 |
+| TSV (flat data only) | 70/96 (72.9%) | 93/96 (96.9%) | 9,252 | 2,092 |
+
+With thinking on, Struct tied XML for the highest accuracy, with the fewest input tokens of any format.
+
+With thinking off, Struct came last among the five formats that ran on every dataset. Its misses were mostly questions about missing values (24 misses, against 7 for TOON and 6 for JSON): Struct writes no value as `~` and an empty list as no line at all, and without reasoning the model often missed both. Counting questions were hard in every format. So on a weak model, a single pass without thinking is where Struct is fragile.
+
+Source: `research/r4-retrieval-gemini-lite.md`, `research/r4-retrieval-gemini-lite-high.md`, `bench/r4/grades/m4_*.json` (thinking low) and `m5_*.json` (thinking high), and `bench/r4/grades/crosscheck_jb007/` and `crosscheck_m5/`.
+
 ## Small per-token facts
 
 From the same report, measured on the same four tokenizers.

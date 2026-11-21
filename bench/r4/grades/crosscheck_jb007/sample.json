@@ -1,0 +1,536 @@
+{
+ "items": [
+  {
+   "id": "item_001",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_001.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_002",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_002.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_003",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_002.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_004",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_003.txt",
+   "question_number": 8,
+   "question": "How many claims have a source published in 2024?",
+   "expected": "2"
+  },
+  {
+   "id": "item_005",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_004.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_006",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_005.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_007",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_006.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_008",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_007.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_009",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_008.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2203.15556, 2404.14219"
+  },
+  {
+   "id": "item_010",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_006.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_011",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_009.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_012",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_010.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_013",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_011.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_014",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_012.txt",
+   "question_number": 3,
+   "question": "What is the title of paper 2404.9279?",
+   "expected": "KV cache quantization losing accuracy on outliers v4"
+  },
+  {
+   "id": "item_015",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_013.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_016",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_014.txt",
+   "question_number": 8,
+   "question": "How many claims have a source published in 2024?",
+   "expected": "2"
+  },
+  {
+   "id": "item_017",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_015.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_018",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_016.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_019",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_017.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_020",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_018.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_021",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_019.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_022",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_020.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_023",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_021.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_024",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_022.txt",
+   "question_number": 8,
+   "question": "How many claims have a source published in 2024?",
+   "expected": "2"
+  },
+  {
+   "id": "item_025",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_015.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_026",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_023.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_027",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_024.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_028",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_025.txt",
+   "question_number": 3,
+   "question": "What is the title of paper 2404.9279?",
+   "expected": "KV cache quantization losing accuracy on outliers v4"
+  },
+  {
+   "id": "item_029",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_026.txt",
+   "question_number": 6,
+   "question": "How many records were published in 2024?",
+   "expected": "11"
+  },
+  {
+   "id": "item_030",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_027.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_031",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_028.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_032",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_026.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_033",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_009.txt",
+   "question_number": 6,
+   "question": "How many records were published in 2024?",
+   "expected": "11"
+  },
+  {
+   "id": "item_034",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_009.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_035",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_029.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_036",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_024.txt",
+   "question_number": 6,
+   "question": "How many records were published in 2024?",
+   "expected": "11"
+  },
+  {
+   "id": "item_037",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_013.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_038",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_015.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_039",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_030.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_040",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_011.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_041",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_031.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_042",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_029.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_043",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_011.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_044",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_032.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_045",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_026.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_046",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_033.txt",
+   "question_number": 6,
+   "question": "How many records were published in 2024?",
+   "expected": "11"
+  },
+  {
+   "id": "item_047",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_026.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_048",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_034.txt",
+   "question_number": 7,
+   "question": "How many claims have verdict supported?",
+   "expected": "7"
+  },
+  {
+   "id": "item_049",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_002.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_050",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_035.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_051",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_007.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_052",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_010.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_053",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_036.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_054",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_011.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_055",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_016.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_056",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_037.txt",
+   "question_number": 8,
+   "question": "How many claims have a source published in 2024?",
+   "expected": "2"
+  },
+  {
+   "id": "item_057",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_038.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_058",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_039.txt",
+   "question_number": 3,
+   "question": "What is the title of paper 2404.9279?",
+   "expected": "KV cache quantization losing accuracy on outliers v4"
+  },
+  {
+   "id": "item_059",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_015.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_060",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_040.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_061",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_036.txt",
+   "question_number": 9,
+   "question": "Which paper IDs have no publication year?",
+   "expected": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+  },
+  {
+   "id": "item_062",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_032.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_063",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_041.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_064",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_012.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_065",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_040.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_066",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_042.txt",
+   "question_number": 6,
+   "question": "How many records were published in 2024?",
+   "expected": "11"
+  },
+  {
+   "id": "item_067",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_043.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2203.15556?",
+   "expected": "null"
+  },
+  {
+   "id": "item_068",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_044.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  },
+  {
+   "id": "item_069",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_012.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_070",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_045.txt",
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "expected": "49"
+  },
+  {
+   "id": "item_071",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_042.txt",
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "expected": "26"
+  },
+  {
+   "id": "item_072",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_029.txt",
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "expected": "null"
+  },
+  {
+   "id": "item_073",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_017.txt",
+   "question_number": 12,
+   "question": "What is the verdict for paper 2404.7570?",
+   "expected": "null"
+  },
+  {
+   "id": "item_074",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_046.txt",
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "expected": "7"
+  },
+  {
+   "id": "item_075",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_047.txt",
+   "question_number": 11,
+   "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+   "expected": "null"
+  },
+  {
+   "id": "item_076",
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\crosscheck_jb007\\raw\\answer_042.txt",
+   "question_number": 10,
+   "question": "Which paper IDs have no verification status?",
+   "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+  }
+ ]
+}

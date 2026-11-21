@@ -39,7 +39,26 @@ from r4.formats import ENCODERS, FORMAT_DISPLAY_NAMES
 
 SERVER_DIR = r"C:\Users\Ashman Das\Documents\turboquant-llama-cpp"
 LLAMA_SERVER = os.path.join(SERVER_DIR, "llama-server.exe")
-MODEL_PATH = os.path.join(SERVER_DIR, "models", "lmstudio-community", "gemma-4-E2B-it-GGUF", "gemma-4-E2B-it-Q4_K_M.gguf")
+# R4_PROFILE picks the model. Default "gemma4e2b" (R4 decision 14); "qwen35_4b" is Qwen3.5-4B with MTP.
+R4_PROFILE = os.environ.get("R4_PROFILE", "gemma4e2b")
+PROFILES = {
+    "gemma4e2b": {
+        "model": os.path.join(SERVER_DIR, "models", "lmstudio-community", "gemma-4-E2B-it-GGUF", "gemma-4-E2B-it-Q4_K_M.gguf"),
+        "stem": "gemma4e2b",
+        "sampling": {"temperature": 1.0, "top_p": 0.95, "top_k": 64, "min_p": 0.0, "presence_penalty": 0.0, "repeat_penalty": 1.0},
+        "extra_flags": [],
+    },
+    "qwen35_4b": {
+        "model": os.path.join(SERVER_DIR, "models", "unsloth", "Qwen3.5-4B-GGUF", "Qwen3.5-4B-Q4_K_M.gguf"),
+        "stem": "qwen35_4b",
+        # Qwen3.5 model card, thinking mode, general tasks
+        "sampling": {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "min_p": 0.0, "presence_penalty": 1.5, "repeat_penalty": 1.0},
+        "extra_flags": ["--spec-type", "draft-mtp,ngram-mod", "--spec-draft-n-max", "3", "-ctkd", "turbo3", "-ctvd", "turbo2",
+                        "--spec-ngram-mod-n-max", "3", "--spec-ngram-mod-n-min", "2", "--spec-ngram-mod-n-match", "8"],
+    },
+}
+PROFILE = PROFILES[R4_PROFILE]
+MODEL_PATH = PROFILE["model"]
 SERVER_BASE = "http://127.0.0.1:8090"
 
 LAUNCH_LINE = (
@@ -116,14 +135,7 @@ SEEDS = [42, 43, 44, 45, 46]
 TIMEOUT_SEC = 1200 # 20 minutes
 PARALLEL = 4  # concurrent requests, matches the server's -np 4 (R4 decision 14)
 
-SAMPLING = {
-    "temperature": 1.0,
-    "top_p": 0.95,
-    "top_k": 64,
-    "min_p": 0.0,
-    "presence_penalty": 0.0,
-    "repeat_penalty": 1.0,
-}
+SAMPLING = dict(PROFILE["sampling"])
 
 FENCE_TAGS = {
     "json_min": "json",
@@ -303,7 +315,7 @@ def run_collection(dry_run=False):
                     "seed": seed,
                     "dataset": ds,
                     "format": fmt,
-                    "file_stem": f"gemma4e2b_r4_{fmt}_{ds}_seed{seed}",
+                    "file_stem": f"{PROFILE['stem']}_r4_{fmt}_{ds}_seed{seed}",
                 })
 
     print(f"Planned collection: {len(SEEDS)} seeds x 24 combinations = {total_runs} total requests")

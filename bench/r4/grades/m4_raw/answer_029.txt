@@ -1,0 +1,24 @@
+1. unverified
+2. 2023
+3. KV cache quantization losing accuracy on outliers v4
+4. false
+5. 20
+6. 13
+7. 43
+8. 2404.7570, 2411.9702
+9. 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547, 2402.5808 (Wait, let me double check null years: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547? Let me scan properly. Let's list the IDs with null year: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2407.547 (Wait, 2407.547 is 2408.7547? Let's check 2408.7547 has year: null). So: 2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2407.1634, 2411.7691, 2408.7547, 2402.5808, 2409.9004.)
+Let's re-verify null years:
+- 2403.4527: year: null
+- 2411.6313: year: null
+- 2402.5808: year: null
+- 2408.9479: year: null
+- 2407.4006: year: null
+- 2410.2343: year: null
+- 2407.1634: year: null
+- 2411.7691: year: null
+- 2407.547? wait 2408.7547: year: null
+- 2409.9004: year: null
+Total 10 items. Let's list them cleanly.
+10. 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2405.4346 (wait, 2405.4346 is verified: true), let's check verified: null -> 2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138.
+11. null
+12. null

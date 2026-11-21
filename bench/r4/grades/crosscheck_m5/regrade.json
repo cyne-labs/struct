@@ -1,0 +1,334 @@
+{
+  "items": [
+    {
+      "id": "item_001",
+      "model_answer": "48",
+      "grade": "wrong",
+      "reason": "Count 48 does not match expected 49."
+    },
+    {
+      "id": "item_002",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547",
+      "grade": "wrong",
+      "reason": "List contains extra item 2407.9379."
+    },
+    {
+      "id": "item_003",
+      "model_answer": "23",
+      "grade": "wrong",
+      "reason": "Count 23 does not match expected 26."
+    },
+    {
+      "id": "item_004",
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2403.8179, 2412.6138, 2406.4441, 2407.9379, 2405.9445",
+      "grade": "wrong",
+      "reason": "List is missing 2411.8062."
+    },
+    {
+      "id": "item_005",
+      "model_answer": "25",
+      "grade": "wrong",
+      "reason": "Count 25 does not match expected 26."
+    },
+    {
+      "id": "item_006",
+      "model_answer": "refuted",
+      "grade": "correct",
+      "reason": "Matches expected verdict refuted."
+    },
+    {
+      "id": "item_007",
+      "model_answer": "LoRA low rank adaptation",
+      "grade": "correct",
+      "reason": "Matches expected title LoRA low rank adaptation."
+    },
+    {
+      "id": "item_008",
+      "model_answer": "missing",
+      "grade": "correct",
+      "reason": "Missing clearly states that the value is absent."
+    },
+    {
+      "id": "item_009",
+      "model_answer": "abstract mentions 32k limit, appendix B clarifies",
+      "grade": "correct",
+      "reason": "Matches expected subnotes."
+    },
+    {
+      "id": "item_010",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2402.8962, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547",
+      "grade": "wrong",
+      "reason": "List contains extra item 2402.8962."
+    },
+    {
+      "id": "item_011",
+      "model_answer": "25",
+      "grade": "wrong",
+      "reason": "Count 25 does not match expected 26."
+    },
+    {
+      "id": "item_012",
+      "model_answer": "1",
+      "grade": "correct",
+      "reason": "Matches expected count 1."
+    },
+    {
+      "id": "item_013",
+      "model_answer": "7",
+      "grade": "correct",
+      "reason": "Matches expected count 7."
+    },
+    {
+      "id": "item_014",
+      "model_answer": "DeepSeekMoE mixture experts",
+      "grade": "correct",
+      "reason": "Matches expected claim DeepSeekMoE mixture experts."
+    },
+    {
+      "id": "item_015",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count 8 does not match expected 7."
+    },
+    {
+      "id": "item_016",
+      "model_answer": "45",
+      "grade": "wrong",
+      "reason": "Count 45 does not match expected 49."
+    },
+    {
+      "id": "item_017",
+      "model_answer": "refuted",
+      "grade": "correct",
+      "reason": "Matches expected verdict refuted."
+    },
+    {
+      "id": "item_018",
+      "model_answer": "Not provided",
+      "grade": "correct",
+      "reason": "Not provided clearly states that the value is missing."
+    },
+    {
+      "id": "item_019",
+      "model_answer": "Not specified",
+      "grade": "correct",
+      "reason": "Not specified clearly states that the value is missing."
+    },
+    {
+      "id": "item_020",
+      "model_answer": "Not provided",
+      "grade": "correct",
+      "reason": "Not provided clearly states that the value is missing."
+    },
+    {
+      "id": "item_021",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2408.7547",
+      "grade": "wrong",
+      "reason": "List is missing 2411.7691."
+    },
+    {
+      "id": "item_022",
+      "model_answer": "not specified",
+      "grade": "correct",
+      "reason": "Not specified clearly states that the value is missing."
+    },
+    {
+      "id": "item_023",
+      "model_answer": "null",
+      "grade": "correct",
+      "reason": "Matches expected null."
+    },
+    {
+      "id": "item_024",
+      "model_answer": "KV cache quantization losing accuracy on outliers v4",
+      "grade": "correct",
+      "reason": "Matches expected title KV cache quantization losing accuracy on outliers v4."
+    },
+    {
+      "id": "item_025",
+      "model_answer": "2408.03314",
+      "grade": "correct",
+      "reason": "Matches expected paper ID 2408.03314."
+    },
+    {
+      "id": "item_026",
+      "model_answer": "not specified",
+      "grade": "correct",
+      "reason": "Not specified clearly states that the value is missing."
+    },
+    {
+      "id": "item_027",
+      "model_answer": "48",
+      "grade": "wrong",
+      "reason": "Count 48 does not match expected 49."
+    },
+    {
+      "id": "item_028",
+      "model_answer": "KV cache quantization losing accuracy on outliers v4",
+      "grade": "correct",
+      "reason": "Matches expected title KV cache quantization losing accuracy on outliers v4."
+    },
+    {
+      "id": "item_029",
+      "model_answer": "2310.06825, 2406.11794",
+      "grade": "correct",
+      "reason": "Matches expected paper IDs 2310.06825, 2406.11794."
+    },
+    {
+      "id": "item_030",
+      "model_answer": "2410.7912, 2408.6977, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445",
+      "grade": "wrong",
+      "reason": "List is missing 2402.3504."
+    },
+    {
+      "id": "item_031",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547",
+      "grade": "correct",
+      "reason": "Matches expected paper IDs."
+    },
+    {
+      "id": "item_032",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547",
+      "grade": "wrong",
+      "reason": "List is missing 2408.9479."
+    },
+    {
+      "id": "item_033",
+      "model_answer": "missing",
+      "grade": "correct",
+      "reason": "Missing clearly states that the value is absent."
+    },
+    {
+      "id": "item_034",
+      "model_answer": "2203.15556, 2404.14219",
+      "grade": "correct",
+      "reason": "Matches expected paper IDs 2203.15556, 2404.14219."
+    },
+    {
+      "id": "item_035",
+      "model_answer": "missing",
+      "grade": "correct",
+      "reason": "Missing clearly states that the value is absent."
+    },
+    {
+      "id": "item_036",
+      "model_answer": "7",
+      "grade": "correct",
+      "reason": "Matches expected count 7."
+    },
+    {
+      "id": "item_037",
+      "model_answer": "48",
+      "grade": "wrong",
+      "reason": "Count 48 does not match expected 49."
+    },
+    {
+      "id": "item_038",
+      "model_answer": "refuted",
+      "grade": "correct",
+      "reason": "Matches expected verdict refuted."
+    },
+    {
+      "id": "item_039",
+      "model_answer": "1",
+      "grade": "correct",
+      "reason": "Matches expected count 1."
+    },
+    {
+      "id": "item_040",
+      "model_answer": "missing",
+      "grade": "correct",
+      "reason": "Missing clearly states that the value is absent."
+    },
+    {
+      "id": "item_041",
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445",
+      "grade": "correct",
+      "reason": "Matches expected paper IDs."
+    },
+    {
+      "id": "item_042",
+      "model_answer": "true",
+      "grade": "correct",
+      "reason": "Matches expected verification status true."
+    },
+    {
+      "id": "item_043",
+      "model_answer": "25",
+      "grade": "wrong",
+      "reason": "Count 25 does not match expected 26."
+    },
+    {
+      "id": "item_044",
+      "model_answer": "7",
+      "grade": "correct",
+      "reason": "Matches expected count 7."
+    },
+    {
+      "id": "item_045",
+      "model_answer": "2",
+      "grade": "correct",
+      "reason": "Matches expected count 2."
+    },
+    {
+      "id": "item_046",
+      "model_answer": "null",
+      "grade": "correct",
+      "reason": "Matches expected null."
+    },
+    {
+      "id": "item_047",
+      "model_answer": "Not specified",
+      "grade": "correct",
+      "reason": "Not specified clearly states that the value is missing."
+    },
+    {
+      "id": "item_048",
+      "model_answer": "KV cache quantization losing accuracy on outliers",
+      "grade": "wrong",
+      "reason": "Title is missing word v4."
+    },
+    {
+      "id": "item_049",
+      "model_answer": "none",
+      "grade": "correct",
+      "reason": "Matches expected none."
+    },
+    {
+      "id": "item_050",
+      "model_answer": "2",
+      "grade": "correct",
+      "reason": "Matches expected count 2."
+    },
+    {
+      "id": "item_051",
+      "model_answer": "2021",
+      "grade": "correct",
+      "reason": "Matches expected year 2021."
+    },
+    {
+      "id": "item_052",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2408.7547",
+      "grade": "wrong",
+      "reason": "List is missing 2411.7691."
+    },
+    {
+      "id": "item_053",
+      "model_answer": "null",
+      "grade": "correct",
+      "reason": "Matches expected null."
+    },
+    {
+      "id": "item_054",
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445",
+      "grade": "correct",
+      "reason": "Matches expected paper IDs."
+    },
+    {
+      "id": "item_055",
+      "model_answer": "llama 7b tested only",
+      "grade": "correct",
+      "reason": "Matches expected subnote llama 7b tested only."
+    }
+  ]
+}

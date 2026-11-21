@@ -1,0 +1,93 @@
+{
+  "model": "m5",
+  "format": "key_value",
+  "total_questions": 96,
+  "strict_correct": 94,
+  "strict_wrong": 2,
+  "items": [
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_047.txt",
+      "dataset": "flat_100",
+      "seed": 1,
+      "question_number": 7,
+      "question": "How many records are marked as verified (true)?",
+      "expected": "49",
+      "strict_grade": "wrong",
+      "spot_check": false,
+      "model_answer": "48",
+      "grade": "wrong"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_048.txt",
+      "dataset": "flat_tabular",
+      "seed": 4,
+      "question_number": 7,
+      "question": "How many records were published in 2024?",
+      "expected": "7",
+      "strict_grade": "wrong",
+      "spot_check": false,
+      "model_answer": "8",
+      "grade": "wrong"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_049.txt",
+      "dataset": "flat_100",
+      "seed": 3,
+      "question_number": 2,
+      "question": "What is the publication year of paper 2404.3286?",
+      "expected": "2023",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "2023",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_048.txt",
+      "dataset": "flat_tabular",
+      "seed": 4,
+      "question_number": 8,
+      "question": "Which paper IDs have verdict unverified?",
+      "expected": "2310.06825, 2406.11794",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "2310.06825, 2406.11794",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_050.txt",
+      "dataset": "flat_100",
+      "seed": 4,
+      "question_number": 3,
+      "question": "What is the title of paper 2404.9279?",
+      "expected": "KV cache quantization losing accuracy on outliers v4",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "KV cache quantization losing accuracy on outliers v4",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_051.txt",
+      "dataset": "flat_tabular",
+      "seed": 1,
+      "question_number": 5,
+      "question": "How many records have verdict refuted?",
+      "expected": "1",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "1",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_052.txt",
+      "dataset": "flat_100",
+      "seed": 2,
+      "question_number": 11,
+      "question": "What is the publication year of paper 2403.4527?",
+      "expected": "null",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "null",
+      "grade": "correct"
+    }
+  ]
+}

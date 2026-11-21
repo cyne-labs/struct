@@ -1,0 +1,460 @@
+{
+  "items": [
+    {
+      "id": "item_001",
+      "model_answer": "2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547",
+      "grade": "wrong",
+      "reason": "List has 11 items; includes extra IDs 2410.7912 and 2407.9379, and misses 2403.4527."
+    },
+    {
+      "id": "item_002",
+      "model_answer": "",
+      "grade": "wrong",
+      "reason": "Answer is blank; rule specifies a blank answer is wrong for a no-value question."
+    },
+    {
+      "id": "item_003",
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2412.6138, 2403.8179, 2405.9445, 2407.9379",
+      "grade": "wrong",
+      "reason": "List has only 7 items; misses 2402.8962, 2411.8062, and 2406.4441."
+    },
+    {
+      "id": "item_004",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "Count is 3; expected 2."
+    },
+    {
+      "id": "item_005",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_006",
+      "model_answer": "[missing]",
+      "grade": "correct",
+      "reason": "States [missing], clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_007",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_008",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count is 8; expected 7."
+    },
+    {
+      "id": "item_009",
+      "model_answer": "None",
+      "grade": "wrong",
+      "reason": "Answer is None; expected 2203.15556, 2404.14219."
+    },
+    {
+      "id": "item_010",
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138",
+      "grade": "wrong",
+      "reason": "List has 9 items; misses 2402.8962."
+    },
+    {
+      "id": "item_011",
+      "model_answer": "39",
+      "grade": "wrong",
+      "reason": "Count is 39; expected 49."
+    },
+    {
+      "id": "item_012",
+      "model_answer": "\"2410.7912\", \"2411.6313\", \"2402.5808\", \"2408.9479\", \"2407.4006\", \"2410.2343\", \"2407.1634\", \"2409.9004\", \"2409.3085\", \"2408.7547\"",
+      "grade": "wrong",
+      "reason": "List includes incorrect IDs 2410.7912 and 2409.3085, and misses 2403.4527 and 2411.7691."
+    },
+    {
+      "id": "item_013",
+      "model_answer": "2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2407.3088, 2402.8962, 2406.4441, 2405.9445",
+      "grade": "wrong",
+      "reason": "List includes incorrect IDs 2403.4527 and 2407.3088, and misses 2412.6138 and 2407.9379."
+    },
+    {
+      "id": "item_014",
+      "model_answer": "KV cache quantization losing accuracy on outliers",
+      "grade": "wrong",
+      "reason": "Title is missing 'v4'; rule requires exact match of title words."
+    },
+    {
+      "id": "item_015",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count is 8; expected 7."
+    },
+    {
+      "id": "item_016",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "Count is 3; expected 2."
+    },
+    {
+      "id": "item_017",
+      "model_answer": "unknown",
+      "grade": "unclear",
+      "reason": "Answer is 'unknown'; unclear whether this states the verdict is missing in the data or indicates model uncertainty."
+    },
+    {
+      "id": "item_018",
+      "model_answer": "(missing)",
+      "grade": "correct",
+      "reason": "States (missing), clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_019",
+      "model_answer": "[None/Not provided]",
+      "grade": "correct",
+      "reason": "States [None/Not provided], clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_020",
+      "model_answer": "2403.4527, 2411.6313, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2402.5808, 2408.9479, 2408.7547",
+      "grade": "wrong",
+      "reason": "List has 9 items; misses 2411.7691."
+    },
+    {
+      "id": "item_021",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547",
+      "grade": "wrong",
+      "reason": "List has 9 items; misses 2408.9479."
+    },
+    {
+      "id": "item_022",
+      "model_answer": "24",
+      "grade": "wrong",
+      "reason": "Count is 24; expected 26."
+    },
+    {
+      "id": "item_023",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "Count is 6; expected 7."
+    },
+    {
+      "id": "item_024",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "Count is 3; expected 2."
+    },
+    {
+      "id": "item_025",
+      "model_answer": "2410.7912, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2409.9004, 2407.1634, 2407.9379, 2411.7691, 2408.7547, 2410.2343",
+      "grade": "wrong",
+      "reason": "List has 11 items; includes extra IDs 2410.7912 and 2407.9379, and misses 2403.4527."
+    },
+    {
+      "id": "item_026",
+      "model_answer": "2410.7912, 2403.4527, 2408.6977, 2402.3504, 2411.8062, 2403.8179, 2407.3088, 2402.8962, 2406.4441, 2405.9445",
+      "grade": "wrong",
+      "reason": "List includes incorrect IDs 2403.4527 and 2407.3088, and misses 2412.6138 and 2407.9379."
+    },
+    {
+      "id": "item_027",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_028",
+      "model_answer": "KV cache quantization losing accuracy on outliers",
+      "grade": "wrong",
+      "reason": "Title is missing 'v4'; rule requires exact match of title words."
+    },
+    {
+      "id": "item_029",
+      "model_answer": "12",
+      "grade": "wrong",
+      "reason": "Count is 12; expected 11."
+    },
+    {
+      "id": "item_030",
+      "model_answer": "46",
+      "grade": "wrong",
+      "reason": "Count is 46; expected 49."
+    },
+    {
+      "id": "item_031",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_032",
+      "model_answer": "unknown (or not provided)",
+      "grade": "correct",
+      "reason": "States 'unknown (or not provided)', explicitly indicating the value was not provided."
+    },
+    {
+      "id": "item_033",
+      "model_answer": "13",
+      "grade": "wrong",
+      "reason": "Count is 13; expected 11."
+    },
+    {
+      "id": "item_034",
+      "model_answer": "2410.7912, 2408.6977, 2402.8962, 2411.8062, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138",
+      "grade": "wrong",
+      "reason": "List has 9 items; misses 2402.3504."
+    },
+    {
+      "id": "item_035",
+      "model_answer": "unknown (or blank/not provided)",
+      "grade": "correct",
+      "reason": "States 'unknown (or blank/not provided)', clearly indicating the value is blank or not provided."
+    },
+    {
+      "id": "item_036",
+      "model_answer": "12",
+      "grade": "wrong",
+      "reason": "Count is 12; expected 11."
+    },
+    {
+      "id": "item_037",
+      "model_answer": "(missing in data)",
+      "grade": "correct",
+      "reason": "States (missing in data), clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_038",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_039",
+      "model_answer": "[unknown]",
+      "grade": "unclear",
+      "reason": "Answer is '[unknown]'; unclear whether this states the publication year is missing in the data or indicates model uncertainty."
+    },
+    {
+      "id": "item_040",
+      "model_answer": "[missing]",
+      "grade": "correct",
+      "reason": "States [missing], clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_041",
+      "model_answer": "[empty] (not provided in the data)",
+      "grade": "correct",
+      "reason": "States [empty] (not provided in the data), clearly indicating the value is missing."
+    },
+    {
+      "id": "item_042",
+      "model_answer": "46",
+      "grade": "wrong",
+      "reason": "Count is 46; expected 49."
+    },
+    {
+      "id": "item_043",
+      "model_answer": "[missing]",
+      "grade": "correct",
+      "reason": "States [missing], clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_044",
+      "model_answer": "21",
+      "grade": "wrong",
+      "reason": "Count is 21; expected 26."
+    },
+    {
+      "id": "item_045",
+      "model_answer": "17",
+      "grade": "wrong",
+      "reason": "Count is 17; expected 26."
+    },
+    {
+      "id": "item_046",
+      "model_answer": "14",
+      "grade": "wrong",
+      "reason": "Count is 14; expected 11."
+    },
+    {
+      "id": "item_047",
+      "model_answer": "unknown (or not provided)",
+      "grade": "correct",
+      "reason": "States 'unknown (or not provided)', explicitly indicating the value was not provided."
+    },
+    {
+      "id": "item_048",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "Count is 6; expected 7."
+    },
+    {
+      "id": "item_049",
+      "model_answer": "16",
+      "grade": "wrong",
+      "reason": "Count is 16; expected 26."
+    },
+    {
+      "id": "item_050",
+      "model_answer": "[missing]",
+      "grade": "correct",
+      "reason": "States [missing], clearly indicating the value is missing when expected is null."
+    },
+    {
+      "id": "item_051",
+      "model_answer": "[empty] (or missing)",
+      "grade": "correct",
+      "reason": "States [empty] (or missing), clearly indicating the value is empty or missing."
+    },
+    {
+      "id": "item_052",
+      "model_answer": "37",
+      "grade": "wrong",
+      "reason": "Count is 37; expected 49."
+    },
+    {
+      "id": "item_053",
+      "model_answer": "20",
+      "grade": "wrong",
+      "reason": "Count is 20; expected 26."
+    },
+    {
+      "id": "item_054",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_055",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count is 8; expected 7."
+    },
+    {
+      "id": "item_056",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "Count is 3; expected 2."
+    },
+    {
+      "id": "item_057",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count is 8; expected 7."
+    },
+    {
+      "id": "item_058",
+      "model_answer": "KV cache quantization losing accuracy on outliers",
+      "grade": "wrong",
+      "reason": "Title is missing 'v4'; rule requires exact match of title words."
+    },
+    {
+      "id": "item_059",
+      "model_answer": "unknown",
+      "grade": "unclear",
+      "reason": "Answer is 'unknown'; unclear whether this states the publication year is missing in the data or indicates model uncertainty."
+    },
+    {
+      "id": "item_060",
+      "model_answer": "[Unknown / empty]",
+      "grade": "correct",
+      "reason": "States [Unknown / empty], clearly indicating the field is empty."
+    },
+    {
+      "id": "item_061",
+      "model_answer": "2403.4527, 2411.6313, 2407.4006, 2408.9479, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2402.5808, 2407.547",
+      "grade": "wrong",
+      "reason": "List contains 2407.547 instead of expected 2408.7547."
+    },
+    {
+      "id": "item_062",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_063",
+      "model_answer": "20",
+      "grade": "wrong",
+      "reason": "Count is 20; expected 26."
+    },
+    {
+      "id": "item_064",
+      "model_answer": "24",
+      "grade": "wrong",
+      "reason": "Count is 24; expected 26."
+    },
+    {
+      "id": "item_065",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "Count is 8; expected 7."
+    },
+    {
+      "id": "item_066",
+      "model_answer": "13",
+      "grade": "wrong",
+      "reason": "Count is 13; expected 11."
+    },
+    {
+      "id": "item_067",
+      "model_answer": "[empty] (not provided in the data)",
+      "grade": "correct",
+      "reason": "States [empty] (not provided in the data), clearly indicating the value was not provided."
+    },
+    {
+      "id": "item_068",
+      "model_answer": "2410.7912, 2408.6977, 2411.8062, 2403.8179, 2402.8962, 2407.3088, 2406.4441, 2407.9379, 2405.9445, 2412.6138",
+      "grade": "wrong",
+      "reason": "List includes incorrect ID 2407.3088, and misses 2402.3504."
+    },
+    {
+      "id": "item_069",
+      "model_answer": "37",
+      "grade": "wrong",
+      "reason": "Count is 37; expected 49."
+    },
+    {
+      "id": "item_070",
+      "model_answer": "43",
+      "grade": "wrong",
+      "reason": "Count is 43; expected 49."
+    },
+    {
+      "id": "item_071",
+      "model_answer": "23",
+      "grade": "wrong",
+      "reason": "Count is 23; expected 26."
+    },
+    {
+      "id": "item_072",
+      "model_answer": "unknown (or blank/not provided)",
+      "grade": "correct",
+      "reason": "States 'unknown (or blank/not provided)', clearly indicating the value is blank or not provided."
+    },
+    {
+      "id": "item_073",
+      "model_answer": "[None/Not provided]",
+      "grade": "correct",
+      "reason": "States [None/Not provided], clearly indicating the value was not provided."
+    },
+    {
+      "id": "item_074",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "Count is 6; expected 7."
+    },
+    {
+      "id": "item_075",
+      "model_answer": "[None/Missing]",
+      "grade": "correct",
+      "reason": "States [None/Missing], clearly indicating the value is missing."
+    },
+    {
+      "id": "item_076",
+      "model_answer": "2410.7912, 2408.6977, 2411.8062, 2402.8962, 2403.8179, 2406.4441, 2407.9379, 2405.9445, 2412.6138",
+      "grade": "wrong",
+      "reason": "List has 9 items; misses 2402.3504."
+    }
+  ]
+}

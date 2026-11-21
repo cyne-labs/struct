@@ -1,0 +1,98 @@
+{
+ "model": "gemini_lite_high",
+ "format": "key_value",
+ "total_questions": 96,
+ "strict_correct": 94,
+ "strict_wrong": 2,
+ "items": [
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_100_seed1.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 1,
+   "question_number": 7,
+   "question": "How many records are marked as verified (true)?",
+   "kind": "count_filter",
+   "expected": "49",
+   "strict_grade": "wrong",
+   "strict_parsed_answer": "48"
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_tabular_seed4.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 4,
+   "question_number": 7,
+   "question": "How many records were published in 2024?",
+   "kind": "count_filter",
+   "expected": "7",
+   "strict_grade": "wrong",
+   "strict_parsed_answer": "8"
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_100_seed3.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 3,
+   "question_number": 2,
+   "question": "What is the publication year of paper 2404.3286?",
+   "kind": "single_lookup",
+   "expected": "2023",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "2023",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_tabular_seed4.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 4,
+   "question_number": 8,
+   "question": "Which paper IDs have verdict unverified?",
+   "kind": "count_filter",
+   "expected": "2310.06825, 2406.11794",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "2310.06825, 2406.11794",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_100_seed4.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 4,
+   "question_number": 3,
+   "question": "What is the title of paper 2404.9279?",
+   "kind": "single_lookup",
+   "expected": "KV cache quantization losing accuracy on outliers v4",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "KV cache quantization losing accuracy on outliers v4",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_tabular_seed1.txt",
+   "format": "key_value",
+   "dataset": "flat_tabular",
+   "seed": 1,
+   "question_number": 5,
+   "question": "How many records have verdict refuted?",
+   "kind": "count_filter",
+   "expected": "1",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "1",
+   "spot_check": true
+  },
+  {
+   "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\real_gemini_lite_high\\raw\\gemini_lite_r4_key_value_flat_100_seed2.txt",
+   "format": "key_value",
+   "dataset": "flat_100",
+   "seed": 2,
+   "question_number": 11,
+   "question": "What is the publication year of paper 2403.4527?",
+   "kind": "null_missing",
+   "expected": "null",
+   "strict_grade": "correct",
+   "strict_parsed_answer": "null",
+   "spot_check": true
+  }
+ ]
+}

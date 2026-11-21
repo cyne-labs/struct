@@ -1,0 +1,24 @@
+{
+  "model_id": "gemini-3.5-flash-lite",
+  "request_body_template": {
+    "contents": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "text": "<prompt>"
+          }
+        ]
+      }
+    ],
+    "generationConfig": {
+      "thinkingConfig": {
+        "thinkingLevel": "high"
+      }
+    }
+  },
+  "thinking_level": "high",
+  "run_order": "seed-by-seed (seed 1 to 4)",
+  "start_time": "2026-11-21T16:23:48.219164+00:00",
+  "stop_time": "2026-11-21T16:24:24.073184+00:00"
+}

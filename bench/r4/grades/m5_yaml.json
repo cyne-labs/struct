@@ -1,0 +1,153 @@
+{
+  "model": "m5",
+  "format": "yaml",
+  "total_questions": 192,
+  "strict_correct": 190,
+  "strict_wrong": 2,
+  "items": [
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_017.txt",
+      "dataset": "flat_100",
+      "seed": 3,
+      "question_number": 5,
+      "question": "How many records have verdict refuted?",
+      "expected": "26",
+      "strict_grade": "wrong",
+      "spot_check": false,
+      "model_answer": "25",
+      "grade": "wrong"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_018.txt",
+      "dataset": "flat_100",
+      "seed": 4,
+      "question_number": 10,
+      "question": "Which paper IDs have no verification status?",
+      "expected": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445",
+      "strict_grade": "wrong",
+      "spot_check": false,
+      "model_answer": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2403.8179, 2412.6138, 2406.4441, 2407.9379, 2405.9445",
+      "grade": "wrong"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_019.txt",
+      "dataset": "flat_tabular",
+      "seed": 4,
+      "question_number": 7,
+      "question": "How many records were published in 2024?",
+      "expected": "7",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "7",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_020.txt",
+      "dataset": "flat_tabular",
+      "seed": 2,
+      "question_number": 8,
+      "question": "Which paper IDs have verdict unverified?",
+      "expected": "2310.06825, 2406.11794",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "2310.06825, 2406.11794",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_021.txt",
+      "dataset": "flat_tabular",
+      "seed": 1,
+      "question_number": 12,
+      "question": "Which paper ID has no verdict?",
+      "expected": "2408.03314",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "2408.03314",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_022.txt",
+      "dataset": "nested_variable",
+      "seed": 2,
+      "question_number": 4,
+      "question": "What subnotes are listed under the note 'notes are from abstract only'?",
+      "expected": "abstract mentions 32k limit, appendix B clarifies",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "abstract mentions 32k limit, appendix B clarifies",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_023.txt",
+      "dataset": "flat_100",
+      "seed": 2,
+      "question_number": 11,
+      "question": "What is the publication year of paper 2403.4527?",
+      "expected": "null",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "null",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_021.txt",
+      "dataset": "flat_tabular",
+      "seed": 1,
+      "question_number": 1,
+      "question": "What is the verdict for paper 2405.05254?",
+      "expected": "refuted",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "refuted",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_024.txt",
+      "dataset": "flat_tabular",
+      "seed": 3,
+      "question_number": 5,
+      "question": "How many records have verdict refuted?",
+      "expected": "1",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "1",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_019.txt",
+      "dataset": "flat_tabular",
+      "seed": 4,
+      "question_number": 11,
+      "question": "What is the publication year of paper 2203.15556?",
+      "expected": "null",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "null",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_025.txt",
+      "dataset": "nested_fixed",
+      "seed": 1,
+      "question_number": 11,
+      "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+      "expected": "null",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "null",
+      "grade": "correct"
+    },
+    {
+      "raw_file": "C:\\Users\\Ashman Das\\Documents\\Struct\\bench\\r4\\grades\\m5_raw\\answer_026.txt",
+      "dataset": "nested_fixed",
+      "seed": 4,
+      "question_number": 12,
+      "question": "Which claim has no verification status?",
+      "expected": "StarCoder 2 training code",
+      "strict_grade": "correct",
+      "spot_check": true,
+      "model_answer": "StarCoder 2 training code",
+      "grade": "correct"
+    }
+  ]
+}
