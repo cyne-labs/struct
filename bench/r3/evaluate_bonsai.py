@@ -10,8 +10,9 @@ Scoring is the same as research/r3-real-run3.md:
 - token counts from /tokenize checked against usage.completion_tokens.
 
 Imports compute_field_accuracy (s1 to s3) from evaluate_run3.py without modifying it.
-For s4 it applies the same positional rule over the whole record list (decoded record N
-against ground-truth record N, comparing the fields of the ground-truth record's class).
+For s4 it computes both the whole-list positional figure and the run3-method figure
+(records split by class, then compared in order within each class).
+Pass --s4-only to print s4 figures without calling the server.
 
 Writes research/r3-real-bonsai.md (machine part only; "New kinds of mistake" gets real quotes
 picked automatically).
@@ -70,6 +71,14 @@ def s4_positional(decoded):
     return correct, evaluated
 
 
+def s4_run3_method(decoded):
+    """Compute s4 field accuracy exactly as evaluate_run3.py does (records split by class)."""
+    if not decoded:
+        return 0, 0
+    c, ev, _ = e3.compute_field_accuracy("s4_two_class_code", decoded)
+    return c, ev
+
+
 def field_acc(schema, decoded):
     if not decoded:
         return 0, 0
@@ -77,6 +86,39 @@ def field_acc(schema, decoded):
         return s4_positional(decoded)
     c, ev, _ = e3.compute_field_accuracy(schema, decoded)
     return c, ev
+
+
+def print_s4_only(meta):
+    """Print only the s4 figures without calling the server."""
+    print("=== s4_two_class_code Field Accuracy ===")
+    for m, name in MODES:
+        print(f"\n{name} ({m}):")
+        pos_cor = pos_ev = 0
+        r3_cor = r3_ev = 0
+        for it in meta:
+            if it["model"] != m or it["schema"] != "s4_two_class_code":
+                continue
+            r = it["run"]
+            seed = it["seed"]
+            fpath = os.path.join(RAW, it["filename"])
+            d = run_doctor("s4_two_class_code", fpath)
+            recs = d.get("records", [])
+            c_pos, ev_pos = s4_positional(recs)
+            c_r3, ev_r3 = s4_run3_method(recs)
+            pos_cor += c_pos
+            pos_ev += ev_pos
+            r3_cor += c_r3
+            r3_ev += ev_r3
+            p_pos = pct(c_pos, ev_pos) if ev_pos else "n/a"
+            p_r3 = pct(c_r3, ev_r3) if ev_r3 else "n/a"
+            print(f"  Run {r} (seed {seed}): decoded {len(recs)}/6 records | "
+                  f"whole-list: {c_pos}/{ev_pos} ({p_pos}) | "
+                  f"run3-method: {c_r3}/{ev_r3} ({p_r3})")
+        tot_pos_pct = pct(pos_cor, pos_ev) if pos_ev else "n/a"
+        tot_r3_pct = pct(r3_cor, r3_ev) if r3_ev else "n/a"
+        print(f"  Pooled total:")
+        print(f"    whole-list positional:    {pos_cor}/{pos_ev} ({tot_pos_pct})")
+        print(f"    run3-method (class-split): {r3_cor}/{r3_ev} ({tot_r3_pct})")
 
 
 def sha(path):
@@ -113,10 +155,15 @@ def fetch_props():
 
 def main():
     meta = json.load(open(META, encoding="utf-8"))
+    if "--s4-only" in sys.argv:
+        print_s4_only(meta)
+        return
+
     pair = defaultdict(lambda: {
         "dec": 0, "exp": 0, "cor": 0, "ev": 0,
         "clean": 0, "repaired": 0, "salvaged": 0, "partial": 0, "unusable": 0,
         "hashes": set(), "fr": Counter(), "think": [], "out": [], "runs": 0,
+        "r3_cor": 0, "r3_ev": 0,
     })
     repairs_by_kind = Counter()
     bad_by_problem = Counter()
@@ -152,6 +199,13 @@ def main():
         p["exp"] += exp_n
         p["cor"] += c
         p["ev"] += ev
+        if s == "s4_two_class_code":
+            c_r3, ev_r3 = s4_run3_method(recs)
+            p["r3_cor"] += c_r3
+            p["r3_ev"] += ev_r3
+            acc_str = f"{pct(c, ev)} whole-list / {pct(c_r3, ev_r3)} run3-method" if n else "n/a"
+        else:
+            acc_str = pct(c, ev) if n else "n/a"
         p[cat] += 1
         p["hashes"].add(sha(fpath))
         p["fr"][it["finish_reason"]] += 1
@@ -172,7 +226,7 @@ def main():
             if (msg.get("reasoning_content") or "").strip():
                 off_reasoning_nonempty += 1
         per_run.append((m, s, r, it["seed"], cat, n, exp_n, len(reps), len(bads), it["finish_reason"],
-                        it["thinking_tokens"], it["struct_tokens"], pct(c, ev) if n else "n/a", it.get("latency_sec")))
+                        it["thinking_tokens"], it["struct_tokens"], acc_str, it.get("latency_sec")))
 
     props = fetch_props()
     tmpl = props.get("chat_template", "")
@@ -202,9 +256,9 @@ def main():
     A("")
     A("## 1. Setup")
     A("")
-    A("- Endpoint: `POST /v1/chat/completions` on the already-running server at `http://127.0.0.1:8080` (the collector never started or stopped a server). One user message per request, the same prompt text as run3, no prefills, no `max_tokens`, no `n_predict`, `stream: false`, seeds 42 to 46, 5 runs per schema, four `bench/r2/schemas`, no grammar. 20-minute safety timeout per run (recorded as `timeout`).")
+    A("- Endpoint: `POST /v1/chat/completions` on the already-running server at `http://127.0.0.1:8080` (the collector never started or stopped a server). One user message per request, the same prompt text as run3, no prefills, no `max_tokens`, no `n_predict`, `stream: false`, seeds 42 to 46, 5 runs per schema, four `bench/r2/schemas`, no grammar. 20-minute safety timeout per run (recorded as `timeout`). The task text is byte-identical, but with thinking on the chat template adds a system line (\"Reasoning effort is set to xhigh\"), so the thinking-on input is 40 tokens longer (no causal claim).")
     A("- Prompt check: the user message of every request equals, byte for byte, the run3 request prompt for the same schema: " + ", ".join(f"`{k}` {'yes' if v else 'NO'}" for k, v in prompt_equal.items()) + ".")
-    A("- Scoring: `target/release/doctor_tool.exe` in salvage mode; field accuracy is positional only (decoded record N against ground-truth record N, no matching by id), pooled over decoded records, `n/a` if none decoded; s4 expects 6 records.")
+    A("- Scoring: `target/release/doctor_tool.exe` in salvage mode; field accuracy is positional only (decoded record N against ground-truth record N, no matching by id), pooled over decoded records, `n/a` if none decoded; s4 expects 6 records. On s4, both the whole-list positional figure and the run3-method figure (records split by class) are reported.")
     A("- Token counts: thinking text and answer text counted with the server's `/tokenize`; checked against `usage.completion_tokens` (section 7).")
     A("")
     A("### Sampling per mode (sent in every request)")
@@ -254,11 +308,15 @@ def main():
             if not p["runs"]:
                 continue
             fr = ", ".join(f"{k}: {v}" for k, v in sorted(p["fr"].items()))
+            if s == "s4_two_class_code":
+                acc_display = f"{pct(p['cor'], p['ev'])} whole-list / {pct(p.get('r3_cor', 0), p.get('r3_ev', 0))} run3-method"
+            else:
+                acc_display = pct(p['cor'], p['ev'])
             A(f"| {name} | `{s}` | {p['runs']} | {p['clean']} | {p['repaired']} | {p['salvaged']} | {p['partial']} | {p['unusable']} | "
-              f"{pct(p['dec'], p['exp'])} ({p['dec']}/{p['exp']}) | {pct(p['cor'], p['ev'])} | {len(p['hashes'])}/{p['runs']} | {fr} | "
+              f"{pct(p['dec'], p['exp'])} ({p['dec']}/{p['exp']}) | {acc_display} | {len(p['hashes'])}/{p['runs']} | {fr} | "
               f"{sum(p['think'])/len(p['think']):.0f} | {max(p['think'])} | {sum(p['out'])/len(p['out']):.0f} | {max(p['out'])} |")
     A("")
-    A("Definitions are those of `research/r3-real-run3.md` section 5: recall is decoded over expected records; field accuracy is exact-match, positional, pooled over decoded records; outcomes are clean, repaired, salvaged (records recovered next to reported bad lines), partial (clean or repaired but fewer records than expected) and unusable (nothing decoded).")
+    A("Definitions are those of `research/r3-real-run3.md` section 5: recall is decoded over expected records; field accuracy is exact-match, positional, pooled over decoded records; outcomes are clean, repaired, salvaged (records recovered next to reported bad lines), partial (clean or repaired but fewer records than expected) and unusable (nothing decoded). On `s4_two_class_code`, both the whole-list positional figure and the run3-method figure (records split by class) are shown. Bonsai wrote files and patches alternating, which SPEC allows, and the whole-list method compares them against a list with all files first.")
     A("")
     A("## 5. finish_reason, thinking and output tokens by mode")
     A("")
@@ -277,7 +335,7 @@ def main():
     A("")
     A("## 6. Comparison with every run3 model")
     A("")
-    A("Run3 cells are copied from `research/r3-real-run3.md` section 5 (recall, then field accuracy). Where run3 split Gemma thinking-on rows into reasoned and unreasoned runs, both cells are shown. Bonsai cells are this run. Sampling differs on purpose (section 1).")
+    A("Run3 cells are copied from `research/r3-real-run3.md` section 5 (recall, then field accuracy). Where run3 split Gemma thinking-on rows into reasoned and unreasoned runs, both cells are shown. Bonsai cells are this run. Sampling differs on purpose (section 1). For `s4_two_class_code`, both the whole-list figure and the run3-method figure are shown; only the run3-method figure is comparable with the run3 models' s4 numbers. Bonsai wrote files and patches alternating, which SPEC allows, and the whole-list method compares them against a list with all files first.")
     A("")
     A("| Model | s1_flat recall / field acc | s2_nested_fixed recall / field acc | s3_nested_variable recall / field acc | s4_two_class_code recall / field acc |")
     A("|---|---|---|---|---|")
@@ -297,7 +355,12 @@ def main():
         cells = []
         for s in SCHEMAS:
             p = pair[(m, s)]
-            cells.append(f"{pct(p['dec'], p['exp'])} ({p['dec']}/{p['exp']}) / {pct(p['cor'], p['ev'])}" if p["runs"] else "not run")
+            if not p["runs"]:
+                cells.append("not run")
+            elif s == "s4_two_class_code":
+                cells.append(f"{pct(p['dec'], p['exp'])} ({p['dec']}/{p['exp']}) / {pct(p['cor'], p['ev'])} whole-list, {pct(p.get('r3_cor', 0), p.get('r3_ev', 0))} run3-method")
+            else:
+                cells.append(f"{pct(p['dec'], p['exp'])} ({p['dec']}/{p['exp']}) / {pct(p['cor'], p['ev'])}")
         A(f"| **{name}** | " + " | ".join(cells) + " |")
     A("")
     A("## 7. Token counts against `usage.completion_tokens`")

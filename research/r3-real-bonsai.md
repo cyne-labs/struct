@@ -4,9 +4,9 @@
 
 ## 1. Setup
 
-- Endpoint: `POST /v1/chat/completions` on the already-running server at `http://127.0.0.1:8080` (the collector never started or stopped a server). One user message per request, the same prompt text as run3, no prefills, no `max_tokens`, no `n_predict`, `stream: false`, seeds 42 to 46, 5 runs per schema, four `bench/r2/schemas`, no grammar. 20-minute safety timeout per run (recorded as `timeout`).
+- Endpoint: `POST /v1/chat/completions` on the already-running server at `http://127.0.0.1:8080` (the collector never started or stopped a server). One user message per request, the same prompt text as run3 (the task text is byte-identical, but with thinking on the chat template adds a system line ("Reasoning effort is set to xhigh"), so the thinking-on input is 40 tokens longer (measured on the s1 prompt); no causal claim is made), no prefills, no `max_tokens`, no `n_predict`, `stream: false`, seeds 42 to 46, 5 runs per schema, four `bench/r2/schemas`, no grammar. 20-minute safety timeout per run (recorded as `timeout`).
 - Prompt check: the user message of every request equals, byte for byte, the run3 request prompt for the same schema: `s1_flat` yes, `s2_nested_fixed` yes, `s3_nested_variable` yes, `s4_two_class_code` yes.
-- Scoring: `target/release/doctor_tool.exe` in salvage mode; field accuracy is positional only (decoded record N against ground-truth record N, no matching by id), pooled over decoded records, `n/a` if none decoded; s4 expects 6 records.
+- Scoring: `target/release/doctor_tool.exe` in salvage mode; field accuracy is positional only (decoded record N against ground-truth record N, no matching by id), pooled over decoded records, `n/a` if none decoded; s4 expects 6 records. For `s4_two_class_code`, both the whole-list positional figure and the run3-method figure (records split by class, then compared in order within each class) are reported. In thinking-on s4 run 3 only, Bonsai wrote files and patches alternating (the other s4 runs grouped them). Nothing in SPEC forbids this. The whole-list method compares them against a list with all files first, so the gap between the whole-list and run3-method figures comes from that one run. Only the run3-method figure is comparable with the run3 models' s4 numbers.
 - Token counts: thinking text and answer text counted with the server's `/tokenize`; checked against `usage.completion_tokens` (section 7).
 
 ### Sampling per mode (sent in every request)
@@ -92,13 +92,13 @@ Same columns as run3.
 | Bonsai-27B (thinking off) | `s1_flat` | 5 | 5 | 0 | 0 | 0 | 0 | 100.0% (25/25) | 81.6% | 3/5 | stop: 5 | 0 | 0 | 103 | 137 |
 | Bonsai-27B (thinking off) | `s2_nested_fixed` | 5 | 3 | 0 | 0 | 0 | 2 | 60.0% (15/25) | 78.7% | 5/5 | stop: 5 | 0 | 0 | 134 | 154 |
 | Bonsai-27B (thinking off) | `s3_nested_variable` | 5 | 0 | 0 | 0 | 0 | 5 | 0.0% (0/25) | n/a | 5/5 | stop: 5 | 0 | 0 | 240 | 324 |
-| Bonsai-27B (thinking off) | `s4_two_class_code` | 5 | 0 | 0 | 3 | 0 | 2 | 30.0% (9/30) | 100.0% | 4/5 | stop: 5 | 0 | 0 | 123 | 131 |
+| Bonsai-27B (thinking off) | `s4_two_class_code` | 5 | 0 | 0 | 3 | 0 | 2 | 30.0% (9/30) | 100.0% whole-list (18/18) / 100.0% run3-method (18/18) | 4/5 | stop: 5 | 0 | 0 | 123 | 131 |
 | Bonsai-27B (thinking on) | `s1_flat` | 5 | 5 | 0 | 0 | 0 | 0 | 100.0% (25/25) | 99.2% | 2/5 | stop: 5 | 672 | 1303 | 137 | 137 |
 | Bonsai-27B (thinking on) | `s2_nested_fixed` | 5 | 5 | 0 | 0 | 0 | 0 | 100.0% (25/25) | 99.2% | 2/5 | stop: 5 | 2147 | 5096 | 139 | 139 |
 | Bonsai-27B (thinking on) | `s3_nested_variable` | 5 | 5 | 0 | 0 | 0 | 0 | 100.0% (25/25) | 97.6% | 3/5 | stop: 5 | 6576 | 7453 | 317 | 320 |
-| Bonsai-27B (thinking on) | `s4_two_class_code` | 5 | 4 | 0 | 1 | 0 | 0 | 90.0% (27/30) | 84.8% | 4/5 | stop: 5 | 8160 | 20275 | 121 | 133 |
+| Bonsai-27B (thinking on) | `s4_two_class_code` | 5 | 4 | 0 | 1 | 0 | 0 | 90.0% (27/30) | 84.8% whole-list (56/66) / 100.0% run3-method (66/66) | 4/5 | stop: 5 | 8160 | 20275 | 121 | 133 |
 
-Definitions are those of `research/r3-real-run3.md` section 5: recall is decoded over expected records; field accuracy is exact-match, positional, pooled over decoded records; outcomes are clean, repaired, salvaged (records recovered next to reported bad lines), partial (clean or repaired but fewer records than expected) and unusable (nothing decoded).
+Definitions are those of `research/r3-real-run3.md` section 5: recall is decoded over expected records; field accuracy is exact-match, positional, pooled over decoded records; outcomes are clean, repaired, salvaged (records recovered next to reported bad lines), partial (clean or repaired but fewer records than expected) and unusable (nothing decoded). On `s4_two_class_code`, both the whole-list positional figure and the run3-method figure (records split by class, then compared in order within each class) are shown. In thinking-on s4 run 3 only, Bonsai wrote files and patches alternating (the other s4 runs grouped them). Nothing in SPEC forbids this. The whole-list method compares them against a list with all files first, so the gap between the whole-list and run3-method figures comes from that one run.
 
 ## 5. finish_reason, thinking and output tokens by mode
 
@@ -109,7 +109,7 @@ Definitions are those of `research/r3-real-run3.md` section 5: recall is decoded
 
 ## 6. Comparison with every run3 model
 
-Run3 cells are copied from `research/r3-real-run3.md` section 5 (recall, then field accuracy). Where run3 split Gemma thinking-on rows into reasoned and unreasoned runs, both cells are shown. Bonsai cells are this run. Sampling differs on purpose (section 1).
+Run3 cells are copied from `research/r3-real-run3.md` section 5 (recall, then field accuracy). Where run3 split Gemma thinking-on rows into reasoned and unreasoned runs, both cells are shown. Bonsai cells are this run. Sampling differs on purpose (section 1). For `s4_two_class_code`, Bonsai shows both the whole-list positional figure and the run3-method figure (records split by class, then compared in order within each class). Only the run3-method figure is comparable with the run3 models' s4 numbers. In thinking-on s4 run 3 only, Bonsai wrote files and patches alternating (the other s4 runs grouped them). Nothing in SPEC forbids this. The whole-list method compares them against a list with all files first, so the gap between the whole-list and run3-method figures comes from that one run.
 
 | Model | s1_flat recall / field acc | s2_nested_fixed recall / field acc | s3_nested_variable recall / field acc | s4_two_class_code recall / field acc |
 |---|---|---|---|---|
@@ -118,8 +118,8 @@ Run3 cells are copied from `research/r3-real-run3.md` section 5 (recall, then fi
 | Gemma-4-E2B (thinking on) (run3) | reasoned: 100.0% (20/20) / 97.0% ; unreasoned: 100.0% (5/5) / 76.0% | 80.0% (20/25) / 99.0% | 20.0% (5/25) / 47.6% | reasoned: 0.0% (0/6) / n/a ; unreasoned: 0.0% (0/24) / n/a |
 | LFM2.5-8B (thinking on) (run3) | 80.0% (20/25) / 80.0% | 0.0% (0/25) / n/a | 0.0% (0/25) / n/a | 0.0% (0/30) / n/a |
 | Mellum2.1-12B (thinking on) (run3) | 100.0% (25/25) / 96.0% | 100.0% (25/25) / 96.8% | 60.0% (15/25) / 81.0% | 20.0% (6/30) / 100.0% |
-| **Bonsai-27B (thinking off)** | 100.0% (25/25) / 81.6% | 60.0% (15/25) / 78.7% | 0.0% (0/25) / n/a | 30.0% (9/30) / 100.0% |
-| **Bonsai-27B (thinking on)** | 100.0% (25/25) / 99.2% | 100.0% (25/25) / 99.2% | 100.0% (25/25) / 97.6% | 90.0% (27/30) / 84.8% |
+| **Bonsai-27B (thinking off)** | 100.0% (25/25) / 81.6% | 60.0% (15/25) / 78.7% | 0.0% (0/25) / n/a | 30.0% (9/30) / 100.0% whole-list, 100.0% run3-method |
+| **Bonsai-27B (thinking on)** | 100.0% (25/25) / 99.2% | 100.0% (25/25) / 99.2% | 100.0% (25/25) / 97.6% | 90.0% (27/30) / 84.8% whole-list, 100.0% run3-method |
 
 ## 7. Token counts against `usage.completion_tokens`
 
@@ -443,9 +443,14 @@ Quotes are copied from `bench/r3/real/run3_bonsai/raw/`. Observations only.
    }|10|
    ```
    Doctor: `expected 3 columns, found 2` and `expected 3 columns, found 1`. Run 5 writes `\r` and then a real line break (`lib.rs|\r` newline `pub fn add(...`), so the decoded code starts with a newline.
-8. Thinking on, s4 run 3: `schema:file` and `schema:patch` blocks alternate per file instead of being grouped (all other runs group them).
+8. Thinking on, s4 run 3: `schema:file` and `schema:patch` blocks alternate per file instead of being grouped (all other runs group them). In run 3, field accuracy was 33.3% (5/15) under the whole-list positional method versus 100.0% (15/15) under the run3 method (records split by class, then compared in order within each class). Across all 5 runs of thinking-on s4, pooled field accuracy is 84.8% (56/66) whole-list versus 100.0% (66/66) run3-method (for thinking-off s4, both methods yield 100.0%, 18/18). In thinking-on s4 run 3 only, Bonsai wrote files and patches alternating (the other s4 runs grouped them). Nothing in SPEC forbids this. The whole-list method compares them against a list with all files first, so the gap between the whole-list and run3-method figures comes from that one run.
 9. Thinking on, s1: one wrong field in 125 over the five runs (run 5, field accuracy 96.0%). Thinking on gives s1, s2 and s3 clean in 15 of 15 runs.
-10. No raw output in either mode contains a code fence. All 40 runs ended with `finish_reason` `stop` and none of the 20 thinking-on runs ended inside the thinking text (every thinking-on run has a non-empty answer).
+10. Thinking off, s1: in runs 2 to 5 the model wrote `~` for every paper id (20 of the 23 wrong fields), and 3 `verified` values were wrong (in runs 1 to 3, record 1 had `1` for `verified` instead of `0`). Real line from raw output (`bonsai_off_s1_flat_run2.txt` line 1):
+   ```text
+   ~|Rope scaling hurts long ctx|refuted|2024|1|
+   ```
+   Across the 5 runs, 102 of 125 fields were correct (81.6% field accuracy).
+11. No raw output in either mode contains a code fence. All 40 runs ended with `finish_reason` `stop` and none of the 20 thinking-on runs ended inside the thinking text (every thinking-on run has a non-empty answer).
 
 ## 11. Per-run results
 
@@ -467,10 +472,10 @@ Quotes are copied from `bench/r3/real/run3_bonsai/raw/`. Observations only.
 | bonsai_off | `s3_nested_variable` | 4 | 45 | unusable | 0/5 | 9 | 27 | stop | 0 | 315 | n/a | 9.19 |
 | bonsai_off | `s3_nested_variable` | 5 | 46 | unusable | 0/5 | 0 | 27 | stop | 0 | 324 | n/a | 9.46 |
 | bonsai_off | `s4_two_class_code` | 1 | 42 | unusable | 0/6 | 0 | 6 | stop | 0 | 131 | n/a | 4.76 |
-| bonsai_off | `s4_two_class_code` | 2 | 43 | salvaged | 3/6 | 0 | 3 | stop | 0 | 118 | 100.0% | 3.9 |
-| bonsai_off | `s4_two_class_code` | 3 | 44 | salvaged | 3/6 | 0 | 3 | stop | 0 | 115 | 100.0% | 3.81 |
+| bonsai_off | `s4_two_class_code` | 2 | 43 | salvaged | 3/6 | 0 | 3 | stop | 0 | 118 | 100.0% whole-list / 100.0% run3-method | 3.9 |
+| bonsai_off | `s4_two_class_code` | 3 | 44 | salvaged | 3/6 | 0 | 3 | stop | 0 | 115 | 100.0% whole-list / 100.0% run3-method | 3.81 |
 | bonsai_off | `s4_two_class_code` | 4 | 45 | unusable | 0/6 | 0 | 6 | stop | 0 | 131 | n/a | 4.31 |
-| bonsai_off | `s4_two_class_code` | 5 | 46 | salvaged | 3/6 | 0 | 3 | stop | 0 | 122 | 100.0% | 3.72 |
+| bonsai_off | `s4_two_class_code` | 5 | 46 | salvaged | 3/6 | 0 | 3 | stop | 0 | 122 | 100.0% whole-list / 100.0% run3-method | 3.72 |
 | bonsai_on | `s1_flat` | 1 | 42 | clean | 5/5 | 0 | 0 | stop | 398 | 137 | 100.0% | 15.1 |
 | bonsai_on | `s1_flat` | 2 | 43 | clean | 5/5 | 0 | 0 | stop | 448 | 137 | 100.0% | 16.53 |
 | bonsai_on | `s1_flat` | 3 | 44 | clean | 5/5 | 0 | 0 | stop | 453 | 137 | 100.0% | 16.71 |
@@ -486,8 +491,17 @@ Quotes are copied from `bench/r3/real/run3_bonsai/raw/`. Observations only.
 | bonsai_on | `s3_nested_variable` | 3 | 44 | clean | 5/5 | 0 | 0 | stop | 7311 | 314 | 100.0% | 217.58 |
 | bonsai_on | `s3_nested_variable` | 4 | 45 | clean | 5/5 | 0 | 0 | stop | 6934 | 320 | 100.0% | 207.72 |
 | bonsai_on | `s3_nested_variable` | 5 | 46 | clean | 5/5 | 0 | 0 | stop | 6084 | 320 | 100.0% | 182.24 |
-| bonsai_on | `s4_two_class_code` | 1 | 42 | salvaged | 3/6 | 3 | 9 | stop | 4142 | 117 | 100.0% | 121.47 |
-| bonsai_on | `s4_two_class_code` | 2 | 43 | clean | 6/6 | 0 | 0 | stop | 5359 | 117 | 100.0% | 157.67 |
-| bonsai_on | `s4_two_class_code` | 3 | 44 | clean | 6/6 | 0 | 0 | stop | 7492 | 133 | 33.3% | 220.97 |
-| bonsai_on | `s4_two_class_code` | 4 | 45 | clean | 6/6 | 0 | 0 | stop | 3532 | 117 | 100.0% | 105.65 |
-| bonsai_on | `s4_two_class_code` | 5 | 46 | clean | 6/6 | 0 | 0 | stop | 20275 | 120 | 100.0% | 600.78 |
+| bonsai_on | `s4_two_class_code` | 1 | 42 | salvaged | 3/6 | 3 | 9 | stop | 4142 | 117 | 100.0% whole-list / 100.0% run3-method | 121.47 |
+| bonsai_on | `s4_two_class_code` | 2 | 43 | clean | 6/6 | 0 | 0 | stop | 5359 | 117 | 100.0% whole-list / 100.0% run3-method | 157.67 |
+| bonsai_on | `s4_two_class_code` | 3 | 44 | clean | 6/6 | 0 | 0 | stop | 7492 | 133 | 33.3% whole-list / 100.0% run3-method | 220.97 |
+| bonsai_on | `s4_two_class_code` | 4 | 45 | clean | 6/6 | 0 | 0 | stop | 3532 | 117 | 100.0% whole-list / 100.0% run3-method | 105.65 |
+| bonsai_on | `s4_two_class_code` | 5 | 46 | clean | 6/6 | 0 | 0 | stop | 20275 | 120 | 100.0% whole-list / 100.0% run3-method | 600.78 |
+
+## 12. Bottom line
+
+- **s4 field accuracy:**
+  - Bonsai-27B (thinking off): 100.0% whole-list (18/18) / 100.0% run3-method (18/18).
+  - Bonsai-27B (thinking on): 84.8% whole-list (56/66) / 100.0% run3-method (66/66).
+  - In thinking-on s4 run 3 only, Bonsai wrote files and patches alternating (the other s4 runs grouped them). Nothing in SPEC forbids this. The whole-list method compares them against a list with all files first, so the gap between the whole-list and run3-method figures comes from that one run. Only the run3-method figure is comparable with the run3 models' s4 numbers.
+- **Prompt wording:** The task text sent in the user prompt is byte-identical to run3. However, with `enable_thinking: true`, the chat template adds a system line ("Reasoning effort is set to xhigh"), so the thinking-on input is 40 tokens longer (measured on the s1 prompt). No causal claim is made.
+- **Thinking-off s1:** Record recall was 100.0% (25/25 records), but field accuracy was 81.6% (102/125 correct fields). In runs 2 to 5 the model wrote `~` for every paper id (20 of the 23 wrong fields), and 3 `verified` values were wrong (in runs 1 to 3, the first record emitted `1` for `verified` instead of `0`).
