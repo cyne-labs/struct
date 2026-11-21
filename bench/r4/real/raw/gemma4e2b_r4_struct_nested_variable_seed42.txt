@@ -1,0 +1,12 @@
+1. supported
+2. refuted
+3. 2203.15556
+4. abstract mentions 32k limit
+5. llama 7b tested only
+6. per-head scales help, perplexity intact
+7. 2
+8. 1
+9. 2
+10. None (Based on the provided data, all notes listed have subnotes.)
+11. optimizer state minimal
+12. None (Based on the provided data, all notes listed have subnotes.)

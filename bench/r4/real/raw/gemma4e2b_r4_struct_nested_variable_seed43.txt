@@ -1,0 +1,12 @@
+1. supported
+2. refuted
+3. 2203.15556
+4. >>abstract mentions 32k limit
+5. >>llama 7b tested only
+6. >>per-head scales help, >>perplexity intact
+7. 1
+8. 1
+9. 2
+10. >tested on GLUE and Wikisql
+11. >>optimizer state minimal
+12. None of the listed notes have no subnotes.

@@ -1,0 +1,12 @@
+1. Supported
+2. Refuted
+3. 2203.15556
+4. Abstract mentions 32k limit; appendix B clarifies
+5. Llama 7B tested only
+6. Per-head scales help; perplexity intact
+7. Three
+8. Two
+9. Two
+10. "checkpoint size under 50MB"
+11. None (the subnotes element is empty)
+12. LoRA matches full finetune

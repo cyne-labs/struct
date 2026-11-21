@@ -1,0 +1,298 @@
+{
+  "flat_tabular": [
+    {
+      "id": "ft_q01",
+      "kind": "single_lookup",
+      "question": "What is the verdict for paper 2405.05254?",
+      "ground_truth": "refuted"
+    },
+    {
+      "id": "ft_q02",
+      "kind": "single_lookup",
+      "question": "What is the publication year of paper 1706.03762?",
+      "ground_truth": "2017"
+    },
+    {
+      "id": "ft_q03",
+      "kind": "single_lookup",
+      "question": "What is the title of paper 2106.09685?",
+      "ground_truth": "LoRA low rank adaptation"
+    },
+    {
+      "id": "ft_q04",
+      "kind": "single_lookup",
+      "question": "What is the verification status of paper 2309.06180?",
+      "ground_truth": "true"
+    },
+    {
+      "id": "ft_q05",
+      "kind": "count_filter",
+      "question": "How many records have verdict refuted?",
+      "ground_truth": "1"
+    },
+    {
+      "id": "ft_q06",
+      "kind": "count_filter",
+      "question": "How many records have verdict supported?",
+      "ground_truth": "16"
+    },
+    {
+      "id": "ft_q07",
+      "kind": "count_filter",
+      "question": "How many records were published in 2024?",
+      "ground_truth": "7"
+    },
+    {
+      "id": "ft_q08",
+      "kind": "count_filter",
+      "question": "Which paper IDs have verdict unverified?",
+      "ground_truth": "2310.06825, 2406.11794"
+    },
+    {
+      "id": "ft_q09",
+      "kind": "null_missing",
+      "question": "Which paper IDs have no publication year?",
+      "ground_truth": "2203.15556, 2404.14219"
+    },
+    {
+      "id": "ft_q10",
+      "kind": "null_missing",
+      "question": "Which paper ID has no verification status?",
+      "ground_truth": "2403.09611"
+    },
+    {
+      "id": "ft_q11",
+      "kind": "null_missing",
+      "question": "What is the publication year of paper 2203.15556?",
+      "ground_truth": "null"
+    },
+    {
+      "id": "ft_q12",
+      "kind": "null_missing",
+      "question": "Which paper ID has no verdict?",
+      "ground_truth": "2408.03314"
+    }
+  ],
+  "flat_100": [
+    {
+      "id": "f100_q01",
+      "kind": "single_lookup",
+      "question": "What is the verdict for paper 2411.2824?",
+      "ground_truth": "unverified"
+    },
+    {
+      "id": "f100_q02",
+      "kind": "single_lookup",
+      "question": "What is the publication year of paper 2404.3286?",
+      "ground_truth": "2023"
+    },
+    {
+      "id": "f100_q03",
+      "kind": "single_lookup",
+      "question": "What is the title of paper 2404.9279?",
+      "ground_truth": "KV cache quantization losing accuracy on outliers v4"
+    },
+    {
+      "id": "f100_q04",
+      "kind": "single_lookup",
+      "question": "What is the verification status of paper 2412.9928?",
+      "ground_truth": "false"
+    },
+    {
+      "id": "f100_q05",
+      "kind": "count_filter",
+      "question": "How many records have verdict refuted?",
+      "ground_truth": "26"
+    },
+    {
+      "id": "f100_q06",
+      "kind": "count_filter",
+      "question": "How many records were published in 2024?",
+      "ground_truth": "11"
+    },
+    {
+      "id": "f100_q07",
+      "kind": "count_filter",
+      "question": "How many records are marked as verified (true)?",
+      "ground_truth": "49"
+    },
+    {
+      "id": "f100_q08",
+      "kind": "count_filter",
+      "question": "Which paper IDs have no verdict?",
+      "ground_truth": "2404.7570, 2411.9702"
+    },
+    {
+      "id": "f100_q09",
+      "kind": "null_missing",
+      "question": "Which paper IDs have no publication year?",
+      "ground_truth": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547"
+    },
+    {
+      "id": "f100_q10",
+      "kind": "null_missing",
+      "question": "Which paper IDs have no verification status?",
+      "ground_truth": "2410.7912, 2408.6977, 2402.3504, 2402.8962, 2411.8062, 2412.6138, 2403.8179, 2406.4441, 2407.9379, 2405.9445"
+    },
+    {
+      "id": "f100_q11",
+      "kind": "null_missing",
+      "question": "What is the publication year of paper 2403.4527?",
+      "ground_truth": "null"
+    },
+    {
+      "id": "f100_q12",
+      "kind": "null_missing",
+      "question": "What is the verdict for paper 2404.7570?",
+      "ground_truth": "null"
+    }
+  ],
+  "nested_fixed": [
+    {
+      "id": "nf_q01",
+      "kind": "single_lookup",
+      "question": "What is the verdict for 'Attention is all you need'?",
+      "ground_truth": "supported"
+    },
+    {
+      "id": "nf_q02",
+      "kind": "single_lookup",
+      "question": "What is the verification status for 'Mistral fine tuning rules'?",
+      "ground_truth": "false"
+    },
+    {
+      "id": "nf_q03",
+      "kind": "single_lookup",
+      "question": "What is the verdict for 'Rope scaling hurts long ctx'?",
+      "ground_truth": "refuted"
+    },
+    {
+      "id": "nf_q04",
+      "kind": "nested_lookup",
+      "question": "What is the source paper ID for 'Attention is all you need'?",
+      "ground_truth": "1706.03762"
+    },
+    {
+      "id": "nf_q05",
+      "kind": "nested_lookup",
+      "question": "What is the publication year of the source for 'LoRA low rank adaptation'?",
+      "ground_truth": "2021"
+    },
+    {
+      "id": "nf_q06",
+      "kind": "nested_lookup",
+      "question": "What is the source paper ID for 'Chinchilla scaling compute'?",
+      "ground_truth": "2203.15556"
+    },
+    {
+      "id": "nf_q07",
+      "kind": "count_filter",
+      "question": "How many claims have verdict supported?",
+      "ground_truth": "7"
+    },
+    {
+      "id": "nf_q08",
+      "kind": "count_filter",
+      "question": "How many claims have a source published in 2024?",
+      "ground_truth": "2"
+    },
+    {
+      "id": "nf_q09",
+      "kind": "count_filter",
+      "question": "Which source paper IDs belong to refuted claims?",
+      "ground_truth": "2405.05254"
+    },
+    {
+      "id": "nf_q10",
+      "kind": "null_missing",
+      "question": "Which claim has no source year?",
+      "ground_truth": "DeepSeekMoE mixture experts"
+    },
+    {
+      "id": "nf_q11",
+      "kind": "null_missing",
+      "question": "What is the publication year of the source for 'DeepSeekMoE mixture experts'?",
+      "ground_truth": "null"
+    },
+    {
+      "id": "nf_q12",
+      "kind": "null_missing",
+      "question": "Which claim has no verification status?",
+      "ground_truth": "StarCoder 2 training code"
+    }
+  ],
+  "nested_variable": [
+    {
+      "id": "nv_q01",
+      "kind": "single_lookup",
+      "question": "What is the verdict for 'LoRA matches full finetune'?",
+      "ground_truth": "supported"
+    },
+    {
+      "id": "nv_q02",
+      "kind": "single_lookup",
+      "question": "What is the verdict for 'KV cache quant loses 2x acc'?",
+      "ground_truth": "refuted"
+    },
+    {
+      "id": "nv_q03",
+      "kind": "single_lookup",
+      "question": "What is the source paper ID for 'Chinchilla tokens beat params'?",
+      "ground_truth": "2203.15556"
+    },
+    {
+      "id": "nv_q04",
+      "kind": "nested_lookup",
+      "question": "What subnotes are listed under the note 'notes are from abstract only'?",
+      "ground_truth": "abstract mentions 32k limit, appendix B clarifies"
+    },
+    {
+      "id": "nv_q05",
+      "kind": "nested_lookup",
+      "question": "What subnotes are listed under the note 'table 3 contradicts'?",
+      "ground_truth": "llama 7b tested only"
+    },
+    {
+      "id": "nv_q06",
+      "kind": "nested_lookup",
+      "question": "What subnotes are listed under the note 'outlier channels preserved'?",
+      "ground_truth": "per-head scales help, perplexity intact"
+    },
+    {
+      "id": "nv_q07",
+      "kind": "count_filter",
+      "question": "How many notes are attached to 'LoRA matches full finetune'?",
+      "ground_truth": "3"
+    },
+    {
+      "id": "nv_q08",
+      "kind": "count_filter",
+      "question": "How many total claims have verdict refuted?",
+      "ground_truth": "2"
+    },
+    {
+      "id": "nv_q09",
+      "kind": "count_filter",
+      "question": "How many subnotes are under 'tested on GLUE and Wikisql'?",
+      "ground_truth": "2"
+    },
+    {
+      "id": "nv_q10",
+      "kind": "null_missing",
+      "question": "Which note under 'LoRA matches full finetune' has no subnotes?",
+      "ground_truth": "checkpoint size under 50MB"
+    },
+    {
+      "id": "nv_q11",
+      "kind": "null_missing",
+      "question": "What subnotes are listed under the note 'checkpoint size under 50MB'?",
+      "ground_truth": "none"
+    },
+    {
+      "id": "nv_q12",
+      "kind": "null_missing",
+      "question": "Which claim text contains a note with no subnotes?",
+      "ground_truth": "LoRA matches full finetune"
+    }
+  ]
+}

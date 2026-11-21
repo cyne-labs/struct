@@ -1,0 +1,12 @@
+1. supported
+2. refuted
+3. 2203.15556
+4. abstract mentions 32k limit
+5. llama 7b tested only
+6. per-head scales help, perplexity intact
+7. 0
+8. 1
+9. 0
+10. LoRA matches full finetune
+11. None
+12. LoRA matches full finetune (or checkpoint size under 50MB, or tested on GLUE and Wikisql)

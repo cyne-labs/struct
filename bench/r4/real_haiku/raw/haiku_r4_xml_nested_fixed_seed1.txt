@@ -1,0 +1,12 @@
+1. The verdict is supported.
+2. Verified is false.
+3. The verdict is refuted.
+4. The source paper ID is 1706.03762.
+5. The publication year is 2021.
+6. The source paper ID is 2203.15556.
+7. Six claims have verdict supported.
+8. Two claims have a source published in 2024.
+9. The refuted claim's source paper ID is 2405.05254.
+10. DeepSeekMoE mixture experts has no source year.
+11. The year is blank (no year is given).
+12. StarCoder 2 training code has no verification status.

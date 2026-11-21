@@ -1,0 +1,27 @@
+1. Refuted
+2. 2017
+3. LoRA low rank adaptation
+4. Unverified (verified = false)
+5. 1
+6. 16
+7. 7
+8. 2310.06825, 2406.11794
+9. 2408.03314 is the only one with a year, so none... (correction: 2203.15556, 2404.14219 have null year, so: 2203.15556, 2404.14219)
+10. 2408.03314
+11. null
+12. 2408.03314
+
+Wait, I need to correct my answers above. Here are the accurate answers:
+
+1. Refuted
+2. 2017
+3. LoRA low rank adaptation
+4. Unverified (verified is false)
+5. 1
+6. 16
+7. 7
+8. 2310.06825, 2406.11794
+9. 2203.15556, 2404.14219
+10. 2403.09611
+11. null
+12. 2408.03314

@@ -1,0 +1,12 @@
+1. unverified
+2. 2023
+3. KV cache quantization losing accuracy on outliers v4
+4. false
+5. 14
+6. 4
+7. 12
+8. 2403.4527, 2408.9479
+9. 2403.4527, 2408.9479
+10. 2402.3504, 2408.6977, 2411.9702, 2408.7216, 2411.5905 (and others with null/false values)
+11. null
+12. null

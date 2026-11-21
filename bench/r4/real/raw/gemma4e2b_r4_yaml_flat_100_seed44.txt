@@ -1,0 +1,12 @@
+1. unverified
+2. 2023
+3. LoRA low rank adaptation of large language models v50
+4. false
+5. 12
+6. 4
+7. 12
+8. 2410.7912, 2411.6313, 2411.5905, 2407.1634, 2409.9004, 2411.9702 (These have `verdict: null`)
+9. 2403.4527, 2408.9479, 2411.7691 (These have `year: null`)
+10. 13 (The papers with `verified` status set to `false` or `null` are: 2412.9928, 2410.2343, 2407.2584, 2409.5803, 2405.2307, 2401.2889, 2406.7572, 2403.8787, 2407.2964, 2411.7691, 2409.1006, 2402.4848, 2404.7570)
+11. null
+12. null

@@ -1,0 +1,56 @@
+1. the verdict for paper 2411.2824 is unverified
+2. the publication year of paper 2404.3286 is 2023
+3. the title of paper 2404.9279 is KV cache quantization losing accuracy on outliers v4
+4. the verification status of paper 2412.9928 is false
+5. 5 records have verdict refuted (2401.3615, 2403.4527, 2407.2584, 2408.6977, 2412.8019, 2402.4872, 2401.5082, 2405.1722, 2407.3088, 2404.2104, 2405.3287, 2411.3041, 2411.7691, 2409.3085, 2409.1006, 2408.7790)
+    *Correction:* Counting 'refuted' explicitly:
+    * 2401.3615 (refuted)
+    * 2403.4527 (refuted)
+    * 2407.2584 (refuted)
+    * 2408.7216 (unverified)
+    * 2402.4872 (refuted)
+    * 2412.8019 (refuted)
+    * 2405.2307 (supported)
+    * 2408.6180 (supported)
+    * 2410.2040 (refuted)
+    * 2412.6107 (unverified)
+    * 2405.8953 (unverified)
+    * 2401.5082 (refuted)
+    * 2407.2964 (supported)
+    * 2405.4450 (refuted)
+    * Total Refuted: 10 (Let's stick to counting the `verdict` column for clarity).
+    * The list of papers with `verdict: refuted` is: 2401.3615, 2403.4527, 2407.2584, 2409.1006, 2402.4848, 2404.2104, 2405.4450, 2410.2040, 2411.3041, 2411.9797, 2409.9004, 2407.3088, 2402.7965, 2406.9346, 2401.5082.
+    * Re-counting:
+        * 2401.3615 (refuted)
+        * 2403.4527 (refuted)
+        * 2407.2584 (refuted)
+        * 2407.4006 (refuted)
+        * 2404.2104 (refuted)
+        * 2402.2753 (unverified)
+        * 2407.3088 (refuted)
+        * 2405.4450 (refuted)
+        * 2401.5082 (refuted)
+        * 2409.1590 (unverified)
+        * 2402.4848 (refuted)
+        * 2404.7570 (null)
+        * 2410.2343 (unverified)
+        * 2406.7658 (unverified)
+        * 2409.5803 (unverified)
+        * Total `refuted` is 10. (Revising based on strict count of 'refuted').
+
+6.  **Final Answer Generation.** (See output below.)
+
+***
+
+1. the verdict for paper 2411.2824 is unverified
+2. the publication year of paper 2404.3286 is 2023
+3. the title of paper 2404.9279 is KV cache quantization losing accuracy on outliers v4
+4. the verification status of paper 2412.9928 is false
+5. 10 records have verdict refuted
+6. 2 records were published in 2024 (2409.5803, 2403.9348, 2402.3504)
+7. 7 records are marked as verified (true)
+8. The paper IDs with no verdict (null) are: 2410.7912, 2403.4527, 2408.9479, 2411.5374, 2411.7691, 2409.9004, 2404.7570, 2408.7547.
+9. The paper IDs with no publication year (null) are: 2403.4527, 2411.5905, 2408.9479, 2407.1634, 2407.2964, 2402.5808, 2411.7691.
+10. The paper IDs with no verification status (null) are: 2410.2638, 2411.7691, 2407.1634.
+11. the publication year of paper 2403.4527 is null
+12. the verdict for paper 2404.7570 is null

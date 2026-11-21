@@ -1,0 +1,12 @@
+1. unverified
+2. 2023
+3. KV cache quantization losing accuracy on outliers
+4. supported
+5. 25
+6. 6
+7. 47
+8. 7, 13, 33, 35, 36, 41, 43, 44, 47, 50, 57, 58, 63, 67, 71, 73, 77, 80, 83, 87, 89, 93
+9. None
+10. None
+11. ~
+12. ~

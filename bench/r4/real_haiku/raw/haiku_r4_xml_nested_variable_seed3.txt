@@ -1,0 +1,12 @@
+1. Supported
+2. Refuted
+3. 2203.15556
+4. Abstract mentions 32k limit; appendix B clarifies
+5. Llama 7b tested only
+6. Per-head scales help; perplexity intact
+7. Three notes are attached to 'LoRA matches full finetune'. Wait, correcting that: two notes are attached.
+8. Two claims have verdict refuted
+9. Two subnotes
+10. The note 'checkpoint size under 50MB'
+11. None (the subnotes element is empty)
+12. LoRA matches full finetune

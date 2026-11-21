@@ -1,0 +1,12 @@
+1. Refuted
+2. 2017
+3. LoRA low rank adaptation
+4. Unverified... no, verified is false. Its status is "false" (not verified).
+5. 1
+6. 15
+7. 7
+8. 2310.06825, 2406.11794
+9. 2203.15556, 2404.14219... no, 2404.14219 has year 2024. Only 2203.15556 has a null year? Correction: 2203.15556 and 2404.14219 have year null? Checking: 2404.14219 shows year null, so both 2203.15556 and 2404.14219 lack a year... wait, 2203.15556 has year null and 2404.14219 has year null. Answer: 2203.15556, 2404.14219
+10. 2408.03314
+11. null (no publication year is recorded)
+12. None (every record has a verdict)

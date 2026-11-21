@@ -1,0 +1,12 @@
+1. verdict for 'Attention is all you need': supported
+2. verification status for 'Mistral fine tuning rules': false
+3. verdict for 'Rope scaling hurts long ctx': refuted
+4. source paper ID for 'Attention is all you need': 1706.03762
+5. publication year of the source for 'LoRA low rank adaptation': 2021
+6. source paper ID for 'Chinchilla scaling compute': 2203.15556
+7. number of claims with verdict supported: 7
+8. number of claims with a source published in 2024: 2
+9. source paper IDs for refuted claims: 2405.05254
+10. claim with no source year: DeepSeekMoE mixture experts
+11. publication year of the source for 'DeepSeekMoE mixture experts': null
+12. claim with no verification status: StarCoder 2 training code

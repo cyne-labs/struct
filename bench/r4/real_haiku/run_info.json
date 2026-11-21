@@ -1,0 +1,23 @@
+{
+  "command": [
+    "claude",
+    "-p",
+    "--model",
+    "haiku",
+    "--effort",
+    "low",
+    "--system-prompt",
+    "You are a helpful assistant.",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--setting-sources",
+    "",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--output-format",
+    "json"
+  ],
+  "command_line": "claude -p --model haiku --effort low --system-prompt You are a helpful assistant. --tools  --strict-mcp-config --setting-sources  --disable-slash-commands --no-session-persistence --output-format json",
+  "claude_version": "2.1.330 (Claude Code)"
+}

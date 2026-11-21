@@ -1,0 +1,12 @@
+1. unverified... wait, let me correct that: 2405.05254 has verdict **refuted**.
+2. 2017
+3. Language models few-shot... no, 2106.09685's title is **LoRA low rank adaptation**.
+4. Verified: **true**
+5. 1
+6. 12
+7. 6
+8. 2310.06825, 2406.11794
+9. 2203.15556, 2404.14219... no, that one has year null too, so: 2203.15556, 2404.14219, 2408.03314 — wait, 2408.03314 has year 2024. Correct list: 2203.15556, 2404.14219
+10. 2403.09611
+11. null (no publication year recorded)
+12. 2408.03314

@@ -1,0 +1,12 @@
+1. supported
+2. unverified
+3. refuted
+4. 1706.03762
+5. 2021
+6. 2203.15556
+7. 6
+8. 2
+9. 2405.05254
+10. DeepSeekMoE mixture experts
+11. Not specified (null)
+12. Attention... no: StarCoder 2 training code

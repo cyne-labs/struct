@@ -1,0 +1,12 @@
+1. supported
+2. refuted
+3. 2203.15556
+4. abstract mentions 32k limit,appendix B clarifies
+5. (None)
+6. per-head scales help,perplexity intact
+7. 1
+8. 2
+9. 1
+10. table 3 contradicts
+11. (None)
+12. table 3 contradicts

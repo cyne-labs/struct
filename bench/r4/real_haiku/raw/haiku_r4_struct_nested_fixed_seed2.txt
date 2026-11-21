@@ -1,0 +1,12 @@
+1. supported
+2. Not verified (the verified field is 0, and the verdict is unverified)
+3. refuted
+4. 1706.03762
+5. 2021
+6. 2203.15556
+7. 7
+8. 2
+9. 2405.05254
+10. DeepSeekMoE mixture experts
+11. Unknown (listed as "~")
+12. Direct preference optim
