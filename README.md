@@ -122,6 +122,26 @@ On Haiku, Struct had both the highest accuracy and the fewest input tokens. This
 
 Source: `research/r4-retrieval-haiku.md`, `bench/r4/grades/haiku_*.json` and `bench/r4/grades/crosscheck/`.
 
+## Retrieval accuracy (R4): Gemini 3.8 Flash
+
+The same test on Gemini 3.8 Flash (low variant), run headless through the Antigravity CLI, 4 times per prompt (96 calls). Grading is the same: by meaning, 7 graders, then a blind re-grade of 82 sampled answers with the model's name and the formats removed. It agreed with all 82.
+
+| Format | By meaning | Strict match | Mean tokens per answer |
+|---|---|---|---|
+| Minified JSON | 192/192 (100%) | 174/192 (90.6%) | 50,374 |
+| TOON | 192/192 (100%) | 181/192 (94.3%) | 35,422 |
+| YAML | 191/192 (99.5%) | 173/192 (90.1%) | 25,596 |
+| **Struct** | **190/192 (99.0%)** | 157/192 (81.8%) | **21,550** |
+| XML-style tags | 188/192 (97.9%) | 170/192 (88.5%) | 39,898 |
+| TSV (flat data only) | 95/96 (99.0%) | 83/96 (86.5%) | 35,424 |
+| `key: value` lines (flat data only) | 95/96 (99.0%) | 93/96 (96.9%) | 36,250 |
+
+Tokens per answer are input plus output as the CLI reports them, the total cost of getting one set of answers. They include about 13,600 tokens of the CLI's own agent prompt on every call, and the model's thinking, which the CLI counts inside output. So compare them across formats here, not with the Haiku table. TSV and `key: value` ran only on the two flat datasets, which are the largest, so their means aren't directly comparable with the rest.
+
+Gemini read every format almost perfectly. At that accuracy, Struct was the cheapest format to get answers from: about 43% of JSON's cost per answer. Most of the difference is thinking: on the 100-row table, Gemini wrote about 4,350 output tokens per answer on Struct and about 10,000 to 15,000 on JSON.
+
+Source: `research/r4-retrieval-gemini.md`, `bench/r4/grades/gemini_*.json` and `bench/r4/grades/crosscheck_b/`.
+
 ## Small per-token facts
 
 From the same report, measured on the same four tokenizers.
