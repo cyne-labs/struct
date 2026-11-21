@@ -1,0 +1,1108 @@
+{
+  "items": [
+    {
+      "id": "gemma|yaml|nested_variable|44|4",
+      "model_answer": "- abstract mentions 32k limit\n- appendix B clarifies",
+      "grade": "correct",
+      "reason": "states exactly the two expected subnotes as bulleted items"
+    },
+    {
+      "id": "gemma|yaml|nested_variable|44|6",
+      "model_answer": "- per-head scales help\n- perplexity intact",
+      "grade": "correct",
+      "reason": "states exactly the two expected subnotes as bulleted items"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|1|6",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|struct|nested_variable|44|11",
+      "model_answer": "(None are listed)",
+      "grade": "correct",
+      "reason": "clearly states that none are listed for an expected empty value"
+    },
+    {
+      "id": "haiku|toon|nested_fixed|4|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|json_min|flat_tabular|3|4",
+      "model_answer": "false (not verified)",
+      "grade": "wrong",
+      "reason": "states false when true was expected"
+    },
+    {
+      "id": "haiku|struct|nested_variable|4|6",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "haiku|xml|nested_fixed|4|2",
+      "model_answer": "Unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "gemma|toon|flat_100|44|4",
+      "model_answer": "The verification status of paper 2412.9928 is false",
+      "grade": "correct",
+      "reason": "sentence states the expected value false"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|1|11",
+      "model_answer": "null (no publication year recorded)",
+      "grade": "correct",
+      "reason": "gives null with an explanatory note confirming no publication year"
+    },
+    {
+      "id": "gemma|json_min|flat_tabular|43|6",
+      "model_answer": "17",
+      "grade": "wrong",
+      "reason": "count is 17 but expected 16"
+    },
+    {
+      "id": "haiku|xml|nested_variable|2|4",
+      "model_answer": "Abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|toon|nested_fixed|46|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|toon|nested_variable|3|11",
+      "model_answer": "None (no subnotes are listed)",
+      "grade": "correct",
+      "reason": "gives None indicating no subnotes are present"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|3|6",
+      "model_answer": "14",
+      "grade": "wrong",
+      "reason": "count is 14 but expected 16"
+    },
+    {
+      "id": "gemma|xml|flat_100|42|12",
+      "model_answer": "",
+      "grade": "wrong",
+      "reason": "blank answer for question 12"
+    },
+    {
+      "id": "gemma|json_min|nested_variable|42|5",
+      "model_answer": "[\"llama 7b tested only\"]",
+      "grade": "correct",
+      "reason": "states the exact single subnote in JSON array format"
+    },
+    {
+      "id": "haiku|xml|flat_tabular|3|6",
+      "model_answer": "17",
+      "grade": "wrong",
+      "reason": "count is 17 but expected 16"
+    },
+    {
+      "id": "gemma|toon|nested_variable|42|11",
+      "model_answer": "(None)",
+      "grade": "correct",
+      "reason": "clearly states None for an expected empty value"
+    },
+    {
+      "id": "haiku|json_min|flat_tabular|3|11",
+      "model_answer": "null (no year listed)",
+      "grade": "correct",
+      "reason": "gives null with note confirming no year listed"
+    },
+    {
+      "id": "haiku|yaml|nested_fixed|1|11",
+      "model_answer": "null (no year recorded)",
+      "grade": "correct",
+      "reason": "states null with a note confirming no year recorded"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|2|6",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|struct|flat_tabular|44|9",
+      "model_answer": "2203.15556, 2404.14219, 2408.03314",
+      "grade": "wrong",
+      "reason": "includes extra paper ID 2408.03314"
+    },
+    {
+      "id": "haiku|xml|flat_tabular|2|6",
+      "model_answer": "17",
+      "grade": "wrong",
+      "reason": "count is 17 but expected 16"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|1|11",
+      "model_answer": "(blank, no year recorded)",
+      "grade": "correct",
+      "reason": "clearly states blank and no year recorded for an expected null value"
+    },
+    {
+      "id": "gemma|key_value|flat_tabular|46|6",
+      "model_answer": "15",
+      "grade": "wrong",
+      "reason": "count is 15 but expected 16"
+    },
+    {
+      "id": "haiku|xml|flat_tabular|4|4",
+      "model_answer": "verified (true)",
+      "grade": "correct",
+      "reason": "verified (true) clearly gives the expected true value"
+    },
+    {
+      "id": "haiku|struct|flat_tabular|1|7",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "count is 8 but expected 7"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|2|4",
+      "model_answer": "abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "haiku|toon|nested_variable|4|12",
+      "model_answer": "checkpoint size under 50MB",
+      "grade": "wrong",
+      "reason": "gives checkpoint size under 50MB instead of expected claim text LoRA matches full finetune"
+    },
+    {
+      "id": "gemma|xml|nested_fixed|43|11",
+      "model_answer": "(No publication year provided/empty)",
+      "grade": "correct",
+      "reason": "clearly states that no publication year is provided / empty"
+    },
+    {
+      "id": "gemma|tsv|flat_100|46|9",
+      "model_answer": "4",
+      "grade": "wrong",
+      "reason": "answers with number 4 instead of the list of paper IDs"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|2|11",
+      "model_answer": "null (no publication year is recorded)",
+      "grade": "correct",
+      "reason": "states null with a note explaining no publication year is recorded"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|4|1",
+      "model_answer": "unverified... wait, let me be precise: refuted",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on refuted"
+    },
+    {
+      "id": "gemma|xml|flat_tabular|46|11",
+      "model_answer": "(empty)",
+      "grade": "correct",
+      "reason": "states empty for an expected null value"
+    },
+    {
+      "id": "haiku|struct|flat_100|3|12",
+      "model_answer": "Unknown (missing, \"~\")",
+      "grade": "correct",
+      "reason": "clearly states missing / ~ for expected null value"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|4|4",
+      "model_answer": "verified: true",
+      "grade": "correct",
+      "reason": "states verified: true which clearly gives the expected true value"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|1|6",
+      "model_answer": "14",
+      "grade": "wrong",
+      "reason": "count is 14 but expected 16"
+    },
+    {
+      "id": "gemma|tsv|flat_tabular|45|11",
+      "model_answer": "(No publication year is listed for this paper)",
+      "grade": "correct",
+      "reason": "clearly states no publication year is listed for this paper"
+    },
+    {
+      "id": "gemma|json_min|nested_variable|42|4",
+      "model_answer": "[\"abstract mentions 32k limit\", \"appendix B clarifies\"]",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes in JSON array format"
+    },
+    {
+      "id": "gemma|toon|nested_variable|45|4",
+      "model_answer": "subnotes[2]: abstract mentions 32k limit,appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes with count prefix"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|9",
+      "model_answer": "source paper IDs for refuted claims: 2405.05254",
+      "grade": "correct",
+      "reason": "sentence states the expected source paper ID 2405.05254"
+    },
+    {
+      "id": "gemma|json_min|flat_tabular|43|7",
+      "model_answer": "4",
+      "grade": "wrong",
+      "reason": "count is 4 but expected 7"
+    },
+    {
+      "id": "haiku|struct|nested_variable|1|6",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|xml|flat_100|44|11",
+      "model_answer": "",
+      "grade": "wrong",
+      "reason": "blank answer for question 11"
+    },
+    {
+      "id": "haiku|tsv|flat_100|1|9",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2408.7547",
+      "grade": "wrong",
+      "reason": "missing paper ID 2411.7691 from the list"
+    },
+    {
+      "id": "haiku|tsv|flat_100|3|11",
+      "model_answer": "(blank, no publication year)",
+      "grade": "correct",
+      "reason": "clearly states blank, no publication year"
+    },
+    {
+      "id": "gemma|struct|nested_variable|43|5",
+      "model_answer": ">>llama 7b tested only",
+      "grade": "correct",
+      "reason": "gives the expected subnote with Struct marker >>"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|4|7",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "count is 6 but expected 7"
+    },
+    {
+      "id": "haiku|struct|flat_100|2|7",
+      "model_answer": "48",
+      "grade": "wrong",
+      "reason": "count is 48 but expected 49"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|1",
+      "model_answer": "verdict for 'Attention is all you need': supported",
+      "grade": "correct",
+      "reason": "sentence states the expected verdict supported"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|2|1",
+      "model_answer": "unverified... wait, correction: 2405.05254 has verdict refuted.",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on refuted"
+    },
+    {
+      "id": "gemma|toon|nested_variable|45|6",
+      "model_answer": "subnotes[2]: per-head scales help,perplexity intact",
+      "grade": "correct",
+      "reason": "lists the two expected subnotes with count prefix"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|4|4",
+      "model_answer": "verified (true)",
+      "grade": "correct",
+      "reason": "verified (true) clearly gives the expected true value"
+    },
+    {
+      "id": "gemma|struct|nested_variable|43|6",
+      "model_answer": ">>per-head scales help, >>perplexity intact",
+      "grade": "correct",
+      "reason": "lists the two expected subnotes with Struct markers >>"
+    },
+    {
+      "id": "gemma|tsv|flat_100|45|10",
+      "model_answer": "2403.4527, 2410.7912, 2408.7790, 2402.3504, 2405.9445",
+      "grade": "wrong",
+      "reason": "list has wrong and missing paper IDs"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|1|11",
+      "model_answer": "Not available (year is null)",
+      "grade": "correct",
+      "reason": "states not available (year is null) for expected null value"
+    },
+    {
+      "id": "haiku|json_min|nested_variable|4|11",
+      "model_answer": "None (no subnotes)",
+      "grade": "correct",
+      "reason": "states None (no subnotes) for expected empty value"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|2",
+      "model_answer": "verification status for 'Mistral fine tuning rules': false",
+      "grade": "correct",
+      "reason": "sentence states the expected value false"
+    },
+    {
+      "id": "haiku|tsv|flat_100|1|11",
+      "model_answer": "Not given (blank)",
+      "grade": "correct",
+      "reason": "states not given (blank) for expected null value"
+    },
+    {
+      "id": "haiku|struct|nested_variable|4|11",
+      "model_answer": "None (no subnotes)",
+      "grade": "correct",
+      "reason": "states None (no subnotes) for expected empty value"
+    },
+    {
+      "id": "gemma|yaml|flat_100|42|9",
+      "model_answer": "The paper IDs with no publication year (null) are: 2403.4527, 2411.5905, 2408.9479, 2407.1634, 2407.2964, 2402.5808, 2411.7691.",
+      "grade": "wrong",
+      "reason": "list contains incorrect paper IDs and is missing expected ones"
+    },
+    {
+      "id": "haiku|xml|nested_variable|2|11",
+      "model_answer": "None (no subnotes listed)",
+      "grade": "correct",
+      "reason": "states None (no subnotes listed) for expected empty value"
+    },
+    {
+      "id": "haiku|xml|flat_100|4|12",
+      "model_answer": "(empty; no verdict recorded)",
+      "grade": "correct",
+      "reason": "states empty; no verdict recorded for expected null value"
+    },
+    {
+      "id": "gemma|toon|nested_variable|45|7",
+      "model_answer": "1",
+      "grade": "wrong",
+      "reason": "count is 1 but expected 3"
+    },
+    {
+      "id": "gemma|tsv|flat_100|43|12",
+      "model_answer": "true",
+      "grade": "wrong",
+      "reason": "states true when expected is null"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|2|12",
+      "model_answer": "Attention... no: StarCoder 2 training code",
+      "grade": "correct",
+      "reason": "model corrects itself and settles on expected claim StarCoder 2 training code"
+    },
+    {
+      "id": "gemma|xml|flat_tabular|42|11",
+      "model_answer": "(The year tag is empty)",
+      "grade": "correct",
+      "reason": "clearly states that the year tag is empty"
+    },
+    {
+      "id": "gemma|toon|flat_tabular|43|6",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "count is 6 but expected 16"
+    },
+    {
+      "id": "gemma|xml|flat_tabular|45|11",
+      "model_answer": "(The publication year tag is empty/not specified)",
+      "grade": "correct",
+      "reason": "states the publication year tag is empty/not specified"
+    },
+    {
+      "id": "gemma|struct|flat_100|44|6",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "count is 6 but expected 11"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|1|4",
+      "model_answer": "Verified: **true**",
+      "grade": "correct",
+      "reason": "states Verified: **true** which clearly gives the expected true value"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|2|4",
+      "model_answer": "verified: true",
+      "grade": "correct",
+      "reason": "states verified: true which clearly gives the expected true value"
+    },
+    {
+      "id": "haiku|xml|nested_fixed|4|11",
+      "model_answer": "No year is given (the year field is empty)",
+      "grade": "correct",
+      "reason": "clearly states no year is given (the year field is empty)"
+    },
+    {
+      "id": "haiku|toon|nested_fixed|1|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "gemma|xml|nested_fixed|45|11",
+      "model_answer": "(The publication year is missing/not provided)",
+      "grade": "correct",
+      "reason": "clearly states the publication year is missing/not provided"
+    },
+    {
+      "id": "gemma|tsv|flat_100|45|3",
+      "model_answer": "LoRA low rank adaptation of large language models v50",
+      "grade": "wrong",
+      "reason": "gives incorrect title LoRA low rank adaptation of large language models v50"
+    },
+    {
+      "id": "haiku|xml|nested_variable|3|9",
+      "model_answer": "Two subnotes",
+      "grade": "correct",
+      "reason": "states exact count Two subnotes"
+    },
+    {
+      "id": "haiku|xml|nested_fixed|4|8",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "count is 3 but expected 2"
+    },
+    {
+      "id": "gemma|struct|nested_variable|45|5",
+      "model_answer": ">>llama 7b tested only",
+      "grade": "correct",
+      "reason": "gives the expected subnote with Struct marker >>"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|2|6",
+      "model_answer": "14",
+      "grade": "wrong",
+      "reason": "count is 14 but expected 16"
+    },
+    {
+      "id": "gemma|json_min|nested_variable|42|6",
+      "model_answer": "[\"per-head scales help\", \"perplexity intact\"]",
+      "grade": "correct",
+      "reason": "lists the two expected subnotes in JSON array format"
+    },
+    {
+      "id": "haiku|xml|nested_variable|4|4",
+      "model_answer": "Abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|key_value|flat_100|45|9",
+      "model_answer": "2403.4527, 2408.6977, 2411.6313, 2407.4006, 2407.1634, 2409.9004",
+      "grade": "wrong",
+      "reason": "list includes incorrect paper IDs and misses expected ones"
+    },
+    {
+      "id": "haiku|toon|flat_tabular|1|11",
+      "model_answer": "null (no publication year is recorded)",
+      "grade": "correct",
+      "reason": "states null with note confirming no publication year recorded"
+    },
+    {
+      "id": "haiku|struct|flat_100|1|9",
+      "model_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547 (year is \"~\")",
+      "grade": "correct",
+      "reason": "lists all 10 expected paper IDs with bracketed note"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|2|11",
+      "model_answer": "Blank (no year listed)",
+      "grade": "correct",
+      "reason": "clearly states Blank (no year listed) for expected null value"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|1|9",
+      "model_answer": "2203.15556, 2404.14219... no, that one has year null too, so: 2203.15556, 2404.14219, 2408.03314 \u2014 wait, 2408.03314 has year 2024. Correct list: 2203.15556, 2404.14219",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on the correct list 2203.15556, 2404.14219"
+    },
+    {
+      "id": "gemma|toon|nested_fixed|43|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "gemma|key_value|flat_100|45|7",
+      "model_answer": "22",
+      "grade": "wrong",
+      "reason": "count is 22 but expected 49"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|3|1",
+      "model_answer": "unverified? No: refuted",
+      "grade": "correct",
+      "reason": "model corrects itself and settles on refuted"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|3|4",
+      "model_answer": "false",
+      "grade": "wrong",
+      "reason": "states false when true was expected"
+    },
+    {
+      "id": "gemma|key_value|flat_100|42|10",
+      "model_answer": "2410.7912, 2412.1887, 2402.3504, 2406.4441, 2404.7570",
+      "grade": "wrong",
+      "reason": "list includes incorrect paper IDs and misses expected ones"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|2|1",
+      "model_answer": "unverified? No: refuted",
+      "grade": "correct",
+      "reason": "model corrects itself and settles on refuted"
+    },
+    {
+      "id": "haiku|json_min|nested_variable|2|11",
+      "model_answer": "None (no subnotes)",
+      "grade": "correct",
+      "reason": "states None (no subnotes) for expected empty value"
+    },
+    {
+      "id": "gemma|xml|flat_tabular|44|11",
+      "model_answer": "(The year tag is empty)",
+      "grade": "correct",
+      "reason": "clearly states that the year tag is empty"
+    },
+    {
+      "id": "haiku|toon|nested_fixed|2|12",
+      "model_answer": "Direct preference optim",
+      "grade": "wrong",
+      "reason": "gives Direct preference optim instead of expected claim StarCoder 2 training code"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|7",
+      "model_answer": "number of claims with verdict supported: 7",
+      "grade": "correct",
+      "reason": "sentence states the expected count 7"
+    },
+    {
+      "id": "haiku|toon|flat_tabular|2|4",
+      "model_answer": "Unverified (verified is false)",
+      "grade": "wrong",
+      "reason": "states Unverified (verified is false) when true was expected"
+    },
+    {
+      "id": "haiku|struct|nested_fixed|2|2",
+      "model_answer": "Not verified (the verified field is 0, and the verdict is unverified)",
+      "grade": "correct",
+      "reason": "states Not verified with verified field is 0, matching expected false"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|2|7",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "count is 6 but expected 7"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|11",
+      "model_answer": "publication year of the source for 'DeepSeekMoE mixture experts': null",
+      "grade": "correct",
+      "reason": "sentence states the expected value null"
+    },
+    {
+      "id": "haiku|struct|nested_fixed|1|2",
+      "model_answer": "unverified (verified: false)",
+      "grade": "correct",
+      "reason": "states unverified (verified: false), giving the expected false value"
+    },
+    {
+      "id": "haiku|xml|flat_tabular|2|7",
+      "model_answer": "9",
+      "grade": "wrong",
+      "reason": "count is 9 but expected 7"
+    },
+    {
+      "id": "gemma|xml|flat_100|46|6",
+      "model_answer": "4",
+      "grade": "wrong",
+      "reason": "count is 4 but expected 11"
+    },
+    {
+      "id": "haiku|toon|flat_tabular|1|9",
+      "model_answer": "2203.15556, 2404.14219... no, 2404.14219 has year 2024. Only 2203.15556 has a null year? Correction: 2203.15556 and 2404.14219 have year null? Checking: 2404.14219 shows year null, so both 2203.15556 and 2404.14219 lack a year... wait, 2203.15556 has year null and 2404.14219 has year null. Answer: 2203.15556, 2404.14219",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on the correct list 2203.15556, 2404.14219"
+    },
+    {
+      "id": "haiku|json_min|flat_tabular|2|11",
+      "model_answer": "null (no year)",
+      "grade": "correct",
+      "reason": "states null (no year) for expected null value"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|2|4",
+      "model_answer": "verified: true",
+      "grade": "correct",
+      "reason": "states verified: true, giving the expected true value"
+    },
+    {
+      "id": "gemma|xml|flat_100|45|11",
+      "model_answer": "(No year / Empty year)",
+      "grade": "correct",
+      "reason": "clearly states No year / Empty year for expected null value"
+    },
+    {
+      "id": "gemma|json_min|nested_fixed|42|12",
+      "model_answer": "StarCoder 2 training code (The verification status is null)",
+      "grade": "correct",
+      "reason": "gives the expected claim StarCoder 2 training code with explanatory note"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|2|4",
+      "model_answer": "true (verified)",
+      "grade": "correct",
+      "reason": "states true (verified), giving the expected true value"
+    },
+    {
+      "id": "haiku|json_min|nested_variable|1|11",
+      "model_answer": "None (no subnotes)",
+      "grade": "correct",
+      "reason": "states None (no subnotes) for expected empty value"
+    },
+    {
+      "id": "gemma|yaml|flat_100|45|9",
+      "model_answer": "7",
+      "grade": "wrong",
+      "reason": "answers with number 7 instead of the list of paper IDs"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|1|1",
+      "model_answer": "unverified... wait, let me correct that: 2405.05254 has verdict **refuted**.",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on refuted"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|4|6",
+      "model_answer": "13",
+      "grade": "wrong",
+      "reason": "count is 13 but expected 16"
+    },
+    {
+      "id": "haiku|xml|nested_fixed|1|8",
+      "model_answer": "Two claims have a source published in 2024.",
+      "grade": "correct",
+      "reason": "sentence states the expected count of two"
+    },
+    {
+      "id": "gemma|struct|flat_100|46|4",
+      "model_answer": "false (or 0)",
+      "grade": "correct",
+      "reason": "states false (or 0), giving the expected false value"
+    },
+    {
+      "id": "gemma|yaml|flat_100|42|4",
+      "model_answer": "the verification status of paper 2412.9928 is false",
+      "grade": "correct",
+      "reason": "sentence states the expected value false"
+    },
+    {
+      "id": "gemma|json_min|nested_variable|46|11",
+      "model_answer": "(None)",
+      "grade": "correct",
+      "reason": "clearly states (None) for expected empty value"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|1|4",
+      "model_answer": "verified: true",
+      "grade": "correct",
+      "reason": "states verified: true, giving the expected true value"
+    },
+    {
+      "id": "haiku|tsv|flat_100|4|11",
+      "model_answer": "(blank)",
+      "grade": "correct",
+      "reason": "states (blank) for expected null value"
+    },
+    {
+      "id": "haiku|toon|nested_fixed|3|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|4|11",
+      "model_answer": "Blank (no year listed)",
+      "grade": "correct",
+      "reason": "states Blank (no year listed) for expected null value"
+    },
+    {
+      "id": "haiku|toon|flat_tabular|2|9",
+      "model_answer": "2203.15556 (no, wait: 2203.15556 has year null) Correction: 2203.15556 and 2404.14219",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on the correct list 2203.15556 and 2404.14219"
+    },
+    {
+      "id": "haiku|struct|flat_tabular|2|11",
+      "model_answer": "Unknown (listed as ~)",
+      "grade": "correct",
+      "reason": "clearly states Unknown (listed as ~) for expected null value"
+    },
+    {
+      "id": "haiku|toon|nested_variable|1|11",
+      "model_answer": "None (no subnotes are listed)",
+      "grade": "correct",
+      "reason": "states None (no subnotes are listed) for expected empty value"
+    },
+    {
+      "id": "haiku|toon|nested_variable|2|11",
+      "model_answer": "None (no subnotes)",
+      "grade": "correct",
+      "reason": "states None (no subnotes) for expected empty value"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|2|11",
+      "model_answer": "Not specified (null)",
+      "grade": "correct",
+      "reason": "states Not specified (null) for expected null value"
+    },
+    {
+      "id": "gemma|xml|flat_100|45|12",
+      "model_answer": "(No verdict / Empty verdict)",
+      "grade": "correct",
+      "reason": "states No verdict / Empty verdict for expected null value"
+    },
+    {
+      "id": "haiku|struct|nested_fixed|3|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|1|4",
+      "model_answer": "abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|toon|nested_variable|42|10",
+      "model_answer": "table 3 contradicts",
+      "grade": "wrong",
+      "reason": "gives table 3 contradicts instead of expected note checkpoint size under 50MB"
+    },
+    {
+      "id": "gemma|xml|nested_variable|45|11",
+      "model_answer": "none (or empty)",
+      "grade": "correct",
+      "reason": "states none (or empty) for expected empty value"
+    },
+    {
+      "id": "gemma|yaml|flat_100|44|5",
+      "model_answer": "12",
+      "grade": "wrong",
+      "reason": "count is 12 but expected 26"
+    },
+    {
+      "id": "gemma|yaml|flat_100|42|8",
+      "model_answer": "The paper IDs with no verdict (null) are: 2410.7912, 2403.4527, 2408.9479, 2411.5374, 2411.7691, 2409.9004, 2404.7570, 2408.7547.",
+      "grade": "wrong",
+      "reason": "list includes incorrect paper IDs and is missing 2411.9702"
+    },
+    {
+      "id": "gemma|struct|nested_variable|45|6",
+      "model_answer": ">>per-head scales help, >>perplexity intact",
+      "grade": "correct",
+      "reason": "lists the two expected subnotes with Struct markers >>"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|3|7",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "count is 8 but expected 7"
+    },
+    {
+      "id": "haiku|yaml|nested_fixed|3|11",
+      "model_answer": "null (no year is recorded)",
+      "grade": "correct",
+      "reason": "states null with note confirming no year is recorded"
+    },
+    {
+      "id": "gemma|toon|flat_tabular|44|9",
+      "model_answer": "2203.15556, 2408.03314",
+      "grade": "wrong",
+      "reason": "includes incorrect paper ID 2408.03314 and misses 2404.14219"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|3|11",
+      "model_answer": "null (no year listed)",
+      "grade": "correct",
+      "reason": "states null (no year listed) for expected null value"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|2|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|xml|flat_100|2|11",
+      "model_answer": "Empty (no publication year)",
+      "grade": "correct",
+      "reason": "states Empty (no publication year) for expected null value"
+    },
+    {
+      "id": "gemma|tsv|flat_tabular|46|11",
+      "model_answer": "(No publication year is provided/empty)",
+      "grade": "correct",
+      "reason": "states No publication year is provided/empty for expected null value"
+    },
+    {
+      "id": "gemma|json_min|flat_100|45|6",
+      "model_answer": "5",
+      "grade": "wrong",
+      "reason": "count is 5 but expected 11"
+    },
+    {
+      "id": "gemma|yaml|nested_variable|44|5",
+      "model_answer": "- llama 7b tested only",
+      "grade": "correct",
+      "reason": "gives the expected subnote as a bullet item"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|2|11",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "states None (empty list) for expected empty value"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|1|9",
+      "model_answer": "2203.15556 has year null... no, correction: 2203.15556, 2404.14219",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on the correct list 2203.15556, 2404.14219"
+    },
+    {
+      "id": "gemma|toon|nested_variable|45|5",
+      "model_answer": "subnotes[1]: llama 7b tested only",
+      "grade": "correct",
+      "reason": "gives the expected subnote with count prefix"
+    },
+    {
+      "id": "haiku|struct|nested_variable|2|4",
+      "model_answer": "abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|3|11",
+      "model_answer": "No publication year is recorded for 2203.15556.",
+      "grade": "correct",
+      "reason": "clearly states No publication year is recorded for 2203.15556"
+    },
+    {
+      "id": "gemma|xml|nested_fixed|46|11",
+      "model_answer": "(No publication year is listed for this claim)",
+      "grade": "correct",
+      "reason": "states No publication year is listed for this claim"
+    },
+    {
+      "id": "gemma|xml|flat_100|43|8",
+      "model_answer": "5",
+      "grade": "wrong",
+      "reason": "answers with number 5 instead of the list of paper IDs"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|3|7",
+      "model_answer": "9",
+      "grade": "wrong",
+      "reason": "count is 9 but expected 7"
+    },
+    {
+      "id": "haiku|toon|nested_variable|4|11",
+      "model_answer": "None (no subnotes are listed; the subnotes field is an empty list)",
+      "grade": "correct",
+      "reason": "states None with note that no subnotes are listed"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|4|7",
+      "model_answer": "9",
+      "grade": "wrong",
+      "reason": "count is 9 but expected 7"
+    },
+    {
+      "id": "gemma|struct|flat_100|45|6",
+      "model_answer": "3",
+      "grade": "wrong",
+      "reason": "count is 3 but expected 11"
+    },
+    {
+      "id": "haiku|struct|nested_fixed|2|12",
+      "model_answer": "Direct preference optim",
+      "grade": "wrong",
+      "reason": "gives Direct preference optim instead of expected claim StarCoder 2 training code"
+    },
+    {
+      "id": "haiku|yaml|flat_tabular|3|6",
+      "model_answer": "15",
+      "grade": "wrong",
+      "reason": "count is 15 but expected 16"
+    },
+    {
+      "id": "haiku|struct|nested_variable|2|6",
+      "model_answer": "per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "haiku|toon|flat_tabular|1|4",
+      "model_answer": "Unverified... no, verified is false. Its status is \"false\" (not verified).",
+      "grade": "wrong",
+      "reason": "settles on false (not verified) when true was expected"
+    },
+    {
+      "id": "gemma|json_min|nested_variable|42|1",
+      "model_answer": "refuted",
+      "grade": "wrong",
+      "reason": "states refuted when supported was expected"
+    },
+    {
+      "id": "haiku|xml|nested_variable|4|6",
+      "model_answer": "Per-head scales help; perplexity intact",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "gemma|struct|nested_fixed|42|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|xml|flat_100|3|12",
+      "model_answer": "No verdict is recorded (empty).",
+      "grade": "correct",
+      "reason": "clearly states No verdict is recorded (empty)"
+    },
+    {
+      "id": "gemma|xml|nested_variable|46|11",
+      "model_answer": "None (or empty)",
+      "grade": "correct",
+      "reason": "clearly states None (or empty) for expected empty value"
+    },
+    {
+      "id": "gemma|toon|flat_100|44|2",
+      "model_answer": "The publication year of paper 2404.3286 is 2023",
+      "grade": "correct",
+      "reason": "sentence states the expected publication year 2023"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|1|3",
+      "model_answer": "Language models few-shot... no, 2106.09685's title is **LoRA low rank adaptation**.",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on LoRA low rank adaptation"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|3|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|struct|flat_100|3|11",
+      "model_answer": "Unknown (missing, \"~\")",
+      "grade": "correct",
+      "reason": "clearly states Unknown (missing, \"~\") for expected null value"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|4|11",
+      "model_answer": "None (empty list)",
+      "grade": "correct",
+      "reason": "states None (empty list) for expected empty value"
+    },
+    {
+      "id": "gemma|yaml|nested_fixed|42|6",
+      "model_answer": "source paper ID for 'Chinchilla scaling compute': 2203.15556",
+      "grade": "correct",
+      "reason": "sentence states the expected source paper ID 2203.15556"
+    },
+    {
+      "id": "haiku|tsv|flat_tabular|1|7",
+      "model_answer": "8",
+      "grade": "wrong",
+      "reason": "count is 8 but expected 7"
+    },
+    {
+      "id": "haiku|tsv|flat_100|4|12",
+      "model_answer": "(blank)",
+      "grade": "correct",
+      "reason": "states (blank) for expected null value"
+    },
+    {
+      "id": "haiku|key_value|flat_tabular|2|9",
+      "model_answer": "2203.15556, 2404.14219... no, that one is supported with null year, so: 2404.14219, 2403.09611? No, 2403.09611 has year 2024. Correct list: 2404.14219, 2408.03314? No, 2408.03314 has year 2024. The records with null year are 2203.15556 and 2404.14219.",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on 2203.15556 and 2404.14219"
+    },
+    {
+      "id": "gemma|struct|nested_variable|44|7",
+      "model_answer": "2",
+      "grade": "wrong",
+      "reason": "count is 2 but expected 3"
+    },
+    {
+      "id": "haiku|yaml|nested_variable|4|4",
+      "model_answer": "abstract mentions 32k limit; appendix B clarifies",
+      "grade": "correct",
+      "reason": "lists exactly the two expected subnotes separated by semicolon"
+    },
+    {
+      "id": "haiku|tsv|flat_100|1|12",
+      "model_answer": "Not given (blank)",
+      "grade": "correct",
+      "reason": "states Not given (blank) for expected null value"
+    },
+    {
+      "id": "haiku|json_min|flat_tabular|1|9",
+      "model_answer": "2203.15556, 2404.14219, 2302.13971 \u2014 wait, correction: 2302.13971 has year 2023, so the correct list is 2203.15556 and 2404.14219",
+      "grade": "correct",
+      "reason": "model corrects itself mid-answer and settles on 2203.15556 and 2404.14219"
+    },
+    {
+      "id": "haiku|yaml|nested_fixed|1|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "gemma|yaml|flat_100|42|11",
+      "model_answer": "the publication year of paper 2403.4527 is null",
+      "grade": "correct",
+      "reason": "sentence states the expected value null"
+    },
+    {
+      "id": "gemma|yaml|flat_100|42|12",
+      "model_answer": "the verdict for paper 2404.7570 is null",
+      "grade": "correct",
+      "reason": "sentence states the expected value null"
+    },
+    {
+      "id": "gemma|xml|nested_variable|42|11",
+      "model_answer": "None (or empty)",
+      "grade": "correct",
+      "reason": "clearly states None (or empty) for expected empty value"
+    },
+    {
+      "id": "haiku|toon|nested_fixed|2|2",
+      "model_answer": "unverified",
+      "grade": "correct",
+      "reason": "unverified clearly indicates not verified / false for a yes/no field"
+    },
+    {
+      "id": "haiku|json_min|nested_fixed|3|7",
+      "model_answer": "6",
+      "grade": "wrong",
+      "reason": "count is 6 but expected 7"
+    }
+  ]
+}

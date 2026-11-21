@@ -1,0 +1,1290 @@
+[
+ {
+  "id": "gemma|json_min|nested_variable|42|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "[\"abstract mentions 32k limit\", \"appendix B clarifies\"]",
+  "shard_reason": "Exact list of subnotes formatted as a JSON array of strings."
+ },
+ {
+  "id": "gemma|json_min|nested_variable|42|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "[\"per-head scales help\", \"perplexity intact\"]",
+  "shard_reason": "Exact list of subnotes formatted as a JSON array of strings."
+ },
+ {
+  "id": "gemma|json_min|nested_variable|46|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(None)",
+  "shard_reason": "States '(None)', which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "gemma|json_min|nested_fixed|42|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "StarCoder 2 training code (The verification status is null)",
+  "shard_reason": "States the correct claim text with a supporting note that verification status is null."
+ },
+ {
+  "id": "gemma|json_min|nested_variable|42|5",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "[\"llama 7b tested only\"]",
+  "shard_reason": "Exact list of subnotes formatted as a JSON array of strings."
+ },
+ {
+  "id": "gemma|json_min|nested_variable|42|1",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "refuted",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|json_min|flat_tabular|43|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "17",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|json_min|flat_100|45|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "5",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|json_min|flat_tabular|43|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "4",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|toon|nested_variable|45|5",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "subnotes[1]: llama 7b tested only",
+  "shard_reason": "Contains the exact expected subnote with TOON format array prefix 'subnotes[1]:'."
+ },
+ {
+  "id": "gemma|toon|nested_variable|42|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(None)",
+  "shard_reason": "Parenthetical '(None)' clearly states no value (none)."
+ },
+ {
+  "id": "gemma|toon|flat_100|44|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "The publication year of paper 2404.3286 is 2023",
+  "shard_reason": "Full sentence clearly states the correct publication year 2023."
+ },
+ {
+  "id": "gemma|toon|nested_variable|45|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "subnotes[2]: abstract mentions 32k limit,appendix B clarifies",
+  "shard_reason": "Contains the exact list of expected subnotes with TOON format array prefix 'subnotes[2]:'."
+ },
+ {
+  "id": "gemma|toon|nested_fixed|43|2",
+  "shard_grade": "unclear",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "Ambiguous: 'unverified' matches the record's verdict field, but in English is synonymous with 'not verified' (verified: false)."
+ },
+ {
+  "id": "gemma|toon|flat_100|44|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "The verification status of paper 2412.9928 is false",
+  "shard_reason": "Full sentence clearly states the correct verification status false."
+ },
+ {
+  "id": "gemma|toon|nested_variable|45|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "subnotes[2]: per-head scales help,perplexity intact",
+  "shard_reason": "Contains the exact list of expected subnotes with TOON format array prefix 'subnotes[2]:'."
+ },
+ {
+  "id": "gemma|toon|nested_fixed|46|2",
+  "shard_grade": "unclear",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "Ambiguous: 'unverified' matches the record's verdict field, but in English is synonymous with 'not verified' (verified: false)."
+ },
+ {
+  "id": "gemma|toon|flat_tabular|43|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "6",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|toon|nested_variable|45|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "1",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|toon|flat_tabular|44|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2408.03314",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|toon|nested_variable|42|10",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "table 3 contradicts",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verification status for 'Mistral fine tuning rules': false",
+  "shard_reason": "Answer gives the correct status false with question label."
+ },
+ {
+  "id": "gemma|yaml|flat_100|42|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "the verdict for paper 2404.7570 is null",
+  "shard_reason": "Sentence clearly states that the verdict is null."
+ },
+ {
+  "id": "gemma|yaml|nested_variable|44|5",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "    - llama 7b tested only",
+  "shard_reason": "Raw file gives '- llama 7b tested only' matching expected subnote; harness parser extracted empty string."
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "publication year of the source for 'DeepSeekMoE mixture experts': null",
+  "shard_reason": "Answer clearly states null with question label."
+ },
+ {
+  "id": "gemma|yaml|nested_variable|44|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "    - abstract mentions 32k limit\n    - appendix B clarifies",
+  "shard_reason": "Raw file gives multiline YAML list with the exact subnotes; harness parser extracted empty string."
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "source paper IDs for refuted claims: 2405.05254",
+  "shard_reason": "Answer gives the correct paper ID 2405.05254 with question label."
+ },
+ {
+  "id": "gemma|yaml|flat_100|42|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "the verification status of paper 2412.9928 is false",
+  "shard_reason": "Sentence states the correct status false."
+ },
+ {
+  "id": "gemma|yaml|flat_100|42|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "the publication year of paper 2403.4527 is null",
+  "shard_reason": "Sentence clearly states that the publication year is null."
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|7",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "number of claims with verdict supported: 7",
+  "shard_reason": "Answer gives the exact count 7 with question label."
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "source paper ID for 'Chinchilla scaling compute': 2203.15556",
+  "shard_reason": "Answer gives the correct paper ID 2203.15556 with question label."
+ },
+ {
+  "id": "gemma|yaml|nested_variable|44|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "    - per-head scales help\n    - perplexity intact",
+  "shard_reason": "Raw file gives multiline YAML list with the exact subnotes; harness parser extracted empty string."
+ },
+ {
+  "id": "gemma|yaml|nested_fixed|42|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verdict for 'Attention is all you need': supported",
+  "shard_reason": "Answer gives the correct value supported with question label."
+ },
+ {
+  "id": "gemma|yaml|flat_100|42|8",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "The paper IDs with no verdict (null) are: 2410.7912, 2403.4527, 2408.9479, 2411.5374, 2411.7691, 2409.9004, 2404.7570, 2408.7547.",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|yaml|flat_100|42|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "The paper IDs with no publication year (null) are: 2403.4527, 2411.5905, 2408.9479, 2407.1634, 2407.2964, 2402.5808, 2411.7691.",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|yaml|flat_100|45|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "7",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|yaml|flat_100|44|5",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "12",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|tsv|flat_tabular|45|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No publication year is listed for this paper)",
+  "shard_reason": "States that no publication year is listed for null value."
+ },
+ {
+  "id": "gemma|tsv|flat_tabular|46|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No publication year is provided/empty)",
+  "shard_reason": "States that publication year is not provided / empty for null value."
+ },
+ {
+  "id": "gemma|tsv|flat_100|46|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "4",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|tsv|flat_100|43|12",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "true",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|tsv|flat_100|45|3",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "LoRA low rank adaptation of large language models v50",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|tsv|flat_100|45|10",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2403.4527, 2410.7912, 2408.7790, 2402.3504, 2405.9445",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|xml|flat_100|45|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No year / Empty year)",
+  "shard_reason": "States that year is missing ('(No year / Empty year)') for null value."
+ },
+ {
+  "id": "gemma|xml|nested_variable|45|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "none (or empty)",
+  "shard_reason": "States 'none (or empty)' for null/none value."
+ },
+ {
+  "id": "gemma|xml|nested_fixed|45|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(The publication year is missing/not provided)",
+  "shard_reason": "States that publication year is missing / not provided for null value."
+ },
+ {
+  "id": "gemma|xml|flat_tabular|42|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(The year tag is empty)",
+  "shard_reason": "States that year tag is empty for null value."
+ },
+ {
+  "id": "gemma|xml|flat_tabular|44|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(The year tag is empty)",
+  "shard_reason": "States that year tag is empty for null value."
+ },
+ {
+  "id": "gemma|xml|flat_tabular|46|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(empty)",
+  "shard_reason": "States that field is empty ('(empty)') for null value."
+ },
+ {
+  "id": "gemma|xml|flat_100|45|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No verdict / Empty verdict)",
+  "shard_reason": "States that verdict is missing ('(No verdict / Empty verdict)') for null value."
+ },
+ {
+  "id": "gemma|xml|nested_variable|42|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (or empty)",
+  "shard_reason": "States 'None (or empty)' for null/none value."
+ },
+ {
+  "id": "gemma|xml|flat_tabular|45|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(The publication year tag is empty/not specified)",
+  "shard_reason": "States that publication year tag is empty/not specified for null value."
+ },
+ {
+  "id": "gemma|xml|nested_fixed|43|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No publication year provided/empty)",
+  "shard_reason": "States that publication year is not provided / empty for null value."
+ },
+ {
+  "id": "gemma|xml|nested_variable|46|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (or empty)",
+  "shard_reason": "States 'None (or empty)' for null/none value."
+ },
+ {
+  "id": "gemma|xml|nested_fixed|46|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(No publication year is listed for this claim)",
+  "shard_reason": "States that no publication year is listed for null value."
+ },
+ {
+  "id": "gemma|xml|flat_100|42|12",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|xml|flat_100|44|11",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|xml|flat_100|46|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "4",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|xml|flat_100|43|8",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "5",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|key_value|flat_100|45|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2403.4527, 2408.6977, 2411.6313, 2407.4006, 2407.1634, 2409.9004",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|key_value|flat_100|42|10",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2410.7912, 2412.1887, 2402.3504, 2406.4441, 2404.7570",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|key_value|flat_tabular|46|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "15",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|key_value|flat_100|45|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "22",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|struct|nested_variable|43|5",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": ">>llama 7b tested only",
+  "shard_reason": "Gives exact subnote value; leading '>>' is Struct depth-2 indentation syntax from the prompt."
+ },
+ {
+  "id": "gemma|struct|nested_variable|45|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": ">>per-head scales help, >>perplexity intact",
+  "shard_reason": "Gives exact subnote list; leading '>>' on each item is Struct depth-2 indentation syntax from the prompt."
+ },
+ {
+  "id": "gemma|struct|flat_100|46|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "false (or 0)",
+  "shard_reason": "States correct boolean value ('false') and its equivalent numeric representation ('0') without hedging."
+ },
+ {
+  "id": "gemma|struct|nested_variable|43|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": ">>per-head scales help, >>perplexity intact",
+  "shard_reason": "Gives exact subnote list; leading '>>' on each item is Struct depth-2 indentation syntax from the prompt."
+ },
+ {
+  "id": "gemma|struct|nested_variable|45|5",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": ">>llama 7b tested only",
+  "shard_reason": "Gives exact subnote value; leading '>>' is Struct depth-2 indentation syntax from the prompt."
+ },
+ {
+  "id": "gemma|struct|nested_variable|44|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(None are listed)",
+  "shard_reason": "Clear statement that no subnotes exist, meeting the no-value rule."
+ },
+ {
+  "id": "gemma|struct|nested_fixed|42|2",
+  "shard_grade": "unclear",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "Answer 'unverified' is semantically 'not verified' for a boolean field, but also matches the verdict enum in the same row; cannot tell which field was retrieved."
+ },
+ {
+  "id": "gemma|struct|flat_tabular|44|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2404.14219, 2408.03314",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|struct|nested_variable|44|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|struct|flat_100|45|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "3",
+  "shard_reason": null
+ },
+ {
+  "id": "gemma|struct|flat_100|44|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "6",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|json_min|flat_tabular|1|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2404.14219, 2302.13971 \u2014 wait, correction: 2302.13971 has year 2023, so the correct list is 2203.15556 and 2404.14219",
+  "shard_reason": "Model self-corrects mid-answer to the exact expected list."
+ },
+ {
+  "id": "haiku|json_min|flat_tabular|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no year)",
+  "shard_reason": "States null with explanatory note (no year), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|flat_tabular|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no year listed)",
+  "shard_reason": "States null with explanatory note (no year listed), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no year listed)",
+  "shard_reason": "States null with explanatory note (no year listed), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Not specified (null)",
+  "shard_reason": "States Not specified (null), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_variable|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes)",
+  "shard_reason": "States None with bracketed note (no subnotes), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|2|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Attention... no: StarCoder 2 training code",
+  "shard_reason": "Model corrects itself mid-answer and settles on StarCoder 2 training code."
+ },
+ {
+  "id": "haiku|json_min|nested_variable|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes)",
+  "shard_reason": "States None with bracketed note (no subnotes), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Not available (year is null)",
+  "shard_reason": "States Not available (year is null), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|3|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States unverified, which counts as not verified / false under the yes/no rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|2|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States unverified, which counts as not verified / false under the yes/no rule."
+ },
+ {
+  "id": "haiku|json_min|nested_variable|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes)",
+  "shard_reason": "States None with bracketed note (no subnotes), clearly indicating no value under the no-value rule."
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|2|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "6",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|4|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "6",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|json_min|nested_fixed|3|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "6",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|json_min|flat_tabular|3|4",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "false (not verified)",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|toon|nested_variable|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes are listed)",
+  "shard_reason": "States 'None' with a bracketed note that no subnotes are listed, matching expected no value."
+ },
+ {
+  "id": "haiku|toon|flat_tabular|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no publication year is recorded)",
+  "shard_reason": "States 'null' with an explanatory bracketed note that no publication year is recorded, which is correct for no value."
+ },
+ {
+  "id": "haiku|toon|nested_variable|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes)",
+  "shard_reason": "States 'None' with a bracketed note that no subnotes exist, matching expected no value."
+ },
+ {
+  "id": "haiku|toon|nested_fixed|2|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States 'unverified', which counts as false/not verified under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|toon|nested_fixed|3|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States 'unverified', which counts as false/not verified under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|toon|flat_tabular|1|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2404.14219... no, 2404.14219 has year 2024. Only 2203.15556 has a null year? Correction: 2203.15556 and 2404.14219 have year null? Checking: 2404.14219 shows year null, so both 2203.15556 and 2404.14219 lack a year... wait, 2203.15556 has year null and 2404.14219 has year null. Answer: 2203.15556, 2404.14219",
+  "shard_reason": "The model corrects itself mid-answer and settles on '2203.15556, 2404.14219', matching the expected list."
+ },
+ {
+  "id": "haiku|toon|flat_tabular|2|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556 (no, wait: 2203.15556 has year null) Correction: 2203.15556 and 2404.14219",
+  "shard_reason": "The model corrects itself mid-answer and settles on '2203.15556 and 2404.14219', matching the expected list."
+ },
+ {
+  "id": "haiku|toon|nested_variable|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes are listed)",
+  "shard_reason": "States 'None' with a bracketed note that no subnotes are listed, matching expected no value."
+ },
+ {
+  "id": "haiku|toon|nested_fixed|1|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States 'unverified', which counts as false/not verified under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|toon|nested_variable|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes are listed; the subnotes field is an empty list)",
+  "shard_reason": "States 'None' with a bracketed note confirming subnotes is an empty list, matching expected no value."
+ },
+ {
+  "id": "haiku|toon|nested_fixed|4|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States 'unverified', which counts as false/not verified under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|toon|nested_fixed|2|12",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "Direct preference optim",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|toon|flat_tabular|1|4",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "Unverified... no, verified is false. Its status is \"false\" (not verified).",
+  "shard_reason": "The model corrected itself mid-answer and settled on 'false', which is wrong (expected 'true')."
+ },
+ {
+  "id": "haiku|toon|flat_tabular|2|4",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "Unverified (verified is false)",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|toon|nested_variable|4|12",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "checkpoint size under 50MB",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|yaml|nested_variable|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (empty list)",
+  "shard_reason": "States None with an explanatory note in brackets; expected none."
+ },
+ {
+  "id": "haiku|yaml|nested_fixed|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no year recorded)",
+  "shard_reason": "States null with an explanatory note in brackets; expected null."
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|1|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556 has year null... no, correction: 2203.15556, 2404.14219",
+  "shard_reason": "Model corrects itself mid-answer and settles on 2203.15556, 2404.14219, which matches expected."
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified: true",
+  "shard_reason": "States the correct boolean value (verified: true)."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|1|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists both correct subnotes separated by a semicolon instead of a comma."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|4|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists both correct subnotes separated by a semicolon instead of a comma."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (empty list)",
+  "shard_reason": "States None with an explanatory note in brackets; expected none."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|2|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "per-head scales help; perplexity intact",
+  "shard_reason": "Lists both correct subnotes separated by a semicolon instead of a comma."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists both correct subnotes separated by a semicolon instead of a comma."
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|2|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified? No: refuted",
+  "shard_reason": "Model corrects itself mid-answer and settles on refuted, which matches expected."
+ },
+ {
+  "id": "haiku|yaml|nested_variable|1|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "per-head scales help; perplexity intact",
+  "shard_reason": "Lists both correct subnotes separated by a semicolon instead of a comma."
+ },
+ {
+  "id": "haiku|yaml|nested_fixed|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no year is recorded)",
+  "shard_reason": "States null with an explanatory note in brackets; expected null."
+ },
+ {
+  "id": "haiku|yaml|nested_fixed|1|2",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|4|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "9",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|1|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "14",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|yaml|flat_tabular|3|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "15",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "true (verified)",
+  "shard_reason": "States 'true (verified)', clearly giving true under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|1|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Not given (blank)",
+  "shard_reason": "States 'Not given (blank)', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "No publication year is recorded for 2203.15556.",
+  "shard_reason": "States 'No publication year is recorded for 2203.15556.', clearly indicating the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(blank, no publication year)",
+  "shard_reason": "States 'no publication year', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(blank)",
+  "shard_reason": "States '(blank)', which clearly indicates the field has no value under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|4|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified (true)",
+  "shard_reason": "States 'verified (true)', clearly giving true under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|1|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified: true",
+  "shard_reason": "States 'verified: true', clearly giving true under the yes/no fields rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Blank (no year listed)",
+  "shard_reason": "States 'Blank (no year listed)', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(blank, no year recorded)",
+  "shard_reason": "States 'no year recorded', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Blank (no year listed)",
+  "shard_reason": "States 'Blank (no year listed)', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|4|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(blank)",
+  "shard_reason": "States '(blank)', which clearly indicates the field has no value under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Not given (blank)",
+  "shard_reason": "States 'Not given (blank)', which clearly indicates the value is missing under the no-value rule."
+ },
+ {
+  "id": "haiku|tsv|flat_100|1|9",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2408.7547",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|3|4",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "false",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|1|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "8",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|tsv|flat_tabular|3|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "8",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|xml|flat_100|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Empty (no publication year)",
+  "shard_reason": "States \"Empty (no publication year)\", which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "haiku|xml|flat_100|3|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "No verdict is recorded (empty).",
+  "shard_reason": "States \"No verdict is recorded (empty).\", which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "haiku|xml|nested_variable|4|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Per-head scales help; perplexity intact",
+  "shard_reason": "Lists exactly the right subnotes separated by a semicolon under the lists rule."
+ },
+ {
+  "id": "haiku|xml|nested_variable|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists exactly the right subnotes separated by a semicolon under the lists rule."
+ },
+ {
+  "id": "haiku|xml|nested_variable|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes listed)",
+  "shard_reason": "States \"None (no subnotes listed)\", which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "haiku|xml|nested_fixed|1|8",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Two claims have a source published in 2024.",
+  "shard_reason": "Full sentence states the exact right value under the sentence rule."
+ },
+ {
+  "id": "haiku|xml|nested_variable|4|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists exactly the right subnotes separated by a semicolon under the lists rule."
+ },
+ {
+  "id": "haiku|xml|nested_fixed|4|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Unverified",
+  "shard_reason": "States \"Unverified\" for verification status, which counts as false under the yes/no rule."
+ },
+ {
+  "id": "haiku|xml|nested_fixed|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "No year is given (the year field is empty)",
+  "shard_reason": "States \"No year is given (the year field is empty)\", which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "haiku|xml|flat_100|4|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "(empty; no verdict recorded)",
+  "shard_reason": "States \"(empty; no verdict recorded)\", which clearly indicates no value under the no-value rule."
+ },
+ {
+  "id": "haiku|xml|nested_variable|3|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Two subnotes",
+  "shard_reason": "States exact count as word \"Two subnotes\" (2) under the counts rule."
+ },
+ {
+  "id": "haiku|xml|flat_tabular|4|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified (true)",
+  "shard_reason": "States \"verified (true)\", which clearly indicates true under the yes/no rule."
+ },
+ {
+  "id": "haiku|xml|flat_tabular|3|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "17",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|xml|flat_tabular|2|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "17",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|xml|flat_tabular|2|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "9",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|xml|nested_fixed|4|8",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "3",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|1|3",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Language models few-shot... no, 2106.09685's title is **LoRA low rank adaptation**.",
+  "shard_reason": "Model corrected itself mid-answer and settled on LoRA low rank adaptation."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|2|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified... wait, correction: 2405.05254 has verdict refuted.",
+  "shard_reason": "Model corrected itself mid-answer and settled on refuted."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|1|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Verified: **true**",
+  "shard_reason": "States the correct value true for verification status."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|4|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified: true",
+  "shard_reason": "States the correct value true for verification status."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|1|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no publication year recorded)",
+  "shard_reason": "States null with explanatory note confirming no publication year is recorded."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|3|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified? No: refuted",
+  "shard_reason": "Model corrected itself mid-answer and settled on refuted."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|2|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2404.14219... no, that one is supported with null year, so: 2404.14219, 2403.09611? No, 2403.09611 has year 2024. Correct list: 2404.14219, 2408.03314? No, 2408.03314 has year 2024. The records with null year are 2203.15556 and 2404.14219.",
+  "shard_reason": "Model corrected itself mid-answer and settled on 2203.15556 and 2404.14219."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|1|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified... wait, let me correct that: 2405.05254 has verdict **refuted**.",
+  "shard_reason": "Model corrected itself mid-answer and settled on refuted."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|1|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2203.15556, 2404.14219... no, that one has year null too, so: 2203.15556, 2404.14219, 2408.03314 \u2014 wait, 2408.03314 has year 2024. Correct list: 2203.15556, 2404.14219",
+  "shard_reason": "Model corrected itself mid-answer and settled on 2203.15556, 2404.14219."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "verified: true",
+  "shard_reason": "States the correct value true for verification status."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|4|1",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified... wait, let me be precise: refuted",
+  "shard_reason": "Model corrected itself mid-answer and settled on refuted."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "null (no publication year is recorded)",
+  "shard_reason": "States null with explanatory note confirming no publication year is recorded."
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|3|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "14",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|3|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "9",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|2|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "14",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|key_value|flat_tabular|4|6",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "13",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|struct|nested_variable|4|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "per-head scales help; perplexity intact",
+  "shard_reason": "Lists the exact required items, separated by semicolon instead of comma."
+ },
+ {
+  "id": "haiku|struct|nested_fixed|2|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Not verified (the verified field is 0, and the verdict is unverified)",
+  "shard_reason": "States \"Not verified\", which is equivalent to false under the yes/no rule."
+ },
+ {
+  "id": "haiku|struct|nested_fixed|3|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified",
+  "shard_reason": "States \"unverified\", which is equivalent to false under the yes/no rule."
+ },
+ {
+  "id": "haiku|struct|flat_100|3|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Unknown (missing, \"~\")",
+  "shard_reason": "States value is unknown/missing under the no-value rule."
+ },
+ {
+  "id": "haiku|struct|nested_variable|2|4",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "abstract mentions 32k limit; appendix B clarifies",
+  "shard_reason": "Lists the exact required items, separated by semicolon instead of comma."
+ },
+ {
+  "id": "haiku|struct|flat_tabular|2|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Unknown (listed as ~)",
+  "shard_reason": "States value is unknown/missing under the no-value rule."
+ },
+ {
+  "id": "haiku|struct|nested_variable|4|11",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "None (no subnotes)",
+  "shard_reason": "States \"None\" under the no-value rule."
+ },
+ {
+  "id": "haiku|struct|flat_100|1|9",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "2403.4527, 2411.6313, 2402.5808, 2408.9479, 2407.4006, 2410.2343, 2409.9004, 2407.1634, 2411.7691, 2408.7547 (year is \"~\")",
+  "shard_reason": "Lists exact IDs; the bracketed note does not contradict the answer."
+ },
+ {
+  "id": "haiku|struct|nested_fixed|1|2",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "unverified (verified: false)",
+  "shard_reason": "States \"unverified\", which is equivalent to false under the yes/no rule."
+ },
+ {
+  "id": "haiku|struct|flat_100|3|12",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "Unknown (missing, \"~\")",
+  "shard_reason": "States value is unknown/missing under the no-value rule."
+ },
+ {
+  "id": "haiku|struct|nested_variable|1|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "per-head scales help; perplexity intact",
+  "shard_reason": "Lists the exact required items, separated by semicolon instead of comma."
+ },
+ {
+  "id": "haiku|struct|nested_variable|2|6",
+  "shard_grade": "correct",
+  "strict_grade": "wrong",
+  "shard_answer": "per-head scales help; perplexity intact",
+  "shard_reason": "Lists the exact required items, separated by semicolon instead of comma."
+ },
+ {
+  "id": "haiku|struct|flat_100|2|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "48",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|struct|flat_tabular|1|7",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "8",
+  "shard_reason": null
+ },
+ {
+  "id": "haiku|struct|nested_fixed|2|12",
+  "shard_grade": "wrong",
+  "strict_grade": "wrong",
+  "shard_answer": "Direct preference optim",
+  "shard_reason": null
+ }
+]

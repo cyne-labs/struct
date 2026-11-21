@@ -100,6 +100,28 @@ Struct wins where nesting varies. TOON can only stay tabular while every row has
 
 The benchmark ran on spec v0.2. The v0.3 changes are raw values and float formatting. We checked the fixtures: none of the three schemas has a `float` field, and no `.stc` fixture contains a backslash, so neither change touches these files. The v0.2 file format and the v0.3 one are identical for them. Struct values-only counts (no schema line) and untyped-schema counts are in the CSV.
 
+## Retrieval accuracy (R4): Claude Haiku
+
+Can a model read the data back? We gave Claude Haiku 5.5 the same data in seven formats and asked the same 48 questions about it: single lookups, nested lookups, counts and filters, and questions about missing values. Only the format changed. Haiku ran through `claude -p` at low effort, with a one-line system prompt and no tools, 4 times per prompt (96 calls).
+
+Answers were graded by meaning: right if they give exactly the right value, whatever the wording. Strict text matching is shown next to it, because it marks right answers wrong when the model adds a note, as in `2404.7570, 2411.9702 (verdict is "~")`. A blind re-grade of 184 sampled answers agreed with the grades on 180, and on all 15 sampled Struct answers.
+
+| Format | By meaning | Strict match | Mean input tokens |
+|---|---|---|---|
+| **Struct** | **189/192 (98.4%)** | 146/192 (76.0%) | 2,123 |
+| XML-style tags | 183/192 (95.3%) | 130/192 (67.7%) | 3,922 |
+| Minified JSON | 176/192 (91.7%) | 158/192 (82.3%) | 2,717 |
+| YAML | 175/192 (91.1%) | 154/192 (80.2%) | 2,776 |
+| TOON | 174/192 (90.6%) | 163/192 (84.9%) | 2,169 |
+| TSV (flat data only) | 90/96 (93.8%) | 75/96 (78.1%) | 2,810 |
+| `key: value` lines (flat data only) | 88/96 (91.7%) | 76/96 (79.2%) | 3,831 |
+
+Input tokens are as counted by the Anthropic API, including about 640 fixed tokens per call. TSV and `key: value` can't hold nested data, so they ran on the two flat datasets only and their numbers aren't directly comparable with the rest.
+
+On Haiku, Struct had both the highest accuracy and the fewest input tokens. This is one model. Results on small local models are not in this table.
+
+Source: `research/r4-retrieval-haiku.md`, `bench/r4/grades/haiku_*.json` and `bench/r4/grades/crosscheck/`.
+
 ## Small per-token facts
 
 From the same report, measured on the same four tokenizers.
