@@ -120,6 +120,18 @@ Input tokens are as counted by the Anthropic API, including about 640 fixed toke
 
 On Haiku, Struct had both the highest accuracy and the fewest input tokens. This is one model. Results on small local models are not in this table.
 
+By seed, by meaning. Each seed is one complete run of all 24 prompts, so every format is compared on the same runs:
+
+| Format | Seed 1 | Seed 2 | Seed 3 | Seed 4 |
+|---|---|---|---|---|
+| **Struct** | **47/48** | **46/48** | **48/48** | **48/48** |
+| XML-style tags | 45/48 | 46/48 | 45/48 | 47/48 |
+| YAML | 44/48 | 44/48 | 43/48 | 44/48 |
+| Minified JSON | 44/48 | 44/48 | 44/48 | 44/48 |
+| TOON | 42/48 | 44/48 | 45/48 | 43/48 |
+| `key: value` lines (flat only) | 21/24 | 23/24 | 22/24 | 22/24 |
+| TSV (flat only) | 20/24 | 24/24 | 22/24 | 24/24 |
+
 Source: `research/r4-retrieval-haiku.md`, `bench/r4/grades/haiku_*.json` and `bench/r4/grades/crosscheck/`.
 
 ## Retrieval accuracy (R4): Gemini 3.8 Flash
@@ -140,6 +152,18 @@ Tokens per answer are input plus output as the CLI reports them, the total cost 
 
 Gemini read every format almost perfectly. At that accuracy, Struct was the cheapest format to get answers from: about 43% of JSON's cost per answer. Most of the difference is thinking: on the 100-row table, Gemini wrote about 4,350 output tokens per answer on Struct and about 10,000 to 15,000 on JSON.
 
+By seed, by meaning. Each seed is one complete run of all 24 prompts, so every format is compared on the same runs:
+
+| Format | Seed 1 | Seed 2 | Seed 3 | Seed 4 |
+|---|---|---|---|---|
+| **Struct** | **47/48** | **47/48** | **48/48** | **48/48** |
+| XML-style tags | 47/48 | 47/48 | 47/48 | 47/48 |
+| YAML | 47/48 | 48/48 | 48/48 | 48/48 |
+| Minified JSON | 48/48 | 48/48 | 48/48 | 48/48 |
+| TOON | 48/48 | 48/48 | 48/48 | 48/48 |
+| `key: value` lines (flat only) | 23/24 | 24/24 | 24/24 | 24/24 |
+| TSV (flat only) | 24/24 | 23/24 | 24/24 | 24/24 |
+
 Source: `research/r4-retrieval-gemini.md`, `bench/r4/grades/gemini_*.json` and `bench/r4/grades/crosscheck_b/`.
 
 ## Retrieval accuracy (R4): Gemini 3.5 Flash Lite, thinking off and on
@@ -159,6 +183,32 @@ A much weaker model, called directly through the Gemini API (no agent prompt, ex
 With thinking on, Struct tied XML for the highest accuracy, with the fewest input tokens of any format.
 
 With thinking off, Struct came last among the five formats that ran on every dataset. Its misses were mostly questions about missing values (24 misses, against 7 for TOON and 6 for JSON): Struct writes no value as `~` and an empty list as no line at all, and without reasoning the model often missed both. Counting questions were hard in every format. So on a weak model, a single pass without thinking is where Struct is fragile.
+
+By seed, by meaning. Each seed is one complete run of all 24 prompts, so every format is compared on the same runs:
+
+Thinking low:
+
+| Format | Seed 1 | Seed 2 | Seed 3 | Seed 4 |
+|---|---|---|---|---|
+| **Struct** | **35/48** | **35/48** | **35/48** | **35/48** |
+| XML-style tags | 40/48 | 42/48 | 40/48 | 42/48 |
+| YAML | 42/48 | 43/48 | 42/48 | 43/48 |
+| Minified JSON | 41/48 | 43/48 | 41/48 | 43/48 |
+| TOON | 39/48 | 41/48 | 39/48 | 40/48 |
+| `key: value` lines (flat only) | 21/24 | 18/24 | 18/24 | 18/24 |
+| TSV (flat only) | 18/24 | 16/24 | 17/24 | 19/24 |
+
+Thinking high:
+
+| Format | Seed 1 | Seed 2 | Seed 3 | Seed 4 |
+|---|---|---|---|---|
+| **Struct** | **48/48** | **48/48** | **48/48** | **47/48** |
+| XML-style tags | 48/48 | 48/48 | 48/48 | 47/48 |
+| YAML | 48/48 | 48/48 | 47/48 | 47/48 |
+| Minified JSON | 47/48 | 46/48 | 48/48 | 47/48 |
+| TOON | 48/48 | 48/48 | 46/48 | 46/48 |
+| `key: value` lines (flat only) | 23/24 | 24/24 | 24/24 | 23/24 |
+| TSV (flat only) | 23/24 | 24/24 | 23/24 | 23/24 |
 
 Source: `research/r4-retrieval-gemini-lite.md`, `research/r4-retrieval-gemini-lite-high.md`, `bench/r4/grades/m4_*.json` (thinking low) and `m5_*.json` (thinking high), and `bench/r4/grades/crosscheck_jb007/` and `crosscheck_m5/`.
 
