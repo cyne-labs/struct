@@ -4,6 +4,19 @@ Struct is a structured-output format for language models: declare the shape once
 
 The Rust crate is `structl`, files use the `.stc` extension, and everything is licensed under Apache 2.0.
 
+## Results at a glance
+
+Can models read it back? Same data, same 48 questions, seven formats (minified JSON, TOON, YAML, TSV, XML-style tags, `key: value` lines, Struct), graded by meaning and blind re-checked. Details and every seed are in the R4 sections below.
+
+| Model | Struct accuracy | Rank of 7 | Struct's tokens vs minified JSON |
+|---|---|---|---|
+| Claude Haiku 5.5 (effort low) | 189/192 (98.4%) | 1st | 78% of JSON's input tokens |
+| Gemini 3.8 Flash (low variant) | 190/192 (99.0%) | 4th (JSON and TOON 100%) | 43% of JSON's tokens per answer, thinking included |
+| Gemini 3.5 Flash Lite, thinking high | 191/192 (99.5%) | tied 1st with XML | 81% of JSON's input tokens |
+| Gemini 3.5 Flash Lite, thinking low | 140/192 (72.9%) | last of the 5 formats that ran on every dataset | 81% of JSON's input tokens |
+
+With thinking on, Struct was the most accurate format or within two answers of it on every model, and the cheapest to read on all three. Without thinking, a weak model misread how Struct marks missing values (`~`, and empty lists written as no line), which is where Struct is fragile today.
+
 ## Example
 
 The same two claims, as minified JSON and as Struct. The data comes from our `nested_variable` benchmark fixture, trimmed to two records.
@@ -33,7 +46,8 @@ KV cache quant loses 2x acc|refuted|2406.12345|2024|
 What is different from JSON, and from other compact formats:
 
 - The schema is declared once, in a `schema:` line. Data lines carry only values, and every line ends with `|`. There are no field names, quotes or braces in the data.
-- Lists of any depth are child lines. `>` is depth 1, `>>` is depth 2, and so on.- `~` is null.
+- Lists of any depth are child lines. `>` is depth 1, `>>` is depth 2, and so on.
+- `~` is null.
 - A value that starts with `\r` is raw: real line breaks, tabs and indentation are kept as written, up to the next unescaped `|`. This is for multi-line text and code.
 - One file can hold several classes. Each `schema:` line starts a new block, and `schema:name` with no braces reuses a class defined earlier.
 
@@ -58,7 +72,7 @@ We counted tokens for three data shapes, in minified JSON, TOON and Struct, with
 - Gemma: `gemma-3-4b-it-Q4_K_M.gguf`
 - LFM: `LFM2.5-8B-A1B-Q4_K_M.gguf`
 
-The Struct rows are Struct v0.2 with the typed schema line included, so every Struct number pays for its own schema. Lower is better. Cells are token counts. The last two columns compare Struct with TOON and with minified JSON.
+The Struct rows include the typed schema line, so every Struct number pays for its own schema. Lower is better. Cells are token counts. The last two columns compare Struct with TOON and with minified JSON.
 
 Source: `research/r1-remeasure.md` and `bench/r1/results_r1_fixtures.csv`.
 
@@ -98,7 +112,7 @@ We lose to TOON on the first two shapes: +2.4% on flat tables and +8.5% on fixed
 
 Struct wins where nesting varies. TOON can only stay tabular while every row has the same shape. Once child list lengths differ, it falls back to repeating keys (`- text:`, `subnotes[2]:`) on every record. Struct's positional child lines carry no keys at any depth, which is where the -27.1% against TOON comes from.
 
-The benchmark ran on spec v0.2. The v0.3 changes are raw values and float formatting. We checked the fixtures: none of the three schemas has a `float` field, and no `.stc` fixture contains a backslash, so neither change touches these files. The v0.2 file format and the v0.3 one are identical for them. Struct values-only counts (no schema line) and untyped-schema counts are in the CSV.
+These counts hold for the current spec, v0.3. They were measured under v0.2, but the only v0.3 changes are raw values and float formatting, and none of the three fixtures has a `float` field or a backslash, so the files are byte-for-byte the same under both. Struct values-only counts (no schema line) and untyped-schema counts are in the CSV.
 
 ## Retrieval accuracy (R4): Claude Haiku
 
@@ -299,6 +313,8 @@ LoRA matches full finetune|supported|2021|
 
 `decode(input)` and `encode(&file)` are the same calls with the schemas defined inside the file. A decode returns a list of blocks in file order, plus warnings. Errors stop decoding and name the line and column.
 
+`doctor(schemas, text, &options)` repairs model output before decoding, under the rule in `SPEC.md` section 9: it fixes only what has exactly one reading (code fences, an echoed schema line, chatter before or after the data, a missing final `|`) and reports every fix and every bad line it can't fix. It never changes a value. `prompt(schemas)` builds the format instructions to put in a prompt.
+
 **Experimental:** `gbnf(schemas)` returns a GBNF grammar for llama.cpp that allows only canonical Struct for the given schemas. `gbnf_triggered(schemas, trigger)` lets the model write freely, for example while reasoning, until the trigger text appears, then constrains the rest. Both return `Result<String, StructError>`.
 
 ## Status
@@ -307,8 +323,9 @@ Pre-release. The spec is v0.3. The crate is std-only Rust, and a 5,000-case roun
 
 Next:
 
-- The doctor: structural repair of model output that never touches values. It fixes code fences, echoed schemas, chatter, header rows, a missing final `|` and a cut-off last record, and reports everything else as a bad line. It is specified in `SPEC.md` and not built yet.
-- A total-cost benchmark: tokens per correct result, including reasoning and retries. The R1 numbers above count output tokens only.
+- Missing values without thinking: weak models reading in a single pass misread `~` and empty lists (see Gemini 3.5 Flash Lite, thinking low). Writing null as `null` costs no extra tokens on Gemma's tokenizer; the change is under consideration and not in the spec.
+- A small local model (Qwen3.5-4B) on the R4 read test, in progress.
+- A total-cost benchmark: tokens per correct result, including reasoning and retries, across both reading and writing.
 
 ## License
 

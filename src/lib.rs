@@ -1,10 +1,10 @@
-//! # structl: Core Library for the Struct Structured-Output Format (v0.2)
+//! # structl: Core Library for the Struct Structured-Output Format (v0.3)
 //!
 //! Struct is a token-minimal structured-output format designed for language models.
 //! A file is composed of schema-declared classes, where data lines carry only values
 //! separated by `|` delimiters with no repeated field names or quotation marks.
 //!
-//! This library provides the core standard-library implementation of Struct v0.2:
+//! This library provides the core standard-library implementation of Struct v0.3:
 //! - **Schema reading:** schema declaration, class definition, reuse, and field typing.
 //! - **Decoding:** text to structured in-memory values with precise line/column errors.
 //! - **Encoding:** data to canonical Struct text.
