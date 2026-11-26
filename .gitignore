@@ -3,3 +3,9 @@ __pycache__/
 *.pyc
 .venv/
 *.gguf
+
+# Internal: benchmarks, research, design notes and tools stay out of the public repo
+bench/
+research/
+milestones/
+tools/

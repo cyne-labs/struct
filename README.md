@@ -74,8 +74,6 @@ We counted tokens for three data shapes, in minified JSON, TOON and Struct, with
 
 The Struct rows include the typed schema line, so every Struct number pays for its own schema. Lower is better. Cells are token counts. The last two columns compare Struct with TOON and with minified JSON.
 
-Source: `research/r1-remeasure.md` and `bench/r1/results_r1_fixtures.csv`.
-
 ### Flat table, 20 rows x 5 columns
 
 | Model | Minified JSON | TOON | Struct | Struct vs TOON | Struct vs JSON |
@@ -112,7 +110,7 @@ We lose to TOON on the first two shapes: +2.4% on flat tables and +8.5% on fixed
 
 Struct wins where nesting varies. TOON can only stay tabular while every row has the same shape. Once child list lengths differ, it falls back to repeating keys (`- text:`, `subnotes[2]:`) on every record. Struct's positional child lines carry no keys at any depth, which is where the -27.1% against TOON comes from.
 
-These counts hold for the current spec, v0.3. They were measured under v0.2, but the only v0.3 changes are raw values and float formatting, and none of the three fixtures has a `float` field or a backslash, so the files are byte-for-byte the same under both. Struct values-only counts (no schema line) and untyped-schema counts are in the CSV.
+These counts hold for the current spec, v0.3. They were measured under v0.2, but the only v0.3 changes are raw values and float formatting, and none of the three fixtures has a `float` field or a backslash, so the files are byte-for-byte the same under both.
 
 ## Retrieval accuracy (R4): Claude Haiku
 
@@ -146,8 +144,6 @@ By seed, by meaning. Each seed is one complete run of all 24 prompts, so every f
 | `key: value` lines (flat only) | 21/24 | 23/24 | 22/24 | 22/24 |
 | TSV (flat only) | 20/24 | 24/24 | 22/24 | 24/24 |
 
-Source: `research/r4-retrieval-haiku.md`, `bench/r4/grades/haiku_*.json` and `bench/r4/grades/crosscheck/`.
-
 ## Retrieval accuracy (R4): Gemini 3.8 Flash
 
 The same test on Gemini 3.8 Flash (low variant), run headless through the Antigravity CLI, 4 times per prompt (96 calls). Grading is the same: by meaning, 7 graders, then a blind re-grade of 82 sampled answers with the model's name and the formats removed. It agreed with all 82.
@@ -177,8 +173,6 @@ By seed, by meaning. Each seed is one complete run of all 24 prompts, so every f
 | TOON | 48/48 | 48/48 | 48/48 | 48/48 |
 | `key: value` lines (flat only) | 23/24 | 24/24 | 24/24 | 24/24 |
 | TSV (flat only) | 24/24 | 23/24 | 24/24 | 24/24 |
-
-Source: `research/r4-retrieval-gemini.md`, `bench/r4/grades/gemini_*.json` and `bench/r4/grades/crosscheck_b/`.
 
 ## Retrieval accuracy (R4): Gemini 3.5 Flash Lite, thinking off and on
 
@@ -223,8 +217,6 @@ Thinking high:
 | TOON | 48/48 | 48/48 | 46/48 | 46/48 |
 | `key: value` lines (flat only) | 23/24 | 24/24 | 24/24 | 23/24 |
 | TSV (flat only) | 23/24 | 24/24 | 23/24 | 23/24 |
-
-Source: `research/r4-retrieval-gemini-lite.md`, `research/r4-retrieval-gemini-lite-high.md`, `bench/r4/grades/m4_*.json` (thinking low) and `m5_*.json` (thinking high), and `bench/r4/grades/crosscheck_jb007/` and `crosscheck_m5/`.
 
 ## Small per-token facts
 
@@ -324,7 +316,6 @@ Pre-release. The spec is v0.3. The crate is std-only Rust, and a 5,000-case roun
 Next:
 
 - Missing values without thinking: weak models reading in a single pass misread `~` and empty lists (see Gemini 3.5 Flash Lite, thinking low). Writing null as `null` costs no extra tokens on Gemma's tokenizer; the change is under consideration and not in the spec.
-- A small local model (Qwen3.5-4B) on the R4 read test, in progress.
 - A total-cost benchmark: tokens per correct result, including reasoning and retries, across both reading and writing.
 
 ## License
