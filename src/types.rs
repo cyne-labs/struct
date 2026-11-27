@@ -22,13 +22,13 @@ pub fn float_eq(a: f64, b: f64) -> bool {
 /// enum labels, records, and lists.
 #[derive(Debug, Clone)]
 pub enum Value {
-    /// Null (no value), written as `~`.
+    /// Null (no value), written as `null`.
     Null,
     /// A signed 64-bit integer, such as `2024` or `-17`.
     Int(i64),
     /// A 64-bit floating point number, such as `3.14`, `-0.5`, `inf`, or `NaN`.
     Float(f64),
-    /// A boolean value: `1` for true, `0` for false.
+    /// A boolean value: `true` or `false`.
     Bool(bool),
     /// A UTF-8 text string.
     String(String),

@@ -37,7 +37,7 @@ impl Default for DoctorOptions {
     }
 }
 
-/// The 4 safe fixes defined in SPEC.md §9.
+/// The 5 safe fixes defined in SPEC.md §9.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum SafeFix {
     /// 1. Markdown code fences (` ``` `) removed.
@@ -48,6 +48,8 @@ pub enum SafeFix {
     Chatter,
     /// 4. Missing final pipe added.
     MissingFinalPipe,
+    /// 5. Group end markers recomputed.
+    GroupEnds,
 }
 
 /// A safe repair made to the document.
@@ -327,6 +329,13 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
             if curr_char_idx >= cur_chars.len() {
                 break;
             }
+
+            let rem_chars = &cur_chars[curr_char_idx..];
+            let rem_is_semi = rem_chars.iter().all(|&c| c == ';' || c == ' ' || c == '\t') && rem_chars.iter().any(|&c| c == ';');
+            if rem_is_semi {
+                ends_with_pipe = true;
+                break;
+            }
         } else {
             let field_raw_start = curr_char_idx;
             let mut field_chars = Vec::new();
@@ -339,7 +348,7 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                 if in_escape {
                     in_escape = false;
                     match c {
-                        '|' | '\\' | '~' | '>' | '#' => field_chars.push(c),
+                        '|' | '\\' | '>' | '#' => field_chars.push(c),
                         other => {
                             if invalid_escape.is_none() {
                                 invalid_escape = Some((other, curr_char_idx));
@@ -375,7 +384,7 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
 
             let field_slice_end = if closed { curr_char_idx - 1 } else { curr_char_idx };
             let raw_slice: String = chars[field_raw_start..field_slice_end].iter().collect();
-            let is_null = raw_slice.trim() == "~";
+            let is_null = raw_slice.trim() == "null";
 
             let raw_str: String = field_chars.into_iter().collect();
             let trimmed = raw_str.trim_end_matches(|c| c == ' ' || c == '\t').to_string();
@@ -398,6 +407,13 @@ fn parse_data_entry(phys_lines: &[SourceLine], start_idx: usize) -> (DoctorEntry
                 curr_char_idx += 1;
             }
             if curr_char_idx >= chars.len() {
+                break;
+            }
+
+            let rem_chars = &chars[curr_char_idx..];
+            let rem_is_semi = rem_chars.iter().all(|&c| c == ';' || c == ' ' || c == '\t') && rem_chars.iter().any(|&c| c == ';');
+            if rem_is_semi {
+                ends_with_pipe = true;
                 break;
             }
         }
@@ -455,7 +471,7 @@ fn validate_field_value(
     let val_trimmed = val_str.trim();
 
     if val_trimmed.is_empty() {
-        return Err("empty field is not allowed (use ~ for null)".to_string());
+        return Err("empty field is not allowed (use null for null)".to_string());
     }
 
     match col_type {
@@ -481,11 +497,11 @@ fn validate_field_value(
             }
         }
         ColType::Bool => {
-            if val_trimmed == "1" || val_trimmed == "0" {
+            if val_trimmed == "true" || val_trimmed == "false" {
                 Ok(())
             } else {
                 Err(format!(
-                    "'{}' is not a valid bool (expected 1 or 0)",
+                    "'{}' is not a valid bool (expected true or false)",
                     val_trimmed
                 ))
             }
@@ -538,12 +554,12 @@ fn parse_field_to_value(
             Ok(Value::Float(f))
         }
         ColType::Bool => {
-            if val_trimmed == "1" {
+            if val_trimmed == "true" {
                 Ok(Value::Bool(true))
-            } else if val_trimmed == "0" {
+            } else if val_trimmed == "false" {
                 Ok(Value::Bool(false))
             } else {
-                Err(format!("'{}' is not a valid bool (expected 1 or 0)", val_trimmed))
+                Err(format!("'{}' is not a valid bool (expected true or false)", val_trimmed))
             }
         }
         ColType::Enum(_) => Ok(Value::Enum(val_trimmed.to_string())),
@@ -608,6 +624,14 @@ enum NodeSchema {
 }
 
 impl NodeSchema {
+    fn has_list(&self) -> bool {
+        match self {
+            NodeSchema::Class(c) => c.has_list(),
+            NodeSchema::Record(r) => r.has_list(),
+            NodeSchema::Scalar | NodeSchema::Enum => false,
+        }
+    }
+
     fn find_lists(&self) -> Vec<ListTarget> {
         match self {
             NodeSchema::Class(c) => c.find_lists(),
@@ -1032,6 +1056,158 @@ fn apply_missing_final_pipe(entries: &mut [DoctorEntry], repairs: &mut Vec<Repai
         });
 
         *entry = repaired_entry;
+    }
+}
+
+// =========================================================================
+// Step 4.5: Recompute Group Ends (Fix 5)
+// =========================================================================
+
+fn apply_group_ends(
+    entries: &mut [DoctorEntry],
+    outside_classes: &BTreeMap<String, ClassDef>,
+    single_outside_class: Option<&ClassDef>,
+    repairs: &mut Vec<Repair>,
+) {
+    let mut active_class = single_outside_class.cloned();
+    let mut schema_stack: Vec<NodeSchema> = Vec::new();
+    let mut entry_schemas: Vec<Option<NodeSchema>> = Vec::with_capacity(entries.len());
+
+    for entry in entries.iter() {
+        if entry.is_schema {
+            schema_stack.clear();
+            if let Some(ref name) = entry.schema_name {
+                active_class = outside_classes.get(name).cloned();
+            }
+            entry_schemas.push(None);
+            continue;
+        }
+
+        let d = entry.depth;
+        schema_stack.truncate(d);
+        let parent_schema = if d > 0 && d - 1 < schema_stack.len() {
+            Some(&schema_stack[d - 1])
+        } else {
+            None
+        };
+
+        let node_schema = node_schema_for_entry(entry, active_class.as_ref(), parent_schema);
+        if let Some(ref ns) = node_schema {
+            schema_stack.push(ns.clone());
+        }
+        entry_schemas.push(node_schema);
+    }
+
+    for i in 0..entries.len() {
+        if entries[i].is_schema || !entries[i].ends_with_pipe || entries[i].has_unclosed_raw {
+            continue;
+        }
+
+        let has_children = i + 1 < entries.len()
+            && !entries[i + 1].is_schema
+            && entries[i + 1].depth > entries[i].depth;
+
+        let next_is_shallower = i + 1 == entries.len()
+            || entries[i + 1].is_schema
+            || entries[i + 1].depth < entries[i].depth;
+
+        let is_last_in_group = entries[i].depth > 0 && next_is_shallower;
+        let has_lists = entry_schemas[i].as_ref().map(|s| s.has_list()).unwrap_or(false);
+        let should_have_semi = !has_children && (has_lists || is_last_in_group);
+
+        let orig_text = entries[i].text.clone();
+        let trimmed_orig = orig_text.trim_end();
+
+        // 1. Check for misplaced ';' before the final '|' (e.g. active;|)
+        let mut fixed_misplaced_semi = false;
+        let mut new_text_working = trimmed_orig.to_string();
+
+        if let Some(ref ns) = entry_schemas[i] {
+            let cols = match ns {
+                NodeSchema::Class(c) => {
+                    let mut cols = Vec::new();
+                    collect_columns(&c.fields, &mut cols);
+                    cols
+                }
+                NodeSchema::Record(r) => {
+                    let mut cols = Vec::new();
+                    collect_columns(&r.fields, &mut cols);
+                    cols
+                }
+                NodeSchema::Scalar => vec![],
+                NodeSchema::Enum => vec![],
+            };
+
+            if let Some(last_field) = entries[i].fields.last() {
+                if !last_field.is_raw && !last_field.is_null && last_field.trimmed_val.ends_with(';') {
+                    let field_idx = entries[i].fields.len() - 1;
+                    let expected_col = if entries[i].depth > 0 && entries[i].fields.len() == cols.len() + 1 {
+                        if field_idx > 0 && field_idx - 1 < cols.len() {
+                            Some(&cols[field_idx - 1].col_type)
+                        } else {
+                            None
+                        }
+                    } else if field_idx < cols.len() {
+                        Some(&cols[field_idx].col_type)
+                    } else {
+                        None
+                    };
+
+                    if let Some(col_type) = expected_col {
+                        let val = &last_field.trimmed_val;
+                        let without_semi = val.trim_end_matches(';').trim();
+                        if validate_field_value(val, col_type, false, false).is_err()
+                            && validate_field_value(without_semi, col_type, false, false).is_ok()
+                        {
+                            if let Some(last_pipe) = new_text_working.rfind('|') {
+                                if let Some(semi_before) = new_text_working[..last_pipe].rfind(';') {
+                                    let between = &new_text_working[semi_before + 1..last_pipe];
+                                    if between.chars().all(|c| c == ' ' || c == '\t') {
+                                        new_text_working = format!(
+                                            "{}{}",
+                                            &new_text_working[..semi_before],
+                                            &new_text_working[last_pipe..]
+                                        );
+                                        fixed_misplaced_semi = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Normalize line ending after final pipe: strip any trailing ';' and spaces
+        let base_pipe_text = if let Some(last_pipe) = new_text_working.rfind('|') {
+            &new_text_working[..=last_pipe]
+        } else {
+            &new_text_working
+        };
+
+        let repaired_text = if should_have_semi {
+            format!("{};", base_pipe_text)
+        } else {
+            base_pipe_text.to_string()
+        };
+
+        if fixed_misplaced_semi || repaired_text != trimmed_orig {
+            let col = trimmed_orig.chars().count() + 1;
+            repairs.push(Repair {
+                line: entries[i].end_line_num,
+                column: col,
+                fix: SafeFix::GroupEnds,
+                original: orig_text,
+                new_text: repaired_text.clone(),
+            });
+
+            let temp_lines = vec![SourceLine {
+                line_num: entries[i].start_line_num,
+                text: repaired_text,
+            }];
+            let (new_entry, _) = parse_data_entry(&temp_lines, 0);
+            entries[i] = new_entry;
+        }
     }
 }
 
@@ -1560,6 +1736,9 @@ pub fn doctor(schemas: &str, text: &str, options: &DoctorOptions) -> DoctorRepor
 
     // Step 4: Apply missing final pipe unconditionally (Fix 4)
     apply_missing_final_pipe(&mut entries, &mut repairs);
+
+    // Step 4.5: Recompute group ends (Fix 5)
+    apply_group_ends(&mut entries, &outside_classes, single_outside_class.as_ref(), &mut repairs);
 
     // Step 5: Validate entries against schemas and decode blocks
     let (decoded, bad_lines) =

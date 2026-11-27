@@ -1,0 +1,101 @@
+schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, verified:bool}
+2411.2824|Attention is all you need for sequence modelling v1|unverified|2020|true|
+2404.3286|Self-instruct aligning language model with self generated data v2|supported|2023|true|
+2410.7912|LoRA low rank adaptation of large language models v3|supported|2018|null|
+2404.9279|KV cache quantization losing accuracy on outliers v4|supported|2022|true|
+2412.9928|Phi 3 technical report compact capability v5|supported|2021|false|
+2401.3615|FlashAttention fast and memory efficient exact attention v6|refuted|2020|false|
+2403.4527|Toolformer language models can teach themselves to use tools v7|refuted|null|true|
+2407.2584|Llama 2 foundation chat model benchmarks v8|refuted|2022|false|
+2401.8527|Nemotron 4 340B synthetic data training report v9|supported|2021|true|
+2409.5803|BitNet scaling 1-bit transformers for efficiency v10|unverified|2024|false|
+2410.4150|FlashAttention fast and memory efficient exact attention v11|supported|2018|true|
+2405.2307|Direct preference optimization without reinforcement v12|supported|2021|false|
+2408.6977|Mistral fine tuning rules and safety guardrails v13|refuted|2020|null|
+2411.5374|FlashAttention fast and memory efficient exact attention v14|unverified|2023|true|
+2410.3803|Nemotron 4 340B synthetic data training report v15|unverified|2019|true|
+2408.7216|Llama 3 herd of models technical overview v16|unverified|2023|true|
+2411.6313|Toolformer language models can teach themselves to use tools v17|supported|null|true|
+2406.7572|Llama 3 herd of models technical overview v18|supported|2019|false|
+2404.9179|ReAct synergizing reasoning and acting in language v19|unverified|2021|true|
+2405.3287|Direct preference optimization without reinforcement v20|unverified|2022|false|
+2412.8019|Rope scaling hurts long context retrieval bounds v21|refuted|2020|true|
+2403.9348|Qwen2 technical report multilingual foundation v22|supported|2024|true|
+2402.3504|BitNet scaling 1-bit transformers for efficiency v23|supported|2024|null|
+2410.2040|ReAct synergizing reasoning and acting in language v24|refuted|2022|false|
+2409.5119|Nemotron 4 340B synthetic data training report v25|supported|2023|true|
+2411.9797|Toolformer language models can teach themselves to use tools v26|refuted|2024|false|
+2402.5808|Phi 3 technical report compact capability v27|supported|null|true|
+2412.5315|Code Llama open model for specialized coding v28|supported|2022|true|
+2411.5889|BitNet scaling 1-bit transformers for efficiency v29|unverified|2022|true|
+2403.7126|Toolformer language models can teach themselves to use tools v30|supported|2022|true|
+2410.6310|Qwen2 technical report multilingual foundation v31|supported|2018|false|
+2405.4923|LoRA low rank adaptation of large language models v32|supported|2022|true|
+2402.8962|DeepSeekMoE mixture of experts architecture report v33|unverified|2024|null|
+2403.8787|Nemotron 4 340B synthetic data training report v34|supported|2020|false|
+2404.9835|Toolformer language models can teach themselves to use tools v35|unverified|2023|true|
+2412.6107|ReAct synergizing reasoning and acting in language v36|unverified|2023|false|
+2408.9479|LLaMA efficient foundational language model v37|supported|null|true|
+2402.6539|Attention is all you need for sequence modelling v38|unverified|2022|true|
+2410.4608|Attention is all you need for sequence modelling v39|supported|2023|true|
+2404.2104|LoRA low rank adaptation of large language models v40|refuted|2018|true|
+2405.8953|Chinchilla scaling compute optimal training tokens v41|unverified|2019|false|
+2404.8749|Phi 3 technical report compact capability v42|supported|2018|true|
+2411.8062|Llama 2 foundation chat model benchmarks v43|refuted|2021|null|
+2412.1887|Mamba linear time sequence modeling with selective state v44|unverified|2023|true|
+2401.7596|Self-instruct aligning language model with self generated data v45|refuted|2024|true|
+2404.4139|Chinchilla scaling compute optimal training tokens v46|unverified|2021|true|
+2407.4006|Llama 3 herd of models technical overview v47|refuted|null|true|
+2408.2604|LoRA low rank adaptation of large language models v48|unverified|2022|true|
+2402.4872|Mistral fine tuning rules and safety guardrails v49|refuted|2021|false|
+2404.7570|LoRA low rank adaptation of large language models v50|null|2021|true|
+2407.5345|LLaMA efficient foundational language model v51|refuted|2021|false|
+2403.4111|Gemini models multimodal reasoning performance v52|supported|2018|true|
+2412.6138|LoRA low rank adaptation of large language models v53|supported|2022|null|
+2409.9701|Mistral fine tuning rules and safety guardrails v54|supported|2022|true|
+2403.2122|KV cache quantization losing accuracy on outliers v55|supported|2023|true|
+2407.2964|Rope scaling hurts long context retrieval bounds v56|supported|2022|true|
+2410.2343|Phi 3 technical report compact capability v57|unverified|null|false|
+2405.4346|Mamba linear time sequence modeling with selective state v58|unverified|2020|true|
+2405.7484|StarCoder 2 training code and data mixture v59|unverified|2023|false|
+2408.6180|Toolformer language models can teach themselves to use tools v60|supported|2018|false|
+2410.2638|DeepSeekMoE mixture of experts architecture report v61|unverified|2019|false|
+2403.6718|DeepSeekMoE mixture of experts architecture report v62|supported|2020|false|
+2403.8179|Nemotron 4 340B synthetic data training report v63|unverified|2020|null|
+2411.5905|Mamba linear time sequence modeling with selective state v64|supported|2019|false|
+2402.2753|Self-instruct aligning language model with self generated data v65|unverified|2019|false|
+2405.4450|FlashAttention fast and memory efficient exact attention v66|refuted|2019|false|
+2409.9004|Llama 3 herd of models technical overview v67|supported|null|false|
+2405.1722|Attention is all you need for sequence modelling v68|refuted|2024|true|
+2411.5291|Mistral fine tuning rules and safety guardrails v69|unverified|2021|false|
+2409.1158|Language models are few-shot learners at scale v70|supported|2023|true|
+2409.1590|Llama 2 foundation chat model benchmarks v71|unverified|2022|true|
+2407.3088|LoRA low rank adaptation of large language models v72|refuted|2020|true|
+2406.4441|Mamba linear time sequence modeling with selective state v73|supported|2023|null|
+2406.7658|KV cache quantization losing accuracy on outliers v74|unverified|2019|true|
+2403.3900|Phi 3 technical report compact capability v75|supported|2019|false|
+2407.5065|Llama 3 herd of models technical overview v76|supported|2024|true|
+2407.1634|Qwen2 technical report multilingual foundation v77|supported|null|false|
+2406.6000|Direct preference optimization without reinforcement v78|supported|2018|true|
+2407.6378|Llama 3 herd of models technical overview v79|supported|2024|false|
+2406.9346|ReAct synergizing reasoning and acting in language v80|unverified|2024|false|
+2401.2889|Llama 3 herd of models technical overview v81|supported|2022|false|
+2401.2776|KV cache quantization losing accuracy on outliers v82|refuted|2020|false|
+2407.9379|Language models are few-shot learners at scale v83|refuted|2022|null|
+2405.1727|FlashAttention fast and memory efficient exact attention v84|refuted|2018|true|
+2406.8066|DeepSeekMoE mixture of experts architecture report v85|unverified|2020|false|
+2411.3041|Self-instruct aligning language model with self generated data v86|refuted|2022|false|
+2411.7691|Gemma open models Google lightweight release v87|refuted|null|false|
+2409.3085|Chinchilla scaling compute optimal training tokens v88|refuted|2023|false|
+2411.3851|KV cache quantization losing accuracy on outliers v89|unverified|2020|false|
+2409.1006|Gemini models multimodal reasoning performance v90|refuted|2019|false|
+2410.6279|LLaMA efficient foundational language model v91|refuted|2021|true|
+2409.8752|Self-instruct aligning language model with self generated data v92|supported|2023|true|
+2405.9445|Mamba linear time sequence modeling with selective state v93|unverified|2022|null|
+2402.4848|Mamba linear time sequence modeling with selective state v94|refuted|2019|true|
+2403.1400|LoRA low rank adaptation of large language models v95|supported|2021|true|
+2408.7790|BitNet scaling 1-bit transformers for efficiency v96|unverified|2019|false|
+2408.7547|Direct preference optimization without reinforcement v97|supported|null|true|
+2402.7965|Direct preference optimization without reinforcement v98|supported|2024|false|
+2401.5082|Language models are few-shot learners at scale v99|refuted|2019|false|
+2411.9702|Nemotron 4 340B synthetic data training report v100|null|2020|false|

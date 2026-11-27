@@ -1,4 +1,4 @@
-//! Encoding implementation for Struct (v0.3).
+//! Encoding implementation for Struct (v0.4).
 //!
 //! Serializes in-memory Struct data into canonical Struct text format.
 
@@ -69,19 +69,40 @@ pub fn encode_with(schemas: &str, file: &DecodedFile) -> Result<String, StructEr
         }
 
         // Records
+        let mut block_lines: Vec<EncodedLine> = Vec::new();
         for record in &block.records {
-            encode_record_tree(record, class_def, &mut out)?;
+            encode_record_tree(record, class_def, &mut block_lines)?;
+        }
+
+        for i in 0..block_lines.len() {
+            let line = &block_lines[i];
+            let has_children = i + 1 < block_lines.len() && block_lines[i + 1].depth > line.depth;
+            let next_is_shallower = i + 1 == block_lines.len() || block_lines[i + 1].depth < line.depth;
+            let is_last_in_group = line.depth > 0 && next_is_shallower;
+            let ends_with_semicolon = !has_children && (line.has_lists || is_last_in_group);
+
+            out.push_str(&line.content);
+            if ends_with_semicolon {
+                out.push(';');
+            }
+            out.push('\n');
         }
     }
 
     Ok(out)
 }
 
+struct EncodedLine {
+    content: String,
+    depth: usize,
+    has_lists: bool,
+}
+
 /// Encodes a top-level record and all its hierarchical child lines.
 fn encode_record_tree(
     record: &Value,
     class_def: &ClassDef,
-    out: &mut String,
+    lines: &mut Vec<EncodedLine>,
 ) -> Result<(), StructError> {
     if record.is_null() && class_def.has_list() {
         let field_name = class_def.first_list_field_name().unwrap_or_default();
@@ -96,13 +117,18 @@ fn encode_record_tree(
     }
 
     // 1. Encode depth-0 data line
-    encode_record_columns(record, &class_def.fields, &class_def.name, true, out)?;
-    out.push('\n');
+    let mut content = String::new();
+    encode_record_columns(record, &class_def.fields, &class_def.name, true, &mut content)?;
+    lines.push(EncodedLine {
+        content,
+        depth: 0,
+        has_lists: class_def.has_list(),
+    });
 
     // 2. Encode child lines for any lists
     let rec_def = class_def.as_record_def();
     let list_targets = rec_def.find_lists();
-    encode_child_lists_for_record(record, &list_targets, &class_def.name, 1, out)?;
+    encode_child_lists_for_record(record, &list_targets, &class_def.name, 1, lines)?;
 
     Ok(())
 }
@@ -132,11 +158,11 @@ fn encode_record_columns(
             for f in fields {
                 match &f.field_type {
                     FieldType::Scalar(_) | FieldType::Enum(_) => {
-                        out.push_str("~|");
+                        out.push_str("null|");
                     }
                     FieldType::Record(r) => {
                         for _ in 0..r.num_columns() {
-                            out.push_str("~|");
+                            out.push_str("null|");
                         }
                     }
                     FieldType::List(_) => {}
@@ -219,28 +245,39 @@ fn encode_child_lists_for_record(
     list_targets: &[ListTarget],
     class_name: &str,
     depth: usize,
-    out: &mut String,
+    lines: &mut Vec<EncodedLine>,
 ) -> Result<(), StructError> {
     for target in list_targets {
         if let Some(items) = get_list_by_path(parent_val, &target.field_path) {
             for item in items {
+                let mut content = String::new();
                 for _ in 0..depth {
-                    out.push('>');
+                    content.push('>');
                 }
 
                 if !target.canonical_index.is_empty() {
-                    out.push_str(&target.canonical_index);
-                    out.push('|');
+                    content.push_str(&target.canonical_index);
+                    content.push('|');
                 }
 
                 match &target.item_type {
                     ListItemType::Scalar(st) => {
-                        encode_scalar_value(item, *st, target.canonical_index.is_empty(), out);
-                        out.push_str("|\n");
+                        encode_scalar_value(item, *st, target.canonical_index.is_empty(), &mut content);
+                        content.push('|');
+                        lines.push(EncodedLine {
+                            content,
+                            depth,
+                            has_lists: false,
+                        });
                     }
                     ListItemType::Enum(labels) => {
-                        encode_enum_value(item, labels, target.canonical_index.is_empty(), out);
-                        out.push_str("|\n");
+                        encode_enum_value(item, labels, target.canonical_index.is_empty(), &mut content);
+                        content.push('|');
+                        lines.push(EncodedLine {
+                            content,
+                            depth,
+                            has_lists: false,
+                        });
                     }
                     ListItemType::Record(rec_def) => {
                         if item.is_null() && rec_def.has_list() {
@@ -259,12 +296,16 @@ fn encode_child_lists_for_record(
                             &rec_def.fields,
                             class_name,
                             target.canonical_index.is_empty(),
-                            out,
+                            &mut content,
                         )?;
-                        out.push('\n');
+                        lines.push(EncodedLine {
+                            content,
+                            depth,
+                            has_lists: rec_def.has_list(),
+                        });
 
                         let sub_lists = rec_def.find_lists();
-                        encode_child_lists_for_record(item, &sub_lists, class_name, depth + 1, out)?;
+                        encode_child_lists_for_record(item, &sub_lists, class_name, depth + 1, lines)?;
                     }
                 }
             }
@@ -298,7 +339,7 @@ fn get_list_by_path<'a>(val: &'a Value, path: &[usize]) -> Option<&'a [Value]> {
 /// Encodes a scalar value.
 fn encode_scalar_value(val: &Value, _st: ScalarType, is_first_col: bool, out: &mut String) {
     match val {
-        Value::Null => out.push('~'),
+        Value::Null => out.push_str("null"),
         Value::Int(n) => out.push_str(&n.to_string()),
         Value::Float(f) => {
             if f.is_nan() {
@@ -326,9 +367,9 @@ fn encode_scalar_value(val: &Value, _st: ScalarType, is_first_col: bool, out: &m
         }
         Value::Bool(b) => {
             if *b {
-                out.push('1');
+                out.push_str("true");
             } else {
-                out.push('0');
+                out.push_str("false");
             }
         }
         Value::String(s) => {
@@ -337,34 +378,30 @@ fn encode_scalar_value(val: &Value, _st: ScalarType, is_first_col: bool, out: &m
         Value::Enum(s) => {
             encode_text(s, is_first_col, out);
         }
-        _ => out.push('~'),
+        _ => out.push_str("null"),
     }
 }
 
 /// Encodes an enum value.
 fn encode_enum_value(val: &Value, _labels: &[String], is_first_col: bool, out: &mut String) {
     match val {
-        Value::Null => out.push('~'),
+        Value::Null => out.push_str("null"),
         Value::Enum(s) | Value::String(s) => encode_text(s, is_first_col, out),
-        _ => out.push('~'),
+        _ => out.push_str("null"),
     }
 }
 
-/// Encodes a text string according to Struct v0.3 canonical rules.
+/// Encodes a text string according to Struct v0.4 canonical rules.
 fn encode_text(s: &str, is_first_col: bool, out: &mut String) {
     if s.is_empty() {
-        out.push('~');
+        out.push_str("null");
         return;
     }
 
-    if s == "~" {
-        out.push_str(r"\~");
-        return;
-    }
-
-    // SPEC.md §7: \r only when a text value contains a line break, or starts or ends with a space or tab.
+    // SPEC.md §7: \r only when a text value is literally "null", contains a line break, or starts or ends with a space or tab.
     // Inside it, only | and \ are escaped.
-    let needs_raw = s.contains('\n')
+    let needs_raw = s == "null"
+        || s.contains('\n')
         || s.starts_with(' ')
         || s.starts_with('\t')
         || s.ends_with(' ')

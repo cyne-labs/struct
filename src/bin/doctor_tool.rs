@@ -28,6 +28,7 @@ fn fix_name(fix: SafeFix) -> &'static str {
         SafeFix::EchoedSchema => "EchoedSchema",
         SafeFix::Chatter => "Chatter",
         SafeFix::MissingFinalPipe => "MissingFinalPipe",
+        SafeFix::GroupEnds => "GroupEnds",
     }
 }
 

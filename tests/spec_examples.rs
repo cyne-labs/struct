@@ -1,4 +1,4 @@
-//! Tests verifying all examples in SPEC.md (v0.3).
+//! Tests verifying all examples in SPEC.md (v0.4).
 //!
 //! Checks decoding, values structure, and byte-for-byte re-encoding.
 
@@ -32,9 +32,9 @@ fn test_spec_section_5_nested_notes_example() {
                  Rope scaling hurts long ctx|\n\
                  >notes are from the abstract only|\n\
                  >>abstract mentions a 32k limit|\n\
-                 >>appendix B clarifies|\n\
+                 >>appendix B clarifies|;\n\
                  >table 3 contradicts|\n\
-                 >>llama 7b tested only|\n";
+                 >>llama 7b tested only|;\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.blocks.len(), 1);
@@ -69,7 +69,7 @@ fn test_spec_section_5_dotted_indices_example() {
                  Rope scaling hurts long ctx|refuted|\n\
                  >1.1|table 3 contradicts the claim|\n\
                  >1.2|abstract says otherwise|\n\
-                 >2|notes are from the abstract only|\n";
+                 >2|notes are from the abstract only|;\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.blocks.len(), 1);
@@ -121,17 +121,17 @@ fn test_spec_section_2_class_reuse_and_lookup() {
 #[test]
 fn test_spec_section_3_null_records() {
     let input = "schema:claim{text, source:record{id, year:int}, verdict}\n\
-                 Rope scaling hurts long ctx|~|~|refuted|\n";
+                 Rope scaling hurts long ctx|null|null|refuted|\n";
 
     let doc = decode(input).expect("decoding failed");
     let rec = &doc.blocks[0].records[0];
     assert_eq!(rec.get_field("text"), Some(&Value::String("Rope scaling hurts long ctx".into())));
-    // SPEC.md §3: A record whose columns are all ~ reads back as a null record
+    // SPEC.md §3: A record whose columns are all null reads back as a null record
     assert_eq!(rec.get_field("source"), Some(&Value::Null));
     assert_eq!(rec.get_field("verdict"), Some(&Value::String("refuted".into())));
 
     let encoded = encode(&doc).expect("encoding failed");
-    assert_eq!(encoded, input, "Encoded null record must emit ~ for every column byte-for-byte");
+    assert_eq!(encoded, input, "Encoded null record must emit null for every column byte-for-byte");
 }
 
 #[test]
@@ -152,9 +152,9 @@ fn test_spec_section_3_raw_values_example() {
 
 #[test]
 fn test_spec_section_3_escapes_roundtrip() {
-    // SPEC.md §3 & §7: Escapes in v0.3
+    // SPEC.md §3 & §7: Escapes in v0.4
     let input = "schema:escaped{gt, pipe, backslash, tilde, hash, raw_sp, raw_nl}\n\
-                 \\>title|\\||\\\\|\\~|#tag|\\r hello |\\rfirst\nsecond|\n";
+                 \\>title|\\||\\\\|~|#tag|\\r hello |\\rfirst\nsecond|\n";
 
     let doc = decode(input).expect("decoding failed");
     let rec = &doc.blocks[0].records[0];
@@ -227,7 +227,7 @@ fn test_spec_section_6_outside_schemas_multiple_classes() {
 fn test_spec_section_5_leniency_warning() {
     let input = "schema:claim{text, notes:list[str]}\n\
                  Claim 1|\n\
-                 >1|Note 1|\n";
+                 >1|Note 1|;\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.warnings.len(), 1);
@@ -237,15 +237,15 @@ fn test_spec_section_5_leniency_warning() {
     // Canonical encoding removes the unneeded index
     let expected_canonical = "schema:claim{text, notes:list[str]}\n\
                               Claim 1|\n\
-                              >Note 1|\n";
+                              >Note 1|;\n";
     let encoded = encode(&doc).expect("encoding failed");
     assert_eq!(encoded, expected_canonical);
 }
 
 #[test]
-fn test_positive_all_tilde_list_holding_record_without_child_lines() {
+fn test_positive_all_null_list_holding_record_without_child_lines() {
     let input = "schema:item{name, tags:list[str]}\n\
-                 ~|\n";
+                 null|;\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.blocks.len(), 1);
@@ -264,10 +264,10 @@ fn test_positive_all_tilde_list_holding_record_without_child_lines() {
 }
 
 #[test]
-fn test_positive_all_tilde_list_holding_record_with_child_lines() {
+fn test_positive_all_null_list_holding_record_with_child_lines() {
     let input = "schema:item{name, tags:list[str]}\n\
-                 ~|\n\
-                 >rust|\n";
+                 null|\n\
+                 >rust|;\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.blocks.len(), 1);
@@ -286,14 +286,14 @@ fn test_positive_all_tilde_list_holding_record_with_child_lines() {
 }
 
 #[test]
-fn test_positive_all_tilde_record_with_no_list_decodes_to_null() {
+fn test_positive_all_null_record_with_no_list_decodes_to_null() {
     let input = "schema:item{name, qty:int}\n\
-                 ~|~|\n";
+                 null|null|\n";
 
     let doc = decode(input).expect("decoding failed");
     assert_eq!(doc.blocks.len(), 1);
     let rec = &doc.blocks[0].records[0];
-    assert_eq!(rec, &Value::Null, "Record with no list must decode to Value::Null when all columns are ~");
+    assert_eq!(rec, &Value::Null, "Record with no list must decode to Value::Null when all columns are null");
 
     let encoded = encode(&doc).expect("encoding failed");
     assert_eq!(encoded, input);
@@ -331,7 +331,7 @@ fn test_positive_both_encoder_input_forms_of_null_record() {
     let text_fields = encode(&doc_fields).expect("encoding record with all null fields failed");
 
     assert_eq!(text_null, text_fields);
-    assert_eq!(text_null, "schema:item{name, qty:int}\n~|~|\n");
+    assert_eq!(text_null, "schema:item{name, qty:int}\nnull|null|\n");
 
     let decoded_from_null = decode(&text_null).expect("decoding text_null failed");
     let decoded_from_fields = decode(&text_fields).expect("decoding text_fields failed");

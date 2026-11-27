@@ -20,7 +20,7 @@ fn test_gbnf_canonical_only_at_least_10_variants() {
     let grammar = Grammar::parse(&grammar_text).expect("Grammar parsing failed");
 
     // Canonical baseline: should match!
-    let canonical = "schema:claim\nhello|42|3.14|\nschema:item\nmy_item|\n>a note|\n";
+    let canonical = "schema:claim\nhello|42|3.14|\nschema:item\nmy_item|\n>a note|;\n";
     assert!(
         grammar.matches(canonical),
         "Canonical text must be accepted by grammar"
@@ -33,7 +33,7 @@ fn test_gbnf_canonical_only_at_least_10_variants() {
     assert!(!grammar.matches(non_canonical_1), "Variant 1 (space after |) must be rejected by grammar");
 
     // Test 2: unneeded index (item has only one list, so index 1 is unneeded)
-    let non_canonical_2 = "schema:item\nmy_item|\n>1|a note|\n";
+    let non_canonical_2 = "schema:item\nmy_item|\n>1|a note|;\n";
     assert!(decode_with(schemas, non_canonical_2).is_ok(), "Variant 2 must decode");
     assert!(!grammar.matches(non_canonical_2), "Variant 2 (unneeded index) must be rejected by grammar");
 

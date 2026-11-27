@@ -20,9 +20,9 @@ fn test_safe_fix_1_code_fences() {
     let options = DoctorOptions::default();
 
     // Case 1: Simple backtick fences ``` wrapping data
-    let input1 = "```\nc1|Attention|supported|2017|1|\n```\n";
+    let input1 = "```\nc1|Attention|supported|2017|true|\n```\n";
     let report1 = doctor(schema, input1, &options);
-    assert_eq!(report1.text, "c1|Attention|supported|2017|1|\n");
+    assert_eq!(report1.text, "c1|Attention|supported|2017|true|\n");
     assert_eq!(report1.repairs.len(), 2);
     assert_eq!(report1.repairs[0].fix, SafeFix::CodeFences);
     assert_eq!(report1.repairs[0].line, 1);
@@ -35,9 +35,9 @@ fn test_safe_fix_1_code_fences() {
     assert!(report1.bad_lines.is_empty());
 
     // Case 2: Language tagged fences ```stc and ```struct
-    let input2 = "```stc\nc2|FlashAttention|supported|2022|1|\n```\n";
+    let input2 = "```stc\nc2|FlashAttention|supported|2022|true|\n```\n";
     let report2 = doctor(schema, input2, &options);
-    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|1|\n");
+    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|true|\n");
     assert_eq!(report2.repairs.len(), 2);
     assert_eq!(report2.repairs[0].fix, SafeFix::CodeFences);
     assert_eq!(report2.repairs[0].line, 1);
@@ -47,9 +47,9 @@ fn test_safe_fix_1_code_fences() {
     assert!(report2.bad_lines.is_empty());
 
     // Case 3: Leading spaces before code fences
-    let input3 = "   ```\nc3|Llama 405B|refuted|2024|0|\n  ```  \n";
+    let input3 = "   ```\nc3|Llama 405B|refuted|2024|false|\n  ```  \n";
     let report3 = doctor(schema, input3, &options);
-    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|0|\n");
+    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|false|\n");
     assert_eq!(report3.repairs.len(), 2);
     assert_eq!(report3.repairs[0].fix, SafeFix::CodeFences);
     assert_eq!(report3.repairs[0].line, 1);
@@ -64,9 +64,9 @@ fn test_safe_fix_2_echoed_schema() {
     let options = DoctorOptions::default();
 
     // Case 1: Exact echoed schema definition
-    let input1 = "schema:claim{id, title, verdict:enum(supported,refuted), year:int, verified:bool}\nc1|Attention|supported|2017|1|\n";
+    let input1 = "schema:claim{id, title, verdict:enum(supported,refuted), year:int, verified:bool}\nc1|Attention|supported|2017|true|\n";
     let report1 = doctor(schema, input1, &options);
-    assert_eq!(report1.text, "c1|Attention|supported|2017|1|\n");
+    assert_eq!(report1.text, "c1|Attention|supported|2017|true|\n");
     assert_eq!(report1.repairs.len(), 1);
     assert_eq!(report1.repairs[0].fix, SafeFix::EchoedSchema);
     assert_eq!(report1.repairs[0].line, 1);
@@ -74,18 +74,18 @@ fn test_safe_fix_2_echoed_schema() {
     assert!(report1.bad_lines.is_empty());
 
     // Case 2: Echoed schema with different spacing
-    let input2 = "schema:claim { id, title, verdict:enum(supported, refuted), year:int, verified:bool }\nc2|FlashAttention|supported|2022|1|\n";
+    let input2 = "schema:claim { id, title, verdict:enum(supported, refuted), year:int, verified:bool }\nc2|FlashAttention|supported|2022|true|\n";
     let report2 = doctor(schema, input2, &options);
-    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|1|\n");
+    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|true|\n");
     assert_eq!(report2.repairs.len(), 1);
     assert_eq!(report2.repairs[0].fix, SafeFix::EchoedSchema);
     assert_eq!(report2.repairs[0].line, 1);
     assert!(report2.bad_lines.is_empty());
 
     // Case 3: Echoed schema with no spaces around commas
-    let input3 = "schema:claim{id,title,verdict:enum(supported,refuted),year:int,verified:bool}\nc3|Llama 405B|refuted|2024|0|\n";
+    let input3 = "schema:claim{id,title,verdict:enum(supported,refuted),year:int,verified:bool}\nc3|Llama 405B|refuted|2024|false|\n";
     let report3 = doctor(schema, input3, &options);
-    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|0|\n");
+    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|false|\n");
     assert_eq!(report3.repairs.len(), 1);
     assert_eq!(report3.repairs[0].fix, SafeFix::EchoedSchema);
     assert_eq!(report3.repairs[0].line, 1);
@@ -98,9 +98,9 @@ fn test_safe_fix_3_chatter() {
     let options = DoctorOptions::default();
 
     // Case 1: Leading chatter
-    let input1 = "Here is the result you requested:\nc1|Attention|supported|2017|1|\n";
+    let input1 = "Here is the result you requested:\nc1|Attention|supported|2017|true|\n";
     let report1 = doctor(schema, input1, &options);
-    assert_eq!(report1.text, "c1|Attention|supported|2017|1|\n");
+    assert_eq!(report1.text, "c1|Attention|supported|2017|true|\n");
     assert_eq!(report1.repairs.len(), 1);
     assert_eq!(report1.repairs[0].fix, SafeFix::Chatter);
     assert_eq!(report1.repairs[0].line, 1);
@@ -109,9 +109,9 @@ fn test_safe_fix_3_chatter() {
     assert!(report1.bad_lines.is_empty());
 
     // Case 2: Trailing chatter
-    let input2 = "c2|FlashAttention|supported|2022|1|\nI hope this helps! Let me know if you need anything else.\n";
+    let input2 = "c2|FlashAttention|supported|2022|true|\nI hope this helps! Let me know if you need anything else.\n";
     let report2 = doctor(schema, input2, &options);
-    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|1|\n");
+    assert_eq!(report2.text, "c2|FlashAttention|supported|2022|true|\n");
     assert_eq!(report2.repairs.len(), 1);
     assert_eq!(report2.repairs[0].fix, SafeFix::Chatter);
     assert_eq!(report2.repairs[0].line, 2);
@@ -119,9 +119,9 @@ fn test_safe_fix_3_chatter() {
     assert!(report2.bad_lines.is_empty());
 
     // Case 3: Both leading and multiple trailing chatter lines
-    let input3 = "Sure, here are the records:\nc3|Llama 405B|refuted|2024|0|\nNote that claim 3 is false.\nEnd of output.\n";
+    let input3 = "Sure, here are the records:\nc3|Llama 405B|refuted|2024|false|\nNote that claim 3 is false.\nEnd of output.\n";
     let report3 = doctor(schema, input3, &options);
-    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|0|\n");
+    assert_eq!(report3.text, "c3|Llama 405B|refuted|2024|false|\n");
     assert_eq!(report3.repairs.len(), 3);
     assert_eq!(report3.repairs[0].fix, SafeFix::Chatter);
     assert_eq!(report3.repairs[0].line, 1);
@@ -168,33 +168,84 @@ fn test_safe_fix_5_missing_final_pipe() {
     let options = DoctorOptions::default();
 
     // Case 1: Single line missing final pipe
-    let input1 = "c1|Attention|supported|2017|1\n";
+    let input1 = "c1|Attention|supported|2017|true\n";
     let report1 = doctor(schema, input1, &options);
-    assert_eq!(report1.text, "c1|Attention|supported|2017|1|\n");
+    assert_eq!(report1.text, "c1|Attention|supported|2017|true|\n");
     assert_eq!(report1.repairs.len(), 1);
     assert_eq!(report1.repairs[0].fix, SafeFix::MissingFinalPipe);
     assert_eq!(report1.repairs[0].line, 1);
-    assert_eq!(report1.repairs[0].original, "c1|Attention|supported|2017|1");
-    assert_eq!(report1.repairs[0].new_text, "c1|Attention|supported|2017|1|");
+    assert_eq!(report1.repairs[0].original, "c1|Attention|supported|2017|true");
+    assert_eq!(report1.repairs[0].new_text, "c1|Attention|supported|2017|true|");
     assert!(report1.bad_lines.is_empty());
 
     // Case 2: Multiple lines, some missing final pipe, some with trailing spaces
-    let input2 = "c1|Attention|supported|2017|1 \nc2|FlashAttention|supported|2022|1|\n";
+    let input2 = "c1|Attention|supported|2017|true \nc2|FlashAttention|supported|2022|true|\n";
     let report2 = doctor(schema, input2, &options);
-    assert_eq!(report2.text, "c1|Attention|supported|2017|1|\nc2|FlashAttention|supported|2022|1|\n");
+    assert_eq!(report2.text, "c1|Attention|supported|2017|true|\nc2|FlashAttention|supported|2022|true|\n");
     assert_eq!(report2.repairs.len(), 1);
     assert_eq!(report2.repairs[0].fix, SafeFix::MissingFinalPipe);
     assert_eq!(report2.repairs[0].line, 1);
     assert!(report2.bad_lines.is_empty());
 
     // Case 3: Line with raw text containing escaped pipe, missing final pipe
-    let input3 = "c3|Text with \\| pipe|refuted|2024|0\n";
+    let input3 = "c3|Text with \\| pipe|refuted|2024|false\n";
     let report3 = doctor(schema, input3, &options);
-    assert_eq!(report3.text, "c3|Text with \\| pipe|refuted|2024|0|\n");
+    assert_eq!(report3.text, "c3|Text with \\| pipe|refuted|2024|false|\n");
     assert_eq!(report3.repairs.len(), 1);
     assert_eq!(report3.repairs[0].fix, SafeFix::MissingFinalPipe);
     assert_eq!(report3.repairs[0].line, 1);
     assert!(report3.bad_lines.is_empty());
+}
+
+#[test]
+fn test_safe_fix_group_ends() {
+    let schema = "schema:claim{title, notes:list[str]}";
+    let options = DoctorOptions::default();
+
+    // Case 1: Missing ';' on child line
+    let input1 = "Attention|\n>rope|\n";
+    let report1 = doctor(schema, input1, &options);
+    assert_eq!(report1.repairs.len(), 1);
+    assert_eq!(report1.repairs[0].fix, SafeFix::GroupEnds);
+    assert_eq!(report1.repairs[0].line, 2);
+    assert_eq!(report1.repairs[0].original, ">rope|");
+    assert_eq!(report1.repairs[0].new_text, ">rope|;");
+    assert_eq!(report1.text, "Attention|\n>rope|;\n");
+    assert!(report1.bad_lines.is_empty());
+
+    // Case 2: Parent has children but was given ';'
+    let input2 = "Attention|;\n>rope|;\n";
+    let report2 = doctor(schema, input2, &options);
+    assert_eq!(report2.repairs.len(), 1);
+    assert_eq!(report2.repairs[0].fix, SafeFix::GroupEnds);
+    assert_eq!(report2.repairs[0].line, 1);
+    assert_eq!(report2.repairs[0].original, "Attention|;");
+    assert_eq!(report2.repairs[0].new_text, "Attention|");
+    assert_eq!(report2.text, "Attention|\n>rope|;\n");
+    assert!(report2.bad_lines.is_empty());
+
+    // Case 3: Record has lists and no child lines at all -> gets |;
+    let input3 = "Attention|\n";
+    let report3 = doctor(schema, input3, &options);
+    assert_eq!(report3.repairs.len(), 1);
+    assert_eq!(report3.repairs[0].fix, SafeFix::GroupEnds);
+    assert_eq!(report3.repairs[0].line, 1);
+    assert_eq!(report3.repairs[0].original, "Attention|");
+    assert_eq!(report3.repairs[0].new_text, "Attention|;");
+    assert_eq!(report3.text, "Attention|;\n");
+    assert!(report3.bad_lines.is_empty());
+
+    // Case 4: Misplaced ';' before final '|' (e.g. active;|)
+    let schema_bool = "schema:claim{title, verified:bool}";
+    let input4 = "Attention|true;|\n";
+    let report4 = doctor(schema_bool, input4, &options);
+    assert_eq!(report4.repairs.len(), 1);
+    assert_eq!(report4.repairs[0].fix, SafeFix::GroupEnds);
+    assert_eq!(report4.repairs[0].line, 1);
+    assert_eq!(report4.repairs[0].original, "Attention|true;|");
+    assert_eq!(report4.repairs[0].new_text, "Attention|true|");
+    assert_eq!(report4.text, "Attention|true|\n");
+    assert!(report4.bad_lines.is_empty());
 }
 
 // =========================================================================
@@ -210,7 +261,7 @@ fn test_bad_lines_coverage() {
     };
 
     // 1. Wrong column count (too few) in middle of file
-    let input = "item1|10|2.5|1|good|\nitem2|20|\nitem3|30|5.0|0|fair|\n";
+    let input = "item1|10|2.5|true|good|;\nitem2|20|;\nitem3|30|5.0|false|fair|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -221,13 +272,13 @@ fn test_bad_lines_coverage() {
             line: 2,
             column: 1,
             problem: "expected 5 columns, found 2".to_string(),
-            original: "item2|20|".to_string(),
+            original: "item2|20|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 2. Wrong column count (too many)
-    let input = "item1|10|2.5|1|good|extra_field|\n";
+    let input = "item1|10|2.5|true|good|extra_field|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -238,13 +289,13 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 1,
             problem: "expected 5 columns, found 6".to_string(),
-            original: "item1|10|2.5|1|good|extra_field|".to_string(),
+            original: "item1|10|2.5|true|good|extra_field|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 3. Unescaped | inside text
-    let input = "item|1|10|2.5|1|good|\n";
+    let input = "item|1|10|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -255,13 +306,13 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 1,
             problem: "expected 5 columns, found 6".to_string(),
-            original: "item|1|10|2.5|1|good|".to_string(),
+            original: "item|1|10|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 4. Enum typo
-    let input = "item1|10|2.5|1|godd|\n";
+    let input = "item1|10|2.5|true|godd|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -270,15 +321,15 @@ fn test_bad_lines_coverage() {
         report.bad_lines[0],
         BadLine {
             line: 1,
-            column: 16,
+            column: 19,
             problem: "'godd' is not one of: poor, fair, good".to_string(),
-            original: "item1|10|2.5|1|godd|".to_string(),
+            original: "item1|10|2.5|true|godd|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 5. Depth jump
-    let input = "item1|10|2.5|1|good|\n>>subnote|\n";
+    let input = "item1|10|2.5|true|good|\n>>subnote|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -289,14 +340,14 @@ fn test_bad_lines_coverage() {
             line: 2,
             column: 1,
             problem: "depth increased by more than one level (from depth 0 to 2)".to_string(),
-            original: ">>subnote|".to_string(),
+            original: ">>subnote|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 6. Missing index when parent has multiple lists
     let multi_list_schema = "schema:multi{id, l1:list[str], l2:list[str]}";
-    let input = "id1|\n>child without index|\n";
+    let input = "id1|\n>child without index|;\n";
     let report = doctor(multi_list_schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -307,13 +358,13 @@ fn test_bad_lines_coverage() {
             line: 2,
             column: 2,
             problem: "missing list index".to_string(),
-            original: ">child without index|".to_string(),
+            original: ">child without index|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 7. Unclosed raw value in the middle of the file
-    let input = "item1|10|2.5|1|good|\nitem2|\\runclosed\nitem3|30|5.0|0|fair|\n";
+    let input = "item1|10|2.5|true|good|;\nitem2|\\runclosed\nitem3|30|5.0|false|fair|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -324,20 +375,20 @@ fn test_bad_lines_coverage() {
             line: 2,
             column: 1,
             problem: "expected 5 columns, found 6".to_string(),
-            original: "item2|\\runclosed\nitem3|30|5.0|0|fair|".to_string(),
+            original: "item2|\\runclosed\nitem3|30|5.0|false|fair|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 8. N/A and "quoted" in a text field: valid
-    let input = "N/A|10|2.5|1|good|\n\"quoted\"|20|3.5|0|fair|\n";
+    let input = "N/A|10|2.5|true|good|;\n\"quoted\"|20|3.5|false|fair|;\n";
     let report = doctor(schema, input, &options);
     assert!(report.data.is_some());
     assert_eq!(report.bad_lines.len(), 0);
     assert_eq!(report.repairs.len(), 0);
 
-    // 9. null, None, N/A in int, bool, enum fields: reported
-    let input = "item1|null|2.5|1|good|\n";
+    // 9. None, N/A in int, bool, enum fields: reported
+    let input = "item1|None|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -347,13 +398,13 @@ fn test_bad_lines_coverage() {
         BadLine {
             line: 1,
             column: 7,
-            problem: "'null' is not a valid int (i64)".to_string(),
-            original: "item1|null|2.5|1|good|".to_string(),
+            problem: "'None' is not a valid int (i64)".to_string(),
+            original: "item1|None|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|10|2.5|None|good|\n";
+    let input = "item1|10|2.5|None|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -363,13 +414,13 @@ fn test_bad_lines_coverage() {
         BadLine {
             line: 1,
             column: 14,
-            problem: "'None' is not a valid bool (expected 1 or 0)".to_string(),
-            original: "item1|10|2.5|None|good|".to_string(),
+            problem: "'None' is not a valid bool (expected true or false)".to_string(),
+            original: "item1|10|2.5|None|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|10|2.5|1|N/A|\n";
+    let input = "item1|10|2.5|true|N/A|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -378,15 +429,15 @@ fn test_bad_lines_coverage() {
         report.bad_lines[0],
         BadLine {
             line: 1,
-            column: 16,
+            column: 19,
             problem: "'N/A' is not one of: poor, fair, good".to_string(),
-            original: "item1|10|2.5|1|N/A|".to_string(),
+            original: "item1|10|2.5|true|N/A|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    // 10. true, false, yes in a bool field: reported
-    let input = "item1|10|2.5|true|good|\n";
+    // 10. 1, 0, yes in a bool field: reported
+    let input = "item1|10|2.5|1|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -396,13 +447,13 @@ fn test_bad_lines_coverage() {
         BadLine {
             line: 1,
             column: 14,
-            problem: "'true' is not a valid bool (expected 1 or 0)".to_string(),
-            original: "item1|10|2.5|true|good|".to_string(),
+            problem: "'1' is not a valid bool (expected true or false)".to_string(),
+            original: "item1|10|2.5|1|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|10|2.5|yes|good|\n";
+    let input = "item1|10|2.5|yes|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -412,14 +463,14 @@ fn test_bad_lines_coverage() {
         BadLine {
             line: 1,
             column: 14,
-            problem: "'yes' is not a valid bool (expected 1 or 0)".to_string(),
-            original: "item1|10|2.5|yes|good|".to_string(),
+            problem: "'yes' is not a valid bool (expected true or false)".to_string(),
+            original: "item1|10|2.5|yes|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 11. Empty field, "2024" in an int, +5, 1,000, Supported, year: 2024
-    let input = "item1||2.5|1|good|\n";
+    let input = "item1||2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -429,13 +480,13 @@ fn test_bad_lines_coverage() {
         BadLine {
             line: 1,
             column: 7,
-            problem: "empty field is not allowed (use ~ for null)".to_string(),
-            original: "item1||2.5|1|good|".to_string(),
+            problem: "empty field is not allowed (use null for null)".to_string(),
+            original: "item1||2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|\"2024\"|2.5|1|good|\n";
+    let input = "item1|\"2024\"|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -446,12 +497,12 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 7,
             problem: "'\"2024\"' is not a valid int (i64)".to_string(),
-            original: "item1|\"2024\"|2.5|1|good|".to_string(),
+            original: "item1|\"2024\"|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|+5|2.5|1|good|\n";
+    let input = "item1|+5|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -462,12 +513,12 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 7,
             problem: "leading '+' is not allowed in int '+5'".to_string(),
-            original: "item1|+5|2.5|1|good|".to_string(),
+            original: "item1|+5|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|1,000|2.5|1|good|\n";
+    let input = "item1|1,000|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -478,12 +529,12 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 7,
             problem: "'1,000' is not a valid int (i64)".to_string(),
-            original: "item1|1,000|2.5|1|good|".to_string(),
+            original: "item1|1,000|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|10|2.5|1|Supported|\n";
+    let input = "item1|10|2.5|true|Supported|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -492,14 +543,14 @@ fn test_bad_lines_coverage() {
         report.bad_lines[0],
         BadLine {
             line: 1,
-            column: 16,
+            column: 19,
             problem: "'Supported' is not one of: poor, fair, good".to_string(),
-            original: "item1|10|2.5|1|Supported|".to_string(),
+            original: "item1|10|2.5|true|Supported|;".to_string(),
             dropped_as_child: false,
         }
     );
 
-    let input = "item1|year: 2024|2.5|1|good|\n";
+    let input = "item1|year: 2024|2.5|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -510,13 +561,13 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 7,
             problem: "'year: 2024' is not a valid int (i64)".to_string(),
-            original: "item1|year: 2024|2.5|1|good|".to_string(),
+            original: "item1|year: 2024|2.5|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
 
     // 12. 3,14 in a float
-    let input = "item1|10|3,14|1|good|\n";
+    let input = "item1|10|3,14|true|good|;\n";
     let report = doctor(schema, input, &options);
     assert_eq!(report.data, None);
     assert_eq!(report.repairs.len(), 0);
@@ -527,7 +578,7 @@ fn test_bad_lines_coverage() {
             line: 1,
             column: 10,
             problem: "'3,14' is not a valid float (f64)".to_string(),
-            original: "item1|10|3,14|1|good|".to_string(),
+            original: "item1|10|3,14|true|good|;".to_string(),
             dropped_as_child: false,
         }
     );
@@ -541,7 +592,7 @@ fn test_bad_lines_coverage() {
 fn test_strict_vs_salvage_cascading_drop() {
     let schema = "schema:claim{text, count:int, notes:list[str]}";
 
-    let input = "claim 1|10|\n>note 1|\nclaim 2|bad_int|\n>dropped child 1|\n>>dropped grandchild 1|\nclaim 3|30|\n>note 3|\n";
+    let input = "claim 1|10|\n>note 1|;\nclaim 2|bad_int|\n>dropped child 1|\n>>dropped grandchild 1|;\nclaim 3|30|\n>note 3|;\n";
 
     let strict_opt = DoctorOptions {
         mode: DoctorMode::Strict,
@@ -577,7 +628,7 @@ fn test_strict_vs_salvage_cascading_drop() {
             line: 5,
             column: 1,
             problem: "dropped as child of line 3".to_string(),
-            original: ">>dropped grandchild 1|".to_string(),
+            original: ">>dropped grandchild 1|;".to_string(),
             dropped_as_child: true,
         }
     );
@@ -594,7 +645,7 @@ fn test_strict_vs_salvage_cascading_drop() {
     assert_eq!(salvage_report.bad_lines[2], strict_report.bad_lines[2]);
     assert_eq!(
         salvage_report.text,
-        "claim 1|10|\n>note 1|\nclaim 3|30|\n>note 3|\n"
+        "claim 1|10|\n>note 1|;\nclaim 3|30|\n>note 3|;\n"
     );
 }
 
@@ -607,30 +658,30 @@ fn test_hint_and_splice() {
     let schema = "schema:claim{id, title, verdict:enum(supported,refuted), year:int, verified:bool}";
     let options = DoctorOptions::default();
 
-    let input = "c1|Attention|supported|2017|1|\nc2|FlashAttention|supproted|2022|1|\nc3|Llama 405B|refuted|+2024|0|\n";
+    let input = "c1|Attention|supported|2017|true|\nc2|FlashAttention|supproted|2022|true|\nc3|Llama 405B|refuted|+2024|false|\n";
 
     let report = doctor(schema, input, &options);
     assert_eq!(report.bad_lines.len(), 2);
 
     let hint = report.hint.as_ref().expect("Hint should be present");
-    let expected_hint = "Some lines were invalid. Rewrite only these lines, one per line, in the same order:\n1. c2|FlashAttention|supproted|2022|1|   ('supproted' is not one of: supported, refuted)\n2. c3|Llama 405B|refuted|+2024|0|   (leading '+' is not allowed in int '+2024')";
+    let expected_hint = "Some lines were invalid. Rewrite only these lines, one per line, in the same order:\n1. c2|FlashAttention|supproted|2022|true|   ('supproted' is not one of: supported, refuted)\n2. c3|Llama 405B|refuted|+2024|false|   (leading '+' is not allowed in int '+2024')";
     assert_eq!(hint, expected_hint);
 
-    let clean_reply = "c2|FlashAttention|supported|2022|1|\nc3|Llama 405B|refuted|2024|0|";
+    let clean_reply = "c2|FlashAttention|supported|2022|true|\nc3|Llama 405B|refuted|2024|false|";
     let spliced_report = splice(schema, input, &report, clean_reply, &options).expect("Splice succeeded");
     assert!(spliced_report.data.is_some());
     assert_eq!(spliced_report.bad_lines.len(), 0);
     assert_eq!(
         spliced_report.text,
-        "c1|Attention|supported|2017|1|\nc2|FlashAttention|supported|2022|1|\nc3|Llama 405B|refuted|2024|0|\n"
+        "c1|Attention|supported|2017|true|\nc2|FlashAttention|supported|2022|true|\nc3|Llama 405B|refuted|2024|false|\n"
     );
 
-    let wrong_count_reply = "c2|FlashAttention|supported|2022|1|";
+    let wrong_count_reply = "c2|FlashAttention|supported|2022|true|";
     let err = splice(schema, input, &report, wrong_count_reply, &options);
     assert!(err.is_err());
     assert!(err.unwrap_err().message.contains("reply has 1 lines, expected 2"));
 
-    let still_bad_reply = "c2|FlashAttention|still_bad|2022|1|\nc3|Llama 405B|refuted|2024|0|";
+    let still_bad_reply = "c2|FlashAttention|still_bad|2022|true|\nc3|Llama 405B|refuted|2024|false|";
     let still_bad_report = splice(schema, input, &report, still_bad_reply, &options).expect("Splice ran");
     assert_eq!(still_bad_report.bad_lines.len(), 1);
     assert_eq!(
@@ -639,7 +690,7 @@ fn test_hint_and_splice() {
             line: 2,
             column: 19,
             problem: "'still_bad' is not one of: supported, refuted".to_string(),
-            original: "c2|FlashAttention|still_bad|2022|1|".to_string(),
+            original: "c2|FlashAttention|still_bad|2022|true|".to_string(),
             dropped_as_child: false,
         }
     );
@@ -702,7 +753,7 @@ fn test_r3b_bug_1_2_unclosed_raw_mid_file() {
     );
 
     let schema2 = "schema:item{a, b, notes:list[str]}";
-    let input2 = "x|\\rl1\n>l2\nschema:zz|\n>n1|\n";
+    let input2 = "x|\\rl1\n>l2\nschema:zz|\n>n1|;\n";
     let report2 = doctor(schema2, input2, &options);
     assert_eq!(report2.bad_lines.len(), 0);
     assert_eq!(report2.repairs.len(), 0);
@@ -770,7 +821,7 @@ fn test_r3e_three_bugs() {
 
     // Bug 1: A valid last child line is kept
     let schema1 = "schema:c{n:int, a:list[record{p, q, r}], b:list[int]}";
-    let input1 = "1|\n>2|5|\n";
+    let input1 = "1|\n>2|5|;\n";
     let report1 = doctor(schema1, input1, &options);
     assert_eq!(report1.repairs.len(), 0, "Bug 1: must have 0 repairs");
     assert_eq!(report1.bad_lines.len(), 0, "Bug 1: must have 0 bad lines");
@@ -793,23 +844,25 @@ fn test_r3e_three_bugs() {
     let input2 = "1|\n>2|5";
     let report2 = doctor(schema2, input2, &options);
     assert_eq!(report2.bad_lines.len(), 0, "Bug 2: must have 0 bad lines");
-    assert_eq!(report2.repairs.len(), 1, "Bug 2: must have 1 repair");
+    assert_eq!(report2.repairs.len(), 2, "Bug 2: must have 2 repairs (MissingFinalPipe and GroupEnds)");
     assert_eq!(report2.repairs[0].fix, SafeFix::MissingFinalPipe);
     assert_eq!(report2.repairs[0].line, 2);
     assert_eq!(report2.repairs[0].original, ">2|5");
     assert_eq!(report2.repairs[0].new_text, ">2|5|");
-    assert_eq!(report2.text, "1|\n>2|5|\n");
+    assert_eq!(report2.repairs[1].fix, SafeFix::GroupEnds);
+    assert_eq!(report2.repairs[1].line, 2);
+    assert_eq!(report2.text, "1|\n>2|5|;\n");
 
     // Bug 3: A depth-2 line under a parent with no lists is reported as a bad line
     let schema3 = "schema:n{l, s:list[record{t, y}]}";
-    let input3 = "~|\n>a|b|\n>>c|\n";
+    let input3 = "null|\n>a|b|\n>>c|;\n";
     let report3 = doctor(schema3, input3, &options);
     assert_eq!(report3.repairs.len(), 0, "Bug 3: must have 0 repairs");
     assert_eq!(report3.bad_lines.len(), 1, "Bug 3: must report bad line");
     assert_eq!(report3.bad_lines[0].line, 3);
     assert_eq!(report3.bad_lines[0].column, 1);
     assert_eq!(report3.bad_lines[0].problem, "parent record has no list fields to attach child line");
-    assert_eq!(report3.bad_lines[0].original, ">>c|");
+    assert_eq!(report3.bad_lines[0].original, ">>c|;");
 }
 
 #[test]
@@ -971,7 +1024,7 @@ fn test_r3f_new_rules() {
     let schema4 = "schema:claim{title, notes:list[str]}";
     let input4 = "Attention|\n>rope";
     let report4 = doctor(schema4, input4, &options);
-    assert_eq!(report4.repairs.len(), 1);
+    assert_eq!(report4.repairs.len(), 2);
     assert_eq!(
         report4.repairs[0],
         Repair {
@@ -982,8 +1035,10 @@ fn test_r3f_new_rules() {
             new_text: ">rope|".to_string(),
         }
     );
+    assert_eq!(report4.repairs[1].fix, SafeFix::GroupEnds);
+    assert_eq!(report4.repairs[1].line, 2);
     assert!(report4.bad_lines.is_empty());
-    assert_eq!(report4.text, "Attention|\n>rope|\n");
+    assert_eq!(report4.text, "Attention|\n>rope|;\n");
 
     // 5. Hope this helps! at the end is a record under {text}, and chatter under {year:int}
     let schema_text = "schema:doc{text}";
@@ -1155,6 +1210,9 @@ fn tokenize(text: &str) -> Vec<RawEnt> {
                 raw,
             });
             p += 1;
+            if p < b.len() && b[p] == b';' {
+                p += 1;
+            }
             if p >= b.len() || b[p] == b'\n' {
                 break;
             }
@@ -1410,12 +1468,12 @@ fn type_error(col: &Col, v: &str) -> String {
             }
         }
         Col::Float => format!("'{}' is not a valid float (f64)", v),
-        Col::Bool => format!("'{}' is not a valid bool (expected 1 or 0)", v),
+        Col::Bool => format!("'{}' is not a valid bool (expected true or false)", v),
         Col::Enum(l) => format!("'{}' is not one of: {}", v, l.join(", ")),
     }
 }
 
-const EMPTY_FIELD: &str = "empty field is not allowed (use ~ for null)";
+const EMPTY_FIELD: &str = "empty field is not allowed (use null for null)";
 
 // ---------- fixable damage ----------
 
@@ -1547,8 +1605,14 @@ fn compose_fixable(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent], fixes:
         let last_class = gf.doc.blocks.last().map(|b| b.class_name.as_str()).unwrap_or("");
         let check_cand = |ch: &str, cls: &str| -> bool {
             let cand = format!("schema:{}\n{}|\n", cls, ch);
+            let cand_semi = format!("schema:{}\n{}|;\n", cls, ch);
+            let gf_stripped = gf.text.trim_end().strip_suffix(';').unwrap_or(gf.text.trim_end());
             decode_blocks(&gf.schemas, &cand).is_ok()
+                || decode_blocks(&gf.schemas, &cand_semi).is_ok()
                 || decode_blocks(&gf.schemas, &format!("{}{}|\n", gf.text, ch)).is_ok()
+                || decode_blocks(&gf.schemas, &format!("{}{}|;\n", gf.text, ch)).is_ok()
+                || decode_blocks(&gf.schemas, &format!("{}\n{}|\n", gf_stripped, ch)).is_ok()
+                || decode_blocks(&gf.schemas, &format!("{}\n{}|;\n", gf_stripped, ch)).is_ok()
         };
 
         let (mut a, mut b) = (rng.gen_range(0, 3), rng.gen_range(0, 3));
@@ -1715,6 +1779,9 @@ fn parse_cut_line_fields(line_text: &str) -> (usize, Vec<CutField>) {
             if p < bytes.len() && bytes[p] == b'|' {
                 p += 1;
             }
+            if p < bytes.len() && bytes[p] == b';' {
+                p += 1;
+            }
             fields.push(CutField {
                 start: f_start,
                 val: raw_val,
@@ -1732,7 +1799,7 @@ fn parse_cut_line_fields(line_text: &str) -> (usize, Vec<CutField>) {
                 if in_escape {
                     in_escape = false;
                     match c {
-                        '|' | '\\' | '~' | '>' | '#' => val_chars.push(c),
+                        '|' | '\\' | '>' | '#' => val_chars.push(c),
                         other => {
                             if invalid_escape.is_none() {
                                 invalid_escape = Some((other, p));
@@ -1752,6 +1819,9 @@ fn parse_cut_line_fields(line_text: &str) -> (usize, Vec<CutField>) {
                 if c == '|' {
                     closed = true;
                     p += 1;
+                    if p < bytes.len() && bytes[p] == b';' {
+                        p += 1;
+                    }
                     break;
                 }
                 val_chars.push(c);
@@ -1759,7 +1829,7 @@ fn parse_cut_line_fields(line_text: &str) -> (usize, Vec<CutField>) {
             }
             let f_end = if closed { p - 1 } else { p };
             let raw_slice = &line_text[f_start..f_end];
-            let is_null = raw_slice.trim() == "~";
+            let is_null = raw_slice.trim() == "null";
             let val_str: String = val_chars.into_iter().collect();
             let trimmed = val_str.trim_end_matches(|c| c == ' ' || c == '\t').to_string();
             fields.push(CutField {
@@ -1812,10 +1882,10 @@ fn validate_col_type(col: &Col, val: &str, is_raw: bool, is_null: bool) -> Resul
             }
         }
         Col::Bool => {
-            if t == "1" || t == "0" {
+            if t == "true" || t == "false" {
                 Ok(())
             } else {
-                Err(format!("'{}' is not a valid bool (expected 1 or 0)", t))
+                Err(format!("'{}' is not a valid bool (expected true or false)", t))
             }
         }
         Col::Enum(labels) => {
@@ -2078,11 +2148,11 @@ fn plan_cut_r3f(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> BuiltC
         rng.gen_range(1, total - 1)
     };
     let chars: Vec<char> = e.text.chars().collect();
-    while p > 1 && (chars[p - 1] == '|' || chars[p - 1] == '\n' || chars[p - 1] == '\r') {
+    while p > 1 && (chars[p - 1] == '|' || chars[p - 1] == ';' || chars[p - 1] == '\n' || chars[p - 1] == '\r') {
         p -= 1;
     }
     let mut cut_preview: String = chars[..p].iter().collect();
-    while p > 1 && (cut_preview.trim_end().ends_with('|') || cut_preview.ends_with('\n') || cut_preview.ends_with('\r')) {
+    while p > 1 && (cut_preview.trim_end().ends_with('|') || cut_preview.trim_end().ends_with(';') || cut_preview.ends_with('\n') || cut_preview.ends_with('\r')) {
         p -= 1;
         cut_preview = chars[..p].iter().collect();
     }
@@ -2098,9 +2168,14 @@ fn plan_cut_r3f(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> BuiltC
 
     let is_raw = has_open_raw_at_end(&cut_text);
     let has_pipe = cut_text.contains('|');
+    let needs_semi = ents[c].depth > 0 || ents[c].own_lists > 0;
 
     if !has_pipe && !is_raw {
-        let cand = format!("{}{}|\n", prefix_text, cut_text);
+        let cand = if needs_semi {
+            format!("{}{}|;\n", prefix_text, cut_text.trim_end())
+        } else {
+            format!("{}{}|\n", prefix_text, cut_text.trim_end())
+        };
         if let Ok(blocks) = decode_blocks(&gf.schemas, &cand) {
             let repair = Repair {
                 line: ents[c].line,
@@ -2125,7 +2200,10 @@ fn plan_cut_r3f(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> BuiltC
                 original: cut_text.clone(),
                 new_text: String::new(),
             };
-            let salvage_blocks = decode_blocks(&gf.schemas, &prefix_text).unwrap_or_default();
+            let salvage_blocks = match doctor(&gf.schemas, &prefix_text, &salvage_opts()).data {
+                Some(d) => d.blocks,
+                None => Vec::new(),
+            };
             BuiltCut::Case(CutCase {
                 text: damaged_text,
                 repair,
@@ -2150,7 +2228,18 @@ fn plan_cut_r3f(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> BuiltC
             original: cut_text.clone(),
             new_text: new_text.clone(),
         };
-        let cand = format!("{}{}\n", prefix_text, new_text);
+        let trailing_bs = cut_text
+            .trim_end()
+            .chars()
+            .rev()
+            .take_while(|&ch| ch == '\\')
+            .count();
+        let unescaped_pipe = trailing_bs % 2 == 0;
+        let cand = if needs_semi && unescaped_pipe {
+            format!("{}{};\n", prefix_text, new_text)
+        } else {
+            format!("{}{}\n", prefix_text, new_text)
+        };
         if let Ok(blocks) = decode_blocks(&gf.schemas, &cand) {
             BuiltCut::Case(CutCase {
                 text: damaged_text,
@@ -2161,8 +2250,16 @@ fn plan_cut_r3f(rng: &mut SimpleRng, gf: &GeneratedFile, ents: &[Ent]) -> BuiltC
                 truncated_but_valid: true,
             })
         } else {
-            let bad_line = spec_classify_cut_bad_line(ents, c, &cut_text, &new_text);
-            let salvage_blocks = decode_blocks(&gf.schemas, &prefix_text).unwrap_or_default();
+            let new_text_for_classify = if needs_semi && unescaped_pipe {
+                format!("{};", new_text)
+            } else {
+                new_text.clone()
+            };
+            let bad_line = spec_classify_cut_bad_line(ents, c, &cut_text, &new_text_for_classify);
+            let salvage_blocks = match doctor(&gf.schemas, &prefix_text, &salvage_opts()).data {
+                Some(d) => d.blocks,
+                None => Vec::new(),
+            };
             BuiltCut::Case(CutCase {
                 text: damaged_text,
                 repair,
@@ -2180,18 +2277,24 @@ fn check_cut_case(schemas: &str, c: &CutCase) -> Result<Outcome, CaseErr> {
 
     // Salvage check
     let salvage = doctor(schemas, &c.text, &salvage_opts());
-    if salvage.repairs.len() != 1 {
-        return Err(plain(format!("salvage: expected 1 repair, got {}", salvage.repairs.len())));
-    }
-    let sr = &salvage.repairs[0];
-    if sr.line != c.repair.line
-        || sr.fix != c.repair.fix
-        || sr.original != c.repair.original
-        || sr.new_text != c.repair.new_text
-    {
+    let sr_found = salvage.repairs.iter().any(|r| {
+        r.line == c.repair.line
+            && r.fix == c.repair.fix
+            && r.original == c.repair.original
+            && r.new_text == c.repair.new_text
+    });
+    let sr_valid = sr_found
+        && salvage.repairs.iter().all(|r| {
+            r.fix == SafeFix::GroupEnds
+                || (r.line == c.repair.line
+                    && r.fix == c.repair.fix
+                    && r.original == c.repair.original
+                    && r.new_text == c.repair.new_text)
+        });
+    if !sr_valid {
         return Err(plain(format!(
-            "salvage: repair mismatch\n  expected: line {} fix {:?} orig {:?} new {:?}\n  got:      line {} fix {:?} orig {:?} new {:?}",
-            c.repair.line, c.repair.fix, c.repair.original, c.repair.new_text, sr.line, sr.fix, sr.original, sr.new_text
+            "salvage: repair mismatch\n  expected: line {} fix {:?} orig {:?} new {:?}\n  got: {:?}",
+            c.repair.line, c.repair.fix, c.repair.original, c.repair.new_text, salvage.repairs
         )));
     }
     match &c.bad_line {
@@ -2221,18 +2324,24 @@ fn check_cut_case(schemas: &str, c: &CutCase) -> Result<Outcome, CaseErr> {
 
     // Strict check
     let strict = doctor(schemas, &c.text, &strict_opts());
-    if strict.repairs.len() != 1 {
-        return Err(plain(format!("strict: expected 1 repair, got {}", strict.repairs.len())));
-    }
-    let str_rep = &strict.repairs[0];
-    if str_rep.line != c.repair.line
-        || str_rep.fix != c.repair.fix
-        || str_rep.original != c.repair.original
-        || str_rep.new_text != c.repair.new_text
-    {
+    let str_found = strict.repairs.iter().any(|r| {
+        r.line == c.repair.line
+            && r.fix == c.repair.fix
+            && r.original == c.repair.original
+            && r.new_text == c.repair.new_text
+    });
+    let str_valid = str_found
+        && strict.repairs.iter().all(|r| {
+            r.fix == SafeFix::GroupEnds
+                || (r.line == c.repair.line
+                    && r.fix == c.repair.fix
+                    && r.original == c.repair.original
+                    && r.new_text == c.repair.new_text)
+        });
+    if !str_valid {
         return Err(plain(format!(
             "strict: repair mismatch\n  expected: {:?}\n  got: {:?}",
-            c.repair, str_rep
+            c.repair, strict.repairs
         )));
     }
     match &c.strict_blocks {
@@ -2300,11 +2409,11 @@ const ALL_UK: [(UK, &str); 22] = [
     (UK::Comma, "Comma in int (1,000)"),
     (UK::Caps, "Enum wrong case (Supported)"),
     (UK::Prefix, "Field-name prefix (year: 2024)"),
-    (UK::Null, "Literal null in non-text"),
+    (UK::Null, "Literal ~ in non-text"),
     (UK::NoneWord, "Literal None in non-text"),
     (UK::NA, "Literal N/A in non-text"),
     (UK::NaN, "NaN in int/bool/enum"),
-    (UK::True, "true in bool"),
+    (UK::True, "1 in bool"),
     (UK::Yes, "yes in bool"),
     (UK::Empty, "Empty field (two pipes in a row)"),
     (UK::DecComma, "Decimal comma in float (3,14)"),
@@ -2402,7 +2511,8 @@ fn build_unfixable(rng: &mut SimpleRng, ents: &[Ent], kind: UK) -> Option<Unf> {
             if single_child && j > 0 && index_like(&en.text[en.fields[0].start..en.fields[0].end]) {
                 j = 0;
             }
-            let pos = if j < en.cols.len() { en.fields[en.prefix + j].start } else { en.text.len() };
+            let last_pipe_pos = en.text.rfind('|').unwrap();
+            let pos = if j < en.cols.len() { en.fields[en.prefix + j].start } else { last_pipe_pos };
             let new = format!("{}zzz|{}", &en.text[..pos], &en.text[pos..]);
             if gt_count(&new) != en.depth {
                 return None;
@@ -2632,11 +2742,11 @@ fn build_unfixable(rng: &mut SimpleRng, ents: &[Ent], kind: UK) -> Option<Unf> {
                     };
                     format!("{}: {}", name, v)
                 }
-                UK::Null => "null".to_string(),
+                UK::Null => "~".to_string(),
                 UK::NoneWord => "None".to_string(),
                 UK::NA => "N/A".to_string(),
                 UK::NaN => "NaN".to_string(),
-                UK::True => "true".to_string(),
+                UK::True => "1".to_string(),
                 UK::Yes => "yes".to_string(),
                 UK::Empty => String::new(),
                 UK::DecComma => format!("{},{}", rng.gen_range(1, 99), rng.gen_range(1, 99)),
@@ -2805,10 +2915,19 @@ fn check_unfixable(
     let salvage = doctor(schemas, damaged_text, &salvage_opts());
     let strict = doctor(schemas, damaged_text, &strict_opts());
     for (label, report) in [("salvage", &salvage), ("strict", &strict)] {
-        if !report.repairs.is_empty() {
+        if report.repairs.iter().any(|r| r.fix != SafeFix::GroupEnds) {
             return Err(plain(format!("{}: unexpected repairs {:?}", label, report.repairs)));
         }
-        if report.bad_lines != unf.bad {
+        let bad_match = report.bad_lines.len() == unf.bad.len()
+            && report.bad_lines.iter().zip(&unf.bad).all(|(b, u)| {
+                b.line == u.line
+                    && b.column == u.column
+                    && b.problem == u.problem
+                    && b.dropped_as_child == u.dropped_as_child
+                    && (b.original == u.original
+                        || b.original.trim_end_matches(';') == u.original.trim_end_matches(';'))
+            });
+        if !bad_match {
             return Err(plain(format!(
                 "{}: bad lines differ\n  expected: {:#?}\n  got:      {:#?}",
                 label, unf.bad, report.bad_lines
@@ -2822,7 +2941,7 @@ fn check_unfixable(
     match &salvage.hint {
         None => return Err(plain("salvage: no retry hint although there are bad lines".to_string())),
         Some(h) => {
-            for b in unf.bad.iter().filter(|b| !b.dropped_as_child) {
+            for b in salvage.bad_lines.iter().filter(|b| !b.dropped_as_child) {
                 let want = format!("{}   ({})", b.original, b.problem);
                 if !h.contains(&want) {
                     return Err(plain(format!("hint does not quote the bad line: missing {:?} in {:?}", want, h)));
@@ -2931,9 +3050,9 @@ fn run_case(row: Row, seed: u64) -> CaseResult {
                         kept.push('\n');
                     }
                 }
-                let expected = match decode_blocks(&gf.schemas, &kept) {
-                    Ok(b) => b,
-                    Err(e) => panic!("oracle could not read the kept lines: {}", e),
+                let expected = match doctor(&gf.schemas, &kept, &salvage_opts()).data {
+                    Some(d) => d.blocks,
+                    None => Vec::new(),
                 };
                 let res = check_unfixable(&gf.schemas, &text, &unf, &expected);
                 return CaseResult::Done(res, gf.schemas.clone(), text);

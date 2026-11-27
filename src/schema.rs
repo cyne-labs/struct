@@ -598,6 +598,13 @@ fn parse_enum_labels(input: &str, line_num: usize, col: usize) -> Result<Vec<Str
                 col,
             ));
         }
+        if trimmed == "null" {
+            return Err(StructError::new(
+                "enum label cannot be 'null'",
+                line_num,
+                col,
+            ));
+        }
         if seen.contains(trimmed) {
             return Err(StructError::new(
                 format!("duplicate enum label '{}'", trimmed),

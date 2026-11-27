@@ -1,4 +1,4 @@
-//! GBNF grammar generation for Struct (v0.3).
+//! GBNF grammar generation for Struct (v0.4).
 //!
 //! Produces GBNF grammars enforcing canonical Struct output for local models.
 //! Standard library only.
@@ -94,23 +94,39 @@ fn generate_gbnf_internal(schemas: &str, trigger: Option<&str>) -> Result<String
                 "record-{} ::= line-0-{}\n",
                 class_name, class_name
             ));
+            out.push_str(&format!("line-0-{} ::= ", class_name));
+            let flat_cols = flatten_fields(&class_def.fields);
+            for (i, col_type) in flat_cols.iter().enumerate() {
+                let is_first = i == 0;
+                let col_rule = column_type_rule_name(class_name, col_type, is_first, i);
+                out.push_str(&format!("{} \"|\" ", col_rule));
+            }
+            out.push_str("\"\\n\"\n\n");
         } else {
             out.push_str(&format!(
-                "record-{} ::= line-0-{} children-{}\n",
-                class_name, class_name, class_name
+                "record-{} ::= line-0-empty-{} | line-0-has-children-{} children-block-{}\n",
+                class_name, class_name, class_name, class_name
             ));
+
+            out.push_str(&format!("line-0-empty-{} ::= ", class_name));
+            let flat_cols = flatten_fields(&class_def.fields);
+            for (i, col_type) in flat_cols.iter().enumerate() {
+                let is_first = i == 0;
+                let col_rule = column_type_rule_name(class_name, col_type, is_first, i);
+                out.push_str(&format!("{} \"|\" ", col_rule));
+            }
+            out.push_str("\";\\n\"\n");
+
+            out.push_str(&format!("line-0-has-children-{} ::= ", class_name));
+            for (i, col_type) in flat_cols.iter().enumerate() {
+                let is_first = i == 0;
+                let col_rule = column_type_rule_name(class_name, col_type, is_first, i);
+                out.push_str(&format!("{} \"|\" ", col_rule));
+            }
+            out.push_str("\"\\n\"\n\n");
+
             generate_children_rules(class_name, &list_targets, 1, &mut out);
         }
-
-        // Depth 0 line columns
-        out.push_str(&format!("line-0-{} ::= ", class_name));
-        let flat_cols = flatten_fields(&class_def.fields);
-        for (i, col_type) in flat_cols.iter().enumerate() {
-            let is_first = i == 0;
-            let col_rule = column_type_rule_name(class_name, col_type, is_first, i);
-            out.push_str(&format!("{} \"|\" ", col_rule));
-        }
-        out.push_str("\"\\n\"\n\n");
 
         // Specific enum rules for this class
         generate_record_enum_rules(&format!("enum-{}", class_name), &class_def.fields, &mut out);
@@ -128,16 +144,20 @@ fn generate_children_rules(
     depth: usize,
     out: &mut String,
 ) {
-    let mut child_options = Vec::new();
+    let mut open_options = Vec::new();
+    let mut last_options = Vec::new();
+
     for (t_idx, target) in list_targets.iter().enumerate() {
-        let rule_name = format!("child-{}-d{}-t{}", class_name, depth, t_idx);
-        child_options.push(rule_name.clone());
+        let rule_open = format!("child-{}-d{}-t{}-open", class_name, depth, t_idx);
+        let rule_last = format!("child-{}-d{}-t{}-last", class_name, depth, t_idx);
+        open_options.push(rule_open.clone());
+        last_options.push(rule_last.clone());
 
         // Child rule: '>' x depth, optional canonical index, columns, newline, nested children
         let depth_str = ">".repeat(depth);
-        let mut line_rule = format!("\"{}\" ", depth_str);
+        let mut prefix = format!("\"{}\" ", depth_str);
         if !target.canonical_index.is_empty() {
-            line_rule.push_str(&format!("\"{}|\" ", target.canonical_index));
+            prefix.push_str(&format!("\"{}|\" ", target.canonical_index));
         }
 
         match &target.item_type {
@@ -154,22 +174,23 @@ fn generate_children_rules(
                     ScalarType::Float => "val-float",
                     ScalarType::Bool => "val-bool",
                 };
-                line_rule.push_str(&format!("{} \"|\\n\"", col_rule));
-                out.push_str(&format!("{} ::= {}\n", rule_name, line_rule));
+                out.push_str(&format!("{} ::= {}{} \"|\\n\"\n", rule_open, prefix, col_rule));
+                out.push_str(&format!("{} ::= {}{} \"|;\\n\"\n", rule_last, prefix, col_rule));
             }
             ListItemType::Enum(labels) => {
                 let enum_rule = format!("enum-child-{}-d{}-t{}", class_name, depth, t_idx);
                 let label_alts: Vec<String> = labels.iter().map(|l| format!("\"{}\"", l)).collect();
-                out.push_str(&format!("{} ::= \"~\" | {}\n", enum_rule, label_alts.join(" | ")));
+                out.push_str(&format!("{} ::= \"null\" | {}\n", enum_rule, label_alts.join(" | ")));
 
-                line_rule.push_str(&format!("{} \"|\\n\"", enum_rule));
-                out.push_str(&format!("{} ::= {}\n", rule_name, line_rule));
+                out.push_str(&format!("{} ::= {}{} \"|\\n\"\n", rule_open, prefix, enum_rule));
+                out.push_str(&format!("{} ::= {}{} \"|;\\n\"\n", rule_last, prefix, enum_rule));
             }
             ListItemType::Record(rec) => {
                 let flat_cols = flatten_fields(&rec.fields);
                 let child_enum_prefix = format!("enum-{}-d{}-t{}", class_name, depth, t_idx);
                 generate_record_enum_rules(&child_enum_prefix, &rec.fields, out);
 
+                let mut cols_str = String::new();
                 for (ci, ct) in flat_cols.iter().enumerate() {
                     let is_first = ci == 0 && target.canonical_index.is_empty();
                     let col_rule = match ct {
@@ -186,26 +207,40 @@ fn generate_children_rules(
                         }
                         FlatColType::Enum(id) => format!("{}-{}", child_enum_prefix, id),
                     };
-                    line_rule.push_str(&format!("{} \"|\" ", col_rule));
+                    cols_str.push_str(&format!("{} \"|\" ", col_rule));
                 }
-                line_rule.push_str("\"\\n\"");
 
                 let sub_lists = rec.find_lists();
                 if sub_lists.is_empty() {
-                    out.push_str(&format!("{} ::= {}\n", rule_name, line_rule));
+                    out.push_str(&format!("{} ::= {}{}\"\\n\"\n", rule_open, prefix, cols_str));
+                    out.push_str(&format!("{} ::= {}{}\";\\n\"\n", rule_last, prefix, cols_str));
                 } else {
-                    let nested_children_rule = format!("children-{}-d{}", class_name, depth + 1);
-                    out.push_str(&format!("{} ::= {} {}\n", rule_name, line_rule, nested_children_rule));
+                    let nested_block = format!("children-block-{}-d{}", class_name, depth + 1);
+                    out.push_str(&format!(
+                        "{} ::= {}{}\";\\n\" | {}{}\"\\n\" {}\n",
+                        rule_open, prefix, cols_str, prefix, cols_str, nested_block
+                    ));
+                    out.push_str(&format!(
+                        "{} ::= {}{}\";\\n\" | {}{}\"\\n\" {}\n",
+                        rule_last, prefix, cols_str, prefix, cols_str, nested_block
+                    ));
                     generate_children_rules(class_name, &sub_lists, depth + 1, out);
                 }
             }
         }
     }
 
+    let block_name = if depth == 1 {
+        format!("children-block-{}", class_name)
+    } else {
+        format!("children-block-{}-d{}", class_name, depth)
+    };
+
     out.push_str(&format!(
-        "children-{} ::= ({})*\n",
-        if depth == 1 { class_name.to_string() } else { format!("{}-d{}", class_name, depth) },
-        child_options.join(" | ")
+        "{} ::= ({})* ({})\n",
+        block_name,
+        open_options.join(" | "),
+        last_options.join(" | ")
     ));
 }
 
@@ -227,7 +262,7 @@ fn generate_record_enum_rules_internal(
                 *counter += 1;
                 let alts: Vec<String> = labels.iter().map(|l| format!("\"{}\"", l)).collect();
                 out.push_str(&format!(
-                    "{}-{} ::= \"~\" | {}\n",
+                    "{}-{} ::= \"null\" | {}\n",
                     prefix, id, alts.join(" | ")
                 ));
             }
@@ -290,8 +325,6 @@ fn column_type_rule_name(
     }
 }
 
-
-
 fn escape_gbnf_string(s: &str) -> String {
     let mut out = String::new();
     for c in s.chars() {
@@ -308,29 +341,29 @@ fn escape_gbnf_string(s: &str) -> String {
 }
 
 const SHARED_PRIMITIVES: &str = r#"
-# --- Canonical Struct v0.3 Primitives ---
+# --- Canonical Struct v0.4 Primitives ---
 
-val-bool ::= "0" | "1" | "~"
+val-bool ::= "true" | "false" | "null"
 
-val-int ::= "~" | "0" | "-"? [1-9] [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]?
+val-int ::= "null" | "0" | "-"? [1-9] [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]? [0-9]?
 
-val-float ::= "~" | "NaN" | "inf" | "-inf" | "-0" | "0" | float-plain | float-exp
+val-float ::= "null" | "NaN" | "inf" | "-inf" | "-0" | "0" | float-plain | float-exp
 
 float-plain ::= "-"? ( [1-9] [0-9]? [0-9]? [0-9]? ( "." [0-9]* [1-9] )? | "0." ( "000" [1-9] [0-9]* | "00" [1-9] [0-9]* | "0" [1-9] [0-9]* | [1-9] [0-9]* ) )
 
 float-exp ::= "-"? [1-9] ( "." [0-9]* [1-9] )? ( "e" ( [4-9] | [1-9] [0-9]+ ) | "e-" ( [5-9] | [1-9] [0-9]+ ) )
 
-col-first-str ::= "~" | "\\~" | str-raw | "\\>" ( str-mid* str-last )? | "~" str-mid* str-last | str-first-char ( str-mid* str-last )?
+col-first-str ::= "null" | "\\rnull" | str-raw | "\\>" ( str-mid* str-last )? | str-first-char ( str-mid* str-last )?
 
-col-str ::= "~" | "\\~" | str-raw | "~" str-mid* str-last | str-col-first-char ( str-mid* str-last )?
+col-str ::= "null" | "\\rnull" | str-raw | str-col-first-char ( str-mid* str-last )?
 
 str-raw ::= "\\r" ( raw-char* "\n" raw-char* | (" " | "\t") raw-char* | raw-char* (" " | "\t") )
 
 raw-char ::= [^\\|\r] | "\\|" | "\\\\"
 
-str-first-char ::= [^ \t\r\n\\|~>] | "\\|" | "\\\\"
+str-first-char ::= [^ \t\r\n\\|>] | "\\|" | "\\\\"
 
-str-col-first-char ::= [^ \t\r\n\\|~] | "\\|" | "\\\\"
+str-col-first-char ::= [^ \t\r\n\\|] | "\\|" | "\\\\"
 
 str-mid ::= [^\r\n\\|] | "\\|" | "\\\\"
 

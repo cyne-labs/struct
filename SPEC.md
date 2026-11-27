@@ -1,4 +1,4 @@
-# Struct specification, v0.3
+# Struct specification, v0.4
 
 Struct is a structured-output format for language models. A file is made of **classes**: shapes declared once in `schema:` lines. Data lines carry only values, separated by `|`. There are no field names, no quotes and no braces in the data.
 
@@ -12,11 +12,11 @@ This spec records every decision made by the maintainer so far. Anything not yet
 - Blank lines, and lines containing only spaces or tabs, are ignored, except inside a raw value.
 - Each non-blank line is one of:
   - a **schema line**: it starts with `schema:` and contains no `|` anywhere;
-  - a **data line**: every other line. A data line ends with an unescaped `|`.
+  - a **data line**: every other line. A data line ends with an unescaped `|`, or `|;` for group ends (section 5).
 - A line that starts with `schema:` but contains a `|` is a data line. For example, `schema:foo|1.5|` is a data line whose first value is the text `schema:foo`. Schema lines can never contain `|`, so the two can't be confused.
 - Leading and trailing spaces and tabs on every line are trimmed before reading, except inside a raw value.
 - A data line that appears before any schema line is an error, unless the schema is supplied from outside the file (section 6).
-- A **raw value** (section 3) may contain real line breaks. A data line then continues across physical lines until its final unescaped `|`. Physical lines inside a raw value are text: one starting with `>` or `schema:` is not a child line or a schema line.
+- A **raw value** (section 3) may contain real line breaks. A data line then continues across physical lines until its final unescaped `|` (or `|;`). Physical lines inside a raw value are text: one starting with `>` or `schema:` is not a child line or a schema line.
 
 ## 2. Classes and blocks
 
@@ -32,8 +32,8 @@ A field is written `name` or `name:type`. With no type, it's text.
 - `str`: text (the default).
 - `int`: a whole number, optionally negative, such as `2024` or `-17`. Its range is Rust's `i64`. A leading `+` is an error.
 - `float`: a decimal number, such as `3.14`, `-0.5`, `1e5`, `+5`, `inf` or `NaN`. It accepts exactly what Rust's `f64` parser accepts.
-- `bool`: `1` for true, `0` for false.
-- `enum(a,b,c)`: exactly one of the listed labels. Labels follow the same rule as names: letters, digits and `_`, no spaces, and they don't start with a digit.
+- `bool`: `true` or `false` (`1` and `0` are rejected).
+- `enum(a,b,c)`: exactly one of the listed labels. Labels follow the same rule as names: letters, digits and `_`, no spaces, and they don't start with a digit. The label `null` is banned; an enum containing the label `null` is a schema error.
 - `record{...}`: a fixed group of fields inside this one (section 4).
 - `list[T]`: any number of items of type `T`, where `T` is a scalar type, an enum, or `record{...}` (section 5).
 
@@ -43,14 +43,14 @@ Types are **enforced**. A value that doesn't match its type is an error. For exa
 
 ## 3. Values
 
-- The fields on a data line are separated by `|`, and the line ends with `|`.
+- The fields on a data line are separated by `|`, and the line ends with `|` or `|;` (section 5).
 - A data line has exactly one value per column of its class or list item (records flattened, lists not counted). Too few or too many values is an error.
 - Spaces and tabs next to each `|` are trimmed. Spaces and tabs inside a value are kept.
-- **`~` means null** (no value) in a field of any scalar or enum type. A value that is exactly `~` is null; `~` anywhere else, as in `~abc`, is plain text.
-- **A record can be null.** A record whose columns are all `~` reads back as a null record. There's no separate marker, so "null record" and "record with every field null" are the same thing.
-- **A list is never null.** A list field always holds a list, which may be empty, and whose items may be `~`. Struct has no way to write a list that doesn't exist, by design. Think of a list as a box: once declared, the box always exists, even when it's empty.
-- **A record that contains a list is never null.** If a record has a list anywhere inside it, the list must exist, so the record must too. When all its columns are `~`, it reads back as a record with null values and its lists (empty when it has no child lines). Handing an encoder a null in place of a list, or a null for a record that contains a list, is an error.
-- **An empty field is always an error.** There's no empty string. Blank text is written `~`.
+- **`null` means null** (no value) in a field of any scalar or enum type. A value that is exactly `null` is null. `~` is ordinary text with no special meaning. A `str` value whose text is literally `null` is written as a raw value, `\rnull`. No new escape is added.
+- **A record can be null.** A record whose columns are all `null` reads back as a null record. There's no separate marker, so "null record" and "record with every field null" are the same thing.
+- **A list is never null.** A list field always holds a list, which may be empty, and whose items may be `null`. Struct has no way to write a list that doesn't exist, by design. Think of a list as a box: once declared, the box always exists, even when it's empty.
+- **A record that contains a list is never null.** If a record has a list anywhere inside it, the list must exist, so the record must too. When all its columns are `null`, it reads back as a record with null values and its lists (empty when it has no child lines). Handing an encoder a null in place of a list, or a null for a record that contains a list, is an error.
+- **An empty field is always an error.** There's no empty string. Blank text is written `null`.
 
 ### Escapes
 
@@ -60,12 +60,11 @@ A backslash makes the next character literal.
 |---|---|---|
 | `\|` | a literal pipe | a value contains `|` |
 | `\\` | a literal backslash | a value contains `\` |
-| `\~` | a literal `~` | only when the whole value is exactly `~` and must not mean null |
 | `\>` | a literal `>` | the first value on a line begins with `>` |
 | `\#` | a literal `#` | reserved for edge cases; harmless anywhere |
 | `\r` | start of a raw value | only as the first thing in a value; see below |
 
-Any other backslash sequence is an error. There are no escapes for line breaks, tabs or spaces: whitespace that must be kept exactly is written in a raw value.
+Any other backslash sequence is an error. There are no escapes for line breaks, tabs or spaces: whitespace that must be kept exactly is written in a raw value. A string whose text is literally `null` is written `\rnull`.
 
 ### Raw values
 
@@ -77,7 +76,7 @@ A value that starts with `\r` is **raw**. Everything after `\r`, up to the next 
 - CR LF inside a raw value becomes LF, as everywhere else;
 - a raw value with nothing after `\r` is an empty field, which is an error.
 
-A raw value is always text: `\r` is allowed only in `str` fields and `list[str]` items. In any other type it's an error. `\r~` is the text `~`, not null.
+A raw value is always text: `\r` is allowed only in `str` fields and `list[str]` items. In any other type it's an error. `\rnull` is the text `null`, not null.
 
 ```
 schema:fix{file, patch}
@@ -114,9 +113,9 @@ schema:claim{text, notes:list[record{text, subnotes:list[str]}]}
 Rope scaling hurts long ctx|
 >notes are from the abstract only|
 >>abstract mentions a 32k limit|
->>appendix B clarifies|
+>>appendix B clarifies|;
 >table 3 contradicts|
->>llama 7b tested only|
+>>llama 7b tested only|;
 ```
 
 ### Which list a child belongs to: indices
@@ -132,7 +131,7 @@ schema:claim{text, verdict:record{label, evidence:list[str], counter:list[str]},
 Rope scaling hurts long ctx|refuted|
 >1.1|table 3 contradicts the claim|
 >1.2|abstract says otherwise|
->2|notes are from the abstract only|
+>2|notes are from the abstract only|;
 ```
 
 The numbers count **schema fields**, not values on the line.
@@ -142,6 +141,17 @@ A child line whose parent has no list is an error. When an index is needed (rule
 **Leniency:** an index written where none is needed (rule 1) is **accepted, with a warning**. It isn't an error.
 
 **Empty lists** produce no child lines and read back as an empty list.
+
+### Group ends: `;`
+
+- A data line ends with `|;` instead of `|` when either:
+  - it is the last line of one or more groups (the next line is shallower than it, or the file ends while it is a child line), or
+  - it has lists and no child lines at all.
+- A **group** is all the child lines of one parent.
+- A line gets at most one `;`.
+- A line that has child lines below it never gets `;`.
+- A record whose class has no lists never gets `;` unless it is the last line of a group.
+- `;` comes after the line's final unescaped `|`. Inside a raw value, `\|;` is text as usual.
 
 ## 6. Decoding, and schemas supplied from outside the file
 
@@ -169,16 +179,15 @@ Decoders are lenient: they accept spaces around `|`, blank lines and unneeded in
 - indices only where needed (section 5), never the lenient extra one;
 - escapes only where needed:
   - `\|` and `\\` always;
-  - `\~` only for a whole value of `~`;
   - `\>` only when the first value on a line begins with `>`;
   - `\#` never;
-- `\r` only when a text value contains a line break, or starts or ends with a space or tab. Inside it, only `|` and `\` are escaped;
+- `\r` only when a text value contains a line break, or starts or ends with a space or tab, or is literally `null`. Inside it, only `|` and `\` are escaped;
 - `int` is plain digits with no leading zeros, and `-` for negatives;
 - `float` uses the shortest digits that read back to exactly the same value:
   - **plain form** when the number is 0, or its size is at least `0.0001` and below `10000`: `3.14`, `2024.5`, `0.0012`, `-0.5`. A whole number has no `.0`;
   - **exponent form** otherwise: `1.2345e4` for 12345, `1e5` for 100000, `1e-5` for 0.00001;
   - the special values are written `NaN`, `inf` and `-inf`, and negative zero is `-0`.
-- `bool` is `1` or `0`; null is `~`.
+- `bool` is `true` or `false`; null is `null`. Group ends are marked with `;` as described in section 5.
 
 ## 8. Grammars (GBNF)
 
@@ -209,12 +218,13 @@ Each fix is reported with its line, its column, what it found, and what it wrote
    - A raw value still open at the end of the output gets its `|` at the very end, which closes it.
    - On a record whose raw value spans several lines, the fix is reported on the record's last line.
    - A record cut off mid-value may become valid this way (`2024|Rope scal` becomes `2024|Rope scal|`). The doctor can't know it was cut. The repair is in the report, and the server's own finish reason says whether the output hit its limit.
+5. **Group ends.** Strip every end marker and recompute them from the structure (depth and child lines). Report one fix per record whose markers changed. A `;` written before the final `|` (`active;|`) also counts as a misplaced marker for this fix, but only when removing it leaves a valid value.
 
-Nothing is ever deleted for being incomplete. The doctor only removes fences, echoed schemas and chatter, and only adds a final `|`.
+Nothing is ever deleted for being incomplete. The doctor only removes fences, echoed schemas and chatter, adds a final `|`, and repairs group end markers.
 
 In the maintainer's words: *the box has a hole, the doctor patches it. Not my problem if the water in the box is dirty.*
 
-**The doctor never touches values.** Fixing data is not its job: a value as written may be exactly what was meant, even in quotes. Only `~` is null, a `bool` is only `1` or `0`, and every value that fails its type check makes its line a bad line. That includes an empty field, `null`, `true`, `"2024"` in an int field, `+5`, `1,000`, an enum's wrong capitalisation (`Supported`), and a field-name prefix (`year: 2024`).
+**The doctor never touches values.** Fixing data is not its job: a value as written may be exactly what was meant, even in quotes. Only `null` is null, a `bool` is only `true` or `false`, and every value that fails its type check makes its line a bad line. That includes an empty field, `1`/`0` in a bool field, `"2024"` in an int field, `+5`, `1,000`, an enum's wrong capitalisation (`Supported`), and a field-name prefix (`year: 2024`).
 
 **Header rows are data.** The doctor never removes a line because it looks like column names: `word|meaning|` can be a real record. A header line is read like any other line: kept if its values are valid, reported as bad if not. Headers are prevented by the prompt (section 10) instead.
 
@@ -242,8 +252,8 @@ Models are told the format by a prompt that the library builds from the schemas:
 Reply with data only in Struct format: no prose, no code fences.
 Never write a header row or column names. The first line is already data.
 One record per line: values in schema order, separated by |, and every line ends with |.
-~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.
-Inside a value, write \| for | and \ for \.
+null means null. bool is true or false. enum values must be one of the listed labels exactly.
+Inside a value, write \| for | and \\ for \.
 ```
 
 **When any class has a `record{...}` field:**
@@ -254,6 +264,7 @@ A record{...} field adds its fields as extra columns, in order.
 **When any class has a list:**
 ```
 List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.
+A > line ends with |; instead of | when it is the last of its group (the next line is shallower, or the data ends). A line with lists but no items also ends with |;.
 ```
 
 **When any parent has two or more lists:**
@@ -271,7 +282,18 @@ For text with line breaks, or with spaces or tabs at its start or end, start the
 Start each block with schema:name on its own line.
 ```
 
-**Always last: one example line,** built from the first class, with neutral placeholder values. Text is `text`, int is `7`, float is `1.5`, bool is `1`, and an enum uses its first label. Exactly one scalar field, the last one, is written `~`, to show null. Record fields are flattened. Lists are left out of the example. It's written as `Example: ` followed by the canonical line.
+**When any class has a list field, after the rules:**
+```
+List fields take no column on their parent's line; their items go on the child lines below it.
+```
+
+**Always: one-line example,** built from the first class, with neutral placeholder values. Text is `text`, int is `7`, float is `1.5`, bool is `true`, and an enum uses its first label. Exactly one field, the last field that is not an enum, is written `null`, to show null. Record fields are flattened. Lists are left out of the example. It's written as `Example: ` followed by the canonical line.
+
+**When any class has a list field: worked example with lists,** after the one-line example, under the line `Example with lists:`. Built with the real encoder from a placeholder record of the first class that has a list. Uses the same placeholder values as the one-line example. For each list field, write:
+- one item;
+- for a list of records: two items, where the first item's own lists (if any) have one item each and the second item's are empty.
+
+The example must use the v0.4 syntax (`null`, `true`, `;`).
 
 ---
 
@@ -280,6 +302,14 @@ Start each block with schema:name on its own line.
 None. Every question raised in review has been decided.
 
 ## Resolved in review
+
+### 2026-11-26, v0.4
+
+- **Null is `null`.** The null marker changes from `~` to `null`. `~` becomes ordinary text, with no special meaning. A `str` value whose text is literally `null` is written as a raw value, `\rnull`. No new escape is added. The encoder writes `\rnull` for the string "null" in `str` fields and `list[str]` items.
+- **Booleans are `true` and `false`.** Replaces `1` and `0`. The decoder strictly rejects `1` and `0` in bool fields.
+- **`null` is banned as an enum label.** A schema whose enum contains the label `null` is a schema error with a clear message.
+- **Group ends: `;`.** A data line ends with `|;` instead of `|` when either it is the last line of one or more groups (the next line is shallower than it, or the file ends while it is a child line), or it has lists and no child lines at all. A group is all the child lines of one parent. A line gets at most one `;`, and never gets `;` if it has child lines below it. The encoder writes them, the decoder checks them strictly (missing, extra or misplaced `;` is an error with line and column), and the doctor strips and recomputes them from the structure as a safe fix (including `active;|` when removing `;` leaves a valid value).
+- **Prompt changes.** The escape line prints literal ``Inside a value, write \| for | and \\ for \.``. When any class has a list field, an explanatory rule ("List fields take no column on their parent's line; their items go on the child lines below it.") is added after the rules, and a worked example with lists is added after the one-line example under `Example with lists:`. The one-line example's null field is specified as the last field that is not an enum.
 
 ### 2026-11-19, v0.2
 

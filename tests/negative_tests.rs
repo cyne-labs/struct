@@ -188,13 +188,20 @@ fn test_error_type_mismatch_float() {
 
 #[test]
 fn test_error_type_mismatch_bool() {
-    // SPEC.md §2: "bool: 1 for true, 0 for false. Types are enforced."
+    // SPEC.md §2: "bool: true or false. Types are enforced."
     let input = "schema:claim{verified:bool}\n\
-                 true|\n";
-    let err = decode(input).expect_err("Must fail: bool must be 1 or 0");
+                 1|\n";
+    let err = decode(input).expect_err("Must fail: bool must be true or false");
     assert_eq!(err.line, 2);
     assert_eq!(err.column, 1);
-    assert_eq!(err.message, "type mismatch: 'true' is not a valid bool (must be 1 or 0)");
+    assert_eq!(err.message, "type mismatch: '1' is not a valid bool (must be true or false)");
+
+    let input_zero = "schema:claim{verified:bool}\n\
+                      0|\n";
+    let err_zero = decode(input_zero).expect_err("Must fail: bool must be true or false");
+    assert_eq!(err_zero.line, 2);
+    assert_eq!(err_zero.column, 1);
+    assert_eq!(err_zero.message, "type mismatch: '0' is not a valid bool (must be true or false)");
 }
 
 #[test]
@@ -232,13 +239,13 @@ fn test_error_int_out_of_i64_range() {
 
 #[test]
 fn test_error_empty_field() {
-    // SPEC.md §3: "An empty field is always an error. There's no empty string. Blank text is written ~."
+    // SPEC.md §3: "An empty field is always an error. There's no empty string. Blank text is written null."
     let input = "schema:claim{text, year:int}\n\
                  |2024|\n";
     let err = decode(input).expect_err("Must fail: empty field");
     assert_eq!(err.line, 2);
     assert_eq!(err.column, 1);
-    assert_eq!(err.message, "empty field is an error; blank text must be written as '~'");
+    assert_eq!(err.message, "empty field is an error; blank text must be written as 'null'");
 }
 
 #[test]
@@ -501,4 +508,83 @@ fn test_error_inside_schemas_argument() {
     assert_eq!(err.line, 1);
     assert_eq!(err.column, 19);
     assert_eq!(err.message, "error in outside schemas: duplicate field name 'text' in schema");
+}
+
+#[test]
+fn test_error_escape_tilde() {
+    // SPEC.md §3: \~ is not a valid escape sequence in v0.4
+    let input = "schema:claim{text}\nhello\\~world|\n";
+    let err = decode(input).expect_err("Must fail: \\~ escape");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 6);
+    assert_eq!(err.message, "invalid escape sequence '\\~'");
+}
+
+#[test]
+fn test_error_enum_label_null() {
+    // SPEC.md §2: "null is banned as an enum label"
+    let input = "schema:claim{verdict:enum(null,ok)}\n";
+    let err = decode(input).expect_err("Must fail: enum label cannot be null");
+    assert_eq!(err.line, 1);
+    assert_eq!(err.column, 27);
+    assert_eq!(err.message, "enum label cannot be 'null'");
+}
+
+#[test]
+fn test_error_missing_semicolon_group_end() {
+    // SPEC.md §5: missing group end marker
+    let input = "schema:claim{text, notes:list[str]}\n\
+                 claim 1|\n\
+                 >note 1|\n";
+    let err = decode(input).expect_err("Must fail: missing group end semicolon");
+    assert_eq!(err.line, 3);
+    assert_eq!(err.column, 8);
+    assert_eq!(err.message, "missing ';' at end of line (end of group)");
+}
+
+#[test]
+fn test_error_extra_semicolon_depth_0_no_lists() {
+    // SPEC.md §5: record without lists cannot end with ;
+    let input = "schema:claim{text}\n\
+                 claim 1|;\n";
+    let err = decode(input).expect_err("Must fail: unexpected semicolon");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 9);
+    assert_eq!(err.message, "unexpected ';' at end of line (line does not close a group)");
+}
+
+#[test]
+fn test_error_extra_semicolon_parent_has_children() {
+    // SPEC.md §5: line that has children cannot end with ;
+    let input = "schema:claim{text, notes:list[str]}\n\
+                 claim 1|;\n\
+                 >note 1|;\n";
+    let err = decode(input).expect_err("Must fail: unexpected semicolon on parent");
+    assert_eq!(err.line, 2);
+    assert_eq!(err.column, 9);
+    assert_eq!(err.message, "unexpected ';' at end of line (line does not close a group)");
+}
+
+#[test]
+fn test_error_misplaced_semicolon_space() {
+    // SPEC.md §5: ; must follow | immediately
+    let input = "schema:claim{text, notes:list[str]}\n\
+                 claim 1|\n\
+                 >note 1| ;\n";
+    let err = decode(input).expect_err("Must fail: space before semicolon");
+    assert_eq!(err.line, 3);
+    assert_eq!(err.column, 10);
+    assert_eq!(err.message, "misplaced ';' (must follow '|' immediately)");
+}
+
+#[test]
+fn test_error_multiple_semicolons() {
+    // SPEC.md §5: at most one semicolon
+    let input = "schema:claim{text, notes:list[str]}\n\
+                 claim 1|\n\
+                 >note 1|;;\n";
+    let err = decode(input).expect_err("Must fail: multiple semicolons");
+    assert_eq!(err.line, 3);
+    assert_eq!(err.column, 10);
+    assert_eq!(err.message, "multiple ';' at end of line");
 }

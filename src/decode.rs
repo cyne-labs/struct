@@ -1,4 +1,4 @@
-//! Decoding implementation for Struct (v0.3).
+//! Decoding implementation for Struct (v0.4).
 //!
 //! Converts Struct text into structured data in standard Rust data structures.
 
@@ -8,6 +8,41 @@ use crate::schema::{
     ListTarget, ParsedSchemaLine, RecordDef, ScalarType,
 };
 use crate::types::{Block, DecodedFile, StructError, Value, Warning};
+
+struct PrevDataLine {
+    line_num: usize,
+    depth: usize,
+    has_lists: bool,
+    has_semicolon: bool,
+    terminator_col: usize,
+    end_pipe_col: usize,
+}
+
+fn validate_prev_data_line(
+    prev: &PrevDataLine,
+    current_depth: usize,
+) -> Result<(), StructError> {
+    let has_children = current_depth > prev.depth;
+    let next_shallower = current_depth < prev.depth;
+    let is_last_in_group = prev.depth > 0 && next_shallower;
+    let should_have_semicolon = !has_children && (prev.has_lists || is_last_in_group);
+
+    if prev.has_semicolon && !should_have_semicolon {
+        return Err(StructError::new(
+            "unexpected ';' at end of line (line does not close a group)",
+            prev.line_num,
+            prev.terminator_col,
+        ));
+    }
+    if !prev.has_semicolon && should_have_semicolon {
+        return Err(StructError::new(
+            "missing ';' at end of line (end of group)",
+            prev.line_num,
+            prev.end_pipe_col,
+        ));
+    }
+    Ok(())
+}
 
 /// Decodes a Struct document string with no outside schemas.
 ///
@@ -40,6 +75,7 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
     }
 
     let mut stack: Vec<StackEntry> = Vec::new();
+    let mut prev_data_line: Option<PrevDataLine> = None;
 
     let mut byte_pos = 0;
     let mut line_num = 1;
@@ -96,6 +132,9 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
 
         if trimmed_clean.starts_with("schema:") && !trimmed_clean.contains('|') {
             // It is a schema line
+            if let Some(prev) = prev_data_line.take() {
+                validate_prev_data_line(&prev, 0)?;
+            }
             unwind_stack(&mut stack, 0, &mut current_block);
             if let Some(b) = current_block.take() {
                 decoded.blocks.push(b);
@@ -185,6 +224,9 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
 
         // Parse fields on this data line (handling \r raw values that can span lines)
         let mut raw_fields: Vec<RawField> = Vec::new();
+        let line_ends_with_semi;
+        let line_terminator_col;
+        let line_pipe_col;
 
         loop {
             // Trim leading spaces and tabs before field value
@@ -208,6 +250,8 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                 ));
             }
 
+            let mut pipe_pos = byte_pos;
+
             // Check if field is raw: starts with \r
             if input[byte_pos..].starts_with(r"\r") {
                 byte_pos += 2; // skip \r
@@ -230,6 +274,7 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                             esc_col,
                         ));
                     } else if input[byte_pos..].starts_with('|') {
+                        pipe_pos = byte_pos;
                         byte_pos += 1;
                         closed = true;
                         break;
@@ -278,7 +323,6 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                 let start_content = byte_pos;
                 let mut in_escape = false;
                 let mut closed = false;
-                let mut pipe_pos = byte_pos;
 
                 while byte_pos < len {
                     if in_escape {
@@ -325,13 +369,13 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                 let trimmed = raw_slice.trim_end_matches(|c| c == ' ' || c == '\t');
                 if trimmed.is_empty() {
                     return Err(StructError::new(
-                        "empty field is an error; blank text must be written as '~'",
+                        "empty field is an error; blank text must be written as 'null'",
                         line_num,
                         field_col,
                     ));
                 }
 
-                if trimmed == "~" {
+                if trimmed == "null" {
                     raw_fields.push(RawField {
                         value: String::new(),
                         is_raw: false,
@@ -347,7 +391,6 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                             match chars.next() {
                                 Some((_, '|')) => unescaped.push('|'),
                                 Some((_, '\\')) => unescaped.push('\\'),
-                                Some((_, '~')) => unescaped.push('~'),
                                 Some((_, '>')) => unescaped.push('>'),
                                 Some((_, '#')) => unescaped.push('#'),
                                 Some((_, 'r')) => {
@@ -402,7 +445,18 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
             }
 
             // Check if this was the last field on the physical line
-            let mut check_pos = byte_pos;
+            let field_end_pipe_col = get_col(input, line_start_byte, pipe_pos);
+            let has_immediate_semi = byte_pos < len && input[byte_pos..].starts_with(';');
+            let mut after_pipe = byte_pos;
+            let semi_col = if has_immediate_semi {
+                let col = get_col(input, line_start_byte, byte_pos);
+                after_pipe += 1;
+                Some(col)
+            } else {
+                None
+            };
+
+            let mut check_pos = after_pipe;
             while check_pos < len {
                 let c = input[check_pos..].chars().next().unwrap();
                 if c == ' ' || c == '\t' {
@@ -411,7 +465,13 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                     break;
                 }
             }
-            if check_pos >= len || input[check_pos..].starts_with('\n') || input[check_pos..].starts_with("\r\n") {
+
+            let is_eol = check_pos >= len || input[check_pos..].starts_with('\n') || input[check_pos..].starts_with("\r\n");
+
+            if has_immediate_semi && is_eol {
+                line_ends_with_semi = true;
+                line_terminator_col = semi_col.unwrap();
+                line_pipe_col = field_end_pipe_col;
                 byte_pos = check_pos;
                 if byte_pos < len && input[byte_pos..].starts_with("\r\n") {
                     byte_pos += 2;
@@ -423,11 +483,52 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                     line_start_byte = byte_pos;
                 }
                 break;
+            } else if !has_immediate_semi && is_eol {
+                line_ends_with_semi = false;
+                line_terminator_col = field_end_pipe_col;
+                line_pipe_col = field_end_pipe_col;
+                byte_pos = check_pos;
+                if byte_pos < len && input[byte_pos..].starts_with("\r\n") {
+                    byte_pos += 2;
+                    line_num += 1;
+                    line_start_byte = byte_pos;
+                } else if byte_pos < len && input[byte_pos..].starts_with('\n') {
+                    byte_pos += 1;
+                    line_num += 1;
+                    line_start_byte = byte_pos;
+                }
+                break;
+            } else if has_immediate_semi && check_pos < len && input[check_pos..].starts_with(';') {
+                return Err(StructError::new(
+                    "multiple ';' at end of line",
+                    line_num,
+                    get_col(input, line_start_byte, check_pos),
+                ));
+            } else if !has_immediate_semi && check_pos < len && input[check_pos..].starts_with(';') {
+                let mut after_semi = check_pos + 1;
+                while after_semi < len {
+                    let c = input[after_semi..].chars().next().unwrap();
+                    if c == ' ' || c == '\t' {
+                        after_semi += 1;
+                    } else {
+                        break;
+                    }
+                }
+                if after_semi >= len || input[after_semi..].starts_with('\n') || input[after_semi..].starts_with("\r\n") {
+                    return Err(StructError::new(
+                        "misplaced ';' (must follow '|' immediately)",
+                        line_num,
+                        get_col(input, line_start_byte, check_pos),
+                    ));
+                }
             }
         }
 
         // Process data line according to depth
         if depth == 0 {
+            if let Some(prev) = prev_data_line.take() {
+                validate_prev_data_line(&prev, depth)?;
+            }
             unwind_stack(&mut stack, 0, &mut current_block);
 
             let expected_cols = class_def.num_columns();
@@ -451,8 +552,17 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
 
             stack.push(StackEntry {
                 value: record,
-                schema: StackItemSchema::Class(class_def),
+                schema: StackItemSchema::Class(class_def.clone()),
                 target_list_path: Vec::new(),
+            });
+
+            prev_data_line = Some(PrevDataLine {
+                line_num: start_line_num,
+                depth: 0,
+                has_lists: class_def.has_list(),
+                has_semicolon: line_ends_with_semi,
+                terminator_col: line_terminator_col,
+                end_pipe_col: line_pipe_col,
             });
         } else {
             // Child line at depth > 0
@@ -465,15 +575,20 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
             }
 
             if depth > stack.len() {
+                let prev_depth = stack.len().saturating_sub(1);
                 return Err(StructError::new(
                     format!(
                         "depth increased by more than one level (from depth {} to {})",
-                        stack.len() - 1,
+                        prev_depth,
                         depth
                     ),
                     start_line_num,
                     1,
                 ));
+            }
+
+            if let Some(prev) = prev_data_line.take() {
+                validate_prev_data_line(&prev, depth)?;
             }
 
             unwind_stack(&mut stack, depth, &mut current_block);
@@ -603,14 +718,27 @@ pub fn decode_with(schemas: &str, input: &str) -> Result<DecodedFile, StructErro
                 }
             };
 
+            let has_lists = item_schema.has_list();
             stack.push(StackEntry {
                 value: parsed_item,
                 schema: item_schema,
                 target_list_path: target_list.field_path,
             });
+
+            prev_data_line = Some(PrevDataLine {
+                line_num: start_line_num,
+                depth,
+                has_lists,
+                has_semicolon: line_ends_with_semi,
+                terminator_col: line_terminator_col,
+                end_pipe_col: line_pipe_col,
+            });
         }
     }
 
+    if let Some(prev) = prev_data_line.take() {
+        validate_prev_data_line(&prev, 0)?;
+    }
     unwind_stack(&mut stack, 0, &mut current_block);
     if let Some(b) = current_block {
         decoded.blocks.push(b);
@@ -651,6 +779,14 @@ enum StackItemSchema {
 }
 
 impl StackItemSchema {
+    fn has_list(&self) -> bool {
+        match self {
+            StackItemSchema::Class(c) => c.has_list(),
+            StackItemSchema::Record(r) => r.has_list(),
+            StackItemSchema::Scalar | StackItemSchema::Enum => false,
+        }
+    }
+
     fn find_lists(&self) -> Vec<ListTarget> {
         match self {
             StackItemSchema::Class(c) => c.find_lists(),
@@ -963,13 +1099,13 @@ fn parse_scalar_value(
             }
         }
         ScalarType::Bool => {
-            if text == "1" {
+            if text == "true" {
                 Ok(Value::Bool(true))
-            } else if text == "0" {
+            } else if text == "false" {
                 Ok(Value::Bool(false))
             } else {
                 Err(StructError::new(
-                    format!("type mismatch: '{}' is not a valid bool (must be 1 or 0)", text),
+                    format!("type mismatch: '{}' is not a valid bool (must be true or false)", text),
                     line_num,
                     raw_field.col_start,
                 ))

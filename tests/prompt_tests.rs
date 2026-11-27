@@ -110,6 +110,29 @@ fn test_conditional_section_two_or_more_classes_left_out() {
     );
 }
 
+#[test]
+fn test_exact_escape_line_output() {
+    let schema = "schema:claim{text}";
+    let p = prompt(schema).expect("prompt generation failed");
+    assert!(
+        p.contains("Inside a value, write \\| for | and \\\\ for \\.\n"),
+        "Prompt must print exact escape line: 'Inside a value, write \\| for | and \\\\ for \\.'"
+    );
+}
+
+#[test]
+fn test_example_with_lists_decodes_back_to_placeholder() {
+    let schema = "schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, year:int}, notes:list[record{text, subnotes:list[str]}]}";
+    let p = prompt(schema).expect("prompt generation failed");
+    let marker = "Example with lists:\n";
+    let idx = p.find(marker).expect("Prompt must contain 'Example with lists:'");
+    let example_data = &p[idx + marker.len()..];
+
+    let decoded = structl::decode_with(schema, example_data).expect("Example with lists must decode successfully");
+    assert_eq!(decoded.blocks.len(), 1);
+    assert_eq!(decoded.blocks[0].records.len(), 1);
+}
+
 // =========================================================================
 // 2. Byte-for-byte tests of full prompt for the four schemas in bench/r2/schemas/
 // =========================================================================
@@ -124,10 +147,10 @@ schema:claim{id, title, verdict:enum(supported,refuted,unverified), year:int, ve
 Reply with data only in Struct format: no prose, no code fences.\n\
 Never write a header row or column names. The first line is already data.\n\
 One record per line: values in schema order, separated by |, and every line ends with |.\n\
-~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.\n\
-Inside a value, write \\| for | and \\ for \\.\n\
+null means null. bool is true or false. enum values must be one of the listed labels exactly.\n\
+Inside a value, write \\| for | and \\\\ for \\.\n\
 For text with line breaks, or with spaces or tabs at its start or end, start the value with \\r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.\n\
-Example: text|text|supported|7|~|\n";
+Example: text|text|supported|7|null|\n";
 
     assert_eq!(generated, expected);
 }
@@ -142,11 +165,11 @@ schema:claim{text, verdict:enum(supported,refuted,unverified), source:record{id,
 Reply with data only in Struct format: no prose, no code fences.\n\
 Never write a header row or column names. The first line is already data.\n\
 One record per line: values in schema order, separated by |, and every line ends with |.\n\
-~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.\n\
-Inside a value, write \\| for | and \\ for \\.\n\
+null means null. bool is true or false. enum values must be one of the listed labels exactly.\n\
+Inside a value, write \\| for | and \\\\ for \\.\n\
 A record{...} field adds its fields as extra columns, in order.\n\
 For text with line breaks, or with spaces or tabs at its start or end, start the value with \\r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.\n\
-Example: text|supported|text|7|~|\n";
+Example: text|supported|text|7|null|\n";
 
     assert_eq!(generated, expected);
 }
@@ -161,12 +184,19 @@ schema:claim{text, verdict:enum(supported,refuted,unknown), source:record{id, ye
 Reply with data only in Struct format: no prose, no code fences.\n\
 Never write a header row or column names. The first line is already data.\n\
 One record per line: values in schema order, separated by |, and every line ends with |.\n\
-~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.\n\
-Inside a value, write \\| for | and \\ for \\.\n\
+null means null. bool is true or false. enum values must be one of the listed labels exactly.\n\
+Inside a value, write \\| for | and \\\\ for \\.\n\
 A record{...} field adds its fields as extra columns, in order.\n\
 List items go on the lines below their parent, starting with one > per level: > for its items, >> for theirs.\n\
+A > line ends with |; instead of | when it is the last of its group (the next line is shallower, or the data ends). A line with lists but no items also ends with |;.\n\
 For text with line breaks, or with spaces or tabs at its start or end, start the value with \\r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.\n\
-Example: text|supported|text|~|\n";
+List fields take no column on their parent's line; their items go on the child lines below it.\n\
+Example: text|supported|text|null|;\n\
+Example with lists:\n\
+text|supported|text|null|\n\
+>text|\n\
+>>text|;\n\
+>text|;\n";
 
     assert_eq!(generated, expected);
 }
@@ -182,11 +212,11 @@ schema:patch{file_name, code, line:int}\n\
 Reply with data only in Struct format: no prose, no code fences.\n\
 Never write a header row or column names. The first line is already data.\n\
 One record per line: values in schema order, separated by |, and every line ends with |.\n\
-~ means null. bool is 1 or 0. enum values must be one of the listed labels exactly.\n\
-Inside a value, write \\| for | and \\ for \\.\n\
+null means null. bool is true or false. enum values must be one of the listed labels exactly.\n\
+Inside a value, write \\| for | and \\\\ for \\.\n\
 For text with line breaks, or with spaces or tabs at its start or end, start the value with \\r, then write it exactly as it is, keeping every space, tab, indent and line break, until the closing |.\n\
 Start each block with schema:name on its own line.\n\
-Example: text|~|\n";
+Example: text|null|\n";
 
     assert_eq!(generated, expected);
 }
